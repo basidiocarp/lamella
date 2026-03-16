@@ -1,0 +1,90 @@
+---
+description: Generate Docker Compose config with services, networking, volumes, and health checks
+allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint: "<services-description> [--output path] [--with-healthchecks]"
+---
+
+# Generate Docker Compose Configuration
+
+Generate a Docker Compose configuration. Follow these steps:
+
+## 1. Understand Requirements
+
+Gather information about:
+- Required services (web, api, database, cache, queue, etc.)
+- Environment (development or production)
+- Networking needs (internal, external, SSL)
+- Persistence requirements
+- Scaling needs
+
+## 2. Consult Documentation
+
+Read the Docker Compose skill for patterns and best practices:
+- `skills/devops/docker-patterns/SKILL.md` for structure, networking, databases, services, and volumes
+
+## 3. Generate Configuration
+
+Create a compose file with:
+
+### Services
+- Build configuration or image reference
+- Restart policy (`unless-stopped` for production)
+- Environment variables (use ${VAR} syntax)
+- Port mappings (bind to 127.0.0.1 for internal services)
+- Health checks
+- Dependencies with conditions
+
+### Networks
+- Frontend network for public services
+- Backend network (internal: true) for databases
+- External networks for reverse proxy integration
+
+### Volumes
+- Named volumes for data persistence
+- Bind mounts for development only
+
+### Example Structure
+```yaml
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontend
+      - backend
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  frontend:
+  backend:
+    internal: true
+```
+
+## 4. Create Supporting Files
+
+Also create:
+- `.env.example` with all required variables
+- Update `.dockerignore` if needed
+
+$ARGUMENTS

@@ -1,0 +1,212 @@
+# MegaClaude2 — Next Steps Plan
+
+> Generated: 2026-03-15
+> Current state: 21 plugins, 240 skills, 0 BEST-PRACTICES issues, all manifests consistent
+
+---
+
+## Plan 2: Trim Security Plugin (32 → ~25 skills)
+
+**Goal:** Reduce the largest plugin from 32 skills (7,691 lines) to ~25 by merging overlapping skills within thematic clusters.
+
+**Rationale:** Security is 13% of all skills but specialized enough that many skills share toolchains, workflows, or domains. Seven skills are fuzzing-related; five are SAST/static analysis. Consolidation preserves knowledge while reducing surface area.
+
+### Merge Candidates
+
+| Cluster | Current | Proposed | Action |
+|---------|---------|----------|--------|
+| **Fuzzing** (7 → 3) | afl-plus-plus-fuzzer (266), cargo-fuzz (494), fuzz-coverage-analysis (139), fuzz-harness-writing (499), libfuzzer (171), ossfuzz (470), wycheproof (93) | **fuzz-harness-writing** (primary), **cargo-fuzz** (Rust-specific), **ossfuzz** (CI integration) | Merge libfuzzer + afl-plus-plus-fuzzer → fuzz-harness-writing refs. Merge fuzz-coverage-analysis → fuzz-harness-writing. wycheproof → cargo-fuzz refs. |
+| **SAST** (5 → 3) | codeql (283), sast-configuration (286), semgrep (217), semgrep-rule-creator (134), variant-analysis (154) | **codeql** (standalone), **semgrep** (absorb semgrep-rule-creator), **sast-configuration** (absorb variant-analysis) | semgrep-rule-creator is a sub-workflow of semgrep. variant-analysis is methodology that fits sast-configuration. |
+| **Memory Safety** (5 → 3) | address-sanitizer (376), constant-time-crypto (314), memory-safety-patterns (190), unsafe-checker (99), zeroize-audit (389) | **memory-safety-patterns** (absorb unsafe-checker), **constant-time-crypto** (absorb zeroize-audit), **address-sanitizer** (standalone) | unsafe-checker (99 lines) is a subset of memory-safety. zeroize-audit is a cryptographic safety concern. |
+| **Threat Modeling** (3 → 2) | attack-tree-construction (140), stride-analysis-patterns (220), threat-mitigation-mapping (112) | **stride-analysis-patterns** (absorb attack-tree-construction), **threat-mitigation-mapping** (standalone) | attack-tree is a visualization technique used within STRIDE workflows. |
+
+### Keep As-Is (15 skills)
+
+- agentic-actions-auditor, api-footgun-detector, insecure-defaults, security-audit-methodology, security-review
+- auth-implementation-patterns, pci-compliance, pii-redactor, secrets-management, supply-chain-risk-auditor
+- seatbelt-sandboxer, yara-rule-authoring
+- address-sanitizer, threat-mitigation-mapping, codeql
+
+### Estimated Result
+
+32 → 25 skills (−7). 15 unchanged, 10 consolidated into 3 existing skills via references.
+
+### Execution Steps
+
+1. Read source skills and identify content to absorb as references
+2. Write merged references and update SKILL.md for absorbing skills
+3. Back up removed skills to `_backups/megaclaude_axed/`
+4. Update security.json manifest and index.json
+5. Verify: manifest=disk, BEST-PRACTICES audit, reference consistency
+
+---
+
+## Plan 3: Audit Reference File Consistency
+
+**Goal:** Fix 42 orphaned references (in SKILL.md but missing on disk) and triage 112 unreferenced files (on disk but not in SKILL.md).
+
+**Rationale:** Orphaned references cause broken links when skills are loaded. Unreferenced files waste disk space and confuse maintenance. 850 total reference files need consistency.
+
+### Orphaned References (42 — fix or remove link)
+
+| Plugin | Skill | Count | Issue |
+|--------|-------|-------|-------|
+| core | verified-implementer | 4 | Links to anchor IDs in references — likely valid (anchor in existing file) |
+| devops | makefile | 3 | Links to `docs/` subdirectory that doesn't exist |
+| devops | promql | 2 | Links to `docs/` subdirectory that doesn't exist |
+| security | api-footgun-detector | 2 | Anchor links into references — likely valid |
+| security | sast-configuration | 2 | Links to non-existent asset files |
+| typescript | payload | 29 | Anchor links into references — likely valid (files exist, anchors may be stale) |
+
+### Unreferenced Files (112 — add link or delete)
+
+| Action | Count | Description |
+|--------|-------|-------------|
+| **Add reference to SKILL.md** | ~80 | Legitimate reference files that should be linked in the Reference Files table |
+| **Delete from disk** | ~20 | Stale files from pre-merge state or duplicate copies |
+| **Investigate** | ~12 | Files that may belong to deleted skills or be misplaced |
+
+### Top offenders by skill
+
+| Skill | Unreferenced Files |
+|-------|-------------------|
+| tools/playwright | 7 |
+| security/yara-rule-authoring | 6 |
+| core/design-patterns | 5 |
+| core/systematic-debugging | 5 |
+| security/zeroize-audit | 5 |
+| security/semgrep-rule-creator | 5 |
+| tools/excalidraw-diagram-generator | 8 (asset templates) |
+| python/fastapi | 6 |
+| frontend/* (3 skills) | 9 total |
+
+### Execution Steps
+
+1. Fix orphaned references:
+   - Check if anchor targets exist in reference files (most payload/api-footgun ones probably do)
+   - Create missing `docs/` directories for makefile and promql OR migrate links to `references/`
+   - Create missing asset files for sast-configuration OR remove dead links
+2. Triage unreferenced files:
+   - For each, check if the file is substantive (>10 lines of unique content)
+   - If substantive: add a row to the Reference Files table in SKILL.md
+   - If empty/stub/duplicate: delete from disk
+3. Re-run reference audit to verify 0 orphaned, 0 unreferenced
+
+---
+
+## Plan 4: Update Documentation
+
+**Goal:** Bring docs into alignment with current 240-skill, 21-plugin inventory.
+
+**Current state:** [docs/INDEX.MD](docs/INDEX.MD) says "515 curated skills across 23 specialized plugins" with inaccurate per-plugin counts (DevOps 64, Security 52, etc.). Other doc files in `docs/getting-started/` may also reference old counts.
+
+### Files to Update
+
+| File | Issue |
+|------|-------|
+| [docs/INDEX.MD](docs/INDEX.MD) | Total count (515→240), plugin count (23→21), all per-plugin skill counts wrong |
+| [docs/getting-started/INDEX.MD](docs/getting-started/INDEX.MD) | May reference old counts or deleted plugins |
+| [docs/getting-started/CATEGORIZING-SKILLS.MD](docs/getting-started/CATEGORIZING-SKILLS.MD) | Category names and examples may be stale |
+| [docs/getting-started/WHAT-ARE-SKILLS.MD](docs/getting-started/WHAT-ARE-SKILLS.MD) | May reference deleted skills as examples |
+| [docs/getting-started/YOUR-FIRST-SKILL.MD](docs/getting-started/YOUR-FIRST-SKILL.MD) | Tutorial examples may use deleted skills |
+| [README.md](README.md) | Top-level README likely has stale counts |
+
+### Execution Steps
+
+1. Read all docs files
+2. Update counts to match current manifests (auto-generate from manifest data)
+3. Replace references to deleted/renamed skills with current equivalents
+4. Remove references to deleted plugins (business, data-engineering, game-dev, science, dotnet)
+5. Verify all internal links resolve
+
+---
+
+## Plan 5: Audit Agents & Commands
+
+**Goal:** Apply the same BEST-PRACTICES discipline to `agents/` (240 agents across 25 categories) and `commands/` (317 commands across 23 categories).
+
+**Rationale:** These directories haven't been audited. They likely contain role-play language, stale references, duplicates, and overlap — the same issues found in skills.
+
+### Agents (240 files, 25 categories)
+
+| Category | Count | Notes |
+|----------|-------|-------|
+| architecture | 20 | Largest category — likely has overlap |
+| specialized | 16 | Catch-all — may overlap with themed categories |
+| testing | 16 | May overlap with debugging |
+| research | 13 | 13 researcher variants — likely redundant |
+| devops | 13 | May overlap with skills/devops |
+| analysis | 12 | May overlap with research |
+| business | 12 | No business plugin exists anymore |
+| code-audit | 11 | May overlap with security and code-quality |
+| code-quality | 11 | May overlap with code-audit |
+| documentation | 11 | 11 doc specialists — likely redundant |
+| meta | 11 | Infrastructure agents |
+| content | 10 | May overlap with writing |
+| debugging | 10 | May overlap with testing |
+| frontend | 10 | May overlap with skills/frontend |
+| planning | 10 | May overlap with agile-pm |
+| data | 9 | No data-engineering plugin exists |
+| teams | 9 | May overlap with collaboration |
+| ai-ml | 6 | May overlap with ai-agents |
+| cyber-defense | 5 | May overlap with security |
+| councils | 5 | Multi-agent councils |
+| languages | 5 | May overlap with skills/languages |
+| analytics-with-eval | 4 | Niche |
+| _negotiation | 2 | Niche |
+| _shared | 1 | Shared utilities |
+
+### Commands (317 files, 23 categories)
+
+| Category | Count | Notes |
+|----------|-------|-------|
+| **misc** | **67** | Catch-all — needs triage badly |
+| development | 29 | May overlap with workflow |
+| meta | 26 | Infrastructure commands |
+| planning | 18 | May overlap with agile-pm |
+| audit | 16 | May overlap with security |
+| frontend | 15 | May overlap with skills/frontend |
+| workflow | 15 | Core workflow commands |
+| consider | 12 | Decision-making commands |
+| content | 12 | May overlap with writing |
+| research | 11 | May overlap with research agents |
+| setup | 11 | Setup/init commands |
+| security | 10 | May overlap with security skills |
+| analysis | 10 | Analysis commands |
+| session | 8 | Session management |
+| devops | 8 | DevOps commands |
+| documentation | 8 | Doc commands |
+| testing | 8 | Test commands |
+| ai | 6 | AI-specific commands |
+| languages | 6 | Language-specific |
+| business | 6 | No business plugin |
+| git | 6 | Git workflow |
+| architecture | 5 | Architecture commands |
+| database | 4 | Database commands |
+
+### Audit Approach
+
+Unlike skills (which have BEST-PRACTICES.md, frontmatter, and manifests), agents and commands are simpler markdown files. The audit would focus on:
+
+1. **Deduplication** — find agents/commands that do the same thing
+2. **Dead references** — links to deleted skills or plugins
+3. **Role-play** — "You are..." persona assignments (appropriate for agents, not commands)
+4. **Stale categories** — business, data categories with no matching plugin
+5. **misc triage** — 67 commands in misc need proper categorization or deletion
+
+### Execution Steps
+
+1. Scan all agents for duplicates (compare descriptions, instructions)
+2. Scan all commands for duplicates
+3. Move misc commands to proper categories
+4. Remove agents/commands that reference deleted plugins or skills
+5. Create a manifest or index for agents (currently none exists)
+
+---
+
+## Execution Order
+
+1. **Plan 2 (Security audit)** — Immediate, already scoped
+2. **Plan 3 (Reference consistency)** — Quick wins, fixes broken functionality
+3. **Plan 4 (Docs update)** — Fast, mostly count updates
+4. **Plan 5 (Agents & Commands)** — Largest effort, can be phased

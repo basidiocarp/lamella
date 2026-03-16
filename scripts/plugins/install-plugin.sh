@@ -1,0 +1,330 @@
+#!/usr/bin/env bash
+#
+# install-plugin.sh - Install built Skill-Issue plugins
+#
+# Supports two install modes:
+#   1. Plugin mode (default): Registers plugins with Claude Code via --plugin-dir
+#      or copies to ~/.claude/plugins/ for persistent access
+#   2. Standalone mode: Copies non-plugin resources (rules, workflows, templates)
+#      directly to ~/.claude/
+#
+# Usage:
+#   ./install-plugin.sh [options] [plugin-names...]
+#
+# Options:
+#   --list, -l        List available plugins
+#   --all, -a         Install all plugins
+#   --uninstall, -u   Uninstall specified plugins
+#   --dry-run, -n     Show what would be done
+#   --force, -f       Overwrite existing files
+#   --help, -h        Show this help
+#
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+DIST_DIR="$BASE_DIR/dist/plugins"
+CLAUDE_DIR="${CLAUDE_HOME:-$HOME/.claude}"
+PLUGINS_DIR="$CLAUDE_DIR/plugins/lamella"
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
+log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+
+DRY_RUN=false
+FORCE=false
+UNINSTALL=false
+LIST_ONLY=false
+INSTALL_ALL=false
+PLUGINS=()
+
+usage() {
+    cat <<EOF
+${BOLD}install-plugin.sh${NC} - Install Skill-Issue plugins
+
+${BOLD}USAGE${NC}
+    $0 [options] [plugin-names...]
+
+${BOLD}OPTIONS${NC}
+    -l, --list        List available plugins
+    -a, --all         Install all available plugins
+    -u, --uninstall   Uninstall specified plugins
+    -n, --dry-run     Show what would be done
+    -f, --force       Overwrite existing files
+    -h, --help        Show this help
+
+${BOLD}EXAMPLES${NC}
+    $0 core python typescript     Install specific plugins
+    $0 --all                      Install all plugins
+    $0 --uninstall security       Remove security plugin
+
+${BOLD}INSTALL LOCATIONS${NC}
+    Plugin resources → $PLUGINS_DIR/<name>/
+      (agents, commands, skills, hooks — official Claude Code plugin dirs)
+    Standalone resources → $CLAUDE_DIR/
+      (rules, workflows, templates — copied directly)
+
+${BOLD}NOTES${NC}
+    Run 'scripts/plugins/build-marketplace.sh' first to build all plugins.
+    After install, add to settings.json or use: claude --plugin-dir <path>
+
+EOF
+    exit 0
+}
+
+get_available_plugins() {
+    [[ ! -d "$DIST_DIR" ]] && return
+    for d in "$DIST_DIR"/*/; do
+        [[ -d "$d" ]] && basename "$d"
+    done | sort
+}
+
+list_plugins() {
+    echo -e "${BOLD}Available Plugins${NC}"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    if [[ ! -d "$DIST_DIR" ]]; then
+        log_warn "No built plugins found. Run 'scripts/plugins/build-marketplace.sh' first."
+        exit 1
+    fi
+
+    local plugins
+    plugins=$(get_available_plugins)
+    [[ -z "$plugins" ]] && { log_warn "No plugins found."; exit 1; }
+
+    printf "${BOLD}%-18s %-8s %6s %6s %6s  %-35s${NC}\n" "PLUGIN" "VERSION" "SKILL" "AGENT" "CMD" "DESCRIPTION"
+    echo "──────────────────────────────────────────────────────────────────────────────"
+
+    local total_plugins=0
+
+    while IFS= read -r plugin; do
+        local pjson="$DIST_DIR/$plugin/.claude-plugin/plugin.json"
+        if [[ -f "$pjson" ]]; then
+            local name version desc
+            name=$(jq -r '.name' "$pjson")
+            version=$(jq -r '.version // "?"' "$pjson")
+            desc=$(jq -r '.description // ""' "$pjson" | head -c 35)
+
+            local skill_count=0 agent_count=0 cmd_count=0
+            [[ -d "$DIST_DIR/$plugin/skills" ]] && skill_count=$(ls -d "$DIST_DIR/$plugin/skills"/*/ 2>/dev/null | wc -l | tr -d ' ')
+            [[ -d "$DIST_DIR/$plugin/agents" ]] && agent_count=$(ls "$DIST_DIR/$plugin/agents"/*.md 2>/dev/null | wc -l | tr -d ' ')
+            [[ -d "$DIST_DIR/$plugin/commands" ]] && cmd_count=$(ls "$DIST_DIR/$plugin/commands"/*.md 2>/dev/null | wc -l | tr -d ' ')
+
+            local status=""
+            [[ -d "$PLUGINS_DIR/$plugin" ]] && status="${GREEN}●${NC}"
+
+            printf "%-18s %-8s %6s %6s %6s  %-35s %b\n" "$name" "$version" "$skill_count" "$agent_count" "$cmd_count" "${desc:0:35}" "$status"
+            ((total_plugins++))
+        fi
+    done <<< "$plugins"
+
+    echo "──────────────────────────────────────────────────────────────────────────────"
+    echo -e "${BOLD}Total:${NC} $total_plugins plugins"
+    echo -e "${GREEN}●${NC} = installed"
+}
+
+# Install a plugin as an official Claude Code plugin directory
+install_plugin() {
+    local plugin="$1"
+    local src="$DIST_DIR/$plugin"
+
+    if [[ ! -d "$src" ]]; then
+        log_error "Plugin not found: $plugin"
+        return 1
+    fi
+
+    if [[ ! -f "$src/.claude-plugin/plugin.json" ]]; then
+        log_error "Not a valid Claude Code plugin: $plugin (missing .claude-plugin/plugin.json)"
+        return 1
+    fi
+
+    log_info "Installing ${BOLD}$plugin${NC}..."
+
+    local installed=0
+
+    # 1. Install plugin directory (agents, commands, skills, hooks)
+    local dst="$PLUGINS_DIR/$plugin"
+
+    if $DRY_RUN; then
+        echo "  [dry-run] Would install plugin to: $dst"
+    else
+        if [[ -d "$dst" ]] && ! $FORCE; then
+            log_warn "Already installed: $plugin (use --force to overwrite)"
+            return 0
+        fi
+
+        mkdir -p "$PLUGINS_DIR"
+        rm -rf "$dst"
+        mkdir -p "$dst"
+
+        # Copy official plugin structure
+        cp -r "$src/.claude-plugin" "$dst/"
+        [[ -d "$src/agents" ]] && cp -r "$src/agents" "$dst/"
+        [[ -d "$src/commands" ]] && cp -r "$src/commands" "$dst/"
+        [[ -d "$src/skills" ]] && cp -r "$src/skills" "$dst/"
+        [[ -d "$src/hooks" ]] && cp -r "$src/hooks" "$dst/"
+        [[ -d "$src/scripts" ]] && cp -r "$src/scripts" "$dst/"
+
+        log_success "Plugin installed: $dst"
+        ((installed++))
+    fi
+
+    # 2. Install standalone resources (rules, workflows, templates)
+    if [[ -d "$src/_standalone" ]]; then
+        for resource_type in rules workflows templates; do
+            local standalone_dir="$src/_standalone/$resource_type"
+            [[ ! -d "$standalone_dir" ]] && continue
+            [[ -z "$(ls -A "$standalone_dir" 2>/dev/null)" ]] && continue
+
+            local claude_dst="$CLAUDE_DIR/$resource_type"
+
+            for item in "$standalone_dir"/*; do
+                [[ ! -e "$item" ]] && continue
+                local name
+                name=$(basename "$item")
+                local target="$claude_dst/$name"
+
+                if $DRY_RUN; then
+                    echo "  [dry-run] Would copy $resource_type/$name to $target"
+                else
+                    if [[ -e "$target" ]] && ! $FORCE; then
+                        log_warn "Exists: $resource_type/$name (use --force)"
+                        continue
+                    fi
+                    mkdir -p "$claude_dst"
+                    cp -r "$item" "$target"
+                    ((installed++))
+                fi
+            done
+
+            if ! $DRY_RUN && [[ -d "$standalone_dir" ]]; then
+                local count
+                count=$(ls -A "$standalone_dir" 2>/dev/null | wc -l | tr -d ' ')
+                [[ "$count" -gt 0 ]] && log_success "  Standalone $resource_type: $count items → $claude_dst"
+            fi
+        done
+    fi
+
+    return 0
+}
+
+# Uninstall a plugin
+uninstall_plugin() {
+    local plugin="$1"
+
+    log_info "Uninstalling ${BOLD}$plugin${NC}..."
+
+    local removed=0
+
+    # Remove plugin directory
+    local dst="$PLUGINS_DIR/$plugin"
+    if [[ -d "$dst" ]]; then
+        if $DRY_RUN; then
+            echo "  [dry-run] Would remove: $dst"
+        else
+            rm -rf "$dst"
+            log_success "Removed plugin: $dst"
+            ((removed++))
+        fi
+    else
+        log_warn "Plugin not installed: $plugin"
+    fi
+
+    # Note: standalone resources (rules) are NOT removed during uninstall
+    # because they may be shared with other plugins or manually modified
+
+    return 0
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -l|--list) LIST_ONLY=true; shift ;;
+            -a|--all) INSTALL_ALL=true; shift ;;
+            -u|--uninstall) UNINSTALL=true; shift ;;
+            -n|--dry-run) DRY_RUN=true; shift ;;
+            -f|--force) FORCE=true; shift ;;
+            -h|--help) usage ;;
+            -*) log_error "Unknown option: $1"; usage ;;
+            *) PLUGINS+=("$1"); shift ;;
+        esac
+    done
+}
+
+main() {
+    parse_args "$@"
+
+    if $LIST_ONLY; then
+        list_plugins
+        exit 0
+    fi
+
+    if [[ ! -d "$DIST_DIR" ]]; then
+        log_error "No built plugins at $DIST_DIR"
+        log_info "Run 'scripts/plugins/build-marketplace.sh' first"
+        exit 1
+    fi
+
+    if $INSTALL_ALL; then
+        mapfile -t PLUGINS < <(get_available_plugins)
+    fi
+
+    if [[ ${#PLUGINS[@]} -eq 0 ]]; then
+        log_error "No plugins specified"
+        usage
+    fi
+
+    if ! $DRY_RUN; then
+        mkdir -p "$CLAUDE_DIR"
+    fi
+
+    local success=0 failed=0
+
+    for plugin in "${PLUGINS[@]}"; do
+        if $UNINSTALL; then
+            if uninstall_plugin "$plugin"; then
+                success=$((success + 1))
+            else
+                failed=$((failed + 1))
+            fi
+        else
+            if install_plugin "$plugin"; then
+                success=$((success + 1))
+            else
+                failed=$((failed + 1))
+            fi
+        fi
+    done
+
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    if $UNINSTALL; then
+        log_success "Uninstalled: $success plugins"
+    else
+        log_success "Installed: $success plugins"
+        if ! $DRY_RUN && ! $UNINSTALL; then
+            echo ""
+            echo -e "Plugin directories: ${CYAN}$PLUGINS_DIR${NC}"
+            echo -e "Use with Claude Code:"
+            echo -e "  claude --plugin-dir $PLUGINS_DIR/<name>"
+            echo ""
+            echo -e "Or register the marketplace in settings.json:"
+            echo -e "  See docs/getting-started/ for details"
+        fi
+    fi
+    [[ $failed -gt 0 ]] && log_error "Failed: $failed plugins"
+
+    return 0
+}
+
+main "$@"

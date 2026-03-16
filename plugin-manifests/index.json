@@ -1,0 +1,376 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "lamella-plugin-index",
+  "version": "1.0.0",
+  "description": "Index of all available lamella plugins",
+  "generated": "2026-03-07",
+  "stats": {
+    "totalPlugins": 21,
+    "totalSkills": 230,
+    "coverage": "98%"
+  },
+  "plugins": [
+    {
+      "name": "agile-pm",
+      "version": "1.0.0",
+      "skills": 12,
+      "description": "Agile and product management: discovery, delivery, iteration, hypothesis testing, and stakeholder workflows",
+      "tags": [
+        "agile",
+        "product-management",
+        "discovery",
+        "delivery",
+        "iteration"
+      ],
+      "manifest": "agile-pm.json",
+      "skillCount": 12,
+      "skills_count": 12
+    },
+    {
+      "name": "ai-agents",
+      "version": "1.0.0",
+      "skills": 9,
+      "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
+      "tags": [
+        "ai",
+        "agents",
+        "llm",
+        "rag",
+        "claude",
+        "multi-agent",
+        "evaluation"
+      ],
+      "manifest": "ai-agents.json",
+      "skillCount": 9,
+      "skills_count": 9
+    },
+    {
+      "name": "atmos",
+      "version": "1.0.0",
+      "skills": 20,
+      "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
+      "tags": [
+        "atmos",
+        "cloud-posse",
+        "terraform",
+        "infrastructure",
+        "stacks"
+      ],
+      "manifest": "atmos.json",
+      "skillCount": 20,
+      "skills_count": 20
+    },
+    {
+      "name": "collaboration",
+      "version": "1.0.0",
+      "skills": 6,
+      "description": "Team collaboration: meetings, decision-making, debates, and cross-functional coordination",
+      "tags": [
+        "collaboration",
+        "meetings",
+        "teams",
+        "decision-making",
+        "communication"
+      ],
+      "manifest": "collaboration.json",
+      "skillCount": 6,
+      "skills_count": 6
+    },
+    {
+      "name": "core",
+      "version": "1.0.0",
+      "skills": 24,
+      "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
+      "tags": [
+        "essential",
+        "workflow",
+        "standards",
+        "testing",
+        "git"
+      ],
+      "manifest": "core.json",
+      "skillCount": 24,
+      "skills_count": 24
+    },
+    {
+      "name": "cpp",
+      "version": "1.0.0",
+      "skills": 3,
+      "description": "C++ development: modern C++ patterns, coding standards, and testing practices",
+      "tags": [
+        "cpp",
+        "c++",
+        "systems",
+        "performance"
+      ],
+      "manifest": "cpp.json",
+      "skillCount": 3,
+      "skills_count": 3
+    },
+    {
+      "name": "database",
+      "version": "1.0.0",
+      "skills": 2,
+      "description": "Database development: SQL optimization, PostgreSQL, migrations, and data modeling",
+      "tags": [
+        "database",
+        "sql",
+        "postgresql",
+        "migrations",
+        "data-modeling"
+      ],
+      "manifest": "database.json",
+      "skillCount": 2,
+      "skills_count": 2
+    },
+    {
+      "name": "devops",
+      "version": "1.0.0",
+      "skills": 24,
+      "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+      "tags": [
+        "devops",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "aws",
+        "ci-cd",
+        "infrastructure"
+      ],
+      "manifest": "devops.json",
+      "skillCount": 24,
+      "skills_count": 24
+    },
+    {
+      "name": "frontend",
+      "version": "1.0.0",
+      "skills": 9,
+      "description": "Frontend development, UI/UX design, and document generation",
+      "tags": [
+        "frontend",
+        "ui",
+        "ux",
+        "design",
+        "css",
+        "documents"
+      ],
+      "manifest": "frontend.json",
+      "skillCount": 9,
+      "skills_count": 9
+    },
+    {
+      "name": "go",
+      "version": "1.0.0",
+      "skills": 2,
+      "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
+      "tags": [
+        "go",
+        "golang",
+        "concurrency",
+        "backend"
+      ],
+      "manifest": "go.json",
+      "skillCount": 2,
+      "skills_count": 2
+    },
+    {
+      "name": "meta",
+      "version": "1.0.0",
+      "skills": 19,
+      "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+      "tags": [
+        "meta",
+        "framework",
+        "internal",
+        "skills",
+        "plugins"
+      ],
+      "manifest": "meta.json",
+      "skillCount": 19,
+      "skills_count": 19
+    },
+    {
+      "name": "microservices",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Microservices architecture, event sourcing, and distributed systems",
+      "tags": [
+        "microservices",
+        "cqrs",
+        "event-sourcing",
+        "distributed",
+        "saga"
+      ],
+      "manifest": "microservices.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "python",
+      "version": "1.0.0",
+      "skills": 10,
+      "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
+      "tags": [
+        "python",
+        "django",
+        "fastapi",
+        "pytest",
+        "async"
+      ],
+      "manifest": "python.json",
+      "skillCount": 10,
+      "skills_count": 10
+    },
+    {
+      "name": "rag",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture",
+      "tags": [
+        "rag",
+        "vector-search",
+        "embeddings",
+        "retrieval",
+        "semantic-search"
+      ],
+      "manifest": "rag.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "rust",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 179 curated rules",
+      "tags": [
+        "rust",
+        "systems",
+        "async",
+        "cargo",
+        "memory-safety"
+      ],
+      "manifest": "rust.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "security",
+      "version": "1.0.0",
+      "skills": 32,
+      "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices",
+      "tags": [
+        "security",
+        "audit",
+        "vulnerability",
+        "fuzzing",
+        "threat-modeling"
+      ],
+      "manifest": "security.json",
+      "skillCount": 32,
+      "skills_count": 32
+    },
+    {
+      "name": "tools",
+      "version": "1.0.0",
+      "skills": 25,
+      "description": "CLI tools, shell scripting, MCP integration, API design, and prompt engineering utilities",
+      "tags": [
+        "cli",
+        "shell",
+        "bash",
+        "mcp",
+        "api",
+        "prompts",
+        "automation"
+      ],
+      "manifest": "tools.json",
+      "skillCount": 25,
+      "skills_count": 25
+    },
+    {
+      "name": "typescript",
+      "version": "1.0.0",
+      "skills": 9,
+      "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
+      "tags": [
+        "typescript",
+        "javascript",
+        "react",
+        "nextjs",
+        "nodejs",
+        "frontend"
+      ],
+      "manifest": "typescript.json",
+      "skillCount": 9,
+      "skills_count": 9
+    },
+    {
+      "name": "workflow",
+      "version": "1.0.0",
+      "skills": 14,
+      "description": "Development workflows: planning, git operations, decision records, continuous improvement (Kaizen), mental models, and Conductor project management",
+      "tags": [
+        "workflow",
+        "planning",
+        "kaizen",
+        "git",
+        "conductor"
+      ],
+      "manifest": "workflow.json",
+      "skillCount": 14,
+      "skills_count": 14
+    },
+    {
+      "name": "writing",
+      "version": "1.0.0",
+      "skills": 7,
+      "description": "Technical writing: documentation, articles, changelogs, content strategy, and editorial workflows",
+      "tags": [
+        "writing",
+        "documentation",
+        "content",
+        "technical-writing",
+        "changelog"
+      ],
+      "manifest": "writing.json",
+      "skillCount": 7,
+      "skills_count": 7
+    }
+  ],
+  "categories": {
+    "core-development": [
+      "core",
+      "python",
+      "typescript",
+      "rust",
+      "go",
+      "cpp"
+    ],
+    "infrastructure": [
+      "devops",
+      "database",
+      "microservices",
+      "atmos"
+    ],
+    "ai-and-agents": [
+      "ai-agents",
+      "rag"
+    ],
+    "product-and-business": [
+      "workflow",
+      "collaboration"
+    ],
+    "frontend-and-design": [
+      "frontend",
+      "writing"
+    ],
+    "security-and-compliance": [
+      "security"
+    ],
+    "tools-and-utilities": [
+      "tools",
+      "meta"
+    ]
+  },
+  "totalSkills": 230
+}

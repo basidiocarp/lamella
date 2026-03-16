@@ -1,0 +1,41 @@
+{
+  "$schema": "./schema.json",
+  "name": "python",
+  "version": "1.0.0",
+  "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "python",
+    "django",
+    "fastapi",
+    "pytest",
+    "async"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "python/django-patterns",
+      "python/django-security",
+      "python/django-tdd",
+      "python/django-verification",
+      "python/fastapi",
+      "python/modern-python",
+      "python/pandas-pro",
+      "python/python-patterns",
+      "python/python-testing",
+      "python/temporal-python-testing"
+    ],
+    "agents": [
+      "languages/django-pro.md",
+      "languages/fastapi-pro.md",
+      "languages/python-expert.md"
+    ],
+    "commands": [
+      "languages/python-review.md",
+      "languages/python-scaffold.md"
+    ]
+  }
+}

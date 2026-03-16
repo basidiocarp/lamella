@@ -1,0 +1,55 @@
+{
+  "$schema": "./schema.json",
+  "name": "ai-agents",
+  "version": "1.0.0",
+  "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "ai",
+    "agents",
+    "llm",
+    "rag",
+    "claude",
+    "multi-agent",
+    "evaluation"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "ai-agents/agent-evaluation",
+      "ai-agents/agent-native-architecture",
+      "ai-agents/cost-aware-llm-pipeline",
+      "ai-agents/external-llm-review",
+      "ai-agents/iterative-retrieval",
+      "ai-agents/launch-sub-agent",
+      "ai-agents/multi-agent-patterns",
+      "ai-agents/prompt-engineering",
+      "ai-agents/subagent-driven-development"
+    ],
+    "agents": [
+      "ai-ml/ai-engineer.md",
+      "ai-ml/ml-engineer.md",
+      "ai-ml/mlops-engineer.md",
+      "ai-ml/performance-engineer.md",
+      "ai-ml/performance-oracle.md",
+      "meta/agent-creator.md",
+      "meta/agent-native-reviewer.md",
+      "meta/agent-sdk-verifier-py.md",
+      "meta/agent-sdk-verifier-ts.md"
+    ],
+    "commands": [
+      "ai/cancel-skill-improver.md",
+      "ai/ct-check.md",
+      "ai/explain.md",
+      "ai/langchain-agent.md",
+      "ai/multi-agent-optimize.md",
+      "audit/agent-native-audit.md",
+      "audit/audit-agents-skills.md",
+      "audit/audit-component.md",
+      "meta/agent.md"
+    ]
+  }
+}

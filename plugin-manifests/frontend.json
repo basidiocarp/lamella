@@ -1,0 +1,48 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Frontend development, UI/UX design, and document generation",
+  "tags": [
+    "frontend",
+    "ui",
+    "ux",
+    "design",
+    "css",
+    "documents"
+  ],
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/accessibility",
+      "frontend/component-architecture",
+      "frontend/css-animation-creator",
+      "frontend/design-systems",
+      "frontend/frontend-patterns",
+      "frontend/frontend-performance",
+      "frontend/frontend-slides",
+      "frontend/responsive-design",
+      "frontend/screenshot-to-code"
+    ],
+    "agents": [
+      "frontend/accessibility-expert.md",
+      "frontend/design-iterator.md",
+      "frontend/dx-optimizer.md",
+      "frontend/figma-design-sync.md",
+      "frontend/landing-designer.md",
+      "frontend/ui-designer.md",
+      "frontend/ui-visual-validator.md",
+      "frontend/visual-diff.md"
+    ],
+    "commands": [
+      "frontend/accessibility-audit.md",
+      "frontend/create-component.md",
+      "frontend/generate_command.md",
+      "frontend/screenshots.md",
+      "frontend/signals.md",
+      "frontend/streams.md"
+    ]
+  }
+}

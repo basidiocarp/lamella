@@ -1,0 +1,60 @@
+{
+  "name": "meta",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+  "tags": [
+    "meta",
+    "framework",
+    "internal",
+    "skills",
+    "plugins"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/agent-development",
+      "meta/command-development",
+      "meta/config-curator",
+      "meta/create-hook",
+      "meta/create-skill",
+      "meta/create-workflow-command",
+      "meta/designing-workflow-skills",
+      "meta/file-todos",
+      "meta/plugin-settings",
+      "meta/plugin-structure",
+      "meta/rust-crate-skill-generator",
+      "meta/skill-best-practices",
+      "meta/skill-composer-studio",
+      "meta/skill-router",
+      "meta/skill-stocktake",
+      "meta/task-observer",
+      "meta/team-communication-protocols"
+    ],
+    "agents": [
+      "meta/output-evaluator.md",
+      "meta/plugin-validator.md",
+      "meta/post-dev-orchestrator.md",
+      "meta/skill-reviewer.md",
+      "meta/slash-command-auditor.md",
+      "meta/subagent-auditor.md",
+      "meta/workflow-skill-reviewer.md"
+    ],
+    "commands": [
+      "meta/clean-crate-skills.md",
+      "meta/create-llms-for-skills.md",
+      "meta/create-llms-from-source.md",
+      "meta/create-plugin.md",
+      "meta/create-skill.md",
+      "meta/create-skills-via-llms.md",
+      "meta/fix-skill-docs.md",
+      "meta/heal-skill.md",
+      "meta/improve-agent.md",
+      "meta/instinct.md",
+      "meta/skill-from-git.md",
+      "meta/skill-improver.md",
+      "meta/skill-index.md",
+      "meta/sync-crate-skills.md"
+    ]
+  }
+}

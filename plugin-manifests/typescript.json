@@ -1,0 +1,40 @@
+{
+  "$schema": "./schema.json",
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "typescript",
+    "javascript",
+    "react",
+    "nextjs",
+    "nodejs",
+    "frontend"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "typescript/backend-patterns",
+      "typescript/javascript-testing-patterns",
+      "typescript/modern-javascript-patterns",
+      "typescript/nextjs-app-router-patterns",
+      "typescript/payload",
+      "typescript/react-patterns",
+      "typescript/tailwind-design-system",
+      "typescript/typescript",
+      "typescript/zustand-store-ts"
+    ],
+    "agents": [
+      "architecture/frontend-architect.md",
+      "frontend/frontend-developer.md",
+      "security/frontend-security-coder.md"
+    ],
+    "commands": [
+      "languages/typescript-scaffold.md"
+    ]
+  }
+}

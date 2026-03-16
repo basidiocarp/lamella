@@ -1,0 +1,42 @@
+{
+  "$schema": "./schema.json",
+  "name": "database",
+  "version": "1.0.0",
+  "description": "Database development: SQL optimization, PostgreSQL, migrations, and data modeling",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "database",
+    "sql",
+    "postgresql",
+    "migrations",
+    "data-modeling"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "database/postgresql",
+      "database/sql-pro"
+    ],
+    "agents": [
+      "data/data-engineer.md",
+      "data/data-integrity-guardian.md",
+      "data/data-migration-expert.md",
+      "data/data-scientist.md",
+      "data/database-expert.md",
+      "data/schema-drift-detector.md",
+      "data/seed-generator.md",
+      "data/vector-database-engineer.md"
+    ],
+    "commands": [
+      "database/data-driven-feature.md",
+      "database/data-pipeline.md",
+      "database/database.md",
+      "database/guideline.md",
+      "database/sql-migrations.md",
+      "devops/migration-observability.md"
+    ]
+  }
+}

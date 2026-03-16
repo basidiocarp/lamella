@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "rag",
+  "version": "1.0.0",
+  "description": "Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "rag",
+    "vector-search",
+    "embeddings",
+    "retrieval",
+    "semantic-search"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "rag/embedding-strategies",
+      "rag/hybrid-search-implementation",
+      "rag/rag-implementation",
+      "rag/vector-search-optimization"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "./schema.json",
+  "name": "writing",
+  "version": "1.0.0",
+  "description": "Technical writing: documentation, articles, changelogs, content strategy, and editorial workflows",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "writing",
+    "documentation",
+    "content",
+    "technical-writing",
+    "changelog"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "writing/content-writer",
+      "writing/docs-style",
+      "writing/humanizer",
+      "writing/latex-posters",
+      "writing/release-notes",
+      "writing/voice-toolkit",
+      "writing/writing-voice"
+    ],
+    "agents": [
+      "content/ad-creator.md",
+      "content/article-writer-agent.md",
+      "content/clarity-editor.md",
+      "content/content-marketer.md",
+      "content/content-writer.md",
+      "content/every-style-editor.md",
+      "content/persona-strategist.md",
+      "content/publishing-optimizer.md",
+      "content/seo-expert.md",
+      "content/voice-guardian.md",
+      "documentation/api-documenter.md",
+      "documentation/doc-auditor.md",
+      "documentation/doc-updater.md",
+      "documentation/docs-specialist.md",
+      "documentation/mermaid-expert.md",
+      "documentation/tech-writer.md",
+      "documentation/tutorial-engineer.md",
+      "research/framework-researcher.md",
+      "specialized/pr-writer.md"
+    ],
+    "commands": [
+      "content/ads.md",
+      "content/articles.md",
+      "content/compose.md",
+      "content/feature-video.md",
+      "content/landing.md",
+      "content/persona.md",
+      "content/personas.md",
+      "content/seo.md",
+      "documentation/changelog.md",
+      "documentation/commands.md",
+      "documentation/docs.md",
+      "documentation/release-notes.md",
+      "documentation/whats-next.md",
+      "documentation/writing.md"
+    ]
+  }
+}

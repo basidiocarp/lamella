@@ -1,0 +1,35 @@
+{
+  "name": "collaboration",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Team collaboration: meetings, decision-making, debates, and cross-functional coordination",
+  "tags": [
+    "collaboration",
+    "meetings",
+    "teams",
+    "decision-making",
+    "communication"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "collaboration/coding-tutor",
+      "collaboration/cross-conversation-project-manager",
+      "collaboration/debate-evaluator",
+      "collaboration/debate-simulator",
+      "collaboration/devils-advocate",
+      "collaboration/expert-panel"
+    ],
+    "agents": [
+      "teams/learning-guide.md",
+      "teams/socratic-mentor.md",
+      "teams/team-debugger.md",
+      "teams/team-implementer.md",
+      "teams/team-lead.md",
+      "teams/team-reviewer.md"
+    ],
+    "commands": []
+  }
+}

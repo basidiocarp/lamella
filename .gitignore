@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+
+# Build output
+dist/
+
+# Python
+.venv/
+__pycache__/
+
+# Serena (local config/cache)
+.serena/
+
+# Session/working dirs
+.plans/
+.plan/

@@ -1,0 +1,72 @@
+{
+  "$schema": "./schema.json",
+  "name": "devops",
+  "version": "1.0.0",
+  "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+  "author": "lamella",
+  "license": "MIT",
+  "tags": [
+    "devops",
+    "docker",
+    "kubernetes",
+    "terraform",
+    "aws",
+    "ci-cd",
+    "infrastructure"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/ansible",
+      "devops/aws-agentic-ai",
+      "devops/aws-cdk-development",
+      "devops/aws-cost-operations",
+      "devops/aws-serverless-eda",
+      "devops/chaos-engineering",
+      "devops/deployment",
+      "devops/distributed-tracing",
+      "devops/docker-patterns",
+      "devops/docker-troubleshoot",
+      "devops/github-actions-validator",
+      "devops/gitops-workflow",
+      "devops/grafana-dashboards",
+      "devops/helm-charts",
+      "devops/kubernetes-manifest-generator",
+      "devops/kubernetes-security-policies",
+      "devops/makefile",
+      "devops/modal-serverless",
+      "devops/postmortem-writing",
+      "devops/prometheus-configuration",
+      "devops/promql",
+      "devops/slo-implementation",
+      "devops/terraform-patterns",
+      "devops/turborepo-caching"
+    ],
+    "agents": [
+      "architecture/cloud-architect.md",
+      "architecture/devops-architect.md",
+      "architecture/hybrid-cloud-architect.md",
+      "devops/deploy-checker.md",
+      "devops/deployment-engineer.md",
+      "devops/deployment-verification-agent.md",
+      "devops/devops-sre.md",
+      "devops/docker-specialist-agent.md",
+      "devops/env-validator.md",
+      "devops/infra-auditor.md",
+      "devops/network-engineer.md",
+      "devops/observability-engineer.md",
+      "devops/service-mesh-expert.md",
+      "devops/terraform-specialist.md"
+    ],
+    "commands": [
+      "devops/dockerfile.md",
+      "devops/monitor-setup.md",
+      "devops/serve.md",
+      "devops/shell.md",
+      "devops/slo-implement.md",
+      "documentation/deploy-docs.md"
+    ]
+  }
+}

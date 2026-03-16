@@ -1,0 +1,24 @@
+{
+  "name": "microservices",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Microservices architecture, event sourcing, and distributed systems",
+  "tags": [
+    "microservices",
+    "cqrs",
+    "event-sourcing",
+    "distributed",
+    "saga"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "microservices/cqrs-implementation",
+      "microservices/event-store-design",
+      "microservices/microservices-design",
+      "microservices/saga-orchestration"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

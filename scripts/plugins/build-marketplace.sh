@@ -126,6 +126,15 @@ build_marketplace() {
 
     log_success "Generated marketplace.json"
 
+    # Clear Claude Code plugin cache to prevent stale versions
+    local cache_dir="${CLAUDE_CACHE_DIR:-${CLAUDE_HOME:-$HOME/.claude}/plugins/cache/lamella}"
+    if [[ -d "$cache_dir" ]]; then
+        rm -rf "$cache_dir" 2>/dev/null && \
+            log_success "Cleared plugin cache ($cache_dir)" || \
+            log_warn "Could not clear plugin cache at $cache_dir"
+        log_info "Restart Claude Code to pick up rebuilt plugins."
+    fi
+
     # Summary
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

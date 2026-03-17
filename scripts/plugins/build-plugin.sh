@@ -222,6 +222,17 @@ copy_hooks() {
         fi
     fi
 
+    # Copy scripts/lib/ if hook scripts require it (shared utilities)
+    if [[ -d "$BASE_DIR/scripts/lib" ]] && [[ -d "$output_dir/scripts/hooks" ]]; then
+        local has_lib_require
+        has_lib_require=$(grep -rl "require.*\.\./lib" "$output_dir/scripts/hooks/" 2>/dev/null | head -1 || true)
+        if [[ -n "$has_lib_require" ]]; then
+            cp -r "$BASE_DIR/scripts/lib" "$output_dir/scripts/lib"
+            ((count++))
+            log_success "  scripts/lib: copied (hook dependency)"
+        fi
+    fi
+
     [[ $count -gt 0 ]] && log_success "  hooks: $count files"
     return 0
 }
@@ -258,7 +269,7 @@ generate_plugin_json() {
         name: .name,
         version: .version,
         description: .description,
-        author: { name: (.author // "Skill-Issue") },
+        author: { name: (.author // "lamella") },
         license: (.license // "MIT"),
         keywords: (.tags // [])
     }' "$manifest" > "$output_dir/.claude-plugin/plugin.json"
@@ -299,6 +310,16 @@ build_plugin() {
     copy_skills "$manifest" "$output_dir" || ((total_missing += $?))
     copy_hooks "$manifest" "$output_dir" || true
 
+    # Copy LSP config if one exists for this plugin
+    local lsp_config="$BASE_DIR/config/lsp/$name.json"
+    if [[ -f "$lsp_config" ]]; then
+        cp "$lsp_config" "$output_dir/.lsp.json"
+        # Add lspServers reference to plugin.json
+        local plugin_json="$output_dir/.claude-plugin/plugin.json"
+        jq '. + {"lspServers": "../.lsp.json"}' "$plugin_json" > "${plugin_json}.tmp" && mv "${plugin_json}.tmp" "$plugin_json"
+        log_success "  lsp: $(jq -r '.lspServers | keys[0]' "$lsp_config")"
+    fi
+
     # Standalone resources (outside plugin spec)
     copy_standalone "$manifest" "$output_dir" "rules" "$BASE_DIR/rules" || ((total_missing += $?))
     copy_standalone "$manifest" "$output_dir" "workflows" "$BASE_DIR/workflows" || ((total_missing += $?))
@@ -309,6 +330,16 @@ build_plugin() {
     if [[ $total_missing -gt 0 ]]; then
         log_warn "$total_missing resources missing"
     fi
+
+    # Clear Claude Code plugin cache to prevent stale versions
+    local cache_dir="${CLAUDE_CACHE_DIR:-${CLAUDE_HOME:-$HOME/.claude}/plugins/cache/lamella}"
+    if [[ -d "$cache_dir" ]]; then
+        rm -rf "$cache_dir" 2>/dev/null && \
+            log_success "  Cleared plugin cache ($cache_dir)" || \
+            log_warn "  Could not clear plugin cache at $cache_dir"
+        log_info "  Restart Claude Code to pick up rebuilt plugins."
+    fi
+
     return 0
 }
 

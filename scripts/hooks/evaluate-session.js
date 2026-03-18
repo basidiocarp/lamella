@@ -14,12 +14,17 @@
 
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+const { spawnSync } = require('child_process');
 const {
   getLearnedSkillsDir,
   ensureDir,
   readFile,
   countInFile,
-  log
+  log,
+  commandExists,
+  getProjectName,
+  findFiles
 } = require('../lib/utils');
 
 // Read hook input from stdin (Claude Code provides transcript_path via stdin JSON)
@@ -95,6 +100,51 @@ async function main() {
   // Signal to Claude that session should be evaluated for extractable patterns
   log(`[ContinuousLearning] Session has ${messageCount} messages - evaluate for extractable patterns`);
   log(`[ContinuousLearning] Save learned skills to: ${learnedSkillsPath}`);
+
+  // Sync learned patterns to hyphae if available
+  try {
+    const hyphaeAvailable = commandExists('hyphae');
+    if (hyphaeAvailable) {
+      const project = getProjectName() || 'unknown';
+      const patterns = findFiles(learnedSkillsPath, '*.md');
+      let stored = 0;
+
+      for (const pattern of patterns) {
+        try {
+          const content = readFile(pattern.path);
+          if (!content) continue;
+
+          const prefix = crypto.createHash('sha256').update(content).digest('hex').slice(0, 12);
+          const category = path.basename(pattern.path, '.md');
+
+          // Dedup: skip if already stored in hyphae
+          const search = spawnSync('hyphae', ['search', '--query', `hash:${prefix}`, '--limit', '1'], {
+            encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], timeout: 3000
+          });
+          if (search.status === 0 && search.stdout && search.stdout.trim()) continue;
+
+          // Store pattern in hyphae
+          const storeResult = spawnSync('hyphae', [
+            'store', '--topic', `learned/${category}`,
+            '--content', content.slice(0, 2000),
+            '--importance', 'high',
+            '-P', project,
+            '--keywords', `learned,${category},hash:${prefix}`
+          ], { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], timeout: 5000 });
+
+          if (storeResult.status === 0) stored++;
+        } catch {
+          // Individual pattern failure — continue with next
+        }
+      }
+
+      if (stored > 0) {
+        log(`[evaluate-session] Stored ${stored} patterns in hyphae`);
+      }
+    }
+  } catch {
+    // Hyphae integration must never break the hook
+  }
 
   process.exit(0);
 }

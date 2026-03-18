@@ -37,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/doc-file-warning.js\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-write-doc-warn.js\""
           }
         ],
         "description": "Doc file warning: warn about non-standard documentation files (exit code 0; warns only)"
@@ -141,6 +141,40 @@
           }
         ],
         "description": "Warn about console.log statements after edits"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/comment-style-check.sh\""
+          }
+        ],
+        "description": "Warn about inline-dash comment style, suggest boxed style"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-errors.js\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Capture command errors in hyphae for cross-session recall"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-corrections.js\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Detect self-corrections and store in hyphae"
       },
       {
         "matcher": "*",

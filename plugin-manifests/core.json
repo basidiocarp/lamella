@@ -30,7 +30,8 @@
       "common/verification.md",
       "common/confidence.md",
       "common/context.md",
-      "common/writing.md"
+      "common/writing.md",
+      "hyphae-context.md"
     ],
     "workflows": [
       "development/TDD.md",
@@ -159,7 +160,16 @@
       "session-start.js",
       "session-end.js",
       "pre-compact.js",
-      "post-edit-format.js"
+      "post-edit-format.js",
+      "post-edit-typecheck.js",
+      "post-edit-console-warn.js",
+      "pre-write-doc-warn.js",
+      "suggest-compact.js",
+      "check-console-log.js",
+      "evaluate-session.js",
+      "comment-style-check.sh",
+      "capture-errors.js",
+      "capture-corrections.js"
     ],
     "templates": [
       "claude/CLAUDE-MD-TEMPLATE.md",

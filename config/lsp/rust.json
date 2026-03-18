@@ -1,0 +1,18 @@
+{
+  "lspServers": {
+    "rust-analyzer": {
+      "command": "rust-analyzer",
+      "args": [],
+      "languages": ["rust"],
+      "filePatterns": ["*.rs"],
+      "initializationOptions": {
+        "check": {
+          "command": "clippy"
+        },
+        "cargo": {
+          "allFeatures": true
+        }
+      }
+    }
+  }
+}

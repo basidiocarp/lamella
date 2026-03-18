@@ -25,7 +25,9 @@ require_literal_line() {
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-# ─── add_standard_targets.sh ──────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# add_standard_targets.sh
+# ─────────────────────────────────────────────────────────────────────────────
 
 # Case 1: dry-run mode should not modify the Makefile.
 mkdir -p "$TMP_DIR/dry_run"
@@ -127,7 +129,9 @@ require_line "$TMP_DIR/add_vars/Makefile" '^install:'
 header_count="$(grep -c '^# My project header$' "$TMP_DIR/add_vars/Makefile")"
 [[ "$header_count" -eq 1 ]] || fail "Header comment duplicated ($header_count occurrences) by add_missing_variables"
 
-# ─── generate_makefile_template.sh ───────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# generate_makefile_template.sh
+# ─────────────────────────────────────────────────────────────────────────────
 
 # Case 6: output-file argument mapping (TYPE NAME OUTPUT) should be deterministic.
 mkdir -p "$TMP_DIR/template_output"

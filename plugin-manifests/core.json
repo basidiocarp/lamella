@@ -31,7 +31,8 @@
       "common/confidence.md",
       "common/context.md",
       "common/writing.md",
-      "hyphae-context.md"
+      "hyphae-context.md",
+      "pr-review-context.md"
     ],
     "workflows": [
       "development/TDD.md",
@@ -169,7 +170,9 @@
       "evaluate-session.js",
       "comment-style-check.sh",
       "capture-errors.js",
-      "capture-corrections.js"
+      "capture-corrections.js",
+      "capture-test-results.js",
+      "capture-pr-reviews.js"
     ],
     "templates": [
       "claude/CLAUDE-MD-TEMPLATE.md",

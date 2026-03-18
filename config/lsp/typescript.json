@@ -1,0 +1,15 @@
+{
+  "lspServers": {
+    "typescript-language-server": {
+      "command": "typescript-language-server",
+      "args": ["--stdio"],
+      "languages": ["typescript", "typescriptreact", "javascript", "javascriptreact"],
+      "filePatterns": ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mts", "*.cts"],
+      "initializationOptions": {
+        "preferences": {
+          "importModuleSpecifierPreference": "relative"
+        }
+      }
+    }
+  }
+}

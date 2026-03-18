@@ -21,7 +21,9 @@ LOG_ANALYZER="$SCRIPT_DIR/../examples/log-analyzer.sh"
 PASS=0
 FAIL=0
 
-# ─── helpers ────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
 pass() { echo "  PASS: $1"; PASS=$((PASS + 1)); }
 fail() { echo "  FAIL: $1"; FAIL=$((FAIL + 1)); }
@@ -89,7 +91,9 @@ assert_output_not_contains() {
     fi
 }
 
-# ─── setup ──────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# setup
+# ─────────────────────────────────────────────────────────────────────────────
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TEMP_DIR}"' EXIT
@@ -109,7 +113,9 @@ EOF
 
 echo "Running bash-script-generator tests..."
 
-# ─── generate_script_template.sh: argument handling ─────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# generate_script_template.sh: argument handling
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[generate_script_template.sh — argument handling]"
@@ -169,7 +175,9 @@ assert_output_contains \
     "Available templates" \
     bash "$GENERATOR" nonexistent-template
 
-# ─── generate_script_template.sh: file generation ───────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# generate_script_template.sh: file generation
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[generate_script_template.sh — file generation]"
@@ -261,7 +269,9 @@ else
 fi
 cd "$ORIG_DIR"
 
-# ─── log-analyzer.sh: argument handling ─────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# log-analyzer.sh: argument handling
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[log-analyzer.sh — argument handling]"
@@ -286,7 +296,9 @@ assert_exit_code \
     1 \
     bash "$LOG_ANALYZER" -t badtype "$LOG_FILE"
 
-# ─── log-analyzer.sh: functional behaviour ──────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# log-analyzer.sh: functional behaviour
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[log-analyzer.sh — functional behaviour]"
@@ -361,7 +373,9 @@ assert_output_not_contains \
     "Report saved to" \
     cat "$REPORT"
 
-# ─── run_ci_checks.sh: determinism and shellcheck gating ───────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# run_ci_checks.sh: determinism and shellcheck gating
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "[run_ci_checks.sh — deterministic validation]"
@@ -402,7 +416,9 @@ assert_exit_code \
     env CI=true SHELLCHECK_BIN="${TEMP_DIR}/missing-shellcheck" \
     bash "$CI_RUNNER" --skip-regression-tests
 
-# ─── summary ────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# summary
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "Results: $PASS passed, $FAIL failed"

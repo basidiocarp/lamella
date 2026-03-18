@@ -49,7 +49,9 @@ case "$TEST_SUITE" in
         ;;
 esac
 
-# ─── cleanup ────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# cleanup
+# ─────────────────────────────────────────────────────────────────────────────
 
 cleanup() {
     local f
@@ -64,7 +66,9 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-# ─── helpers ────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
 pass() { printf "  PASS  %s\n" "$1"; PASS=$((PASS + 1)); }
 fail() { printf "  FAIL  %s\n" "$1"; FAIL=$((FAIL + 1)); }
@@ -133,13 +137,17 @@ mktemp_mk() {
     echo "$f"
 }
 
-# ─── Test Groups ────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# Test Groups
+# ─────────────────────────────────────────────────────────────────────────────
 
 echo ""
 echo "Running validate_makefile.sh regression tests (suite: $TEST_SUITE)..."
 
 if [[ "$RUN_OFFLINE" -eq 1 ]]; then
-    # ── Harness: cleanup removes both files and directories ───────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Harness: cleanup removes both files and directories
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── harness: cleanup removes files and directories ───────────────────"
     cleanup_file=$(mktemp "${TMPDIR:-/tmp}/test-clean-file-XXXXXX")
@@ -149,7 +157,9 @@ if [[ "$RUN_OFFLINE" -eq 1 ]]; then
     assert_path_absent "cleanup removes temp file"               "$cleanup_file"
     assert_path_absent "cleanup removes temp directory"          "$cleanup_dir"
 
-    # ── Offline mode: deterministic mbake skip ────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Offline mode: deterministic mbake skip
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── offline: deterministic mbake skip mode ───────────────────────────"
     FAKEOFFLINEBIN=$(mktemp -d "${TMPDIR:-/tmp}/test-offlinebin-XXXXXX")
@@ -166,7 +176,9 @@ if [[ "$RUN_OFFLINE" -eq 1 ]]; then
     assert_not_contains "pip3 warning suppressed in offline mode"    "pip3 not found"
     assert_not_contains "venv setup skipped in offline mode"         "Creating temporary venv|Installing mbake"
 
-    # ── good-makefile.mk ─────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # good-makefile.mk
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── good-makefile.mk ─────────────────────────────────────────────────"
     _run "$EXAMPLES_DIR/good-makefile.mk"
@@ -176,7 +188,9 @@ if [[ "$RUN_OFFLINE" -eq 1 ]]; then
     assert_not_contains "no validation-failed summary"                "Validation FAILED"
     assert_contains     "passes summary printed"                      "Validation PASSED"
 
-    # ── bad-makefile.mk ──────────────────────────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # bad-makefile.mk
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── bad-makefile.mk ──────────────────────────────────────────────────"
     _run "$EXAMPLES_DIR/bad-makefile.mk"
@@ -189,7 +203,9 @@ if [[ "$RUN_OFFLINE" -eq 1 ]]; then
     assert_contains     "catches recursive = with shell"              "Shell commands with recursive expansion"
     assert_contains     "failed summary printed"                      "Validation FAILED"
 
-    # ── Edge: commented-out credentials must NOT be flagged ──────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: commented-out credentials must NOT be flagged
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: commented credentials ──────────────────────────────────────"
     F=$(mktemp_mk)
@@ -209,7 +225,9 @@ MKEOF
     _run "$F"
     assert_not_contains "commented creds not flagged"                 "hardcoded credentials"
 
-    # ── Edge: actual credentials after comment lines must still be caught ────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: actual credentials after comment lines must still be caught
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: real credentials are still caught ──────────────────────────"
     F=$(mktemp_mk)
@@ -227,7 +245,9 @@ MKEOF
     _run "$F"
     assert_contains     "real creds after comments still caught"      "hardcoded credentials"
 
-    # ── Edge: lowercase variable in dangerous command ─────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: lowercase variable in dangerous command
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: lowercase variable in rm -rf ───────────────────────────────"
     F=$(mktemp_mk)
@@ -242,7 +262,9 @@ MKEOF
     _run "$F"
     assert_contains     "lowercase unsafe var detected"               "without defaults"
 
-    # ── Edge: bare make call at end of line (no args) ─────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: bare make call at end of line (no args)
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: bare make call (no args at end of line) ────────────────────"
     F=$(mktemp_mk)
@@ -257,7 +279,9 @@ MKEOF
     _run "$F"
     assert_contains     "bare make call detected"                     "Direct.*call"
 
-    # ── Edge: make with args is also caught ───────────────────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: make with args is also caught
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: make with args ─────────────────────────────────────────────"
     F=$(mktemp_mk)
@@ -272,7 +296,9 @@ MKEOF
     _run "$F"
     assert_contains     "make-with-args detected"                     "Direct.*call"
 
-    # ── Edge: $(MAKE) must NOT be flagged as a bare make call ─────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: $(MAKE) must NOT be flagged as a bare make call
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: \$(MAKE) is not flagged ────────────────────────────────────"
     F=$(mktemp_mk)
@@ -290,7 +316,9 @@ MKEOF
     _run "$F"
     assert_not_contains "MAKE macro not flagged"                      "Direct.*call"
 
-    # ── Edge: syntax_check single make invocation (output present on error) ───
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: syntax_check single make invocation (output present on error)
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── edge: syntax error output is shown ───────────────────────────────"
     F=$(mktemp_mk)
@@ -299,7 +327,9 @@ MKEOF
     _run "$F"
     assert_contains     "syntax error output shown"                   "missing separator|Syntax errors detected"
 
-    # ── Edge: graceful degradation when python3 is absent ─────────────────────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Edge: graceful degradation when python3 is absent
+    # ─────────────────────────────────────────────────────────────────────────────
     # Shadow python3 with a stub that exits 127 so the validator cannot set up mbake.
     # The script should warn, skip mbake stages, still run custom/syntax checks,
     # and exit with warnings (1) rather than a hard error.
@@ -337,7 +367,9 @@ else
 fi
 
 if [[ "$RUN_INTEGRATION" -eq 1 ]]; then
-    # ── Integration: ensure mbake path executes when skip mode is disabled ────
+    # ─────────────────────────────────────────────────────────────────────────────
+    # Integration: ensure mbake path executes when skip mode is disabled
+    # ─────────────────────────────────────────────────────────────────────────────
     echo ""
     echo "── integration: mbake path is exercised ──────────────────────────────"
     _run "$EXAMPLES_DIR/good-makefile.mk" 0
@@ -372,7 +404,9 @@ else
     echo "── integration suite skipped (set MAKEFILE_VALIDATOR_TEST_SUITE=integration|all) ──"
 fi
 
-# ─── Summary ────────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# Summary
+# ─────────────────────────────────────────────────────────────────────────────
 echo ""
 echo "══════════════════════════════════════════════════════════════════════"
 printf "  Results: %d passed, %d failed\n" "$PASS" "$FAIL"

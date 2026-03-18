@@ -2,6 +2,24 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [0.2.0] - 2026-03-18
+
+### Added
+
+- **`capture-errors.js` PostToolUse hook**: Real-time error capture from tool outputs, storing structured error data in Hyphae for pattern analysis.
+- **`capture-corrections.js` PostToolUse hook**: Detects self-correction patterns (reverts, retries, "actually" pivots) and logs them for session review.
+- **`capture-test-results.js` PostToolUse hook**: Tracks test failures across tool invocations, building a per-session test result timeline.
+- **`capture-pr-reviews.js` PostToolUse hook**: Captures PR review feedback from GitHub tool calls for downstream analysis.
+- **`hyphae-context.md` rule**: Reminds agents to check Hyphae for relevant memories before starting new tasks.
+- **`pr-review-context.md` rule**: Instructs agents to pull prior PR review feedback from Hyphae when creating or updating pull requests.
+- **Hyphae integration in `evaluate-session.js`**: Session evaluation hook stores session summaries and metrics in Hyphae for cross-session learning.
+- **LSP configs for rust, typescript, python plugins**: Language-specific plugin configurations for LSP-aware skill execution.
+- **Comment style check hook**: PreToolUse hook that validates comment formatting matches the project's boxed section header convention.
+
+### Changed
+
+- **Plugin cache auto-clear on rebuild**: `build-plugin.sh` now clears the plugin cache directory before rebuilding, preventing stale skill/agent definitions.
+
 ## [0.1.0] - 2026-03-16
 
 ### Added

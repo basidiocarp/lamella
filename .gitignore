@@ -14,3 +14,4 @@ __pycache__/
 # Session/working dirs
 .plans/
 .plan/
+.rhizome/

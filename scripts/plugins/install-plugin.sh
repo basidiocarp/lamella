@@ -24,7 +24,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
-DIST_DIR="$BASE_DIR/dist/plugins"
+DIST_DIR="$BASE_DIR/dist/claude/plugins"
 CLAUDE_DIR="${CLAUDE_HOME:-$HOME/.claude}"
 PLUGINS_DIR="$CLAUDE_DIR/plugins/lamella"
 
@@ -75,7 +75,7 @@ ${BOLD}INSTALL LOCATIONS${NC}
       (rules, workflows, templates — copied directly)
 
 ${BOLD}NOTES${NC}
-    Run 'scripts/plugins/build-marketplace.sh' first to build all plugins.
+    Run 'builders/build-claude-marketplace.sh' first to build all plugins.
     After install, add to settings.json or use: claude --plugin-dir <path>
 
 EOF

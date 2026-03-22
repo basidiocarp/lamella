@@ -11,19 +11,19 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_DIR = path.join(__dirname, '../..');
-const MANIFESTS_DIR = path.join(BASE_DIR, 'plugin-manifests');
+const MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
 
 // Map resource types to their base directories
 const RESOURCE_DIRS = {
-  skills: path.join(BASE_DIR, 'skills'),
-  agents: path.join(BASE_DIR, 'agents'),
-  commands: path.join(BASE_DIR, 'commands'),
-  rules: path.join(BASE_DIR, 'rules'),
+  skills: path.join(BASE_DIR, 'resources', 'skills'),
+  agents: path.join(BASE_DIR, 'resources', 'agents'),
+  commands: path.join(BASE_DIR, 'resources', 'commands'),
+  rules: path.join(BASE_DIR, 'resources', 'rules'),
   hooks: path.join(BASE_DIR, 'scripts', 'hooks'),
-  workflows: path.join(BASE_DIR, 'workflows'),
-  templates: path.join(BASE_DIR, 'templates'),
+  workflows: path.join(BASE_DIR, 'resources', 'workflows'),
+  templates: path.join(BASE_DIR, 'resources', 'templates'),
   scripts: path.join(BASE_DIR, 'scripts'),
-  'mcp-configs': path.join(BASE_DIR, 'mcp-configs'),
+  'mcp-configs': path.join(BASE_DIR, 'resources', 'mcp-configs'),
 };
 
 let errors = 0;

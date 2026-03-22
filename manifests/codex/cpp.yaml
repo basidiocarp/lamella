@@ -1,0 +1,19 @@
+{
+  "name": "cpp",
+  "description": "C++ development: modern C++ patterns, coding standards, and testing practices",
+  "source_plugin": "cpp",
+  "resources": {
+    "skills": [
+      "cpp/cpp-pro",
+      "cpp/cpp-testing",
+      "cpp/embedded-systems"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "python",
+  "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
+  "source_plugin": "python",
+  "resources": {
+    "skills": [
+      "python/django-patterns",
+      "python/django-security",
+      "python/django-tdd",
+      "python/django-verification",
+      "python/fastapi",
+      "python/modern-python",
+      "python/pandas-pro",
+      "python/python-patterns",
+      "python/python-testing",
+      "python/temporal-python-testing"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

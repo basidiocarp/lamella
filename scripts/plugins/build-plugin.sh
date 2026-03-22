@@ -2,7 +2,7 @@
 #
 # build-plugin.sh - Build a Skill-Issue manifest into an official Claude Code plugin
 #
-# Reads a plugin-manifests/*.json file and generates a self-contained plugin
+# Reads a Claude manifest JSON file and generates a self-contained plugin
 # directory with .claude-plugin/plugin.json, flattened agents/, commands/,
 # skills/, and hooks/hooks.json — matching the official Claude Code plugin spec.
 #
@@ -13,8 +13,8 @@
 #   ./build-plugin.sh <manifest.json> [output-dir]
 #
 # Example:
-#   ./build-plugin.sh plugin-manifests/core.json
-#   ./build-plugin.sh plugin-manifests/rust.json dist/plugins/rust
+#   ./build-plugin.sh manifests/claude/core.json
+#   ./build-plugin.sh manifests/claude/rust.json dist/claude/plugins/rust
 #
 
 set -euo pipefail
@@ -39,8 +39,8 @@ usage() {
     echo "Builds a Skill-Issue manifest into an official Claude Code plugin."
     echo ""
     echo "Arguments:"
-    echo "  manifest.json   Path to plugin manifest (e.g., plugin-manifests/core.json)"
-    echo "  output-dir      Output directory (default: dist/plugins/<plugin-name>)"
+    echo "  manifest.json   Path to plugin manifest (e.g., manifests/claude/core.json)"
+    echo "  output-dir      Output directory (default: dist/claude/plugins/<plugin-name>)"
     echo ""
     echo "Output structure:"
     echo "  .claude-plugin/plugin.json   Official manifest"
@@ -70,7 +70,7 @@ copy_agents() {
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/agents/$item"
+        local src="$BASE_DIR/resources/agents/$item"
         local filename; filename=$(basename "$item")
         local dst="$output_dir/agents/$filename"
 
@@ -95,7 +95,7 @@ copy_commands() {
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/commands/$item"
+        local src="$BASE_DIR/resources/commands/$item"
         local filename; filename=$(basename "$item")
         local dst="$output_dir/commands/$filename"
 
@@ -120,7 +120,7 @@ copy_skills() {
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/skills/$item"
+        local src="$BASE_DIR/resources/skills/$item"
         local skill_name; skill_name=$(basename "$item")
         local dst="$output_dir/skills/$skill_name"
 
@@ -141,7 +141,7 @@ copy_skills() {
 # Copy hooks — bundle hook scripts and generate hooks/hooks.json
 copy_hooks() {
     local manifest="$1" output_dir="$2"
-    local hooks_json="$BASE_DIR/hooks/hooks.json"
+    local hooks_json="$BASE_DIR/resources/hooks/hooks.json"
     local count=0
 
     local hook_items
@@ -159,7 +159,7 @@ copy_hooks() {
     mkdir -p "$output_dir/scripts/hooks"
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/scripts/hooks/$item"
+        local src="$BASE_DIR/resources/hooks/$item"
         if [[ -f "$src" ]]; then
             cp "$src" "$output_dir/scripts/hooks/"
             ((count++))
@@ -175,7 +175,7 @@ copy_hooks() {
             | sed 's|${CLAUDE_PLUGIN_ROOT}/scripts/hooks/||' | sort -u || true)
         while IFS= read -r script; do
             [[ -z "$script" ]] && continue
-            local src="$BASE_DIR/scripts/hooks/$script"
+            local src="$BASE_DIR/resources/hooks/$script"
             if [[ -f "$src" ]] && [[ ! -f "$output_dir/scripts/hooks/$script" ]]; then
                 cp "$src" "$output_dir/scripts/hooks/"
                 ((count++))
@@ -292,7 +292,7 @@ build_plugin() {
         exit 1
     fi
 
-    [[ -z "$output_dir" ]] && output_dir="$BASE_DIR/dist/plugins/$name"
+    [[ -z "$output_dir" ]] && output_dir="$BASE_DIR/dist/claude/plugins/$name"
 
     log_info "Building plugin: $name v$version"
 
@@ -321,9 +321,9 @@ build_plugin() {
     fi
 
     # Standalone resources (outside plugin spec)
-    copy_standalone "$manifest" "$output_dir" "rules" "$BASE_DIR/rules" || ((total_missing += $?))
-    copy_standalone "$manifest" "$output_dir" "workflows" "$BASE_DIR/workflows" || ((total_missing += $?))
-    copy_standalone "$manifest" "$output_dir" "templates" "$BASE_DIR/templates" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "rules" "$BASE_DIR/resources/rules" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "workflows" "$BASE_DIR/resources/workflows" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "templates" "$BASE_DIR/resources/templates" || ((total_missing += $?))
 
     echo ""
     log_success "Built: $name v$version -> $output_dir"
@@ -350,7 +350,13 @@ main() {
     local manifest="$1"
     local output_dir="${2:-}"
 
-    [[ ! "$manifest" = /* ]] && manifest="$BASE_DIR/$manifest"
+    if [[ ! "$manifest" = /* ]]; then
+        if [[ -f "$manifest" ]]; then
+            manifest="$(cd "$(dirname "$manifest")" && pwd)/$(basename "$manifest")"
+        else
+            manifest="$BASE_DIR/$manifest"
+        fi
+    fi
 
     build_plugin "$manifest" "$output_dir"
 }

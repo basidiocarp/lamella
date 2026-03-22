@@ -8,9 +8,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT_DIR = path.join(__dirname, '../..');
-const COMMANDS_DIR = path.join(ROOT_DIR, 'commands');
-const AGENTS_DIR = path.join(ROOT_DIR, 'agents');
-const SKILLS_DIR = path.join(ROOT_DIR, 'skills');
+const COMMANDS_DIR = path.join(ROOT_DIR, 'resources', 'commands');
+const AGENTS_DIR = path.join(ROOT_DIR, 'resources', 'agents');
+const SKILLS_DIR = path.join(ROOT_DIR, 'resources', 'skills');
 
 /** Recursively find all .md files (excluding README.md) */
 function findMdFiles(dir) {
@@ -116,22 +116,22 @@ function validateCommands() {
       }
     }
 
-    // Check agent references (e.g., "agents/planner.md" or "`planner` agent")
-    const agentPathRefs = contentNoCodeBlocks.matchAll(/agents\/([a-z][-a-z0-9]*)\.md/g);
+    // Check agent references (e.g., "resources/agents/planner.md" or "`planner` agent")
+    const agentPathRefs = contentNoCodeBlocks.matchAll(/resources\/agents\/([a-z][-a-z0-9]*)\.md/g);
     for (const match of agentPathRefs) {
       const refName = match[1];
       if (!validAgents.has(refName)) {
-        console.error(`ERROR: ${relPath} - references non-existent agent agents/${refName}.md`);
+        console.error(`ERROR: ${relPath} - references non-existent agent resources/agents/${refName}.md`);
         hasErrors = true;
       }
     }
 
-    // Check skill directory references (e.g., "skills/category/skill-name/")
-    const skillRefs = contentNoCodeBlocks.matchAll(/skills\/([a-z][-a-z0-9]*)\/([a-z][-a-z0-9]*)\//g);
+    // Check skill directory references (e.g., "resources/skills/category/skill-name/")
+    const skillRefs = contentNoCodeBlocks.matchAll(/resources\/skills\/([a-z][-a-z0-9]*)\/([a-z][-a-z0-9]*)\//g);
     for (const match of skillRefs) {
       const refName = match[2];
       if (!validSkills.has(refName)) {
-        console.warn(`WARN: ${relPath} - references skill directory skills/${match[1]}/${refName}/ (not found locally)`);
+        console.warn(`WARN: ${relPath} - references skill directory resources/skills/${match[1]}/${refName}/ (not found locally)`);
         warnCount++;
       }
     }

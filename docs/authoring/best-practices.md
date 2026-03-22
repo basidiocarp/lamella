@@ -4,30 +4,39 @@ Learn how to write effective Skills that Claude can discover and use successfull
 
 ---
 
-Good Skills are concise, well-structured, and tested with real usage. This guide provides practical authoring decisions to help you write Skills that Claude can discover and use effectively.
+Good Skills are concise, well-structured, and tested with real usage. This guide provides practical authoring decisions
+to help you write Skills that Claude can discover and use effectively.
 
-For conceptual background on how Skills work, see the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview).
+For conceptual background on how Skills work, see
+the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview).
 
 ## Core principles
 
 ### Concise is key
 
-The [context window](https://docs.anthropic.com/docs/en/build-with-claude/context-windows) is a public good. Your Skill shares the context window with everything else Claude needs to know, including:
+The [context window](https://docs.anthropic.com/docs/en/build-with-claude/context-windows) is a public good. Your Skill
+shares the context window with everything else Claude needs to know, including:
+
 - The system prompt
 - Conversation history
 - Other Skills' metadata
 - Your actual request
 
-Not every token in your Skill has an immediate cost. At startup, only the metadata (name and description) from all Skills is pre-loaded. Claude reads SKILL.md only when the Skill becomes relevant, and reads additional files only as needed. However, being concise in SKILL.md still matters: once Claude loads it, every token competes with conversation history and other context.
+Not every token in your Skill has an immediate cost. At startup, only the metadata (name and description) from all
+Skills is pre-loaded. Claude reads SKILL.md only when the Skill becomes relevant, and reads additional files only as
+needed. However, being concise in SKILL.md still matters: once Claude loads it, every token competes with conversation
+history and other context.
 
 **Default assumption:** Claude is already very smart
 
 Only add context Claude doesn't already have. Challenge each piece of information:
+
 - "Does Claude really need this explanation?"
 - "Can I assume Claude knows this?"
 - "Does this paragraph justify its token cost?"
 
 **Good example: Concise** (approximately 50 tokens):
+
 ````markdown
 ## Extract PDF text
 
@@ -42,6 +51,7 @@ with pdfplumber.open("file.pdf") as pdf:
 ````
 
 **Bad example: Too verbose** (approximately 150 tokens):
+
 ```markdown
 ## Extract PDF text
 
@@ -61,11 +71,13 @@ Match the level of specificity to the task's fragility and variability.
 **High freedom** (text-based instructions):
 
 Use when:
+
 - Multiple approaches are valid
 - Decisions depend on context
 - Heuristics guide the approach
 
 Example:
+
 ```markdown
 ## Code review process
 
@@ -78,11 +90,13 @@ Example:
 **Medium freedom** (pseudocode or scripts with parameters):
 
 Use when:
+
 - A preferred pattern exists
 - Some variation is acceptable
 - Configuration affects behavior
 
 Example:
+
 ````markdown
 ## Generate report
 
@@ -99,11 +113,13 @@ def generate_report(data, format="markdown", include_charts=True):
 **Low freedom** (specific scripts, few or no parameters):
 
 Use when:
+
 - Operations are fragile and error-prone
 - Consistency is critical
 - A specific sequence must be followed
 
 Example:
+
 ````markdown
 ## Database migration
 
@@ -117,19 +133,25 @@ Do not modify the command or add additional flags.
 ````
 
 **Analogy:** Think of Claude as a robot exploring a path:
-- **Narrow bridge with cliffs on both sides:** There's only one safe way forward. Provide specific guardrails and exact instructions (low freedom). Example: database migrations that must run in exact sequence.
-- **Open field with no hazards:** Many paths lead to success. Give general direction and trust Claude to find the best route (high freedom). Example: code reviews where context determines the best approach.
+
+- **Narrow bridge with cliffs on both sides:** There's only one safe way forward. Provide specific guardrails and exact
+  instructions (low freedom). Example: database migrations that must run in exact sequence.
+- **Open field with no hazards:** Many paths lead to success. Give general direction and trust Claude to find the best
+  route (high freedom). Example: code reviews where context determines the best approach.
 
 ### Test with all models you plan to use
 
-Skills act as additions to models, so effectiveness depends on the underlying model. Test your Skill with all the models you plan to use it with.
+Skills act as additions to models, so effectiveness depends on the underlying model. Test your Skill with all the models
+you plan to use it with.
 
 **Testing considerations by model:**
+
 - **Claude Haiku** (fast, economical): Does the Skill provide enough guidance?
 - **Claude Sonnet** (balanced): Is the Skill clear and efficient?
 - **Claude Opus** (powerful reasoning): Does the Skill avoid over-explaining?
 
-What works perfectly for Opus might need more detail for Haiku. If you plan to use your Skill across multiple models, aim for instructions that work well with all of them.
+What works perfectly for Opus might need more detail for Haiku. If you plan to use your Skill across multiple models,
+aim for instructions that work well with all of them.
 
 ## Skill structure
 
@@ -137,27 +159,32 @@ What works perfectly for Opus might need more detail for Haiku. If you plan to u
 **YAML Frontmatter:** The SKILL.md frontmatter requires two fields:
 
 `name`:
+
 - Maximum 64 characters
 - Must contain only lowercase letters, numbers, and hyphens
 - Cannot contain XML tags
 - Cannot contain reserved words: "anthropic", "claude"
 
 `description`:
+
 - Must be non-empty
 - Maximum 1024 characters
 - Cannot contain XML tags
 - Should describe what the Skill does and when to use it
 
-For complete Skill structure details, see the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure).
+For complete Skill structure details, see
+the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure).
 </Note>
 
 ### Naming conventions
 
-Use consistent naming patterns to make Skills easier to reference and discuss. Consider using **gerund form** (verb + -ing) for Skill names, as this clearly describes the activity or capability the Skill provides.
+Use consistent naming patterns to make Skills easier to reference and discuss. Consider using **gerund form** (verb +
+-ing) for Skill names, as this clearly describes the activity or capability the Skill provides.
 
 Remember that the `name` field must use lowercase letters, numbers, and hyphens only.
 
 **Good naming examples (gerund form):**
+
 - `processing-pdfs`
 - `analyzing-spreadsheets`
 - `managing-databases`
@@ -165,16 +192,19 @@ Remember that the `name` field must use lowercase letters, numbers, and hyphens 
 - `writing-documentation`
 
 **Acceptable alternatives:**
+
 - Noun phrases: `pdf-processing`, `spreadsheet-analysis`
 - Action-oriented: `process-pdfs`, `analyze-spreadsheets`
 
 **Avoid:**
+
 - Vague names: `helper`, `utils`, `tools`
 - Overly generic: `documents`, `data`, `files`
 - Reserved words: `anthropic-helper`, `claude-tools`
 - Inconsistent patterns within your skill collection
 
 Consistent naming makes it easier to:
+
 - Reference Skills in documentation and conversations
 - Understand what a Skill does at a glance
 - Organize and search through multiple Skills
@@ -190,25 +220,32 @@ The `description` field enables Skill discovery and should include both what the
 - **Good:** "Processes Excel files and generates reports"
 - **Avoid:** "I can help you process Excel files"
 - **Avoid:** "You can use this to process Excel files"
+
 </Warning>
 
-**Be specific and include key terms**. Include both what the Skill does and specific triggers/contexts for when to use it.
+**Be specific and include key terms**. Include both what the Skill does and specific triggers/contexts for when to use
+it.
 
-Each Skill has exactly one description field. The description is critical for skill selection: Claude uses it to choose the right Skill from potentially 100+ available Skills. Your description must provide enough detail for Claude to know when to select this Skill, while the rest of SKILL.md provides the implementation details.
+Each Skill has exactly one description field. The description is critical for skill selection: Claude uses it to choose
+the right Skill from potentially 100+ available Skills. Your description must provide enough detail for Claude to know
+when to select this Skill, while the rest of SKILL.md provides the implementation details.
 
 Effective examples:
 
 **PDF Processing skill:**
+
 ```yaml
 description: Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDF files or when the user mentions PDFs, forms, or document extraction.
 ```
 
 **Excel Analysis skill:**
+
 ```yaml
 description: Analyze Excel spreadsheets, create pivot tables, generate charts. Use when analyzing Excel files, spreadsheets, tabular data, or .xlsx files.
 ```
 
 **Git Commit Helper skill:**
+
 ```yaml
 description: Generate descriptive commit messages by analyzing git diffs. Use when the user asks for help writing commit messages or reviewing staged changes.
 ```
@@ -218,18 +255,24 @@ Avoid vague descriptions like these:
 ```yaml
 description: Helps with documents
 ```
+
 ```yaml
 description: Processes data
 ```
+
 ```yaml
 description: Does stuff with files
 ```
 
 ### Progressive disclosure patterns
 
-SKILL.md serves as an overview that points Claude to detailed materials as needed, like a table of contents in an onboarding guide. For an explanation of how progressive disclosure works, see [How Skills work](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) in the overview.
+SKILL.md serves as an overview that points Claude to detailed materials as needed, like a table of contents in an
+onboarding guide. For an explanation of how progressive disclosure works,
+see [How Skills work](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) in the
+overview.
 
 **Practical guidance:**
+
 - Keep SKILL.md body under 500 lines for optimal performance
 - Split content into separate files when approaching this limit
 - Use the patterns below to organize instructions, code, and resources effectively
@@ -288,7 +331,9 @@ Claude loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed.
 
 #### Pattern 2: Domain-specific organization
 
-For Skills with multiple domains, organize content by domain to avoid loading irrelevant context. When a user asks about sales metrics, Claude only needs to read sales-related schemas, not finance or marketing data. This keeps token usage low and context focused.
+For Skills with multiple domains, organize content by domain to avoid loading irrelevant context. When a user asks about
+sales metrics, Claude only needs to read sales-related schemas, not finance or marketing data. This keeps token usage
+low and context focused.
 
 ```text
 bigquery-skill/
@@ -344,11 +389,15 @@ Claude reads REDLINING.md or OOXML.md only when the user needs those features.
 
 ### Avoid deeply nested references
 
-Claude may partially read files when they're referenced from other referenced files. When encountering nested references, Claude might use commands like `head -100` to preview content rather than reading entire files, resulting in incomplete information.
+Claude may partially read files when they're referenced from other referenced files. When encountering nested
+references, Claude might use commands like `head -100` to preview content rather than reading entire files, resulting in
+incomplete information.
 
-**Keep references one level deep from SKILL.md**. All reference files should link directly from SKILL.md to ensure Claude reads complete files when needed.
+**Keep references one level deep from SKILL.md**. All reference files should link directly from SKILL.md to ensure
+Claude reads complete files when needed.
 
 **Bad example: Too deep**:
+
 ```markdown
 # SKILL.md
 See [advanced.md](advanced.md)...
@@ -361,6 +410,7 @@ Here's the actual information...
 ```
 
 **Good example: One level deep**:
+
 ```markdown
 # SKILL.md
 
@@ -372,9 +422,11 @@ Here's the actual information...
 
 ### Structure longer reference files with table of contents
 
-For reference files longer than 100 lines, include a table of contents at the top. This ensures Claude can see the full scope of available information even when previewing with partial reads.
+For reference files longer than 100 lines, include a table of contents at the top. This ensures Claude can see the full
+scope of available information even when previewing with partial reads.
 
 **Example:**
+
 ```markdown
 # API Reference
 
@@ -394,13 +446,15 @@ For reference files longer than 100 lines, include a table of contents at the to
 
 Claude can then read the complete file or jump to specific sections as needed.
 
-For details on how this filesystem-based architecture enables progressive disclosure, see the [Runtime environment](#runtime-environment) section in the Advanced section below.
+For details on how this filesystem-based architecture enables progressive disclosure, see
+the [Runtime environment](#runtime-environment) section in the Advanced section below.
 
 ## Workflows and feedback loops
 
 ### Use workflows for complex tasks
 
-Break complex operations into clear, sequential steps. For particularly complex workflows, provide a checklist that Claude can copy into its response and check off as it progresses.
+Break complex operations into clear, sequential steps. For particularly complex workflows, provide a checklist that
+Claude can copy into its response and check off as it progresses.
 
 **Example 1: Research synthesis workflow** (for Skills without code):
 
@@ -442,7 +496,8 @@ Organize findings by theme. Include:
 Check that every claim references the correct source document. If citations are incomplete, return to Step 3.
 ````
 
-This example shows how workflows apply to analysis tasks that don't require code. The checklist pattern works for any complex, multi-step process.
+This example shows how workflows apply to analysis tasks that don't require code. The checklist pattern works for any
+complex, multi-step process.
 
 **Example 2: PDF form filling workflow** (for Skills with code):
 
@@ -487,7 +542,8 @@ Run: `python scripts/verify_output.py output.pdf`
 If verification fails, return to Step 2.
 ````
 
-Clear steps prevent Claude from skipping critical validation. The checklist helps both Claude and you track progress through multi-step workflows.
+Clear steps prevent Claude from skipping critical validation. The checklist helps both Claude and you track progress
+through multi-step workflows.
 
 ### Implement feedback loops
 
@@ -513,7 +569,8 @@ This pattern greatly improves output quality.
 5. Finalize and save the document
 ```
 
-This shows the validation loop pattern using reference documents instead of scripts. The "validator" is STYLE_GUIDE.md, and Claude performs the check by reading and comparing.
+This shows the validation loop pattern using reference documents instead of scripts. The "validator" is STYLE_GUIDE.md,
+and Claude performs the check by reading and comparing.
 
 **Example 2: Document editing process** (for Skills with code):
 
@@ -540,12 +597,14 @@ The validation loop catches errors early.
 Don't include information that will become outdated:
 
 **Bad example: Time-sensitive** (will become wrong):
+
 ```markdown
 If you're doing this before August 2025, use the old API.
 After August 2025, use the new API.
 ```
 
 **Good example** (use "old patterns" section):
+
 ```markdown
 ## Current method
 
@@ -569,11 +628,13 @@ The old patterns section provides historical context without cluttering the main
 Choose one term and use it throughout the Skill:
 
 **Good - Consistent:**
+
 - Always "API endpoint"
 - Always "field"
 - Always "extract"
 
 **Bad - Inconsistent:**
+
 - Mix "API endpoint", "URL", "API route", "path"
 - Mix "field", "box", "element", "control"
 - Mix "extract", "pull", "get", "retrieve"
@@ -707,9 +768,11 @@ If workflows become large or complicated with many steps, consider pushing them 
 
 ### Build evaluations first
 
-**Create evaluations BEFORE writing extensive documentation.** This ensures your Skill solves real problems rather than documenting imagined ones.
+**Create evaluations BEFORE writing extensive documentation.** This ensures your Skill solves real problems rather than
+documenting imagined ones.
 
 **Evaluation-driven development:**
+
 1. **Identify gaps:** Run Claude on representative tasks without a Skill. Document specific failures or missing context
 2. **Create evaluations:** Build three scenarios that test these gaps
 3. **Establish baseline:** Measure Claude's performance without the Skill
@@ -719,6 +782,7 @@ If workflows become large or complicated with many steps, consider pushing them 
 This approach ensures you're solving actual problems rather than anticipating requirements that may never materialize.
 
 **Evaluation structure:**
+
 ```json
 {
   "skills": ["pdf-processing"],
@@ -738,33 +802,46 @@ This example demonstrates a data-driven evaluation with a simple testing rubric.
 
 ### Develop Skills iteratively with Claude
 
-The most effective Skill development process involves Claude itself. Work with one instance of Claude ("Claude A") to create a Skill that is used by other instances ("Claude B"). Claude A helps you design and refine instructions, while Claude B tests them in real tasks. This works because Claude models understand both how to write effective agent instructions and what information agents need.
+The most effective Skill development process involves Claude itself. Work with one instance of Claude ("Claude A") to
+create a Skill that is used by other instances ("Claude B"). Claude A helps you design and refine instructions, while
+Claude B tests them in real tasks. This works because Claude models understand both how to write effective agent
+instructions and what information agents need.
 
 **Creating a new Skill:**
 
-1. **Complete a task without a Skill:** Work through a problem with Claude A using normal prompting. As you work, you'll naturally provide context, explain preferences, and share procedural knowledge. Notice what information you repeatedly provide.
+1. **Complete a task without a Skill:** Work through a problem with Claude A using normal prompting. As you work, you'll
+   naturally provide context, explain preferences, and share procedural knowledge. Notice what information you
+   repeatedly provide.
 
-2. **Identify the reusable pattern:** After completing the task, identify what context you provided that would be useful for similar future tasks.
+2. **Identify the reusable pattern:** After completing the task, identify what context you provided that would be useful
+   for similar future tasks.
 
-   **Example:** If you worked through a BigQuery analysis, you might have provided table names, field definitions, filtering rules (like "always exclude test accounts"), and common query patterns.
+   **Example:** If you worked through a BigQuery analysis, you might have provided table names, field definitions,
+   filtering rules (like "always exclude test accounts"), and common query patterns.
 
-3. **Ask Claude A to create a Skill:** "Create a Skill that captures this BigQuery analysis pattern we just used. Include the table schemas, naming conventions, and the rule about filtering test accounts."
+3. **Ask Claude A to create a Skill:** "Create a Skill that captures this BigQuery analysis pattern we just used.
+   Include the table schemas, naming conventions, and the rule about filtering test accounts."
 
    <Tip>
    Claude models understand the Skill format and structure natively. You don't need special system prompts or a "writing skills" skill to get Claude to help create Skills. Simply ask Claude to create a Skill and it generates properly structured SKILL.md content with appropriate frontmatter and body content.
    </Tip>
 
-4. **Review for conciseness:** Check that Claude A hasn't added unnecessary explanations. Ask: "Remove the explanation about what win rate means - Claude already knows that."
+4. **Review for conciseness:** Check that Claude A hasn't added unnecessary explanations. Ask: "Remove the explanation
+   about what win rate means - Claude already knows that."
 
-5. **Improve information architecture:** Ask Claude A to organize the content more effectively. For example: "Organize this so the table schema is in a separate reference file. We might add more tables later."
+5. **Improve information architecture:** Ask Claude A to organize the content more effectively. For example: "Organize
+   this so the table schema is in a separate reference file. We might add more tables later."
 
-6. **Test on similar tasks:** Use the Skill with Claude B (a fresh instance with the Skill loaded) on related use cases. Observe whether Claude B finds the right information, applies rules correctly, and handles the task successfully.
+6. **Test on similar tasks:** Use the Skill with Claude B (a fresh instance with the Skill loaded) on related use cases.
+   Observe whether Claude B finds the right information, applies rules correctly, and handles the task successfully.
 
-7. **Iterate based on observation:** If Claude B struggles or misses something, return to Claude A with specifics: "When Claude used this Skill, it forgot to filter by date for Q4. Should we add a section about date filtering patterns?"
+7. **Iterate based on observation:** If Claude B struggles or misses something, return to Claude A with specifics: "When
+   Claude used this Skill, it forgot to filter by date for Q4. Should we add a section about date filtering patterns?"
 
 **Iterating on existing Skills:**
 
 The same hierarchical pattern continues when improving Skills. You alternate between:
+
 - **Working with Claude A** (the expert who helps refine the Skill)
 - **Testing with Claude B** (the agent using the Skill to perform real work)
 - **Observing Claude B's behavior** and bringing insights back to Claude A
@@ -773,15 +850,21 @@ The same hierarchical pattern continues when improving Skills. You alternate bet
 
 2. **Observe Claude B's behavior:** Note where it struggles, succeeds, or makes unexpected choices
 
-   **Example observation:** "When I asked Claude B for a regional sales report, it wrote the query but forgot to filter out test accounts, even though the Skill mentions this rule."
+   **Example observation:** "When I asked Claude B for a regional sales report, it wrote the query but forgot to filter
+   out test accounts, even though the Skill mentions this rule."
 
-3. **Return to Claude A for improvements:** Share the current SKILL.md and describe what you observed. Ask: "I noticed Claude B forgot to filter test accounts when I asked for a regional report. The Skill mentions filtering, but maybe it's not prominent enough?"
+3. **Return to Claude A for improvements:** Share the current SKILL.md and describe what you observed. Ask: "I noticed
+   Claude B forgot to filter test accounts when I asked for a regional report. The Skill mentions filtering, but maybe
+   it's not prominent enough?"
 
-4. **Review Claude A's suggestions:** Claude A might suggest reorganizing to make rules more prominent, using stronger language like "MUST filter" instead of "always filter", or restructuring the workflow section.
+4. **Review Claude A's suggestions:** Claude A might suggest reorganizing to make rules more prominent, using stronger
+   language like "MUST filter" instead of "always filter", or restructuring the workflow section.
 
-5. **Apply and test changes:** Update the Skill with Claude A's refinements, then test again with Claude B on similar requests
+5. **Apply and test changes:** Update the Skill with Claude A's refinements, then test again with Claude B on similar
+   requests
 
-6. **Repeat based on usage:** Continue this observe-refine-test cycle as you encounter new scenarios. Each iteration improves the Skill based on real agent behavior, not assumptions.
+6. **Repeat based on usage:** Continue this observe-refine-test cycle as you encounter new scenarios. Each iteration
+   improves the Skill based on real agent behavior, not assumptions.
 
 **Gathering team feedback:**
 
@@ -789,18 +872,25 @@ The same hierarchical pattern continues when improving Skills. You alternate bet
 2. Ask: Does the Skill activate when expected? Are instructions clear? What's missing?
 3. Incorporate feedback to address blind spots in your own usage patterns
 
-**Why this approach works:** Claude A understands agent needs, you provide domain expertise, Claude B reveals gaps through real usage, and iterative refinement improves Skills based on observed behavior rather than assumptions.
+**Why this approach works:** Claude A understands agent needs, you provide domain expertise, Claude B reveals gaps
+through real usage, and iterative refinement improves Skills based on observed behavior rather than assumptions.
 
 ### Observe how Claude navigates Skills
 
 As you iterate on Skills, pay attention to how Claude actually uses them in practice. Watch for:
 
-- **Unexpected exploration paths:** Does Claude read files in an order you didn't anticipate? This might indicate your structure isn't as intuitive as you thought
-- **Missed connections:** Does Claude fail to follow references to important files? Your links might need to be more explicit or prominent
-- **Overreliance on certain sections:** If Claude repeatedly reads the same file, consider whether that content should be in the main SKILL.md instead
-- **Ignored content:** If Claude never accesses a bundled file, it might be unnecessary or poorly signaled in the main instructions
+- **Unexpected exploration paths:** Does Claude read files in an order you didn't anticipate? This might indicate your
+  structure isn't as intuitive as you thought
+- **Missed connections:** Does Claude fail to follow references to important files? Your links might need to be more
+  explicit or prominent
+- **Overreliance on certain sections:** If Claude repeatedly reads the same file, consider whether that content should
+  be in the main SKILL.md instead
+- **Ignored content:** If Claude never accesses a bundled file, it might be unnecessary or poorly signaled in the main
+  instructions
 
-Iterate based on these observations rather than assumptions. The 'name' and 'description' in your Skill's metadata are particularly critical. Claude uses these when deciding whether to trigger the Skill in response to the current task. Make sure they clearly describe what the Skill does and when it should be used.
+Iterate based on these observations rather than assumptions. The 'name' and 'description' in your Skill's metadata are
+particularly critical. Claude uses these when deciding whether to trigger the Skill in response to the current task.
+Make sure they clearly describe what the Skill does and when it should be used.
 
 ## Anti-patterns to avoid
 
@@ -832,7 +922,8 @@ For scanned PDFs requiring OCR, use pdf2image with pytesseract instead."
 
 ## Advanced: Skills with executable code
 
-The sections below focus on Skills that include executable scripts. If your Skill uses only markdown instructions, skip to [Checklist for effective Skills](#checklist-for-effective-skills).
+The sections below focus on Skills that include executable scripts. If your Skill uses only markdown instructions, skip
+to [Checklist for effective Skills](#checklist-for-effective-skills).
 
 ### Solve, don't punt
 
@@ -866,7 +957,8 @@ def process_file(path):
     return open(path).read()
 ```
 
-Configuration parameters should also be justified and documented to avoid "voodoo constants" (Ousterhout's law). If you don't know the right value, how will Claude determine it?
+Configuration parameters should also be justified and documented to avoid "voodoo constants" (Ousterhout's law). If you
+don't know the right value, how will Claude determine it?
 
 **Good example: Self-documenting:**
 
@@ -892,6 +984,7 @@ RETRIES = 5  # Why 5?
 Even if Claude could write a script, pre-made scripts offer advantages:
 
 **Benefits of utility scripts:**
+
 - More reliable than generated code
 - Save tokens (no need to include code in context)
 - Save time (no code generation required)
@@ -899,15 +992,19 @@ Even if Claude could write a script, pre-made scripts offer advantages:
 
 ![Bundling executable scripts alongside instruction files](https://docs.anthropic.com/docs/images/agent-skills-executable-scripts.png)
 
-The diagram above shows how executable scripts work alongside instruction files. The instruction file (forms.md) references the script, and Claude can execute it without loading its contents into context.
+The diagram above shows how executable scripts work alongside instruction files. The instruction file (forms.md)
+references the script, and Claude can execute it without loading its contents into context.
 
 **Important distinction:** Make clear in your instructions whether Claude should:
+
 - **Execute the script** (most common): "Run `analyze_form.py` to extract fields"
 - **Read it as reference** (for complex logic): "See `analyze_form.py` for the field extraction algorithm"
 
-For most utility scripts, execution is preferred because it's more reliable and efficient. See the [Runtime environment](#runtime-environment) section below for details on how script execution works.
+For most utility scripts, execution is preferred because it's more reliable and efficient. See
+the [Runtime environment](#runtime-environment) section below for details on how script execution works.
 
 **Example:**
+
 ````markdown
 ## Utility scripts
 
@@ -963,13 +1060,19 @@ Claude's vision capabilities help understand layouts and structures.
 
 ### Create verifiable intermediate outputs
 
-When Claude performs complex, open-ended tasks, it can make mistakes. The "plan-validate-execute" pattern catches errors early by having Claude first create a plan in a structured format, then validate that plan with a script before executing it.
+When Claude performs complex, open-ended tasks, it can make mistakes. The "plan-validate-execute" pattern catches errors
+early by having Claude first create a plan in a structured format, then validate that plan with a script before
+executing it.
 
-**Example:** Imagine asking Claude to update 50 form fields in a PDF based on a spreadsheet. Without validation, Claude might reference non-existent fields, create conflicting values, miss required fields, or apply updates incorrectly.
+**Example:** Imagine asking Claude to update 50 form fields in a PDF based on a spreadsheet. Without validation, Claude
+might reference non-existent fields, create conflicting values, miss required fields, or apply updates incorrectly.
 
-**Solution:** Use the workflow pattern shown above (PDF form filling), but add an intermediate `changes.json` file that gets validated before applying changes. The workflow becomes: analyze → **create plan file** → **validate plan** → execute → verify.
+**Solution:** Use the workflow pattern shown above (PDF form filling), but add an intermediate `changes.json` file that
+gets validated before applying changes. The workflow becomes: analyze → **create plan file** → **validate plan** →
+execute → verify.
 
 **Why this pattern works:**
+
 - **Catches errors early:** Validation finds problems before changes are applied
 - **Machine-verifiable:** Scripts provide objective verification
 - **Reversible planning:** Claude can iterate on the plan without touching originals
@@ -977,7 +1080,8 @@ When Claude performs complex, open-ended tasks, it can make mistakes. The "plan-
 
 **When to use:** Batch operations, destructive changes, complex validation rules, high-stakes operations.
 
-**Implementation tip:** Make validation scripts verbose with specific error messages like "Field 'signature_date' not found. Available fields: customer_name, order_total, signature_date_signed" to help Claude fix issues.
+**Implementation tip:** Make validation scripts verbose with specific error messages like "Field 'signature_date' not
+found. Available fields: customer_name, order_total, signature_date_signed" to help Claude fix issues.
 
 ### Package dependencies
 
@@ -986,28 +1090,39 @@ Skills run in the code execution environment with platform-specific limitations:
 - **claude.ai:** Can install packages from npm and PyPI and pull from GitHub repositories
 - **Claude API:** Has no network access and no runtime package installation
 
-List required packages in your SKILL.md and verify they're available in the [code execution tool documentation](https://docs.anthropic.com/docs/en/agents-and-tools/tool-use/code-execution-tool).
+List required packages in your SKILL.md and verify they're available in
+the [code execution tool documentation](https://docs.anthropic.com/docs/en/agents-and-tools/tool-use/code-execution-tool).
 
 ### Runtime environment
 
-Skills run in a code execution environment with filesystem access, bash commands, and code execution capabilities. For the conceptual explanation of this architecture, see [The Skills architecture](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#the-skills-architecture) in the overview.
+Skills run in a code execution environment with filesystem access, bash commands, and code execution capabilities. For
+the conceptual explanation of this architecture,
+see [The Skills architecture](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#the-skills-architecture)
+in the overview.
 
 **How this affects your authoring:**
 
 **How Claude accesses Skills:**
 
-1. **Metadata pre-loaded:** At startup, the name and description from all Skills' YAML frontmatter are loaded into the system prompt
-2. **Files read on-demand:** Claude uses bash Read tools to access SKILL.md and other files from the filesystem when needed
-3. **Scripts executed efficiently:** Utility scripts can be executed via bash without loading their full contents into context. Only the script's output consumes tokens
-4. **No context penalty for large files:** Reference files, data, or documentation don't consume context tokens until actually read
+1. **Metadata pre-loaded:** At startup, the name and description from all Skills' YAML frontmatter are loaded into the
+   system prompt
+2. **Files read on-demand:** Claude uses bash Read tools to access SKILL.md and other files from the filesystem when
+   needed
+3. **Scripts executed efficiently:** Utility scripts can be executed via bash without loading their full contents into
+   context. Only the script's output consumes tokens
+4. **No context penalty for large files:** Reference files, data, or documentation don't consume context tokens until
+   actually read
 
-- **File paths matter:** Claude navigates your skill directory like a filesystem. Use forward slashes (`reference/guide.md`), not backslashes
+- **File paths matter:** Claude navigates your skill directory like a filesystem. Use forward slashes (
+  `reference/guide.md`), not backslashes
 - **Name files descriptively:** Use names that indicate content: `form_validation_rules.md`, not `doc2.md`
 - **Organize for discovery:** Structure directories by domain or feature
   - Good: `reference/finance.md`, `reference/sales.md`
   - Bad: `docs/file1.md`, `docs/file2.md`
-- **Bundle comprehensive resources:** Include complete API docs, extensive examples, large datasets; no context penalty until accessed
-- **Prefer scripts for deterministic operations:** Write `validate_form.py` rather than asking Claude to generate validation code
+- **Bundle comprehensive resources:** Include complete API docs, extensive examples, large datasets; no context penalty
+  until accessed
+- **Prefer scripts for deterministic operations:** Write `validate_form.py` rather than asking Claude to generate
+  validation code
 - **Make execution intent clear:**
   - "Run `analyze_form.py` to extract fields" (execute)
   - "See `analyze_form.py` for the extraction algorithm" (read as reference)
@@ -1024,23 +1139,31 @@ bigquery-skill/
     └── product.md (usage analytics)
 ```
 
-When the user asks about revenue, Claude reads SKILL.md, sees the reference to `reference/finance.md`, and invokes bash to read just that file. The sales.md and product.md files remain on the filesystem, consuming zero context tokens until needed. This filesystem-based model is what enables progressive disclosure. Claude can navigate and selectively load exactly what each task requires.
+When the user asks about revenue, Claude reads SKILL.md, sees the reference to `reference/finance.md`, and invokes bash
+to read just that file. The sales.md and product.md files remain on the filesystem, consuming zero context tokens until
+needed. This filesystem-based model is what enables progressive disclosure. Claude can navigate and selectively load
+exactly what each task requires.
 
-For complete details on the technical architecture, see [How Skills work](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) in the Skills overview.
+For complete details on the technical architecture,
+see [How Skills work](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work) in the
+Skills overview.
 
 ### MCP tool references
 
-If your Skill uses MCP (Model Context Protocol) tools, always use fully qualified tool names to avoid "tool not found" errors.
+If your Skill uses MCP (Model Context Protocol) tools, always use fully qualified tool names to avoid "tool not found"
+errors.
 
 **Format:** `ServerName:tool_name`
 
 **Example:**
+
 ```markdown
 Use the BigQuery:bigquery_schema tool to retrieve table schemas.
 Use the GitHub:create_issue tool to create issues.
 ```
 
 Where:
+
 - `BigQuery` and `GitHub` are MCP server names
 - `bigquery_schema` and `create_issue` are the tool names within those servers
 
@@ -1069,20 +1192,25 @@ reader = PdfReader("file.pdf")
 ### YAML frontmatter requirements
 
 The SKILL.md frontmatter requires `name` and `description` fields with specific validation rules:
+
 - `name`: Maximum 64 characters, lowercase letters/numbers/hyphens only, no XML tags, no reserved words
 - `description`: Maximum 1024 characters, non-empty, no XML tags
 
-See the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure) for complete structure details.
+See the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure) for
+complete structure details.
 
 ### Token budgets
 
-Keep SKILL.md body under 500 lines for optimal performance. If your content exceeds this, split it into separate files using the progressive disclosure patterns described earlier. For architectural details, see the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work).
+Keep SKILL.md body under 500 lines for optimal performance. If your content exceeds this, split it into separate files
+using the progressive disclosure patterns described earlier. For architectural details, see
+the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#how-skills-work).
 
 ## Checklist for effective Skills
 
 Before sharing a Skill, verify:
 
 ### Core quality
+
 - [ ] Description is specific and includes key terms
 - [ ] Description includes both what the Skill does and when to use it
 - [ ] SKILL.md body is under 500 lines
@@ -1095,6 +1223,7 @@ Before sharing a Skill, verify:
 - [ ] Workflows have clear steps
 
 ### Code and scripts
+
 - [ ] Scripts solve problems rather than punt to Claude
 - [ ] Error handling is explicit and helpful
 - [ ] No "voodoo constants" (all values justified)
@@ -1105,6 +1234,7 @@ Before sharing a Skill, verify:
 - [ ] Feedback loops included for quality-critical tasks
 
 ### Testing
+
 - [ ] At least three evaluations created
 - [ ] Tested with Haiku, Sonnet, and Opus
 - [ ] Tested with real usage scenarios

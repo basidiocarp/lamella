@@ -1,0 +1,33 @@
+{
+  "name": "meta",
+  "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+  "source_plugin": "meta",
+  "resources": {
+    "skills": [
+      "meta/agent-development",
+      "meta/command-development",
+      "meta/config-curator",
+      "meta/create-hook",
+      "meta/create-skill",
+      "meta/create-workflow-command",
+      "meta/designing-workflow-skills",
+      "meta/file-todos",
+      "meta/plugin-settings",
+      "meta/plugin-structure",
+      "meta/rust-crate-skill-generator",
+      "meta/skill-best-practices",
+      "meta/skill-composer-studio",
+      "meta/skill-router",
+      "meta/skill-stocktake",
+      "meta/task-observer",
+      "meta/team-communication-protocols"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

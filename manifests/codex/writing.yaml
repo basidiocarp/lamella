@@ -1,0 +1,23 @@
+{
+  "name": "writing",
+  "description": "Technical writing: documentation, articles, changelogs, content strategy, and editorial workflows",
+  "source_plugin": "writing",
+  "resources": {
+    "skills": [
+      "writing/content-writer",
+      "writing/docs-style",
+      "writing/humanizer",
+      "writing/latex-posters",
+      "writing/release-notes",
+      "writing/voice-toolkit",
+      "writing/writing-voice"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

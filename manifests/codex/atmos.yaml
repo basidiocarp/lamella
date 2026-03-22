@@ -1,0 +1,36 @@
+{
+  "name": "atmos",
+  "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
+  "source_plugin": "atmos",
+  "resources": {
+    "skills": [
+      "atmos/atmos-ansible",
+      "atmos/atmos-auth",
+      "atmos/atmos-components",
+      "atmos/atmos-config",
+      "atmos/atmos-custom-commands",
+      "atmos/atmos-design-patterns",
+      "atmos/atmos-devcontainer",
+      "atmos/atmos-gitops",
+      "atmos/atmos-helmfile",
+      "atmos/atmos-introspection",
+      "atmos/atmos-packer",
+      "atmos/atmos-stacks",
+      "atmos/atmos-stores",
+      "atmos/atmos-templates",
+      "atmos/atmos-terraform",
+      "atmos/atmos-toolchain",
+      "atmos/atmos-validation",
+      "atmos/atmos-vendoring",
+      "atmos/atmos-workflows",
+      "atmos/atmos-yaml-functions"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

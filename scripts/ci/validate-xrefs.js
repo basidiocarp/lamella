@@ -13,7 +13,7 @@ const path = require('path');
 const BASE_DIR = path.join(__dirname, '../..');
 
 // Directories to scan for markdown files containing references
-const SCAN_DIRS = ['agents', 'commands', 'workflows', 'templates'];
+const SCAN_DIRS = ['resources/agents', 'resources/commands', 'resources/workflows', 'resources/templates'];
 
 // Files/directories to skip (reference docs with example paths, roadmap with future plans)
 const SKIP_PATHS = [
@@ -24,11 +24,11 @@ const SKIP_PATHS = [
 ];
 
 // Path prefixes we validate (relative to BASE_DIR)
-const VALID_PREFIXES = ['agents/', 'skills/', 'commands/', 'workflows/', 'templates/'];
+const VALID_PREFIXES = ['resources/agents/', 'resources/skills/', 'resources/commands/', 'resources/workflows/', 'resources/templates/'];
 
 // Patterns that look like resource path references
-// Matches: agents/foo/bar.md, skills/core/brainstorming, commands/dev/tdd.md, etc.
-const PATH_PATTERN = /(?:agents|skills|commands|workflows|templates)\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_.-]+)*/g;
+// Matches: resources/agents/foo/bar.md, resources/skills/core/brainstorming, resources/commands/dev/tdd.md, etc.
+const PATH_PATTERN = /(?:resources\/)?(?:agents|skills|commands|workflows|templates)\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_.-]+)*/g;
 
 // Paths to ignore (common false positives)
 const IGNORE_PATTERNS = [
@@ -82,10 +82,13 @@ function validateFile(filePath) {
       if (IGNORE_PATTERNS.some(p => p.test(ref))) continue;
 
       refsChecked++;
-      const fullPath = path.join(BASE_DIR, ref);
 
-      // Check if the path exists (as file, directory, or with .md extension)
-      if (!fs.existsSync(fullPath) && !fs.existsSync(fullPath + '.md')) {
+      // Resolve paths: try as-is first, then under resources/
+      const fullPath = path.join(BASE_DIR, ref);
+      const resourcesPath = ref.startsWith('resources/') ? fullPath : path.join(BASE_DIR, 'resources', ref);
+
+      if (!fs.existsSync(fullPath) && !fs.existsSync(fullPath + '.md') &&
+          !fs.existsSync(resourcesPath) && !fs.existsSync(resourcesPath + '.md')) {
         console.error(`ERROR: ${relFile}:${i + 1} - Broken reference: ${ref}`);
         errors++;
       }

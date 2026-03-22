@@ -6,21 +6,21 @@ A modular plugin system for Claude Code with 230+ curated skills across 21 plugi
 
 | Directory | Contents |
 |-----------|----------|
-| `skills/` | Skill definitions (folder per skill) |
-| `agents/` | Agent markdown files with YAML frontmatter |
-| `commands/` | Slash command markdown files with YAML frontmatter |
-| `hooks/` | Event hook configurations |
-| `rules/` | Project rules markdown files |
-| `plugin-manifests/` | JSON plugin manifests |
+| `resources/skills/` | Skill definitions (folder per skill) |
+| `resources/agents/` | Agent markdown files with YAML frontmatter |
+| `resources/commands/` | Slash command markdown files with YAML frontmatter |
+| `resources/hooks/` | Event hook configurations |
+| `resources/rules/` | Project rules markdown files |
+| `manifests/claude/` | JSON plugin manifests |
 | `scripts/ci/` | Validation scripts |
 | `scripts/plugins/` | Build and install scripts |
 
 ## Adding a Skill
 
-Each skill is a directory under `skills/<category>/` containing at minimum a `SKILL.md`.
+Each skill is a directory under `resources/skills/<category>/` containing at minimum a `SKILL.md`.
 
 ```
-skills/my-category/my-skill/
+resources/skills/my-category/my-skill/
 ├── SKILL.md          # Required — main skill file
 ├── reference.md      # Optional reference docs
 └── templates/        # Optional templates
@@ -37,11 +37,11 @@ dependencies: []
 ---
 ```
 
-After creating the skill directory, register it in the appropriate plugin manifest under `plugin-manifests/`. Add an entry to the `resources.skills` array with the skill's relative path.
+After creating the skill directory, register it in the appropriate plugin manifest under `manifests/claude/`. Add an entry to the `resources.skills` array with the skill's relative path.
 
 ## Adding an Agent
 
-Create a markdown file under `agents/<category>/` with the required YAML frontmatter.
+Create a markdown file under `resources/agents/<category>/` with the required YAML frontmatter.
 
 **Required fields:** `name`, `description`
 
@@ -60,7 +60,7 @@ If the agent belongs to a plugin, add it to the plugin manifest's `resources.age
 
 ## Adding a Command
 
-Create a markdown file under `commands/<category>/` with YAML frontmatter.
+Create a markdown file under `resources/commands/<category>/` with YAML frontmatter.
 
 **Required field:** `description`
 
@@ -72,11 +72,11 @@ description: What the command does
 Command instructions go here.
 ```
 
-Organize commands into the existing category directories. Use a descriptive filename that matches the slash command name (e.g., `commands/debugging/trace.md` for `/trace`).
+Organize commands into the existing category directories. Use a descriptive filename that matches the slash command name (e.g., `resources/commands/debugging/trace.md` for `/trace`).
 
 ## Plugin Manifests
 
-Each plugin manifest in `plugin-manifests/` is a JSON file with this structure:
+Each plugin manifest in `manifests/claude/` is a JSON file with this structure:
 
 ```json
 {
@@ -84,9 +84,9 @@ Each plugin manifest in `plugin-manifests/` is a JSON file with this structure:
   "version": "1.0.0",
   "description": "What this plugin provides",
   "resources": {
-    "skills": ["skills/category/my-skill"],
-    "agents": ["agents/category/my-agent.md"],
-    "commands": ["commands/category/my-command.md"],
+    "skills": ["resources/skills/category/my-skill"],
+    "agents": ["resources/agents/category/my-agent.md"],
+    "commands": ["resources/commands/category/my-command.md"],
     "rules": []
   }
 }
@@ -113,13 +113,13 @@ Fix any reported errors — CI will block merges with validation failures.
 Build a plugin from its manifest:
 
 ```bash
-bash scripts/plugins/build-plugin.sh plugin-manifests/core.json
+bash builders/build-claude-plugin.sh manifests/claude/core.json
 ```
 
 Install a built plugin locally to test:
 
 ```bash
-./scripts/plugins/install-plugin.sh core
+./install.sh core
 ```
 
 Verify the installed plugin works as expected before submitting.

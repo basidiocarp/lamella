@@ -4,6 +4,15 @@ All notable changes to Lamella are documented in this file.
 
 ## [0.3.0] - 2026-03-22
 
+### Directory Restructuring
+
+Reorganized top-level directories under `resources/` and `manifests/` for better code organization and clarity:
+- `agents/`, `skills/`, `commands/`, `hooks/`, `rules/`, `templates/`, `workflows/`, `mcp-configs/` → `resources/`
+- `plugin-manifests/` → `manifests/claude/`
+- Build, validation, and hook scripts moved to dedicated subdirectories
+
+This change has no impact on the official Claude Code plugin format or build output.
+
 ### Agent Consolidation
 
 Reduced agent count from 175 to 129 through systematic audit, merge, and cleanup.

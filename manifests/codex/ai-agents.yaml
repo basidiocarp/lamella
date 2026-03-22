@@ -1,0 +1,25 @@
+{
+  "name": "ai-agents",
+  "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
+  "source_plugin": "ai-agents",
+  "resources": {
+    "skills": [
+      "ai-agents/agent-evaluation",
+      "ai-agents/agent-native-architecture",
+      "ai-agents/cost-aware-llm-pipeline",
+      "ai-agents/external-llm-review",
+      "ai-agents/iterative-retrieval",
+      "ai-agents/launch-sub-agent",
+      "ai-agents/multi-agent-patterns",
+      "ai-agents/prompt-engineering",
+      "ai-agents/subagent-driven-development"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

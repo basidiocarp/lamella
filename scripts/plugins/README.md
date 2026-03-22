@@ -1,19 +1,20 @@
-# Plugin Management Scripts
+# Claude Plugin Management Scripts
 
-Scripts for building and installing lamella plugins.
+Legacy Claude build/install scripts used by the generalized builders in
+[`builders/`](../../builders/).
 
 ## Scripts
 
 | Script | Description |
 |--------|-------------|
-| `build-plugin.sh` | Build a plugin from its manifest JSON |
+| `build-plugin.sh` | Build a Claude plugin from its manifest JSON |
 | `install-plugin.sh` | Install built plugins to `~/.claude` |
 
 ## Usage
 
 ```bash
 # Build all plugins
-for manifest in plugin-manifests/*.json; do
+for manifest in manifests/claude/*.json; do
   [[ "$(basename "$manifest")" != "schema.json" ]] && bash scripts/plugins/build-plugin.sh "$manifest"
 done
 
@@ -29,5 +30,6 @@ done
 
 ## See Also
 
-- [Plugin manifests](../../plugin-manifests/)
-- [Built plugins](../../dist/plugins/)
+- [Claude manifests](../../manifests/claude/)
+- [Generalized builders](../../builders/)
+- [Claude build output](../../dist/claude/)

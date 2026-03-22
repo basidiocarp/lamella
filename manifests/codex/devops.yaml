@@ -1,0 +1,40 @@
+{
+  "name": "devops",
+  "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+  "source_plugin": "devops",
+  "resources": {
+    "skills": [
+      "devops/ansible",
+      "devops/aws-agentic-ai",
+      "devops/aws-cdk-development",
+      "devops/aws-cost-operations",
+      "devops/aws-serverless-eda",
+      "devops/chaos-engineering",
+      "devops/deployment",
+      "devops/distributed-tracing",
+      "devops/docker-patterns",
+      "devops/docker-troubleshoot",
+      "devops/github-actions-validator",
+      "devops/gitops-workflow",
+      "devops/grafana-dashboards",
+      "devops/helm-charts",
+      "devops/kubernetes-manifest-generator",
+      "devops/kubernetes-security-policies",
+      "devops/makefile",
+      "devops/modal-serverless",
+      "devops/postmortem-writing",
+      "devops/prometheus-configuration",
+      "devops/promql",
+      "devops/slo-implementation",
+      "devops/terraform-patterns",
+      "devops/turborepo-caching"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

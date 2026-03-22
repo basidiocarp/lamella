@@ -1,0 +1,28 @@
+{
+  "name": "agile-pm",
+  "description": "Agile and product management: discovery, delivery, iteration, hypothesis testing, and stakeholder workflows",
+  "source_plugin": "agile-pm",
+  "resources": {
+    "skills": [
+      "agile-pm/define-hypothesis",
+      "agile-pm/define-jtbd-canvas",
+      "agile-pm/define-opportunity-tree",
+      "agile-pm/define-problem-statement",
+      "agile-pm/deliver-launch-checklist",
+      "agile-pm/deliver-prd",
+      "agile-pm/deliver-user-stories",
+      "agile-pm/discover-competitive-analysis",
+      "agile-pm/discover-interview-synthesis",
+      "agile-pm/discover-stakeholder-summary",
+      "agile-pm/iterate-refinement-notes",
+      "agile-pm/iterate-retrospective"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

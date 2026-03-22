@@ -11,7 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SKILLS_DIR = path.join(__dirname, '../../skills');
+const SKILLS_DIR = path.join(__dirname, '../../resources/skills');
 
 function extractFrontmatter(content) {
   const cleanContent = content.replace(/^\uFEFF/, '');

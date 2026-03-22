@@ -1,0 +1,42 @@
+{
+  "name": "tools",
+  "description": "CLI tools, shell scripting, MCP integration, API design, and prompt engineering utilities",
+  "source_plugin": "tools",
+  "resources": {
+    "skills": [
+      "tools/agent-browser",
+      "tools/api-design-principles",
+      "tools/aws-mcp-setup",
+      "tools/bash-script-generator",
+      "tools/bash-script-validator",
+      "tools/cli-developer",
+      "tools/devcontainer-setup",
+      "tools/docx-word-documents",
+      "tools/excalidraw-diagram-generator",
+      "tools/gh-cli-patterns",
+      "tools/graphql-patterns",
+      "tools/markitdown-converter",
+      "tools/mcp-integration",
+      "tools/mermaid-diagrams",
+      "tools/obsidian",
+      "tools/openapi-spec-generation",
+      "tools/pdf-manipulation",
+      "tools/playwright",
+      "tools/pptx-presentations",
+      "tools/rclone",
+      "tools/regex-debugger",
+      "tools/tmux-interactive-runner",
+      "tools/token-reduction-optimizer",
+      "tools/websocket-patterns",
+      "tools/xlsx-spreadsheets",
+      "tools/php-pro"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

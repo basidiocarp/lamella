@@ -15,3 +15,5 @@ __pycache__/
 .plans/
 .plan/
 .rhizome/
+.idea/
+.claude/

@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to MegaClaude2! This guide will help you get up and running with **230 skills** across **20 plugins**.
+Welcome to Lamella! This guide will help you get up and running with **230 skills** across **20 plugins**.
 
 ---
 

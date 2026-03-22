@@ -1,0 +1,40 @@
+{
+  "name": "security",
+  "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices",
+  "source_plugin": "security",
+  "resources": {
+    "skills": [
+      "security/address-sanitizer",
+      "security/agentic-actions-auditor",
+      "security/api-footgun-detector",
+      "security/auth-implementation-patterns",
+      "security/cargo-fuzz",
+      "security/codeql",
+      "security/constant-time-crypto",
+      "security/fuzz-harness-writing",
+      "security/insecure-defaults",
+      "security/memory-safety-patterns",
+      "security/ossfuzz",
+      "security/pci-compliance",
+      "security/pii-redactor",
+      "security/sast-configuration",
+      "security/seatbelt-sandboxer",
+      "security/secrets-management",
+      "security/security-audit-methodology",
+      "security/security-review",
+      "security/semgrep",
+      "security/stride-analysis-patterns",
+      "security/supply-chain-risk-auditor",
+      "security/threat-mitigation-mapping",
+      "security/wycheproof",
+      "security/yara-rule-authoring"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

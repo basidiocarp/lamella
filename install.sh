@@ -15,8 +15,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_DIR="$SCRIPT_DIR/plugin-manifests"
-BUILD_SCRIPT="$SCRIPT_DIR/scripts/plugins/build-plugin.sh"
+PLUGIN_DIR="$SCRIPT_DIR/manifests/claude"
+BUILD_SCRIPT="$SCRIPT_DIR/builders/build-claude-plugin.sh"
 INSTALL_SCRIPT="$SCRIPT_DIR/scripts/plugins/install-plugin.sh"
 
 RED='\033[0;31m'
@@ -125,7 +125,7 @@ build_and_install() {
     echo "  claude --plugin-dir ~/.claude/plugins/lamella/<name>"
     echo ""
     echo "  Or add the marketplace:"
-    echo "  /plugin marketplace add $(pwd)/dist"
+    echo "  /plugin marketplace add $(pwd)/dist/claude"
 }
 
 install_all() {

@@ -1,38 +1,49 @@
 # lamella
 
-A modular plugin system for Claude Code with 230 curated skills across 20 specialized plugins.
-Built plugins follow the **official Claude Code plugin format** (`.claude-plugin/plugin.json`).
+A portable resource system for AI coding environments, with first-class Claude
+plugin builds and Codex skill exports.
+
+Claude builds follow the **official Claude Code plugin format**
+(`.claude-plugin/plugin.json`). Codex builds export installable skill folders.
 
 ## Quick Start
 
 ```bash
-# Install specific plugins
+# Claude: build marketplace + install plugins
+make build-marketplace
 ./install.sh core python typescript
 
-# Install all plugins
-./install.sh --all
+# Codex: generate manifests + build skill exports
+make build-codex
 
-# List available plugins
-./install.sh --list
-
-# Or use the Makefile
-make build-marketplace   # Build all plugins + marketplace.json
-make install             # Build and install all
+# Codex: build and install exported skills
+./install-codex.sh --all
 ```
 
 ## As a Claude Code Marketplace
 
-After building, the `dist/` directory is a proper Claude Code marketplace:
+After building, `dist/claude/` is a proper Claude Code marketplace:
 
 ```bash
 # Build the marketplace
 make build-marketplace
 
 # Add it in Claude Code
-/plugin marketplace add ./dist
+/plugin marketplace add ./dist/claude
 
 # Or load a single plugin for testing
-claude --plugin-dir dist/plugins/core
+claude --plugin-dir dist/claude/plugins/core
+```
+
+## As a Codex Skill Export
+
+After building, `dist/codex/skills/` contains portable skill folders that can be
+copied or symlinked into `~/.codex/skills/`.
+
+```bash
+make build-codex
+./install-codex.sh --list
+./install-codex.sh --all
 ```
 
 ## Plugins
@@ -66,69 +77,80 @@ claude --plugin-dir dist/plugins/core
 
 ```
 lamella/
-├── plugin-manifests/     # Plugin definitions (JSON) — source of truth
-│   ├── schema.json       # JSON Schema for validation
-│   ├── index.json        # Plugin registry
-│   └── *.json            # Individual plugin manifests
-├── skills/               # All skills (source, organized by category)
-├── agents/               # Agent definitions (source, by category)
-├── commands/             # Slash commands (source, by category)
-├── hooks/                # Event hooks
-├── rules/                # Project rules
-├── templates/            # Configuration and doc templates
-├── workflows/            # Development and quality workflows
-├── mcp-configs/          # MCP server configs
+├── resources/
+│   ├── skills/           # Source skills (organized by category)
+│   ├── agents/           # Agent definitions (source, by category)
+│   ├── commands/         # Slash commands (source, by category)
+│   ├── hooks/            # Event hooks
+│   ├── rules/            # Project rules
+│   ├── templates/        # Configuration and doc templates
+│   ├── workflows/        # Development and quality workflows
+│   ├── mcp-configs/      # MCP server configs
+│   └── scripts/          # Build and validation scripts
+├── manifests/
+│   ├── claude/           # Claude plugin manifests
+│   └── codex/            # Codex export manifests
+├── builders/
+│   ├── build-claude-plugin.sh
+│   ├── build-claude-marketplace.sh
+│   ├── sync-codex-manifests.sh
+│   └── build-codex-skills.sh
 ├── scripts/
 │   ├── plugins/          # Build + install pipeline
 │   │   ├── build-plugin.sh       # Build single plugin
 │   │   ├── build-marketplace.sh  # Build all + marketplace.json
 │   │   └── install-plugin.sh     # Install to ~/.claude/plugins/
 │   ├── ci/               # Validators (8 scripts)
-│   ├── hooks/            # Hook scripts
-│   └── ...
+│   └── hooks/            # Hook scripts
 ├── dist/                 # Built output (gitignored)
-│   ├── .claude-plugin/
-│   │   └── marketplace.json      # Marketplace catalog
-│   └── plugins/
-│       ├── core/
-│       │   ├── .claude-plugin/plugin.json  # Official plugin manifest
-│       │   ├── agents/*.md                 # Flattened agents
-│       │   ├── commands/*.md               # Flattened commands
-│       │   ├── skills/*/SKILL.md           # Flattened skills
-│       │   └── hooks/hooks.json            # Hook config
-│       ├── typescript/
-│       └── ...
+│   ├── claude/
+│   │   ├── .claude-plugin/marketplace.json
+│   │   └── plugins/<name>/
+│   └── codex/
+│       ├── skills/<skill-name>/
+│       └── profiles/<name>/
 └── docs/                 # Documentation
 ```
 
 ## Build Pipeline
 
-The source organizes resources in category subdirectories (`agents/code-quality/code-reviewer.md`).
-The build step flattens them into self-contained Claude Code plugin directories.
+The source organizes resources in category subdirectories (`resources/agents/code-quality/code-reviewer.md`).
+The generalized build step can either flatten them into Claude Code plugin
+directories or export portable Codex skill folders.
 
 ```
-Source:  agents/code-quality/code-reviewer.md
-         skills/core/brainstorming/SKILL.md
-         
-Built:   dist/plugins/core/agents/code-reviewer.md
-         dist/plugins/core/skills/brainstorming/SKILL.md
-         dist/plugins/core/.claude-plugin/plugin.json
+Source:  resources/agents/code-quality/code-reviewer.md
+         resources/skills/core/brainstorming/SKILL.md
+
+Built:   dist/claude/plugins/core/agents/code-reviewer.md
+         dist/claude/plugins/core/skills/brainstorming/SKILL.md
+         dist/claude/plugins/core/.claude-plugin/plugin.json
+
+Codex:   dist/codex/skills/brainstorming/SKILL.md
+         dist/codex/profiles/core/profile.json
 ```
 
-### build-plugin.sh
+### Claude build
 
 Build one plugin from its manifest:
 
 ```bash
-bash scripts/plugins/build-plugin.sh plugin-manifests/core.json
+bash builders/build-claude-plugin.sh manifests/claude/core.json
 ```
-
-### build-marketplace.sh
 
 Build all plugins and generate marketplace.json:
 
 ```bash
-bash scripts/plugins/build-marketplace.sh
+bash builders/build-claude-marketplace.sh
+```
+
+### Codex build
+
+Generate Codex manifests from Claude manifests, then export skill folders:
+
+```bash
+bash builders/sync-codex-manifests.sh
+bash builders/build-codex-skills.sh
 ```
 
 ### install-plugin.sh
@@ -136,11 +158,11 @@ bash scripts/plugins/build-marketplace.sh
 Install built plugins to `~/.claude/plugins/lamella/`:
 
 ```bash
-./scripts/plugins/install-plugin.sh --list
-./scripts/plugins/install-plugin.sh core typescript python
-./scripts/plugins/install-plugin.sh --all
-./scripts/plugins/install-plugin.sh --dry-run --all
-./scripts/plugins/install-plugin.sh --uninstall security
+./install.sh --list
+./install.sh core typescript python
+./install.sh --all
+./install.sh --dry-run --all
+./install.sh --uninstall security
 ```
 
 ## Validation

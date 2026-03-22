@@ -1,0 +1,25 @@
+{
+  "name": "typescript",
+  "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
+  "source_plugin": "typescript",
+  "resources": {
+    "skills": [
+      "typescript/backend-patterns",
+      "typescript/javascript-testing-patterns",
+      "typescript/modern-javascript-patterns",
+      "typescript/nextjs-app-router-patterns",
+      "typescript/payload",
+      "typescript/react-patterns",
+      "typescript/tailwind-design-system",
+      "typescript/typescript",
+      "typescript/zustand-store-ts"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

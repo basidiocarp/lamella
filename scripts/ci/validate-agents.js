@@ -13,7 +13,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const AGENTS_DIR = path.join(__dirname, '../../agents');
+const AGENTS_DIR = path.join(__dirname, '../../resources/agents');
 const REQUIRED_FIELDS = ['name', 'description'];
 const MODEL_ALIASES = ['haiku', 'sonnet', 'opus', 'inherit'];
 const VALID_PERMISSION_MODES = ['default', 'acceptEdits', 'dontAsk', 'bypassPermissions', 'plan'];

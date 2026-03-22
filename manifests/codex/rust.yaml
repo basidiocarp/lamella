@@ -1,0 +1,27 @@
+{
+  "name": "rust",
+  "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 179 curated rules",
+  "source_plugin": "rust",
+  "resources": {
+    "skills": [
+      "rust/concurrency",
+      "rust/lifecycle",
+      "rust/meta-cognition-parallel",
+      "rust/mutability",
+      "rust/ownership",
+      "rust/resource-mgmt",
+      "rust/rust-advanced",
+      "rust/rust-learner",
+      "rust/rust-router",
+      "rust/unsafe-checker",
+      "rust/zero-cost"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

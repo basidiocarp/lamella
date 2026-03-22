@@ -1,0 +1,22 @@
+{
+  "name": "collaboration",
+  "description": "Team collaboration: meetings, decision-making, debates, and cross-functional coordination",
+  "source_plugin": "collaboration",
+  "resources": {
+    "skills": [
+      "collaboration/coding-tutor",
+      "collaboration/cross-conversation-project-manager",
+      "collaboration/debate-evaluator",
+      "collaboration/debate-simulator",
+      "collaboration/devils-advocate",
+      "collaboration/expert-panel"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

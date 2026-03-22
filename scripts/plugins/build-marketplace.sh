@@ -2,16 +2,16 @@
 #
 # build-marketplace.sh - Build all Skill-Issue plugins into a Claude Code marketplace
 #
-# Builds every plugin in plugin-manifests/ and generates a marketplace.json
-# so the dist/ directory can be used as a local Claude Code plugin marketplace.
+# Builds every Claude manifest in manifests/claude/ and generates a marketplace.json
+# so the dist/claude directory can be used as a local Claude Code plugin marketplace.
 #
 # Usage:
 #   ./build-marketplace.sh [output-dir]
 #
-# Default output: dist/
+# Default output: dist/claude
 #
 # Install the marketplace:
-#   /plugin marketplace add ./dist
+#   /plugin marketplace add ./dist/claude
 #
 
 set -euo pipefail
@@ -44,8 +44,8 @@ check_deps() {
 }
 
 build_marketplace() {
-    local output_dir="${1:-$BASE_DIR/dist}"
-    local manifests_dir="$BASE_DIR/plugin-manifests"
+    local output_dir="${1:-$BASE_DIR/dist/claude}"
+    local manifests_dir="$BASE_DIR/manifests/claude"
     local plugins_dir="$output_dir/plugins"
 
     echo -e "${BOLD}Building Skill-Issue Marketplace${NC}"

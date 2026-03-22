@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "description": "Frontend development, UI/UX design, and document generation",
+  "source_plugin": "frontend",
+  "resources": {
+    "skills": [
+      "frontend/accessibility",
+      "frontend/component-architecture",
+      "frontend/css-animation-creator",
+      "frontend/design-systems",
+      "frontend/frontend-patterns",
+      "frontend/frontend-performance",
+      "frontend/frontend-slides",
+      "frontend/responsive-design",
+      "frontend/screenshot-to-code"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

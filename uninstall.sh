@@ -13,7 +13,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INSTALL_SCRIPT="$SCRIPT_DIR/scripts/plugins/install-plugin.sh"
-PLUGIN_DIR="$SCRIPT_DIR/plugin-manifests"
+PLUGIN_DIR="$SCRIPT_DIR/manifests/claude"
 
 # Colors
 RED='\033[0;31m'

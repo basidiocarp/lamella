@@ -1,0 +1,20 @@
+{
+  "name": "microservices",
+  "description": "Microservices architecture, event sourcing, and distributed systems",
+  "source_plugin": "microservices",
+  "resources": {
+    "skills": [
+      "microservices/cqrs-implementation",
+      "microservices/event-store-design",
+      "microservices/microservices-design",
+      "microservices/saga-orchestration"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

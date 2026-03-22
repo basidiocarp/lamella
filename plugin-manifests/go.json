@@ -19,9 +19,7 @@
       "go/golang-patterns",
       "go/golang-testing"
     ],
-    "agents": [
-      "debugging/go-build-resolver.md"
-    ],
+    "agents": [],
     "commands": [
       "languages/go.md"
     ]

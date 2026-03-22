@@ -3,6 +3,7 @@ name: infra-auditor
 description: Infrastructure and deployment checker. Env vars, headers, database config.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Infrastructure Audit
@@ -27,24 +28,33 @@ skipped_checks: []
 
 ## Check
 
-**Environment**
-- `.env.example` exists and matches actual vars
-- No secrets in repo
-- Dev/prod separation
+**Environment Validation**
+- All vars in `.env.example` exist in `.env` (completeness check)
+- No undocumented vars in `.env`
+- Required vars have non-empty values
+- URL vars have valid format (include protocol)
+- Boolean vars use `true`/`false` (not `1`/`0` or `yes`/`no`)
+- Port vars are valid numbers
+- No trailing whitespace in var values
+- No localhost URLs in production config
+- No debug flags enabled in production
+- No secrets hardcoded in source code or exposed in logs
+- Sensitive vars properly named (contain SECRET, KEY, PASSWORD)
+- Dev vs prod config differences documented
 
 **Headers**
 - CSP configured
-- X-Frame-Options
-- HSTS
+- X-Frame-Options set
+- HSTS enabled
 
 **Database**
-- Connection pooling
+- Connection pooling configured
 - SSL enabled
 - Timeouts set
 
 **CORS**
-- No wildcard in production
-- Credentials handled
+- No wildcard origin in production
+- Credentials handled correctly
 
 **Health**
 - `/health` or `/api/health` exists
@@ -57,10 +67,10 @@ skipped_checks: []
 # Env files
 ls -la .env* 2>/dev/null
 
-# Configs
+# Config files
 find . -name "*.config.*" -o -name "next.config.*" | head -10
 
-# Localhost references (shouldn't be in prod code)
+# Localhost references (should not appear in prod code)
 grep -rn "localhost\|127.0.0.1" src --include="*.ts"
 
 # Security headers

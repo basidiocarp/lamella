@@ -33,7 +33,6 @@
     "agents": [
       "planning/context-manager.md",
       "planning/fix-planner.md",
-      "planning/pm-agent.md",
       "planning/prd-interviewer.md",
       "planning/repo-index.md",
       "planning/requirements-analyst.md"

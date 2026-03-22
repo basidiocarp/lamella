@@ -30,8 +30,7 @@
     ],
     "agents": [
       "architecture/frontend-architect.md",
-      "frontend/frontend-developer.md",
-      "security/frontend-security-coder.md"
+      "frontend/frontend-developer.md"
     ],
     "commands": [
       "languages/typescript-scaffold.md"

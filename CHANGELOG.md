@@ -2,6 +2,105 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [0.3.0] - 2026-03-22
+
+### Agent Consolidation
+
+Reduced agent count from 175 to 129 through systematic audit, merge, and cleanup.
+
+**Deleted (15 low-value/narrow agents):**
+- search-specialist, reference-builder, learning-guide, test-automator,
+  content-marketer, performance-engineer, legal-advisor, mermaid-expert,
+  pm-agent, schema-drift-detector, ad-creator, landing-designer,
+  persona-strategist, every-style-editor, article-writer-agent
+
+**Merged (22 agents absorbed into targets):**
+- software-architect → architect
+- hybrid-cloud-architect → cloud-architect
+- devops-architect → deployment-engineer
+- error-detective → debugger
+- silent-failure-hunter → bug-auditor
+- e2e-test-agent → e2e-runner
+- pr-test-analyzer → test-coverage-reviewer
+- doc-updater → docs-specialist (now docs-writer)
+- deep-research + search-specialist → researcher
+- historical-context-reviewer → git-history-analyzer
+- code-simplifier → refactoring-specialist (now refactorer)
+- go-build-resolver → build-error-resolver
+- backend/frontend/mobile-security-coder → security-expert (now security-reviewer)
+- deployment-verification-agent → deploy-checker
+- publishing-optimizer → seo-expert (now seo-optimizer)
+- data-migration-expert → data-integrity-guardian
+- env-validator → infra-auditor
+- design-system-architect → ui-designer
+- visual-diff → ui-visual-validator
+
+**Absorbed (7 narrow agents into broader ones):**
+- clippy-researcher, crate-researcher, std-docs-researcher → researcher
+- layer1/2/3-analyzer → rust-developer
+- console-monitor → browser-qa-agent (now browser-tester)
+- learnings-researcher → researcher
+
+### Agent Renames
+
+Standardized naming: dropped -specialist, -expert, -pro, -agent suffixes.
+
+- docker-specialist-agent → docker-engineer
+- terminal-specialist-agent → terminal-engineer
+- browser-qa-agent → browser-tester
+- refactoring-specialist → refactorer
+- pattern-recognition-specialist → pattern-analyzer
+- docs-specialist → docs-writer
+- security-expert → security-reviewer
+- threat-modeling-expert → threat-modeler
+- seo-expert → seo-optimizer
+- accessibility-expert → accessibility-reviewer
+- language-expert → language-developer
+- python-expert → python-developer
+- database-expert → database-architect
+- service-mesh-expert → service-mesh-architect
+- django-pro → django-developer
+- fastapi-pro → fastapi-developer
+- performance-oracle → performance-analyzer
+- repo-research-analyst → repo-analyzer
+- vector-database-engineer → vector-db-architect
+- structure-architect → content-architect
+- graphql-patterns (name field) → graphql-architect
+
+### Agent Moves
+
+- content-architect: architecture/ → content/ (content structure, not software)
+- performance-analyzer: ai-ml/ → analysis/ (code analysis, not AI/ML)
+- reverse-engineer: specialized/ → security/ (binary analysis is security)
+- repo-analyzer: research/ → analysis/ (codebase analysis)
+
+### Agent Standardization
+
+All 129 agents rewritten to follow new agent-style-guide.md:
+
+- Added `model` field to 31 agents (opus for planning/research, sonnet for coding, haiku for lookup)
+- Added `color` field to all 129 agents (blue=architecture, cyan=analysis, green=testing, yellow=audit, magenta=writing, red=security)
+- Removed non-standard frontmatter fields (category, assistant, user) from 15 agents
+- Average agent size reduced from ~130 lines to 65 lines
+- 92% of agents now have standardized Scope sections
+- 93% have Workflow and Boundaries sections
+- 99% have Output Format sections
+- Stripped capability lists, filler adjectives, and repeated purpose sections
+- Enforced second-person imperative voice throughout
+- Added three-tier boundaries (Do / Ask first / Never) to all agents
+- Added status blocks to dep-auditor and db-auditor (completing auditor consistency)
+
+### Added
+
+- **CLAUDE.md**: Project instructions for agents working in this repo — build commands, directory layout, authoring reference table, checklists
+- **docs/authoring/agent-style-guide.md**: Voice rules, body skeleton, section order, size targets, color scheme, degrees of freedom
+- **docs/authoring/writing-specs-for-agents.md**: Six core areas, three-tier boundaries, modular context, self-verification (adapted from Addy Osmani)
+
+### Changed
+
+- All 22 plugin manifests updated to reflect agent deletions, renames, and moves
+- Agent authoring checklist in CLAUDE.md now references style guide with model/color/skeleton rules
+
 ## [0.2.0] - 2026-03-18
 
 ### Added

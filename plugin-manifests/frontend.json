@@ -27,14 +27,12 @@
       "frontend/screenshot-to-code"
     ],
     "agents": [
-      "frontend/accessibility-expert.md",
+      "frontend/accessibility-reviewer.md",
       "frontend/design-iterator.md",
       "frontend/dx-optimizer.md",
       "frontend/figma-design-sync.md",
-      "frontend/landing-designer.md",
       "frontend/ui-designer.md",
-      "frontend/ui-visual-validator.md",
-      "frontend/visual-diff.md"
+      "frontend/ui-visual-validator.md"
     ],
     "commands": [
       "frontend/accessibility-audit.md",

@@ -3,6 +3,7 @@ name: bug-auditor
 description: Runtime bug scanner. Finds error handling gaps, race conditions, memory leaks, null refs.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Runtime Bug Audit
@@ -46,13 +47,17 @@ skipped_checks: []
 
 ## Check
 
-**Error Handling**
-- Empty catch blocks
+**Error Handling** (critical — silent failures are unacceptable)
+- Empty catch blocks (absolutely forbidden)
 - Unhandled promise rejections
 - Missing error boundaries (React)
 - Try-catch without logging
-- Swallowed errors
-- Generic catch-all handlers
+- Swallowed errors (catch blocks that log but continue without user feedback)
+- Generic catch-all handlers that hide unrelated errors
+- Catch blocks without specific error type matching
+- Fallback logic that masks underlying problems
+- Silent fallbacks to default values without logging
+- Catching exceptions that should propagate to higher-level handlers
 
 **Null/Undefined Safety**
 - Optional chaining gaps
@@ -98,7 +103,15 @@ grep -rn "catch\s*(\s*[a-z]*\s*)\s*{\s*}" src --include="*.ts" --include="*.tsx"
 
 # Catch blocks that swallow errors
 grep -rn "catch.*{" -A 2 src --include="*.ts" --include="*.tsx" | grep -B 1 "^\s*}" | head -20
-# ... (21 lines trimmed)
+
+# Floating promises (async function calls without await)
+grep -rn "^\s*[a-zA-Z]*\(.*\);" src --include="*.ts" | grep -v "await\|return\|const\|let\|var" | head -20
+
+# Event listeners without cleanup
+grep -rn "addEventListener" src --include="*.tsx" | head -10
+
+# setInterval without clearInterval
+grep -rn "setInterval" src --include="*.tsx" | head -10
 
 # Missing dependency array
 grep -rn "useEffect\|useCallback\|useMemo" -A 3 src --include="*.tsx" | grep -v "\[\]" | head -20
@@ -109,13 +122,23 @@ grep -rn "useEffect\|useCallback\|useMemo" -A 3 src --include="*.tsx" | grep -v 
 ```markdown
 # Runtime Bug Audit
 
----
-agent: bug-auditor
-status: [COMPLETE|PARTIAL|SKIPPED]
-# ... (19 lines trimmed)
+[Status block]
+
+## Summary
+| Category | Critical | High | Medium | Low |
+|----------|----------|------|--------|-----|
+| Error Handling | | | | |
+| Null Safety | | | | |
+| Race Conditions | | | | |
+| Resource Leaks | | | | |
+| Async Issues | | | | |
+| State Management | | | | |
+
+## Critical
+
 ### BUG-001: Empty Catch Block Swallows Errors
-**File:** `src/lib/api.ts:45`
-**Issue:** Error caught but not logged or handled
+**File**: `src/lib/api.ts:45`
+**Issue**: Error caught but not logged or handled
 ```typescript
 try {
   await fetchData();
@@ -123,8 +146,8 @@ try {
   // Error silently swallowed
 }
 ```
-**Impact:** Bugs go undetected, silent failures
-**Fix:**
+**Impact**: Bugs go undetected; silent failures
+**Fix**:
 ```typescript
 try {
   await fetchData();
@@ -135,30 +158,16 @@ try {
 ```
 
 ### BUG-002: Missing await on async function
-**File:** `src/hooks/useAuth.ts:23`
-**Issue:** Async function called without await
-```typescript
-validateToken(token); // Missing await!
-```
-**Impact:** Race condition, validation may not complete before use
-**Fix:**
-```typescript
-await validateToken(token);
-```
+**File**: `src/hooks/useAuth.ts:23`
+**Issue**: Async function called without await — race condition
+**Fix**: `await validateToken(token);`
 
 ## High
 
-### BUG-003: Event listener not removed
-**File:** `src/components/ScrollTracker.tsx:15`
-**Issue:** addEventListener without removeEventListener
-```typescript
-useEffect(() => {
-  window.addEventListener('scroll', handleScroll);
-  // Missing cleanup!
-}, []);
-```
-**Impact:** Memory leak, duplicate handlers
-**Fix:**
+### BUG-003: Event Listener Not Removed
+**File**: `src/components/ScrollTracker.tsx:15`
+**Issue**: addEventListener without cleanup
+**Fix**:
 ```typescript
 useEffect(() => {
   window.addEventListener('scroll', handleScroll);
@@ -166,16 +175,9 @@ useEffect(() => {
 }, []);
 ```
 
-### BUG-004: setInterval without cleanup
-**File:** `src/components/Timer.tsx:8`
-**Issue:** setInterval not cleared on unmount
-```typescript
-useEffect(() => {
-  setInterval(() => setCount(c => c + 1), 1000);
-}, []);
-```
-**Impact:** Timer continues after unmount, memory leak
-**Fix:**
+### BUG-004: setInterval Without Cleanup
+**File**: `src/components/Timer.tsx:8`
+**Fix**:
 ```typescript
 useEffect(() => {
   const id = setInterval(() => setCount(c => c + 1), 1000);
@@ -183,59 +185,33 @@ useEffect(() => {
 }, []);
 ```
 
-### BUG-005: Stale closure in callback
-**File:** `src/hooks/useData.ts:30`
-**Issue:** Using stale state value in callback
-```typescript
-const onClick = () => {
-  setCount(count + 1); // count is stale!
-};
-```
-**Impact:** State updates lost, incorrect values
-**Fix:**
-```typescript
-const onClick = () => {
-  setCount(c => c + 1); // Use functional form
-};
-```
+### BUG-005: Stale Closure in Callback
+**File**: `src/hooks/useData.ts:30`
+**Issue**: Using stale state value in callback
+**Fix**: `setCount(c => c + 1);` — use functional form
 
 ## Medium
 
-### BUG-006: Array access without bounds check
-**File:** `src/utils/helpers.ts:12`
-**Issue:** Accessing array[0] without checking length
-```typescript
-const first = items[0]; // May be undefined
-```
-**Fix:**
-```typescript
-const first = items?.[0];
-// or
-const first = items.length > 0 ? items[0] : null;
-```
+### BUG-006: Array Access Without Bounds Check
+**File**: `src/utils/helpers.ts:12`
+**Fix**: `const first = items?.[0];`
 
-### BUG-007: Missing error boundary
-**File:** `src/app/layout.tsx`
-**Issue:** No ErrorBoundary wrapping page content
-**Impact:** Uncaught errors crash entire app
-**Fix:** Add React ErrorBoundary component
+### BUG-007: Missing Error Boundary
+**File**: `src/app/layout.tsx`
+**Impact**: Uncaught errors crash entire app
+**Fix**: Wrap page content with a React ErrorBoundary component
 
-### BUG-008: Floating promise (not awaited)
-**File:** `src/services/analytics.ts:25`
-**Issue:** Promise not awaited or caught
-```typescript
-trackEvent('page_view'); // Fire and forget, no error handling
-```
-**Fix:**
-```typescript
-trackEvent('page_view').catch(console.error);
-```
+### BUG-008: Floating Promise
+**File**: `src/services/analytics.ts:25`
+**Fix**: `trackEvent('page_view').catch(console.error);`
 
-## Low
+## Checklist
 
-### BUG-009: Console.log in production code
-**File:** Multiple files
-# ... (19 lines trimmed)
+Before marking complete:
+- [ ] All catch blocks log or re-throw
+- [ ] All event listeners have cleanup
+- [ ] All setInterval/setTimeout calls are cleared
+- [ ] All async operations are awaited
 - [ ] useEffect has proper dependencies
 - [ ] No state updates after unmount
 - [ ] No direct state mutation
@@ -251,8 +227,8 @@ After completing, append to `.claude/audits/EXECUTION_LOG.md`:
 ## Output Verification
 
 Before completing:
-1. Verify `.claude/audits/AUDIT_BUGS.md` was created
-2. Verify file has content beyond headers
-3. If no issues found, write "No runtime bugs detected" (not empty file)
+1. Verify `.claude/audits/AUDIT_BUGS.md` was created.
+2. Verify file has content beyond headers.
+3. If no issues found, write "No runtime bugs detected" (not empty file).
 
-Focus on runtime bugs. **Do NOT duplicate security checks** - those belong in security-auditor.
+Focus on runtime bugs. **Do NOT duplicate security checks** — those belong in security-auditor.

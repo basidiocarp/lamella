@@ -3,6 +3,7 @@ name: deploy-checker
 description: Pre-deployment validation. Build, env vars, dependencies, migrations, health checks.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Deploy Checker
@@ -14,18 +15,18 @@ Validate everything before deployment. Output to `.claude/audits/DEPLOY_CHECK.md
 **Build Validation**
 - TypeScript compiles without errors
 - Production build succeeds
-- No console.log statements in production code
+- No `console.log` statements in production code
 - Bundle size within acceptable limits
 - All imports resolve correctly
 
 **Environment Variables**
-- All required env vars documented in .env.example
+- All required env vars documented in `.env.example`
 - No hardcoded secrets in codebase
 - Production env vars are set
 - No development-only values in production config
 
 **Dependencies**
-- No security vulnerabilities (npm audit)
+- No security vulnerabilities (`npm audit`)
 - All dependencies installed
 - Lock file up to date
 - No deprecated packages in critical paths
@@ -36,7 +37,14 @@ Validate everything before deployment. Output to `.claude/audits/DEPLOY_CHECK.md
 - Database connection works
 - Seed data available if needed
 
-**Health & Monitoring**
+**Data Migration Verification** _(if migrations modify data)_
+- Data invariants validated (counts, NULL checks, foreign keys remain valid)
+- Pre-deploy baseline queries executed and results saved
+- Post-deploy verification queries prepared (test mappings, data integrity)
+- Rollback procedure documented and tested
+- Monitoring plan in place for first 24 hours post-deploy
+
+**Health and Monitoring**
 - Health endpoint exists and responds
 - Error tracking configured (Sentry, etc.)
 - Logging configured for production
@@ -98,12 +106,10 @@ npm run analyze 2>&1 || echo "No analyze script"
 ### DEPLOY-002: Missing Environment Variables
 **Missing in production:**
 - `DATABASE_URL`
-# ... (23 lines trimmed)
 
 ## Pre-Deploy Commands
 
 ```bash
-# Run before deploying:
 npm run build
 npm run test
 npm run db:migrate:deploy  # If applicable
@@ -112,7 +118,6 @@ npm run db:migrate:deploy  # If applicable
 ## Post-Deploy Verification
 
 ```bash
-# Verify after deploy:
 curl -s https://your-app.com/api/health | jq
 curl -s https://your-app.com/ -o /dev/null -w "%{http_code}"
 ```

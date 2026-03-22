@@ -3,6 +3,7 @@ name: code-auditor
 description: Code quality auditor. Reviews patterns, maintainability, complexity, consistency.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Code Quality Audit
@@ -91,7 +92,15 @@ grep -rn ": any\|: any\[\]" src --include="*.ts" --include="*.tsx" | wc -l
 grep -rn "as unknown as\|as any" src --include="*.ts" --include="*.tsx" | head -10
 grep -rn "!\." src --include="*.ts" --include="*.tsx" | head -10
 
-# ... (17 lines trimmed)
+# Complexity (files over 500 lines)
+find src -name "*.ts" -o -name "*.tsx" | xargs wc -l 2>/dev/null | sort -n | tail -20
+
+# Code hygiene
+grep -rn "console\.\(log\|debug\|info\)" src --include="*.ts" --include="*.tsx" | wc -l
+grep -rn "TODO\|FIXME\|HACK\|XXX" src --include="*.ts" --include="*.tsx" | wc -l
+
+# DRY violations (rough check for repeated patterns)
+grep -rn "if (!email\|email\.includes\|@.*email" src --include="*.ts" | head -10
 
 # Unused imports (rough check)
 grep -rn "^import.*from" src --include="*.ts" | head -20
@@ -102,18 +111,40 @@ grep -rn "^import.*from" src --include="*.ts" | head -20
 ```markdown
 # Code Quality Audit
 
----
-agent: code-auditor
-status: [COMPLETE|PARTIAL|SKIPPED]
-# ... (53 lines trimmed)
-**Function:** `processUserData` (89 lines, 6 levels deep)
-**Issue:** Too complex to test or modify safely
-**Fix:** Extract logical blocks:
-```typescript
-// Before: one giant function
-function processUserData(data) { /* 89 lines */ }
+[Status block]
 
-// After: composed of smaller functions
+## Summary
+| Category | Critical | High | Medium | Low |
+|----------|----------|------|--------|-----|
+| Type Safety | | | | |
+| Complexity | | | | |
+| Maintainability | | | | |
+| Consistency | | | | |
+| Code Hygiene | | | | |
+
+## Critical
+
+### CODE-001: Unsafe Type Assertions
+**Count**: X occurrences
+**Files**: `src/lib/api.ts:23`, `src/hooks/useAuth.ts:45`
+**Issue**: `as unknown as X` bypasses type safety
+**Fix**: Use type guards or proper type narrowing
+
+## High
+
+### CODE-002: God File
+**File**: `src/lib/api.ts` (847 lines)
+**Issue**: Too large to maintain or test safely
+**Fix**: Split by domain:
+- `src/lib/api/users.ts`
+- `src/lib/api/products.ts`
+- `src/lib/api/orders.ts`
+
+### CODE-003: Complex Function
+**Function**: `processUserData` (89 lines, 6 levels deep)
+**Issue**: Too complex to test or modify safely
+**Fix**: Extract logical blocks:
+```typescript
 function processUserData(data) {
   const validated = validateInput(data);
   const normalized = normalizeData(validated);
@@ -123,44 +154,32 @@ function processUserData(data) {
 ```
 
 ### CODE-004: Console.log in Production
-**Count:** 23 occurrences
-**Files:**
-# ... (11 lines trimmed)
-- `src/app/api/auth/route.ts:15`
-**Issue:** Same email validation in 3 places
-```typescript
-// Duplicated in multiple files
-if (!email || !email.includes('@')) { ... }
-```
-**Fix:** Create shared validation utility
+**Count**: 23 occurrences
+**Fix**: Remove or replace with structured logging
+
+## Medium
+
+### CODE-005: Duplicate Validation Logic
+**File**: `src/app/api/auth/route.ts:15`
+**Issue**: Same email validation in 3 places
+**Fix**: Create shared validation utility
 ```typescript
 // src/lib/validation.ts
 export const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 ```
 
 ### CODE-006: Inconsistent API Response Shape
-**Files:**
-- `src/app/api/users/route.ts:34` - Returns `{ data: users }`
-- `src/app/api/products/route.ts:28` - Returns raw array `[...]`
-- `src/app/api/orders/route.ts:41` - Returns `{ items: orders }`
-**Fix:** Standardize to consistent shape:
-```typescript
-// Standard response shape
-type ApiResponse<T> = {
-  data: T;
-  meta?: { total: number; page: number };
-  error?: string;
-};
-```
+**Files**:
+- `src/app/api/users/route.ts:34` — Returns `{ data: users }`
+- `src/app/api/products/route.ts:28` — Returns raw array
+- `src/app/api/orders/route.ts:41` — Returns `{ items: orders }`
+**Fix**: Standardize to `ApiResponse<T>` with `data`, `meta`, `error` fields
 
 ### CODE-007: Magic Numbers
-**Files:**
-- `src/lib/cache.ts:12` - `setTimeout(() => {}, 300000)`
-- `src/utils/pagination.ts:8` - `const limit = 25`
-- `src/hooks/useRetry.ts:15` - `for (let i = 0; i < 3; i++)`
-**Fix:** Extract to named constants
+**Files**: `src/lib/cache.ts:12`, `src/utils/pagination.ts:8`
+**Fix**: Extract to named constants
 ```typescript
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 5 * 60 * 1000;
 const DEFAULT_PAGE_SIZE = 25;
 const MAX_RETRY_ATTEMPTS = 3;
 ```
@@ -168,11 +187,17 @@ const MAX_RETRY_ATTEMPTS = 3;
 ## Low
 
 ### CODE-008: TODO/FIXME Accumulation
-**Count:** 34 items
-# ... (34 lines trimmed)
+**Count**: 34 items
+**Action**: Schedule a cleanup sprint or convert to tracked issues
+
+## Recommended Actions
+1. [Highest impact fix first]
+2. ...
+
+## Prevention
+- [ ] Add `@typescript-eslint/no-explicit-any` to ESLint config
 - [ ] Set up pre-commit hooks
 - [ ] Document naming conventions
-- [ ] Regular code review
 ```
 
 ## Execution Logging
@@ -185,8 +210,8 @@ After completing, append to `.claude/audits/EXECUTION_LOG.md`:
 ## Output Verification
 
 Before completing:
-1. Verify `.claude/audits/AUDIT_CODE.md` was created
-2. Verify file has content beyond headers
-3. If no issues found, write "No code quality issues detected" (not empty file)
+1. Verify `.claude/audits/AUDIT_CODE.md` was created.
+2. Verify file has content beyond headers.
+3. If no issues found, write "No code quality issues detected" (not empty file).
 
 Focus on maintainability and consistency. **Do NOT duplicate security or bug checks.**

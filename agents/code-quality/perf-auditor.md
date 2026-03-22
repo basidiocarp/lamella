@@ -3,6 +3,7 @@ name: perf-auditor
 description: Performance auditor. Bundle size, Core Web Vitals, slow queries, memory leaks.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Performance Audit
@@ -28,26 +29,31 @@ skipped_checks: []
 
 ## Prerequisites Check
 
-Before running analysis, detect environment:
+Detect environment before running analysis:
 
 ```bash
-# 1. Detect framework
+# Detect framework
 ls -la next.config.* 2>/dev/null && echo "FRAMEWORK: Next.js"
 ls -la vite.config.* 2>/dev/null && echo "FRAMEWORK: Vite"
 ls -la webpack.config.* 2>/dev/null && echo "FRAMEWORK: Webpack"
-# ... (9 lines trimmed)
+
+# Detect build output
+ls -la .next/build-manifest.json 2>/dev/null && echo "BUILD: Next.js available"
+ls -la dist/assets/ 2>/dev/null && echo "BUILD: Vite available"
+
+# Detect package manager
 ls pnpm-lock.yaml 2>/dev/null && echo "PKG: pnpm"
 ls yarn.lock 2>/dev/null && echo "PKG: yarn"
 ```
 
 **If prerequisites not met:**
-- No build directory: Run static code analysis only, note "Build artifacts not available"
-- Unknown framework: Use generic patterns, note "Framework not detected"
-- No package manager: Skip dependency analysis, note "No package manager detected"
+- No build directory: Run static code analysis only. Note "Build artifacts not available."
+- Unknown framework: Use generic patterns. Note "Framework not detected."
+- No package manager: Skip dependency analysis. Note "No package manager detected."
 
 ## Check
 
-**Bundle & Loading**
+**Bundle and Loading**
 - Bundle size (target: <500KB initial JS)
 - Code splitting implemented
 - Dynamic imports for heavy components
@@ -56,8 +62,7 @@ ls yarn.lock 2>/dev/null && echo "PKG: yarn"
 - Images optimized (WebP, lazy loading)
 
 **Runtime Performance**
-- N+1 queries (see db-auditor)
-- Expensive computations in render
+- Expensive computations in render path
 - Missing memoization (useMemo, useCallback)
 - Unnecessary re-renders
 - Memory leaks (event listeners, subscriptions)
@@ -68,7 +73,7 @@ ls yarn.lock 2>/dev/null && echo "PKG: yarn"
 - CLS (Cumulative Layout Shift) < 0.1
 - TTFB (Time to First Byte) < 600ms
 
-**Database & API**
+**Database and API**
 - Slow queries (>100ms)
 - Missing pagination
 - No caching strategy
@@ -85,30 +90,25 @@ ls yarn.lock 2>/dev/null && echo "PKG: yarn"
 
 ### Next.js
 ```bash
-# Check bundle size
 cat .next/build-manifest.json 2>/dev/null | head -50 || echo "SKIP: No Next.js build"
-
-# Analyze pages
 ls -la .next/static/chunks/*.js 2>/dev/null | head -10 || echo "SKIP: No chunks"
 ```
 
 ### Vite
 ```bash
-# Check bundle size
 ls -la dist/assets/*.js 2>/dev/null | head -10 || echo "SKIP: No Vite build"
-
-# Check for source maps (should not be in prod)
 find dist -name "*.map" 2>/dev/null | head -5
 ```
 
 ### Generic (All Frameworks)
 ```bash
-# Find large source files
-find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" 2>/dev/null | xargs wc -l 2>/dev/null | sort -n | tail -10
+# Large source files
+find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" | xargs wc -l 2>/dev/null | sort -n | tail -10
 
-# Find components without memo
-# ... (11 lines trimmed)
-# Check for heavy dependencies
+# Components without memo
+grep -rn "export.*function\|export.*const.*=.*(" src --include="*.tsx" | grep -v "memo\|React.memo" | head -20
+
+# Heavy dependencies
 grep -E "moment|lodash|jquery|@material-ui" package.json 2>/dev/null && echo "WARNING: Heavy dependencies detected"
 ```
 
@@ -117,53 +117,68 @@ grep -E "moment|lodash|jquery|@material-ui" package.json 2>/dev/null && echo "WA
 ```markdown
 # Performance Audit
 
----
-agent: perf-auditor
-status: [COMPLETE|PARTIAL|SKIPPED]
-# ... (23 lines trimmed)
-**Current:** 1.2MB initial JS
-**Target:** <500KB
-**Breakdown:**
-```
-- vendor.js: 600KB
-- main.js: 400KB
-- pages/dashboard.js: 200KB
-```
-**Fix:**
-1. Dynamic import for dashboard: `const Dashboard = dynamic(() => import('./Dashboard'))`
+[Status block]
+
+## Summary
+| Category | Critical | High | Medium | Low |
+|----------|----------|------|--------|-----|
+| Bundle | | | | |
+| Runtime | | | | |
+| Core Web Vitals | | | | |
+| Database/API | | | | |
+| Infrastructure | | | | |
+
+## Critical
+
+### PERF-001: Bundle Size Exceeds Target
+**Current**: 1.2MB initial JS
+**Target**: <500KB
+**Breakdown**: vendor.js 600KB, main.js 400KB, pages/dashboard.js 200KB
+**Fix**:
+1. `const Dashboard = dynamic(() => import('./Dashboard'))` — defer dashboard load
 2. Replace moment.js (300KB) with date-fns (30KB)
 3. Enable tree shaking for lodash
 
-# ... (19 lines trimmed)
-**Issue:** Re-renders on every parent render
-**Impact:** Slow list scrolling
-**Fix:**
+## High
+
+### PERF-002: Unmemoized Component in List
+**File**: `src/components/ProductCard.tsx:5`
+**Issue**: Re-renders on every parent render
+**Impact**: Slow list scrolling
+**Fix**:
 ```typescript
-export const ProductCard = React.memo(({ product }) => {
-  // ...
-});
+export const ProductCard = React.memo(({ product }) => { ... });
 ```
 
-### PERF-005: Inline Function in JSX
-**File:** `src/components/Form.tsx:23`
-**Issue:** New function created every render
-```tsx
-<button onClick={() => handleSubmit(data)}>  // Bad
-```
-**Fix:**
+### PERF-003: Inline Function in JSX
+**File**: `src/components/Form.tsx:23`
+**Issue**: New function created every render
+**Fix**:
 ```tsx
 const onSubmit = useCallback(() => handleSubmit(data), [data]);
-<button onClick={onSubmit}>  // Good
+<button onClick={onSubmit}>
 ```
 
-### PERF-006: Missing Pagination
-**File:** `src/api/products.ts:15`
-**Issue:** Fetching all 10,000 products at once
-**Impact:** 5s API response, browser freeze
-# ... (35 lines trimmed)
-- **Bundle analysis:** `npm run build && npx @next/bundle-analyzer`
-- **Lighthouse:** `npx lighthouse https://your-site.com`
-- **Query profiling:** Enable slow query log in database
+### PERF-004: Missing Pagination
+**File**: `src/api/products.ts:15`
+**Issue**: Fetching all records without limit
+**Impact**: Large API responses, slow rendering
+**Fix**: Add `limit` and `offset` query parameters; return `{ data, total, page }`
+
+## Medium
+
+### PERF-005: No Caching Strategy
+**Endpoint**: `GET /api/products`
+**Fix**: Add `Cache-Control: public, max-age=300` for static data
+
+## Recommended Actions
+1. [Highest impact first]
+2. ...
+
+## Measurement Commands
+- **Bundle analysis**: `npm run build && npx @next/bundle-analyzer`
+- **Lighthouse**: `npx lighthouse https://your-site.com`
+- **Query profiling**: Enable slow query log in database
 ```
 
 ## Execution Logging
@@ -176,8 +191,8 @@ After completing, append to `.claude/audits/EXECUTION_LOG.md`:
 ## Output Verification
 
 Before completing:
-1. Verify `.claude/audits/AUDIT_PERF.md` was created
-2. Verify file has content beyond headers
-3. If no issues found, write "No performance issues detected" (not empty file)
+1. Verify `.claude/audits/AUDIT_PERF.md` was created.
+2. Verify file has content beyond headers.
+3. If no issues found, write "No performance issues detected" (not empty file).
 
-Focus on issues with measurable impact. Include before/after expectations for fixes.
+Focus on issues with measurable impact. Include before/after expectations for every fix recommendation.

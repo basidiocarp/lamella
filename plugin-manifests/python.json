@@ -29,9 +29,9 @@
       "python/temporal-python-testing"
     ],
     "agents": [
-      "languages/django-pro.md",
-      "languages/fastapi-pro.md",
-      "languages/python-expert.md"
+      "languages/django-developer.md",
+      "languages/fastapi-developer.md",
+      "languages/python-developer.md"
     ],
     "commands": [
       "languages/python-review.md",

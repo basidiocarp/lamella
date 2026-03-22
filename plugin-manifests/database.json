@@ -23,12 +23,10 @@
     "agents": [
       "data/data-engineer.md",
       "data/data-integrity-guardian.md",
-      "data/data-migration-expert.md",
       "data/data-scientist.md",
-      "data/database-expert.md",
-      "data/schema-drift-detector.md",
+      "data/database-architect.md",
       "data/seed-generator.md",
-      "data/vector-database-engineer.md"
+      "data/vector-db-architect.md"
     ],
     "commands": [
       "database/data-driven-feature.md",

@@ -3,6 +3,7 @@ name: doc-auditor
 description: Documentation coverage analyzer. Finds missing docs, outdated comments, API gaps.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
 
 # Documentation Audit
@@ -88,7 +89,6 @@ ls -la README* CONTRIBUTING* CHANGELOG*
 #### `src/lib/auth.ts`
 - `verifyToken()` - Missing JSDoc
 - `createSession()` - Missing param descriptions
-- `refreshToken()` - Missing return type docs
 
 ### Medium Priority (Internal)
 ...

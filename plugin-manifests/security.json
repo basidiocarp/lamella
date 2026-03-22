@@ -51,16 +51,13 @@
       "devops/infra-auditor.md",
       "documentation/doc-auditor.md",
       "frontend/ui-auditor.md",
-      "security/backend-security-coder.md",
       "security/contracts-reviewer.md",
       "security/exploitability-verifier.md",
-      "security/frontend-security-coder.md",
       "security/incident-responder.md",
       "security/malware-analyst.md",
-      "security/mobile-security-coder.md",
-      "security/security-expert.md",
+      "security/security-reviewer.md",
       "security/semgrep-scanner.md",
-      "security/threat-modeling-expert.md"
+      "security/threat-modeler.md"
     ],
     "commands": [
       "audit/audit-context.md",

@@ -23,7 +23,6 @@
       "collaboration/expert-panel"
     ],
     "agents": [
-      "teams/learning-guide.md",
       "teams/socratic-mentor.md",
       "teams/team-debugger.md",
       "teams/team-implementer.md",

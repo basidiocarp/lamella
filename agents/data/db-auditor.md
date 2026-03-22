@@ -3,7 +3,28 @@ name: db-auditor
 description: Database auditor. Schema design, N+1 queries, indexes, connection pooling.
 tools: Read, Grep, Glob, Bash
 model: inherit
+color: yellow
 ---
+
+## Status Block (Required)
+
+Every output MUST start with:
+
+```yaml
+---
+agent: db-auditor
+status: COMPLETE | PARTIAL | SKIPPED | ERROR
+timestamp: [ISO timestamp]
+duration: [seconds]
+findings: [count]
+tables_scanned: [count]
+queries_analyzed: [count]
+n_plus_one_count: [count]
+missing_index_count: [count]
+errors: []
+skipped_checks: []
+---
+```
 
 # Database Audit
 
@@ -14,7 +35,7 @@ Analyze database layer for performance and correctness issues. Output to `.claud
 **Query Patterns**
 - N+1 queries (loops with individual fetches)
 - Unbounded fetches (no LIMIT, no pagination)
-- SELECT * instead of specific columns
+- `SELECT *` instead of specific columns
 - Missing WHERE clauses on large tables
 - Queries inside loops
 
@@ -23,10 +44,10 @@ Analyze database layer for performance and correctness issues. Output to `.claud
 - Missing foreign key constraints
 - No cascade rules defined
 - Inconsistent naming conventions
-- Missing timestamps (created_at, updated_at)
+- Missing timestamps (`created_at`, `updated_at`)
 
-**Connection & Pooling**
-- Connection pool configuration
+**Connection and Pooling**
+- Connection pool configuration present
 - Connection leaks (connections not released)
 - Missing connection timeouts
 - No retry logic for transient failures
@@ -46,7 +67,7 @@ Analyze database layer for performance and correctness issues. Output to `.claud
 ## Grep
 
 ```bash
-# N+1 patterns - queries in loops
+# N+1 patterns — queries in loops
 grep -rn "for.*await.*find\|forEach.*await.*query" src --include="*.ts"
 
 # Unbounded fetches
@@ -55,7 +76,7 @@ grep -rn "findMany()\|find({})\|SELECT \*" src --include="*.ts"
 # Raw queries (potential injection)
 grep -rn "\$queryRaw\|\$executeRaw\|\.query(" src --include="*.ts"
 
-# Missing indexes - check schema
+# Missing indexes — check schema
 grep -rn "@index\|@@index\|createIndex" prisma --include="*.prisma"
 
 # Connection pool settings
@@ -84,7 +105,7 @@ grep -rn "pool\|connectionLimit\|max_connections" . --include="*.ts" --include="
 **File:** `src/api/users.ts:45`
 **Issue:** Fetching related data inside loop
 ```typescript
-// Current - N+1 problem
+// Current — N+1 problem
 for (const user of users) {
   const posts = await prisma.post.findMany({ where: { userId: user.id } });
 }
@@ -92,10 +113,7 @@ for (const user of users) {
 **Impact:** O(n) queries instead of O(1). 100 users = 101 queries.
 **Fix:**
 ```typescript
-// Use include for eager loading
-const users = await prisma.user.findMany({
-  include: { posts: true }
-});
+const users = await prisma.user.findMany({ include: { posts: true } });
 ```
 
 ### DB-002: Unbounded Query on Large Table
@@ -104,13 +122,10 @@ const users = await prisma.user.findMany({
 ```typescript
 const products = await prisma.product.findMany();
 ```
-**Impact:** Memory exhaustion with large datasets
+**Impact:** Memory exhaustion with large datasets.
 **Fix:**
 ```typescript
-const products = await prisma.product.findMany({
-  take: 100,
-  skip: page * 100
-});
+const products = await prisma.product.findMany({ take: 100, skip: page * 100 });
 ```
 
 ## High
@@ -129,19 +144,22 @@ model User {
 
 ### DB-004: Raw Query with String Interpolation
 **File:** `src/lib/search.ts:67`
-**Issue:** SQL injection vulnerability
-```typescript
-const results = await prisma.$queryRaw`SELECT * FROM users WHERE name LIKE '%${search}%'`;
-```
-**Fix:** Use parameterized queries
-
-## Medium
-
-### DB-005: No Connection Pool Configuration
-# ... (15 lines trimmed)
-3. **Set connection pool** limits appropriate for your hosting
-4. **Add pagination** to all list endpoints
-5. **Use transactions** for multi-table writes
+**Issue:** SQL injection vulnerability — use parameterized queries instead.
 ```
 
 Focus on queries that will cause production problems at scale. Include file:line for every finding.
+
+## Execution Logging
+
+After completing, append to `.claude/audits/EXECUTION_LOG.md`:
+
+```
+| [timestamp] | db-auditor | [status] | [duration] | [findings] | [errors] |
+```
+
+## Output Verification
+
+Before completing:
+1. Verify `.claude/audits/AUDIT_DB.md` was created
+2. Verify file has content beyond headers
+3. If no issues found, write "No issues detected" (not empty file)

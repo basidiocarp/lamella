@@ -29,7 +29,6 @@
     "agents": [
       "business/business-analyst.md",
       "business/business-council.md",
-      "business/legal-advisor.md",
       "business/quant-analyst.md",
       "business/startup-analyst.md"
     ],

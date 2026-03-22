@@ -12,7 +12,8 @@ metadata:
   phase: deliver
   version: 2.0.0
   updated: 2026-01-26
----# Edge Cases
+---
+# Edge Cases
 
 An edge cases document systematically catalogs the unusual, boundary, and error scenarios for a feature. While happy-path flows are typically well-specified, edge cases often get discovered in production — causing bugs, poor user experience, and support burden. Documenting edge cases upfront ensures engineering handles them intentionally and QA knows what to test.
 

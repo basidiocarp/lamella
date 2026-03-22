@@ -3,7 +3,8 @@ name: define-jtbd-canvas
 description: >-
   Creates a Jobs to be Done canvas capturing the functional, emotional, and social dimensions of a customer job. Use when
   deeply understanding customer motivations, designing for jobs, or reframing product positioning.
----# Jobs to be Done Canvas
+---
+# Jobs to be Done Canvas
 
 A Jobs to be Done (JTBD) canvas captures the complete picture of why customers "hire" products to make progress in their lives. Based on Clayton Christensen's framework, JTBD goes beyond features and demographics to understand the underlying motivations—functional, emotional, and social—that drive customer behavior.
 

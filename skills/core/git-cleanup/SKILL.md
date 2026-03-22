@@ -3,7 +3,8 @@ name: git-cleanup
 description: "Safely analyze and clean up local git branches and worktrees. Use when cleaning up accumulated branches and worktrees, removing merged branches, or tidying local git state."
 metadata:
   disable-model-invocation: true
----# Git Cleanup
+---
+# Git Cleanup
 
 Safely clean up accumulated git worktrees and local branches by categorizing them into: safely deletable (merged), potentially related (similar themes), and active work (keep).
 

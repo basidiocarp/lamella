@@ -3,7 +3,8 @@ name: git-analyze-issue
 description: Analyze a GitHub issue and create a detailed technical specification. Use when starting work on a GitHub issue, creating technical specs from issues, or planning implementation.
 metadata:
   argument-hint: Issue number (e.g., 42)
----Please analyze GitHub issue #$ARGUMENTS and create a technical specification.
+---
+Please analyze GitHub issue #$ARGUMENTS and create a technical specification.
 
 Follow these steps:
 

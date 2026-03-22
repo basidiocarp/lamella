@@ -5,7 +5,8 @@ metadata:
   context: fork
   agent: general-purpose
   argument-hint: "[--force] | <crate_name>"
----# Dynamic Skills Manager
+---
+# Dynamic Skills Manager
 
 Orchestrates on-demand generation of crate-specific skills based on project dependencies.
 

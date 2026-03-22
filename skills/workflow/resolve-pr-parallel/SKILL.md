@@ -5,7 +5,8 @@ description: "Resolve all PR comments using parallel processing. Use when addres
 metadata:
   argument-hint: "[optional: PR number or current PR]"
   disable-model-invocation: true
----# Resolve PR Comments in Parallel
+---
+# Resolve PR Comments in Parallel
 
 Resolve all unresolved PR review comments by spawning parallel agents for each thread.
 

@@ -2,7 +2,8 @@
 name: deliver-launch-checklist
 description: >-
   Creates a comprehensive pre-launch checklist covering engineering, design, marketing, support, legal, and operations readiness. Use when preparing to release features, products, or major updates.
----# Launch Checklist
+---
+# Launch Checklist
 
 A launch checklist is a comprehensive verification document that ensures all functions are ready before releasing a feature or product. It coordinates across engineering, QA, design, marketing, support, legal, and operations to prevent launch-day surprises. Good launch checklists surface blockers early and create shared accountability for launch readiness.
 

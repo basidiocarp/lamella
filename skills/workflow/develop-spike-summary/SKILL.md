@@ -12,7 +12,8 @@ metadata:
   phase: develop
   version: 2.0.0
   updated: 2026-01-26
----# Spike Summary
+---
+# Spike Summary
 
 A spike summary documents the results of a time-boxed exploration — a focused investigation to reduce uncertainty before committing to implementation. Spikes answer specific questions like "Can we integrate with this API?" or "Is this technology viable for our use case?" The summary captures findings so the team can make informed decisions without the spike participants needing to repeat explanations.
 

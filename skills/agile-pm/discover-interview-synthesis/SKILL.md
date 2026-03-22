@@ -2,7 +2,8 @@
 name: discover-interview-synthesis
 description: >-
   Synthesizes user research interviews into actionable insights, patterns, and recommendations. Use after conducting user interviews, customer calls, or usability sessions.
----# Interview Synthesis
+---
+# Interview Synthesis
 
 An interview synthesis transforms raw user research data into structured insights that drive product decisions. Rather than simply listing what participants said, a good synthesis identifies patterns across conversations, connects observations to underlying user needs, and translates findings into actionable recommendations.
 

@@ -13,7 +13,8 @@ metadata:
   phase: develop
   version: 2.0.0
   updated: 2026-01-26
----# Architecture Decision Record (ADR)
+---
+# Architecture Decision Record (ADR)
 
 An Architecture Decision Record documents a significant technical decision along with its context and consequences. ADRs capture the "why" behind architectural choices so future team members understand the reasoning — especially important when they question why something was done a particular way. This skill follows Michael Nygard's lightweight ADR format.
 

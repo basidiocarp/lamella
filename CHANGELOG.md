@@ -2,6 +2,17 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [0.4.1] - 2026-03-22
+
+### Fixed
+
+- **Codex build dirtiness**: `./lamella build-codex` now generates Codex manifests into `dist/generated/` instead of rewriting tracked manifests as a build side effect.
+
+### Changed
+
+- **Manifest sync script**: `builders/sync-codex-manifests.sh` now accepts an explicit output directory and clears stale generated YAML files before rebuilding.
+- **Tracked Codex manifests synced**: `manifests/codex/all.yaml` and `manifests/codex/core.yaml` are now aligned with the current Claude manifests.
+
 ## [0.4.0] - 2026-03-22
 
 ### Added

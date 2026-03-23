@@ -41,19 +41,37 @@ EOF
     exit 0
 }
 
+generated_codex_manifest_dir() {
+    echo "$SCRIPT_DIR/dist/generated/codex-manifests"
+}
+
+build_codex_exports() {
+    local manifest_dir
+    manifest_dir="$(generated_codex_manifest_dir)"
+    local output_dir="${1:-}"
+
+    rm -rf "$manifest_dir"
+    mkdir -p "$manifest_dir"
+
+    bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh" "$manifest_dir"
+    if [[ -n "$output_dir" ]]; then
+        bash "$SCRIPT_DIR/builders/build-codex-skills.sh" "$manifest_dir" "$output_dir"
+    else
+        bash "$SCRIPT_DIR/builders/build-codex-skills.sh" "$manifest_dir"
+    fi
+}
+
 run_update() {
     case "${1:-all}" in
         all)
             bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh"
-            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
-            bash "$SCRIPT_DIR/builders/build-codex-skills.sh"
+            build_codex_exports
             ;;
         claude|plugins)
             bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh"
             ;;
         codex|skills)
-            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
-            bash "$SCRIPT_DIR/builders/build-codex-skills.sh"
+            build_codex_exports
             ;;
         *)
             usage
@@ -95,8 +113,7 @@ main() {
             ;;
         build-codex)
             shift
-            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
-            exec bash "$SCRIPT_DIR/builders/build-codex-skills.sh" "$@"
+            build_codex_exports "${1:-}"
             ;;
         install)
             shift

@@ -5,7 +5,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
 CLAUDE_MANIFESTS_DIR="$BASE_DIR/manifests/claude"
-CODEX_MANIFESTS_DIR="$BASE_DIR/manifests/codex"
+DEFAULT_CODEX_MANIFESTS_DIR="$BASE_DIR/manifests/codex"
+CODEX_MANIFESTS_DIR="${1:-$DEFAULT_CODEX_MANIFESTS_DIR}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -70,6 +71,7 @@ build_all_manifest() {
 main() {
     check_deps
     mkdir -p "$CODEX_MANIFESTS_DIR"
+    rm -f "$CODEX_MANIFESTS_DIR"/*.yaml
 
     local count=0
     local manifest

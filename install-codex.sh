@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Thin compatibility wrapper for Codex skill installs.
+#
+# Preferred entrypoint:
+#   ./lamella install-codex [options]
 
 set -euo pipefail
 

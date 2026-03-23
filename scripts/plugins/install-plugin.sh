@@ -25,6 +25,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 DIST_DIR="$BASE_DIR/dist/claude/plugins"
+MANIFESTS_DIR="$BASE_DIR/manifests/claude"
 CLAUDE_DIR="${CLAUDE_HOME:-$HOME/.claude}"
 PLUGINS_DIR="$CLAUDE_DIR/plugins/lamella"
 
@@ -46,6 +47,7 @@ FORCE=false
 UNINSTALL=false
 LIST_ONLY=false
 INSTALL_ALL=false
+PRINT_ORDER=false
 PLUGINS=()
 
 usage() {
@@ -61,6 +63,7 @@ ${BOLD}OPTIONS${NC}
     -u, --uninstall   Uninstall specified plugins
     -n, --dry-run     Show what would be done
     -f, --force       Overwrite existing files
+    --print-order     Print the dependency-resolved install order
     -h, --help        Show this help
 
 ${BOLD}EXAMPLES${NC}
@@ -75,6 +78,7 @@ ${BOLD}INSTALL LOCATIONS${NC}
       (rules, workflows, templates — copied directly)
 
 ${BOLD}NOTES${NC}
+    Dependency order is resolved from manifests/claude/*.json.
     Run 'builders/build-claude-marketplace.sh' first to build all plugins.
     After install, add to settings.json or use: claude --plugin-dir <path>
 
@@ -83,54 +87,184 @@ EOF
 }
 
 get_available_plugins() {
-    [[ ! -d "$DIST_DIR" ]] && return
-    for d in "$DIST_DIR"/*/; do
-        [[ -d "$d" ]] && basename "$d"
+    [[ ! -d "$MANIFESTS_DIR" ]] && return
+    for f in "$MANIFESTS_DIR"/*.json; do
+        [[ ! -f "$f" ]] && continue
+        local name
+        name=$(basename "$f" .json)
+        [[ "$name" == "schema" || "$name" == "index" ]] && continue
+        echo "$name"
     done | sort
+}
+
+manifest_path() {
+    local plugin="$1"
+    echo "$MANIFESTS_DIR/$plugin.json"
+}
+
+manifest_dependencies() {
+    local plugin="$1"
+    local manifest
+    manifest=$(manifest_path "$plugin")
+    [[ -f "$manifest" ]] || return 1
+    jq -r '.dependencies[]? // empty' "$manifest"
+}
+
+resolve_plugin_order() {
+    local roots=("$@")
+    local ordered=()
+    local resolved=""
+    local visiting=""
+
+    visit_plugin() {
+        local plugin="$1"
+
+        if list_contains "$resolved" "$plugin"; then
+            return 0
+        fi
+
+        if list_contains "$visiting" "$plugin"; then
+            log_error "Cyclic dependency detected while resolving $plugin"
+            return 1
+        fi
+
+        local manifest
+        manifest=$(manifest_path "$plugin")
+        if [[ ! -f "$manifest" ]]; then
+            log_error "Manifest not found: $plugin ($manifest)"
+            return 1
+        fi
+
+        visiting=$(append_list_item "$visiting" "$plugin")
+
+        local dep
+        while IFS= read -r dep; do
+            [[ -z "$dep" ]] && continue
+            visit_plugin "$dep" || return 1
+        done < <(manifest_dependencies "$plugin")
+
+        visiting=$(pop_list_item "$visiting")
+        resolved=$(append_list_item "$resolved" "$plugin")
+        ordered+=("$plugin")
+    }
+
+    local root
+    for root in "${roots[@]}"; do
+        [[ -z "$root" ]] && continue
+        visit_plugin "$root" || return 1
+    done
+
+    printf '%s\n' "${ordered[@]}"
+}
+
+reverse_plugins() {
+    local input=("$@")
+    local reversed=()
+    local i
+    for ((i=${#input[@]}-1; i>=0; i--)); do
+        reversed+=("${input[$i]}")
+    done
+    printf '%s\n' "${reversed[@]}"
+}
+
+list_contains() {
+    local list="$1"
+    local needle="$2"
+
+    case $'\n'"$list"$'\n' in
+        *$'\n'"$needle"$'\n'*) return 0 ;;
+    esac
+
+    return 1
+}
+
+append_list_item() {
+    local list="$1"
+    local item="$2"
+
+    if [[ -z "$list" ]]; then
+        printf '%s' "$item"
+    else
+        printf '%s\n%s' "$list" "$item"
+    fi
+}
+
+pop_list_item() {
+    local list="$1"
+
+    if [[ -z "$list" ]]; then
+        printf ''
+        return 0
+    fi
+
+    printf '%s\n' "$list" | sed '$d'
+}
+
+describe_plugin_order() {
+    local label="$1"
+    shift
+
+    echo -e "${BOLD}${label}${NC}"
+    local index=1
+    local plugin deps
+    for plugin in "$@"; do
+        deps=$(manifest_dependencies "$plugin" | paste -sd ', ' -)
+        if [[ -n "$deps" ]]; then
+            printf "  %2d. %s (deps: %s)\n" "$index" "$plugin" "$deps"
+        else
+            printf "  %2d. %s\n" "$index" "$plugin"
+        fi
+        index=$((index + 1))
+    done
 }
 
 list_plugins() {
     echo -e "${BOLD}Available Plugins${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-    if [[ ! -d "$DIST_DIR" ]]; then
-        log_warn "No built plugins found. Run 'scripts/plugins/build-marketplace.sh' first."
-        exit 1
-    fi
-
     local plugins
     plugins=$(get_available_plugins)
     [[ -z "$plugins" ]] && { log_warn "No plugins found."; exit 1; }
 
-    printf "${BOLD}%-18s %-8s %6s %6s %6s  %-35s${NC}\n" "PLUGIN" "VERSION" "SKILL" "AGENT" "CMD" "DESCRIPTION"
+    printf "${BOLD}%-18s %-8s %6s %6s %6s  %-20s %-35s${NC}\n" "PLUGIN" "VERSION" "SKILL" "AGENT" "CMD" "DEPS" "DESCRIPTION"
     echo "──────────────────────────────────────────────────────────────────────────────"
 
     local total_plugins=0
 
     while IFS= read -r plugin; do
-        local pjson="$DIST_DIR/$plugin/.claude-plugin/plugin.json"
+        local pjson="$MANIFESTS_DIR/$plugin.json"
         if [[ -f "$pjson" ]]; then
             local name version desc
             name=$(jq -r '.name' "$pjson")
             version=$(jq -r '.version // "?"' "$pjson")
             desc=$(jq -r '.description // ""' "$pjson" | head -c 35)
+            local deps
+            deps=$(jq -r '[.dependencies // [] | .[]] | join(",")' "$pjson")
 
-            local skill_count=0 agent_count=0 cmd_count=0
-            [[ -d "$DIST_DIR/$plugin/skills" ]] && skill_count=$(ls -d "$DIST_DIR/$plugin/skills"/*/ 2>/dev/null | wc -l | tr -d ' ')
-            [[ -d "$DIST_DIR/$plugin/agents" ]] && agent_count=$(ls "$DIST_DIR/$plugin/agents"/*.md 2>/dev/null | wc -l | tr -d ' ')
-            [[ -d "$DIST_DIR/$plugin/commands" ]] && cmd_count=$(ls "$DIST_DIR/$plugin/commands"/*.md 2>/dev/null | wc -l | tr -d ' ')
+            local skill_count agent_count cmd_count
+            skill_count=$(jq -r '.resources.skills // [] | length' "$pjson")
+            agent_count=$(jq -r '.resources.agents // [] | length' "$pjson")
+            cmd_count=$(jq -r '.resources.commands // [] | length' "$pjson")
 
             local status=""
-            [[ -d "$PLUGINS_DIR/$plugin" ]] && status="${GREEN}●${NC}"
+            [[ -d "$DIST_DIR/$plugin" ]] && status="${BLUE}built${NC}"
+            if [[ -d "$PLUGINS_DIR/$plugin" ]]; then
+                if [[ -n "$status" ]]; then
+                    status="${status} / ${GREEN}installed${NC}"
+                else
+                    status="${GREEN}installed${NC}"
+                fi
+            fi
 
-            printf "%-18s %-8s %6s %6s %6s  %-35s %b\n" "$name" "$version" "$skill_count" "$agent_count" "$cmd_count" "${desc:0:35}" "$status"
+            printf "%-18s %-8s %6s %6s %6s  %-20s %-35s %b\n" "$name" "$version" "$skill_count" "$agent_count" "$cmd_count" "${deps:0:20}" "${desc:0:35}" "$status"
             ((total_plugins++))
         fi
     done <<< "$plugins"
 
     echo "──────────────────────────────────────────────────────────────────────────────"
     echo -e "${BOLD}Total:${NC} $total_plugins plugins"
-    echo -e "${GREEN}●${NC} = installed"
+    echo -e "${BLUE}built${NC} = built"
+    echo -e "${GREEN}installed${NC} = installed"
 }
 
 # Install a plugin as an official Claude Code plugin directory
@@ -209,7 +343,7 @@ install_plugin() {
 
             if ! $DRY_RUN && [[ -d "$standalone_dir" ]]; then
                 local count
-                count=$(ls -A "$standalone_dir" 2>/dev/null | wc -l | tr -d ' ')
+                count=$(find "$standalone_dir" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')
                 [[ "$count" -gt 0 ]] && log_success "  Standalone $resource_type: $count items → $claude_dst"
             fi
         done
@@ -246,26 +380,35 @@ uninstall_plugin() {
     return 0
 }
 
-parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            -l|--list) LIST_ONLY=true; shift ;;
-            -a|--all) INSTALL_ALL=true; shift ;;
-            -u|--uninstall) UNINSTALL=true; shift ;;
-            -n|--dry-run) DRY_RUN=true; shift ;;
-            -f|--force) FORCE=true; shift ;;
-            -h|--help) usage ;;
-            -*) log_error "Unknown option: $1"; usage ;;
-            *) PLUGINS+=("$1"); shift ;;
-        esac
-    done
-}
-
 main() {
     parse_args "$@"
 
     if $LIST_ONLY; then
         list_plugins
+        exit 0
+    fi
+
+    if $PRINT_ORDER; then
+        if $INSTALL_ALL; then
+            PLUGINS=()
+            while IFS= read -r plugin; do
+                [[ -z "$plugin" ]] && continue
+                PLUGINS+=("$plugin")
+            done < <(get_available_plugins)
+        fi
+        if [[ ${#PLUGINS[@]} -eq 0 ]]; then
+            log_error "No plugins specified"
+            exit 1
+        fi
+        ordered_output=$(resolve_plugin_order "${PLUGINS[@]}")
+        ordered=()
+        while IFS= read -r plugin; do
+            [[ -z "$plugin" ]] && continue
+            ordered+=("$plugin")
+        done <<EOF
+$ordered_output
+EOF
+        printf '%s\n' "${ordered[@]}"
         exit 0
     fi
 
@@ -276,12 +419,43 @@ main() {
     fi
 
     if $INSTALL_ALL; then
-        mapfile -t PLUGINS < <(get_available_plugins)
+        PLUGINS=()
+        while IFS= read -r plugin; do
+            [[ -z "$plugin" ]] && continue
+            PLUGINS+=("$plugin")
+        done < <(get_available_plugins)
     fi
 
     if [[ ${#PLUGINS[@]} -eq 0 ]]; then
         log_error "No plugins specified"
         usage
+    fi
+
+    ordered_output=$(resolve_plugin_order "${PLUGINS[@]}")
+    ordered_plugins=()
+    while IFS= read -r plugin; do
+        [[ -z "$plugin" ]] && continue
+        ordered_plugins+=("$plugin")
+    done <<EOF
+$ordered_output
+EOF
+    PLUGINS=("${ordered_plugins[@]}")
+
+    if $UNINSTALL; then
+        reversed_output=$(reverse_plugins "${PLUGINS[@]}")
+        reversed_plugins=()
+        while IFS= read -r plugin; do
+            [[ -z "$plugin" ]] && continue
+            reversed_plugins+=("$plugin")
+        done <<EOF
+$reversed_output
+EOF
+        PLUGINS=("${reversed_plugins[@]}")
+    fi
+
+    if $DRY_RUN; then
+        describe_plugin_order "Dependency order" "${PLUGINS[@]}"
+        echo ""
     fi
 
     if ! $DRY_RUN; then
@@ -327,4 +501,22 @@ main() {
     return 0
 }
 
-main "$@"
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -l|--list) LIST_ONLY=true; shift ;;
+            -a|--all) INSTALL_ALL=true; shift ;;
+            -u|--uninstall) UNINSTALL=true; shift ;;
+            -n|--dry-run) DRY_RUN=true; shift ;;
+            -f|--force) FORCE=true; shift ;;
+            --print-order) PRINT_ORDER=true; shift ;;
+            -h|--help) usage ;;
+            -*) log_error "Unknown option: $1"; usage ;;
+            *) PLUGINS+=("$1"); shift ;;
+        esac
+    done
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

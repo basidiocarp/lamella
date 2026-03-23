@@ -8,6 +8,7 @@ BUILD_CODEX := builders/build-codex-skills.sh
 SYNC_CODEX_MANIFESTS := builders/sync-codex-manifests.sh
 INSTALL_CODEX := builders/install-codex-skills.sh
 INSTALL_SCRIPT := scripts/plugins/install-plugin.sh
+LAMELLA := ./lamella
 
 # Default target
 help: ## Show this help
@@ -37,19 +38,19 @@ build: ## Build all Claude plugins to dist/claude/plugins/
 	@echo "Build complete. Output in dist/claude/plugins/"
 
 build-marketplace: ## Build all plugins + marketplace.json
-	@bash $(BUILD_MARKETPLACE)
+	@bash $(LAMELLA) build-marketplace
 
 sync-codex-manifests: ## Generate Codex manifests from Claude manifests
 	@bash $(SYNC_CODEX_MANIFESTS)
 
-build-codex: sync-codex-manifests ## Build Codex skill exports to dist/codex/
-	@bash $(BUILD_CODEX)
+build-codex: ## Build Codex skill exports to dist/codex/
+	@bash $(LAMELLA) build-codex
 
 install-codex: build-codex ## Build and install Codex skills to ~/.codex/skills
-	@bash $(INSTALL_CODEX) --all --force
+	@bash $(LAMELLA) install-codex --all --force
 
 install: build ## Build and install all plugins
-	@bash $(INSTALL_SCRIPT) --all --force
+	@bash $(LAMELLA) install --all --force
 
 install-all: install ## Alias for install
 

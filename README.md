@@ -3,22 +3,27 @@
 A portable resource system for AI coding environments, with first-class Claude
 plugin builds and Codex skill exports.
 
-Claude builds follow the **official Claude Code plugin format**
+Claude builds follow the official Claude Code plugin format
 (`.claude-plugin/plugin.json`). Codex builds export installable skill folders.
 
 ## Quick Start
 
 ```bash
 # Claude: build marketplace + install plugins
-make build-marketplace
-./install.sh core python typescript
+./lamella build-marketplace
+./lamella install core python typescript
+./lamella list
 
 # Codex: generate manifests + build skill exports
-make build-codex
+./lamella build-codex
 
 # Codex: build and install exported skills
-./install-codex.sh --all
+./lamella install-codex --all
 ```
+
+The `install` flow resolves manifest dependencies before it builds or installs
+anything. Installing `typescript` also installs `core`, because that is the
+dependency declared in `manifests/claude/typescript.json`.
 
 ## As a Claude Code Marketplace
 
@@ -26,7 +31,7 @@ After building, `dist/claude/` is a proper Claude Code marketplace:
 
 ```bash
 # Build the marketplace
-make build-marketplace
+./lamella build-marketplace
 
 # Add it in Claude Code
 /plugin marketplace add ./dist/claude
@@ -41,10 +46,19 @@ After building, `dist/codex/skills/` contains portable skill folders that can be
 copied or symlinked into `~/.codex/skills/`.
 
 ```bash
-make build-codex
-./install-codex.sh --list
-./install-codex.sh --all
+./lamella build-codex
+./lamella install-codex --list
+./lamella install-codex --all
 ```
+
+## Common wrapper commands
+
+`./lamella` is the preferred entrypoint for local work.
+
+- `./lamella list` lists built Claude plugins.
+- `./lamella install <plugin...>` installs Claude plugins in dependency order.
+- `./lamella install-codex <skill...>` installs exported Codex skills.
+- `./lamella update` refreshes both Claude and Codex build outputs.
 
 ## Plugins
 
@@ -158,11 +172,11 @@ bash builders/build-codex-skills.sh
 Install built plugins to `~/.claude/plugins/lamella/`:
 
 ```bash
-./install.sh --list
-./install.sh core typescript python
-./install.sh --all
-./install.sh --dry-run --all
-./install.sh --uninstall security
+./lamella list
+./lamella install core typescript python
+./lamella install --all
+./lamella install --dry-run --all
+./lamella uninstall security
 ```
 
 ## Validation

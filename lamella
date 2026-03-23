@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+#
+# lamella - thin wrapper for the common Lamella flows.
+#
+# Usage:
+#   ./lamella list [plugins|codex|all]
+#   ./lamella build-marketplace
+#   ./lamella build-codex
+#   ./lamella install [options] [plugin-names...]
+#   ./lamella install-codex [options] [skill-names...]
+#   ./lamella uninstall [plugin-names...]
+#   ./lamella update [claude|codex|all]
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+    cat <<EOF
+lamella - common Lamella operations
+
+USAGE
+    ./lamella <command> [args...]
+
+COMMANDS
+    list [plugins|codex|all]   List available built plugins or skills
+    build-marketplace          Build the Claude plugin marketplace
+    build-codex                Build and export Codex skills
+    install [args...]          Install Claude plugins
+    install-codex [args...]    Install Codex skills
+    uninstall [args...]        Remove installed Claude plugins
+    update [claude|codex|all]  Refresh generated outputs
+
+EXAMPLES
+    ./lamella list
+    ./lamella install core typescript
+    ./lamella install --dry-run typescript
+    ./lamella install-codex --all
+    ./lamella update
+EOF
+    exit 0
+}
+
+run_update() {
+    case "${1:-all}" in
+        all)
+            bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh"
+            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
+            bash "$SCRIPT_DIR/builders/build-codex-skills.sh"
+            ;;
+        claude|plugins)
+            bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh"
+            ;;
+        codex|skills)
+            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
+            bash "$SCRIPT_DIR/builders/build-codex-skills.sh"
+            ;;
+        *)
+            usage
+            ;;
+    esac
+}
+
+run_list() {
+    case "${1:-plugins}" in
+        plugins|claude|plugin)
+            bash "$SCRIPT_DIR/install.sh" --list
+            ;;
+        codex|skills)
+            bash "$SCRIPT_DIR/install-codex.sh" --list
+            ;;
+        all)
+            bash "$SCRIPT_DIR/install.sh" --list
+            echo ""
+            bash "$SCRIPT_DIR/install-codex.sh" --list
+            ;;
+        *)
+            usage
+            ;;
+    esac
+}
+
+main() {
+    case "${1:-}" in
+        ""|-h|--help|help)
+            usage
+            ;;
+        list)
+            shift
+            run_list "${1:-plugins}"
+            ;;
+        build-marketplace|build)
+            shift
+            exec bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh" "$@"
+            ;;
+        build-codex)
+            shift
+            bash "$SCRIPT_DIR/builders/sync-codex-manifests.sh"
+            exec bash "$SCRIPT_DIR/builders/build-codex-skills.sh" "$@"
+            ;;
+        install)
+            shift
+            exec bash "$SCRIPT_DIR/install.sh" "$@"
+            ;;
+        install-codex)
+            shift
+            exec bash "$SCRIPT_DIR/install-codex.sh" "$@"
+            ;;
+        uninstall)
+            shift
+            exec bash "$SCRIPT_DIR/scripts/plugins/install-plugin.sh" --uninstall "$@"
+            ;;
+        update)
+            shift
+            run_update "${1:-all}"
+            ;;
+        *)
+            usage
+            ;;
+    esac
+}
+
+main "$@"

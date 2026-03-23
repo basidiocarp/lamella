@@ -2,6 +2,18 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [0.4.0] - 2026-03-22
+
+### Added
+
+- **`./lamella` wrapper CLI**: Added a single entry point for listing, building, installing, uninstalling, and refreshing Claude and Codex outputs.
+- **Dependency-aware installs**: Claude plugin installs now resolve manifest dependencies, support dry-run planning, and uninstall in reverse dependency order.
+
+### Changed
+
+- **Unified local workflows**: `Makefile`, `install.sh`, and `install-codex.sh` now route through the wrapper so local commands share one code path.
+- **Manifest-first plugin listing**: `./lamella list` reads source manifests, so it works before any marketplace build has run.
+
 ## [0.3.0] - 2026-03-22
 
 ### Directory Restructuring

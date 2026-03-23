@@ -78,7 +78,7 @@ build_marketplace() {
         version=$(jq -r '.version // "1.0.0"' "$manifest")
 
         if bash "$BUILD_SCRIPT" "$manifest" "$plugins_dir/$name" 2>&1 | sed 's/^/  /'; then
-            ((built++))
+            built=$((built + 1))
 
             # Build marketplace plugin entry
             local entry
@@ -101,7 +101,7 @@ build_marketplace() {
             fi
         else
             log_error "Failed to build: $name"
-            ((failed++))
+            failed=$((failed + 1))
         fi
 
         echo ""

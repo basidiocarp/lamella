@@ -2,6 +2,12 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [0.4.2] - 2026-03-22
+
+### Fixed
+
+- **Marketplace release builds**: `scripts/plugins/build-marketplace.sh` now increments build counters without tripping Bash `set -e`, which fixes GitHub Actions release runs that exited after the first successful plugin build.
+
 ## [0.4.1] - 2026-03-22
 
 ### Fixed

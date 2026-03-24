@@ -40,6 +40,16 @@ After building, `dist/claude/` is a proper Claude Code marketplace:
 claude --plugin-dir dist/claude/plugins/core
 ```
 
+### Direct GitHub marketplace source
+
+`lamella` also ships a repo-root marketplace catalog in `.claude-plugin/marketplace.json` on `main`. That means Claude Code can add the repository itself as the marketplace source:
+
+```text
+/plugin marketplace add basidiocarp/lamella
+```
+
+That repo-root catalog points each plugin to the published `gh-pages` branch via `git-subdir`, so the marketplace source stays lightweight on `main` while plugin installs still fetch the built plugin artifacts.
+
 ### Windows-friendly build
 
 `lamella` is bash-driven, so the clean Windows path is WSL2:
@@ -87,6 +97,24 @@ After GitHub Pages is enabled for the repository, add the marketplace in Claude 
 ```
 
 The hosted catalog points plugin installs back to the same repository's `gh-pages` branch, so users can install and update plugins from a stable marketplace URL without needing a local checkout.
+
+### Repository settings example
+
+If you want another repository to automatically offer lamella as a known marketplace, add this to that repo's Claude settings:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "lamella": {
+      "source": {
+        "source": "github",
+        "repo": "basidiocarp/lamella",
+        "ref": "gh-pages"
+      }
+    }
+  }
+}
+```
 
 ## As a Codex Skill Export
 

@@ -40,6 +40,7 @@ SOURCE_MODE="local"
 GIT_SOURCE_URL=""
 GIT_SOURCE_REF=""
 OUTPUT_DIR=""
+CATALOG_ONLY=false
 
 usage() {
     cat <<EOF
@@ -57,6 +58,7 @@ Options:
   --source-mode <mode>   Plugin source mode: local | git-subdir
   --git-url <url>        Git URL used for hosted plugin sources
   --git-ref <ref>        Git branch/tag used for hosted plugin sources
+  --catalog-only         Write marketplace.json only; skip building plugin dirs
   -h, --help             Show this help
 
 Notes:
@@ -113,6 +115,10 @@ parse_args() {
                 GIT_SOURCE_REF="$2"
                 shift 2
                 ;;
+            --catalog-only)
+                CATALOG_ONLY=true
+                shift
+                ;;
             -h|--help)
                 usage
                 exit 0
@@ -138,6 +144,10 @@ parse_args() {
 validate_config() {
     case "$SOURCE_MODE" in
         local)
+            if $CATALOG_ONLY; then
+                log_error "--catalog-only requires a non-local source mode"
+                exit 1
+            fi
             ;;
         git-subdir)
             if [[ -z "$GIT_SOURCE_URL" ]]; then
@@ -326,14 +336,20 @@ build_marketplace() {
     local output_dir="${1:-$BASE_DIR/dist/claude}"
     local manifests_dir="$BASE_DIR/manifests/claude"
     local plugins_dir="$output_dir/plugins"
+    local built_label="Plugins built"
 
     echo -e "${BOLD}Building Skill-Issue Marketplace${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 
-    # Clean output
-    rm -rf "$output_dir"
-    mkdir -p "$plugins_dir"
+    if ! $CATALOG_ONLY; then
+        # Clean output
+        rm -rf "$output_dir"
+        mkdir -p "$plugins_dir"
+    else
+        mkdir -p "$output_dir/.claude-plugin"
+        built_label="Catalog entries"
+    fi
 
     local built=0
     local failed=0
@@ -356,21 +372,31 @@ build_marketplace() {
         description=$(jq -r '.description // ""' "$manifest")
         version=$(jq -r '.version // "1.0.0"' "$manifest")
 
-        if bash "$BUILD_SCRIPT" "$manifest" "$plugins_dir/$name" 2>&1 | sed 's/^/  /'; then
-            built=$((built + 1))
-
-            # Build marketplace plugin entry
+        if $CATALOG_ONLY; then
             local entry
             entry=$(plugin_entry_json "$name" "$description" "$version")
-
             if [[ -z "$plugin_entries" ]]; then
                 plugin_entries="$entry"
             else
                 plugin_entries="$plugin_entries,$entry"
             fi
+            built=$((built + 1))
         else
-            log_error "Failed to build: $name"
-            failed=$((failed + 1))
+            if bash "$BUILD_SCRIPT" "$manifest" "$plugins_dir/$name" 2>&1 | sed 's/^/  /'; then
+                built=$((built + 1))
+
+                local entry
+                entry=$(plugin_entry_json "$name" "$description" "$version")
+
+                if [[ -z "$plugin_entries" ]]; then
+                    plugin_entries="$entry"
+                else
+                    plugin_entries="$plugin_entries,$entry"
+                fi
+            else
+                log_error "Failed to build: $name"
+                failed=$((failed + 1))
+            fi
         fi
 
         echo ""
@@ -378,7 +404,9 @@ build_marketplace() {
 
     mkdir -p "$output_dir/.claude-plugin"
     generate_marketplace_json "$output_dir" "$plugin_entries"
-    write_marketplace_index "$output_dir"
+    if ! $CATALOG_ONLY; then
+        write_marketplace_index "$output_dir"
+    fi
 
     log_success "Generated marketplace.json"
 
@@ -395,7 +423,7 @@ build_marketplace() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo -e "${BOLD}Marketplace Build Complete${NC}"
-    echo -e "  Plugins built: ${GREEN}$built${NC}"
+    echo -e "  ${built_label}: ${GREEN}$built${NC}"
     if [[ $failed -gt 0 ]]; then
         echo -e "  Failed:        ${RED}$failed${NC}"
     fi
@@ -404,9 +432,11 @@ build_marketplace() {
     echo -e "${BOLD}Install the marketplace:${NC}"
     echo "  /plugin marketplace add $output_dir"
     echo ""
-    echo -e "${BOLD}Or load a single plugin for testing:${NC}"
-    echo "  claude --plugin-dir $plugins_dir/<name>"
-    echo ""
+    if ! $CATALOG_ONLY; then
+        echo -e "${BOLD}Or load a single plugin for testing:${NC}"
+        echo "  claude --plugin-dir $plugins_dir/<name>"
+        echo ""
+    fi
 
     if [[ $failed -gt 0 ]]; then
         return 1

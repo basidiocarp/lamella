@@ -5,6 +5,7 @@
 # Usage:
 #   ./lamella list [plugins|codex|all]
 #   ./lamella build-marketplace
+#   ./lamella build-repo-marketplace
 #   ./lamella build-codex
 #   ./lamella install [options] [plugin-names...]
 #   ./lamella install-codex [options] [skill-names...]
@@ -35,6 +36,7 @@ EXAMPLES
     ./lamella list
     ./lamella install core typescript
     ./lamella install --dry-run typescript
+    ./lamella build-repo-marketplace
     ./lamella install-codex --all
     ./lamella update
 EOF
@@ -110,6 +112,16 @@ main() {
         build-marketplace|build)
             shift
             exec bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh" "$@"
+            ;;
+        build-repo-marketplace)
+            shift
+            exec bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh" \
+                --catalog-only \
+                --output-dir "$SCRIPT_DIR" \
+                --source-mode git-subdir \
+                --git-url "https://github.com/basidiocarp/lamella.git" \
+                --git-ref gh-pages \
+                "$@"
             ;;
         build-codex)
             shift

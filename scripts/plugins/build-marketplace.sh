@@ -6,7 +6,7 @@
 # so the dist/claude directory can be used as a local Claude Code plugin marketplace.
 #
 # Usage:
-#   ./build-marketplace.sh [output-dir]
+#   ./build-marketplace.sh [options] [output-dir]
 #
 # Default output: dist/claude
 #
@@ -32,6 +32,41 @@ log_success() { echo -e "${GREEN}[OK]${NC} $1"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
+MARKETPLACE_NAME="lamella"
+MARKETPLACE_OWNER="William Newton"
+MARKETPLACE_DESCRIPTION="Skill-Issue — curated skills, agents, and commands for Claude Code"
+MARKETPLACE_VERSION="1.0.0"
+SOURCE_MODE="local"
+GIT_SOURCE_URL=""
+GIT_SOURCE_REF=""
+OUTPUT_DIR=""
+
+usage() {
+    cat <<EOF
+Usage: $0 [options] [output-dir]
+
+Build every Claude manifest into a Claude Code marketplace.
+
+Options:
+  --output-dir <dir>     Output directory (default: dist/claude)
+  --marketplace-name <name>
+                         Marketplace identifier (default: lamella)
+  --owner-name <name>    Marketplace owner name
+  --description <text>   Marketplace description
+  --version <version>    Marketplace version
+  --source-mode <mode>   Plugin source mode: local | git-subdir
+  --git-url <url>        Git URL used for hosted plugin sources
+  --git-ref <ref>        Git branch/tag used for hosted plugin sources
+  -h, --help             Show this help
+
+Notes:
+  local      Produces a local git/path marketplace with ./plugins/<name> entries.
+  git-subdir Produces a URL-safe marketplace manifest where each plugin points
+             to a git subdirectory source. Use this when hosting marketplace.json
+             at a URL such as GitHub Pages.
+EOF
+}
+
 check_deps() {
     if ! command -v jq &>/dev/null; then
         log_error "jq is required. Install with: brew install jq"
@@ -41,6 +76,250 @@ check_deps() {
         log_error "build-plugin.sh not found or not executable at: $BUILD_SCRIPT"
         exit 1
     fi
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --output-dir)
+                OUTPUT_DIR="$2"
+                shift 2
+                ;;
+            --marketplace-name)
+                MARKETPLACE_NAME="$2"
+                shift 2
+                ;;
+            --owner-name)
+                MARKETPLACE_OWNER="$2"
+                shift 2
+                ;;
+            --description)
+                MARKETPLACE_DESCRIPTION="$2"
+                shift 2
+                ;;
+            --version)
+                MARKETPLACE_VERSION="$2"
+                shift 2
+                ;;
+            --source-mode)
+                SOURCE_MODE="$2"
+                shift 2
+                ;;
+            --git-url)
+                GIT_SOURCE_URL="$2"
+                shift 2
+                ;;
+            --git-ref)
+                GIT_SOURCE_REF="$2"
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -*)
+                log_error "Unknown option: $1"
+                usage
+                exit 1
+                ;;
+            *)
+                if [[ -n "$OUTPUT_DIR" ]]; then
+                    log_error "Unexpected extra argument: $1"
+                    usage
+                    exit 1
+                fi
+                OUTPUT_DIR="$1"
+                shift
+                ;;
+        esac
+    done
+}
+
+validate_config() {
+    case "$SOURCE_MODE" in
+        local)
+            ;;
+        git-subdir)
+            if [[ -z "$GIT_SOURCE_URL" ]]; then
+                log_error "--git-url is required when --source-mode git-subdir is used"
+                exit 1
+            fi
+            if [[ -z "$GIT_SOURCE_REF" ]]; then
+                log_error "--git-ref is required when --source-mode git-subdir is used"
+                exit 1
+            fi
+            ;;
+        *)
+            log_error "Unsupported source mode: $SOURCE_MODE"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+plugin_entry_json() {
+    local name="$1"
+    local description="$2"
+    local version="$3"
+
+    case "$SOURCE_MODE" in
+        local)
+            jq -n \
+                --arg name "$name" \
+                --arg source "./plugins/$name" \
+                --arg desc "$description" \
+                --arg ver "$version" \
+                '{
+                    name: $name,
+                    source: $source,
+                    description: $desc,
+                    version: $ver
+                }'
+            ;;
+        git-subdir)
+            jq -n \
+                --arg name "$name" \
+                --arg desc "$description" \
+                --arg ver "$version" \
+                --arg git_url "$GIT_SOURCE_URL" \
+                --arg git_ref "$GIT_SOURCE_REF" \
+                '{
+                    name: $name,
+                    source: {
+                        source: "git-subdir",
+                        url: $git_url,
+                        path: ("plugins/" + $name),
+                        ref: $git_ref
+                    },
+                    description: $desc,
+                    version: $ver
+                }'
+            ;;
+    esac
+}
+
+generate_marketplace_json() {
+    local output_dir="$1"
+    local plugin_entries="$2"
+    local metadata_json=""
+
+    if [[ "$SOURCE_MODE" == "local" ]]; then
+        metadata_json=$(jq -n \
+            --arg desc "$MARKETPLACE_DESCRIPTION" \
+            --arg ver "$MARKETPLACE_VERSION" \
+            '{
+                description: $desc,
+                version: $ver,
+                pluginRoot: "./plugins"
+            }')
+    else
+        metadata_json=$(jq -n \
+            --arg desc "$MARKETPLACE_DESCRIPTION" \
+            --arg ver "$MARKETPLACE_VERSION" \
+            '{
+                description: $desc,
+                version: $ver
+            }')
+    fi
+
+    jq -n \
+        --arg name "$MARKETPLACE_NAME" \
+        --arg owner "$MARKETPLACE_OWNER" \
+        --argjson metadata "$metadata_json" \
+        --argjson plugins "[$plugin_entries]" \
+        '{
+            name: $name,
+            owner: {
+                name: $owner
+            },
+            metadata: $metadata,
+            plugins: $plugins
+        }' > "$output_dir/.claude-plugin/marketplace.json"
+}
+
+write_marketplace_index() {
+    local output_dir="$1"
+
+    cat > "$output_dir/index.html" <<EOF
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${MARKETPLACE_NAME} Marketplace</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --fg: #e2e8f0;
+      --muted: #94a3b8;
+      --card: rgba(15, 23, 42, 0.78);
+      --accent: #38bdf8;
+      --accent-2: #f59e0b;
+      --border: rgba(148, 163, 184, 0.18);
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.24), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.18), transparent 30%),
+        var(--bg);
+      color: var(--fg);
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.05;
+    }
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .card {
+      margin-top: 28px;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Consolas, monospace;
+      font-size: 0.95em;
+      color: var(--fg);
+    }
+    a {
+      color: var(--accent);
+    }
+    .meta {
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="meta">Claude Code Marketplace</div>
+    <h1>${MARKETPLACE_NAME}</h1>
+    <p>${MARKETPLACE_DESCRIPTION}</p>
+    <div class="card">
+      <p>Marketplace catalog URL:</p>
+      <p><code>./.claude-plugin/marketplace.json</code></p>
+      <p>This build is intended for Claude Code marketplace installation and automated updates.</p>
+    </div>
+  </main>
+</body>
+</html>
+EOF
 }
 
 build_marketplace() {
@@ -82,17 +361,7 @@ build_marketplace() {
 
             # Build marketplace plugin entry
             local entry
-            entry=$(jq -n \
-                --arg name "$name" \
-                --arg source "./plugins/$name" \
-                --arg desc "$description" \
-                --arg ver "$version" \
-                '{
-                    name: $name,
-                    source: $source,
-                    description: $desc,
-                    version: $ver
-                }')
+            entry=$(plugin_entry_json "$name" "$description" "$version")
 
             if [[ -z "$plugin_entries" ]]; then
                 plugin_entries="$entry"
@@ -107,22 +376,9 @@ build_marketplace() {
         echo ""
     done
 
-    # Generate marketplace.json
     mkdir -p "$output_dir/.claude-plugin"
-    echo "{
-  \"name\": \"lamella\",
-  \"owner\": {
-    \"name\": \"William Newton\"
-  },
-  \"metadata\": {
-    \"description\": \"Skill-Issue — curated skills, agents, and commands for Claude Code\",
-    \"version\": \"1.0.0\",
-    \"pluginRoot\": \"./plugins\"
-  },
-  \"plugins\": [
-    $(echo "$plugin_entries" | sed 's/},{/},\n    {/g')
-  ]
-}" | jq '.' > "$output_dir/.claude-plugin/marketplace.json"
+    generate_marketplace_json "$output_dir" "$plugin_entries"
+    write_marketplace_index "$output_dir"
 
     log_success "Generated marketplace.json"
 
@@ -160,7 +416,9 @@ build_marketplace() {
 
 main() {
     check_deps
-    build_marketplace "${1:-}"
+    parse_args "$@"
+    validate_config
+    build_marketplace "$OUTPUT_DIR"
 }
 
 main "$@"

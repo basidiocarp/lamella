@@ -30,20 +30,28 @@ jobs:
 
       - name: Package marketplace and Codex exports
         run: |
-          tar czf "lamella-claude-${{ github.ref_name }}.tar.gz" dist/claude
-          tar czf "lamella-codex-${{ github.ref_name }}.tar.gz" dist/codex
+          cd dist
+          tar czf "../lamella-claude-${{ github.ref_name }}.tar.gz" claude
+          zip -qr "../lamella-claude-${{ github.ref_name }}.zip" claude
+          tar czf "../lamella-codex-${{ github.ref_name }}.tar.gz" codex
+          zip -qr "../lamella-codex-${{ github.ref_name }}.zip" codex
+          cd ..
 
       - name: Upload Claude artifact
         uses: actions/upload-artifact@v7.0.0
         with:
           name: lamella-claude
-          path: lamella-claude-${{ github.ref_name }}.tar.gz
+          path: |
+            lamella-claude-${{ github.ref_name }}.tar.gz
+            lamella-claude-${{ github.ref_name }}.zip
 
       - name: Upload Codex artifact
         uses: actions/upload-artifact@v7.0.0
         with:
           name: lamella-codex
-          path: lamella-codex-${{ github.ref_name }}.tar.gz
+          path: |
+            lamella-codex-${{ github.ref_name }}.tar.gz
+            lamella-codex-${{ github.ref_name }}.zip
 
   release:
     name: Publish release
@@ -60,7 +68,7 @@ jobs:
       - name: Collect release files
         run: |
           mkdir release
-          find artifacts -type f -name '*.tar.gz' -exec cp {} release/ \;
+          find artifacts -type f \( -name '*.tar.gz' -o -name '*.zip' \) -exec cp {} release/ \;
           cd release && sha256sum * > SHA256SUMS
 
       - name: Extract release notes from tag

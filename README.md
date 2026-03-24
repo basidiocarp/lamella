@@ -40,6 +40,54 @@ After building, `dist/claude/` is a proper Claude Code marketplace:
 claude --plugin-dir dist/claude/plugins/core
 ```
 
+### Windows-friendly build
+
+`lamella` is bash-driven, so the clean Windows path is WSL2:
+
+```bash
+# WSL2 Ubuntu
+sudo apt update
+sudo apt install -y jq make zip unzip curl git
+
+# Node 24 via fnm
+curl -fsSL https://fnm.vercel.app/install | bash
+source ~/.bashrc
+fnm install 24
+fnm use 24
+
+# Rust
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source "$HOME/.cargo/env"
+
+# Build marketplace
+./lamella build-marketplace
+
+# Copy to a Windows path for Claude Code on Windows
+mkdir -p /mnt/c/Users/<you>/lamella-release
+rm -rf /mnt/c/Users/<you>/lamella-release/claude
+cp -r dist/claude /mnt/c/Users/<you>/lamella-release/claude
+```
+
+Then in Claude Code on Windows:
+
+```text
+/plugin marketplace add C:/Users/<you>/lamella-release/claude
+```
+
+### Hosted marketplace URL
+
+The `Publish Marketplace` GitHub Actions workflow publishes a hosted marketplace to the `gh-pages` branch and GitHub Pages. It builds `marketplace.json` with URL-safe `git-subdir` plugin sources so Claude Code can consume the marketplace by URL.
+
+Enable GitHub Pages for the repository and set it to serve from the `gh-pages` branch root.
+
+After GitHub Pages is enabled for the repository, add the marketplace in Claude Code with:
+
+```text
+/plugin marketplace add https://<owner>.github.io/<repo>/.claude-plugin/marketplace.json
+```
+
+The hosted catalog points plugin installs back to the same repository's `gh-pages` branch, so users can install and update plugins from a stable marketplace URL without needing a local checkout.
+
 ## As a Codex Skill Export
 
 After building, `dist/codex/skills/` contains portable skill folders that can be
@@ -185,6 +233,17 @@ Install built plugins to `~/.claude/plugins/lamella/`:
 make validate          # Source validators (7 scripts)
 node scripts/ci/validate-build.js  # Post-build validator
 ```
+
+## Releases
+
+Tagging `v*` triggers the release workflow, which now publishes both `.tar.gz` and `.zip` artifacts for Claude and Codex builds:
+
+```bash
+git tag -a v1.2.3 -m "release notes"
+git push origin v1.2.3
+```
+
+Windows users can download `lamella-claude-v1.2.3.zip`, extract it, and add the extracted `claude/` directory as a marketplace in Claude Code.
 
 ## Environment Variables
 

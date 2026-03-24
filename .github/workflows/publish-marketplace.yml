@@ -1,0 +1,40 @@
+name: Publish Marketplace
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish hosted Claude marketplace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version: "24"
+
+      - name: Run validators
+        run: make validate
+
+      - name: Build hosted Claude marketplace
+        run: |
+          ./lamella build-marketplace \
+            --source-mode git-subdir \
+            --git-url "https://github.com/${{ github.repository }}.git" \
+            --git-ref gh-pages
+
+      - name: Publish marketplace branch
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist/claude
+          force_orphan: true
+          enable_jekyll: false

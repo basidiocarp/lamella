@@ -159,8 +159,17 @@ copy_hooks() {
     mkdir -p "$output_dir/scripts/hooks"
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/resources/hooks/$item"
-        if [[ -f "$src" ]]; then
+        local src=""
+
+        # Hook scripts live in scripts/hooks/, while hook configs live in resources/hooks/.
+        # Fall back to resources/hooks/ for older layouts that colocated the script files.
+        if [[ -f "$BASE_DIR/scripts/hooks/$item" ]]; then
+            src="$BASE_DIR/scripts/hooks/$item"
+        elif [[ -f "$BASE_DIR/resources/hooks/$item" ]]; then
+            src="$BASE_DIR/resources/hooks/$item"
+        fi
+
+        if [[ -n "$src" ]]; then
             cp "$src" "$output_dir/scripts/hooks/"
             ((count++))
         else

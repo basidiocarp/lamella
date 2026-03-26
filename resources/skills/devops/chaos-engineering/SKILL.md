@@ -1,6 +1,6 @@
 ---
 name: chaos-engineering
-description: Design chaos experiments, implement failure injection frameworks, and conduct game day exercises. Use when planning resilience testing, controlling blast radius, integrating chaos into CI/CD, or running chaos experiments with Litmus, Gremlin, or Chaos Monkey.
+description: Designs chaos experiments, failure injection frameworks, and game day exercises. Use when planning resilience testing, controlling blast radius, integrating chaos into CI/CD, or running chaos experiments with Litmus, Gremlin, or Chaos Monkey.
 ---
 
 # Chaos Engineering

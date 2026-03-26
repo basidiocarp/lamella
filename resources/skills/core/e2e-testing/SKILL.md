@@ -1,6 +1,6 @@
 ---
 name: e2e-testing
-description: Playwright E2E testing patterns, Page Object Model, configuration, CI/CD integration, artifact management, and flaky test strategies. Use when writing Playwright tests, debugging flaky tests, setting up Page Object Models, or configuring CI/CD test pipelines.
+description: Provides Playwright end-to-end testing patterns, Page Object Models, configuration guidance, artifact management, and flaky test strategies. Use when writing Playwright tests, debugging flaky tests, setting up Page Object Models, or configuring CI/CD pipelines.
 ---
 
 # E2E Testing Patterns
@@ -30,7 +30,7 @@ description: Playwright E2E testing patterns, Page Object Model, configuration, 
 - [Financial / Critical Flow Testing](#financial-critical-flow-testing)
 
 
-Comprehensive Playwright patterns for building stable, fast, and maintainable E2E test suites.
+Build Playwright test suites that stay stable, fast, and maintainable.
 
 ## Test File Organization
 

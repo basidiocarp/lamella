@@ -1,6 +1,6 @@
 ---
 name: concurrency
-description: "Use for concurrency and async. Triggers: E0277 Send Sync, cannot be sent between threads, thread, spawn, channel, Mutex, RwLock, async, await, tokio, deadlock, race condition"
+description: "Analyzes Rust concurrency and async issues. Use when encountering Send or Sync errors, thread-safety problems, async runtime issues, channels, mutexes, RwLocks, deadlocks, or race conditions."
 ---
 
 # Concurrency & Async

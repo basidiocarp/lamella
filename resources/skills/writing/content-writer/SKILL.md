@@ -1,6 +1,6 @@
 ---
 name: content-writer
-description: Create, research, and repurpose content across platforms and formats. Use when writing articles, social posts, newsletters, or adapting existing content for new audiences and channels.
+description: Creates, researches, and repurposes content across platforms and formats. Use when writing articles, social posts, newsletters, or adapting existing content for new audiences and channels.
 ---
 
 # Content Writer
@@ -21,9 +21,11 @@ Create original content, back it with research, and repurpose it across platform
 
 - Writing articles, blog posts, or essays
 - Creating social media content (X, LinkedIn, TikTok scripts, YouTube)
-- Drafting newsletters or email sequences
+- Drafting newsletters or one-off email content
 - Repurposing existing content for new channels or audiences
 - Research-backed content requiring citations and evidence
+
+Use `writing/content-strategy` when the user needs a publishing plan, content pillars, or topic clusters before drafting. Use `writing/email-sequence` when the work is a triggered lifecycle flow rather than a single email.
 
 ## Content Creation Workflow
 

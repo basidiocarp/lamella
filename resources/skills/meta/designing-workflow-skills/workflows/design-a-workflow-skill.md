@@ -48,7 +48,7 @@ How many distinct paths does the skill have?
    └─ Start with Linear Progression, refactor if needed
 ```
 
-3. **Read the pattern description** in `references/workflow-patterns.md`. Study the structural skeleton.
+3. **Read the pattern description** in `../references/workflow-patterns.md`. Study the structural skeleton.
 
 4. **Validate the choice.** Does your skill's workflow naturally fit the skeleton? If you're forcing it, try a different pattern.
 
@@ -106,7 +106,7 @@ How many distinct paths does the skill have?
 
 5. **For agents**, repeat this process for the agent's tool list. Agent tools are specified with `tools:` not `allowed-tools:`.
 
-See `references/tool-assignment-guide.md` for the complete tool selection matrix.
+See `../references/tool-assignment-guide.md` for the complete tool selection matrix.
 
 **Exit:** Validated tool list for each component (skill, agents).
 
@@ -142,7 +142,7 @@ See `references/tool-assignment-guide.md` for the complete tool selection matrix
 
 6. **Verify progressive disclosure:** SKILL.md contains only what's needed for every invocation. Details are in linked files.
 
-See `references/progressive-disclosure-guide.md` for the splitting heuristic.
+See `../references/progressive-disclosure-guide.md` for the splitting heuristic.
 
 **Exit:** All content files written, line counts within limits.
 
@@ -154,9 +154,9 @@ See `references/progressive-disclosure-guide.md` for the splitting heuristic.
 
 **Actions:**
 
-1. **Run the review checklist** in `workflows/review-checklist.md`.
+1. **Run the review checklist** in `review-checklist.md`.
 
-2. **Check anti-patterns** against `references/anti-patterns.md`. Scan for each one.
+2. **Check anti-patterns** against `../references/anti-patterns.md`. Scan for each one.
 
 3. **Validate file references.** Every path in SKILL.md must resolve to an existing file.
 

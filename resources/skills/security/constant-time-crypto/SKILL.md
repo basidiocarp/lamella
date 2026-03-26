@@ -1,15 +1,10 @@
 ---
 name: constant-time-crypto
 description: >-
-  Detect and test timing side-channel vulnerabilities in cryptographic code. Combines static analysis 
-  (assembly/bytecode inspection across 12+ languages) with dynamic testing (dudect, timecop, ct-verif). 
-  Use when implementing or reviewing crypto code, auditing for timing attacks, or encountering 
+  Detects and tests timing side-channel vulnerabilities in cryptographic code. Combines static analysis
+  (assembly or bytecode inspection across 12+ languages) with dynamic testing (dudect, timecop, ct-verif).
+  Use when implementing or reviewing crypto code, auditing for timing attacks, or encountering
   secret-dependent branches, division, or table lookups.
-metadata:
-  type: domain
-  absorbed:
-    - constant-time-analysis
-    - constant-time-testing
 ---
 
 # Constant-Time Crypto

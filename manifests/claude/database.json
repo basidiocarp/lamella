@@ -2,7 +2,7 @@
   "$schema": "./schema.json",
   "name": "database",
   "version": "1.0.0",
-  "description": "Database development: SQL optimization, PostgreSQL, migrations, and data modeling",
+  "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
   "author": "William Newton",
   "license": "MIT",
   "tags": [
@@ -17,6 +17,7 @@
   ],
   "resources": {
     "skills": [
+      "database/database-schema-designer",
       "database/postgresql",
       "database/sql-pro"
     ],

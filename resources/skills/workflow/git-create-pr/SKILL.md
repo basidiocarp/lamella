@@ -1,6 +1,6 @@
 ---
 name: git-create-pr
-description: Create pull requests using GitHub CLI with proper templates and formatting. Use when ready to submit changes for review, preparing code for merge, or creating PRs programmatically.
+description: Creates pull requests with GitHub CLI using proper templates and formatting. Use when ready to submit changes for review, preparing code for merge, or creating pull requests programmatically.
 ---
 
 ## Contents
@@ -12,11 +12,6 @@ description: Create pull requests using GitHub CLI with proper templates and for
 - [Additional GitHub CLI PR Commands](#additional-github-cli-pr-commands)
 - [Using Templates for PR Creation](#using-templates-for-pr-creation)
 - [Related Documentation](#related-documentation)
-
----
-name: git-create-pr
-description: Create pull requests using GitHub CLI with proper templates and formatting. Use when ready to submit changes for review, preparing code for merge, or creating PRs programmatically.
----
 # How to Create a Pull Request Using GitHub CLI
 
 This guide explains how to create pull requests using GitHub CLI in our project.
@@ -50,9 +45,9 @@ Check if `gh` is installed, if not follow this instruction to install it:
 Before creating a PR, check for uncommitted changes:
 
 1. Run `git status` to check for uncommitted changes (staged, unstaged, or untracked files)
-2. If uncommitted changes exist, use the Skill tool to run the `git:commit` command first:
+2. If uncommitted changes exist, run the bundled [`development/commit`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/development/commit.md) command first:
    ```
-   Skill: git:commit
+   /development:commit
    ```
 3. This ensures all your work is committed before creating the PR
 

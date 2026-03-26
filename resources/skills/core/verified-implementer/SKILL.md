@@ -1,12 +1,12 @@
 ---
 name: verified-implementer
-description: Implement a task with automated LLM-as-Judge verification for critical steps. Use when implementing tasks that require automated quality verification, LLM-as-Judge validation, or multi-step implementation with verification gates.
+description: Implements tasks with automated LLM-as-Judge verification for critical steps. Use when work requires automated quality checks, LLM-as-Judge validation, or multi-step verification gates.
 metadata:
   argument-hint: "Task file [options] (e.g., \"add-validation.feature.md --continue --human-in-the-loop\")"
 ---
 # Implement Task with Verification
 
-Execute task implementation steps with automated quality verification using LLM-as-Judge for critical artifacts.
+Execute implementation steps with automated quality verification for critical artifacts.
 
 **Your job:** Implement solution using task specification and sub-agents. Do NOT stop until critically necessary or done. Avoid asking questions unless critical. Launch implementation agent, judges, iterate till issues are fixed, then move to next step.
 

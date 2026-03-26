@@ -84,12 +84,13 @@ tlmgr install qrcode graphics xcolor tcolorbox subcaption
 
 ## Scripts and Automation
 
-Helper scripts available in `scripts/` directory:
+Bundled helpers and assets:
 
-- `compile_poster.sh`: Automated compilation with error handling
-- `generate_template.py`: Interactive template generator
-- `resize_images.py`: Batch image optimization for posters
-- `poster_checklist.py`: Pre-submission validation tool
+- `scripts/review_poster.sh`: Review a compiled PDF for poster-specific issues
+- `assets/beamerposter_template.tex`: Beamerposter starting template
+- `assets/tikzposter_template.tex`: Tikzposter starting template
+- `assets/baposter_template.tex`: Baposter starting template
+- `assets/poster_quality_checklist.md`: Manual validation checklist
 
 ---
 
@@ -97,10 +98,10 @@ Helper scripts available in `scripts/` directory:
 
 Comprehensive reference files for detailed guidance:
 
-- `references/latex_poster_packages.md`: Detailed comparison of beamerposter, tikzposter, and baposter with examples
-- `references/poster_layout_design.md`: Layout principles, grid systems, and visual flow
-- `references/poster_design_principles.md`: Typography, color theory, visual hierarchy, and accessibility
-- `references/poster_content_guide.md`: Content organization, writing style, and section-specific guidance
+- `references/core-capabilities.md`: Poster packages, templates, layout systems, and compilation workflow
+- `references/content-patterns.md`: Content organization, writing style, and section-specific guidance
+- `references/generation-workflow.md`: Step-by-step visual generation and assembly workflow
+- `references/pdf-review-checklist.md`: Final PDF validation and overflow checks
 
 ---
 

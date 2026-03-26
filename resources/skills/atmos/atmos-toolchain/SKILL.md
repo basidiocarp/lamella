@@ -1,10 +1,6 @@
 ---
 name: atmos-toolchain
-description: "Toolchain management: install/exec/search/env commands, Aqua registry integration, version pinning, multi-tooling execution. Use when managing Atmos toolchain, installing tools via Aqua, pinning versions, or executing commands across tools."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/commands-reference.md
+description: "Manages the Atmos toolchain with install, exec, search, and environment commands, including Aqua-based version pinning. Use when managing the Atmos toolchain, installing tools via Aqua, pinning versions, or executing commands across tools."
 ---
 
 # Atmos Toolchain
@@ -199,13 +195,21 @@ atmos toolchain registry search jq         # Search across registries
 
 ## Shell Integration
 
-Add to `~/.bashrc` or `~/.zshrc` for automatic PATH setup:
+Use the format that matches your shell for automatic PATH setup.
 
 ```bash
 eval "$(atmos toolchain env --format=bash)"
 ```
 
-Other shell formats: `--format=fish`, `--format=powershell`, `--format=github` (for CI).
+Add that command to `~/.bashrc` or `~/.zshrc` for Bash and Zsh shells.
+
+```powershell
+Invoke-Expression (& atmos toolchain env --format=powershell)
+```
+
+Add that command to your PowerShell profile for automatic PATH setup on Windows.
+
+Other shell formats: `--format=fish`, `--format=github` (for CI).
 
 ## Template Variables in Registries
 

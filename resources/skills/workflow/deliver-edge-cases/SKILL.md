@@ -1,17 +1,8 @@
 ---
 name: deliver-edge-cases
 description: >-
-  Use when documenting edge cases, error states, boundary conditions, and recovery paths for a feature. Apply during specification
-  to ensure comprehensive coverage or during QA planning to identify test scenarios.
-metadata:
-  category: specification
-  frameworks:
-  - triple-diamond
-  - lean-startup
-  - design-thinking
-  phase: deliver
-  version: 2.0.0
-  updated: 2026-01-26
+  Documents edge cases, error states, boundary conditions, and recovery paths for a feature.
+  Use when specifying a feature or planning QA coverage for complex behavior.
 ---
 # Edge Cases
 

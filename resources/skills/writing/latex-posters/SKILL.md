@@ -1,7 +1,7 @@
 ---
 name: latex-posters
 description: >-
-  Create professional research posters in LaTeX using beamerposter, tikzposter, or baposter. Includes layout design, color schemes, multi-column formats, figure integration, and poster-specific best practices. Use when creating research posters for conferences, academic presentations, or scientific communication in LaTeX format.
+  Creates professional research posters in LaTeX using beamerposter, tikzposter, or baposter. Use when creating research posters for conferences, academic presentations, or scientific communication in LaTeX format.
 ---
 # LaTeX Research Posters
 
@@ -184,10 +184,11 @@ pdffonts poster.pdf                     # Check font embedding
 
 ## Integration with Other Skills
 
-- **scientific-schematics**: Generate all poster diagrams
-- **scientific-writing**: Develop content from papers
+- **content-writer**: Shape poster copy from research notes, abstracts, or source material
+- **writing-voice**: Tighten the prose so headings and callouts stay concise and readable
+- **Available diagram or image-generation tooling**: Create visual elements before assembling the poster
 
-**Recommended**: Always generate visuals BEFORE creating the LaTeX poster.
+**Recommended**: Generate visuals before creating the LaTeX poster.
 ### Additional Resources
 
 

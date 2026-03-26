@@ -2,8 +2,11 @@
 
 <required_reading>
 **Read these files NOW:**
-1. templates/roadmap.md
+1. ../assets/roadmap.md
 2. Read `.planning/BRIEF.md` if it exists
+
+**If the roadmap starts from a PRD or feature brief:**
+3. Read ../references/vertical-slices.md
 </required_reading>
 
 <purpose>
@@ -38,6 +41,10 @@ Common phase patterns:
 - Foundation → Core Feature → Enhancement → Polish
 - Setup → MVP → Iteration → Launch
 - Infrastructure → Backend → Frontend → Integration
+
+If the roadmap is derived from a PRD, prefer thin end-to-end phases that map
+back to user stories instead of layer-only phases. Capture only durable
+decisions at the roadmap level.
 </step>
 
 <step name="confirm_phases">
@@ -76,7 +83,7 @@ mkdir -p .planning/phases
 </step>
 
 <step name="write_roadmap">
-Use template from `templates/roadmap.md`.
+Use template from `../assets/roadmap.md`.
 
 Write to `.planning/roadmap.md` with:
 - Phase list with names and one-line descriptions

@@ -1,6 +1,6 @@
 ---
 name: resource-mgmt
-description: "Use for smart pointers and resource management. Triggers: Box, Rc, Arc, Weak, RefCell, Cell, smart pointer, heap allocation, reference counting, RAII, Drop"
+description: "Explains Rust smart pointers and resource management patterns. Use when choosing between Box, Rc, Arc, Weak, RefCell, Cell, heap allocation, reference counting, RAII, or Drop-based cleanup."
 ---
 
 # Smart Pointers & Resource Management

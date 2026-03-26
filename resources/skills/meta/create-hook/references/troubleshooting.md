@@ -24,6 +24,14 @@ echo '{"tool_name":"Bash","tool_input":{"command":"ls"}}' | ./my-hook.sh
 echo $?  # Check the exit code
 ```
 
+PowerShell version:
+
+```powershell
+'{"tool_name":"Bash","tool_input":{"command":"ls"}}' |
+  pwsh -NoProfile -File ./my-hook.ps1
+$LASTEXITCODE
+```
+
 **Common causes:**
 - "command not found": Use absolute paths or `$CLAUDE_PROJECT_DIR`
 - "jq: command not found": Install `jq` or use Python for JSON parsing
@@ -114,6 +122,20 @@ EOF
 # Test your hook
 cat /tmp/test-input.json | ./your-hook.sh
 echo "Exit code: $?"
+```
+
+PowerShell variant:
+
+```powershell
+$json = @'
+{
+  "tool_name": "Bash",
+  "tool_input": { "command": "npm test" }
+}
+'@
+
+$json | pwsh -NoProfile -File ./your-hook.ps1
+$LASTEXITCODE
 ```
 
 ### Check for syntax errors

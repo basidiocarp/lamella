@@ -23,7 +23,7 @@ Ask: What do we need to learn before we can plan this phase?
 </step>
 
 <step name="create_research_prompt">
-Use templates/research-prompt.md.
+Use `../assets/research-prompt.md`.
 Write to `.planning/phases/XX-name/RESEARCH.md`
 
 Include:

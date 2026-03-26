@@ -108,6 +108,22 @@ See [link to detailed user stories] for full acceptance criteria.
 | [Edge case 1] | [Behavior] |
 | [Edge case 2] | [Behavior] |
 
+## Implementation Decisions
+
+<!-- Stable decisions that should survive implementation churn -->
+
+- [Module or workflow boundary]
+- [Schema or contract decision]
+- [Integration or auth decision]
+
+## Testing Decisions
+
+<!-- What behavior must be tested and how to think about good coverage -->
+
+- [Behavior or contract that must be tested]
+- [Existing prior art or characterization test to follow]
+- [Test boundary or non-goal]
+
 ## Technical Considerations
 
 <!-- Technical constraints, architectural notes, or integration requirements -->
@@ -163,6 +179,7 @@ See [link to detailed user stories] for full acceptance criteria.
 - User Research — add link or path
 - Design Specs — add link or path
 - Technical Design — add link or path
+- Delivery Plan — add link or path if one exists
 
 ### Revision History
 

@@ -1,12 +1,8 @@
 ---
 name: conductor
 description: >-
-  Conductor project management system: context artifacts (product.md, tech-stack.md),
-  track-based work management (spec → plan → implement), and TDD workflow patterns.
-  Use when setting up project context, creating/managing tracks, or following TDD task lifecycle.
-metadata:
-  category: methodology
-  version: 1.0.0
+  Organizes project context, track-based work management, and TDD execution with the Conductor system.
+  Use when setting up project context, creating or managing tracks, or following a TDD task lifecycle.
 ---
 
 # Conductor

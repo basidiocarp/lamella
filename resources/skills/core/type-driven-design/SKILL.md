@@ -1,6 +1,6 @@
 ---
 name: type-driven-design
-description: Use the type system to prevent bugs at compile time. Covers newtype pattern, type state, builder pattern, and making invalid states unrepresentable. Applies to Rust, TypeScript, Go, and other typed languages.
+description: Uses the type system to prevent bugs at compile time. Covers newtype patterns, typestate, builder patterns, and making invalid states unrepresentable across typed languages.
 ---
 
 # Type-Driven Design

@@ -1,11 +1,11 @@
 ---
 name: openapi-spec-generation
-description: Generate and maintain OpenAPI 3.1 specifications from code, design-first specs, and validation patterns. Use when creating API documentation, generating SDKs, or ensuring API contract compliance.
+description: Generates and maintains OpenAPI 3.1 specifications from code, design-first specs, and validation patterns. Use when creating API documentation, generating SDKs, or ensuring API contract compliance.
 ---
 
 # OpenAPI Spec Generation
 
-Comprehensive patterns for creating, maintaining, and validating OpenAPI 3.1 specifications for RESTful APIs.
+Create, maintain, and validate OpenAPI 3.1 specifications for REST APIs. Commands in this skill are shell-neutral and work in Bash, zsh, and PowerShell unless noted otherwise.
 
 ## Contents
 

@@ -2,7 +2,7 @@
 
 <required_reading>
 **Read these files NOW:**
-1. templates/brief.md
+1. ../assets/brief.md
 </required_reading>
 
 <purpose>
@@ -46,7 +46,7 @@ mkdir -p .planning
 </step>
 
 <step name="write_brief">
-Use the template from `templates/brief.md`.
+Use the template from `../assets/brief.md`.
 
 Write to `.planning/BRIEF.md` with:
 - Project name

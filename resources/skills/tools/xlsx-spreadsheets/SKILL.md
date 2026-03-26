@@ -1,6 +1,6 @@
 ---
 name: xlsx-spreadsheets
-description: Spreadsheet toolkit (.xlsx/.csv). Create/edit with formulas/formatting, analyze data, visualization, recalculate formulas, for spreadsheet processing and analysis. Use when users need to create, modify, or analyze Excel spreadsheets and CSV files programmatically.
+description: Creates, edits, and analyzes Excel spreadsheets and CSV files. Covers formulas, formatting, visualization, and recalculation for spreadsheet processing workflows. Use when users need to create, modify, or analyze Excel spreadsheets and CSV files programmatically.
 ---
 
 # Requirements for Outputs
@@ -211,13 +211,17 @@ wb.save('modified.xlsx')
 
 Excel files created or modified by openpyxl contain formulas as strings but not calculated values. Use the provided `recalc.py` script to recalculate formulas:
 
-```bash
+```sh
 python recalc.py <excel_file> [timeout_seconds]
 ```
 
 Example:
-```bash
+```sh
 python recalc.py output.xlsx 30
+```
+
+```powershell
+py recalc.py output.xlsx 30
 ```
 
 The script:
@@ -225,7 +229,7 @@ The script:
 - Recalculates all formulas in all sheets
 - Scans ALL cells for Excel errors (#REF!, #DIV/0!, etc.)
 - Returns JSON with detailed error locations and counts
-- Works on both Linux and macOS
+- Works on Linux, macOS, and Windows when LibreOffice is installed and `soffice` is on `PATH`
 
 ## Formula Verification Checklist
 

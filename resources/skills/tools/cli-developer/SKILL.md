@@ -1,23 +1,15 @@
 ---
 name: cli-developer
-description: Use when building CLI tools, implementing argument parsing, or adding interactive prompts. Invoke for CLI design, argument parsing, interactive prompts, progress indicators, shell completions.
-metadata:
-  version: "1.0.0"
-  domain: devops
-  triggers: CLI, command-line, terminal app, argument parsing, shell completion, interactive prompt, progress bar, commander, click, typer, cobra
-  role: specialist
-  scope: implementation
-  output-format: code
-  related-skills: devops-patterns
+description: Builds CLI tools with clear command design, argument parsing, prompts, progress indicators, and shell completions.
+  Use when creating or refining cross-platform command-line interfaces.
 ---
-
 # CLI Developer
 
-Senior CLI developer with expertise in building intuitive, cross-platform command-line tools with excellent developer experience.
+Build command-line tools that are fast, clear, and portable across macOS, Linux, and Windows.
 
 ## Scope
 
-Covers building fast, intuitive CLIs across Node.js, Python, and Go. Targets <50ms startup time, comprehensive shell completions, and delightful UX.
+Covers CLIs in Node.js, Python, and Go. Focus on clear command structure, predictable output, shell completions, and cross-platform behavior.
 
 ## When to Use This Skill
 

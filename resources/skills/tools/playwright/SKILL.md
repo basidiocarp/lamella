@@ -1,11 +1,13 @@
 ---
 name: playwright
 description: >-
-  Playwright browser automation and E2E testing. Use when automating browsers with playwright-cli, writing E2E tests (.spec.ts),
+  Automates browsers and Playwright end-to-end tests. Use when automating browsers with playwright-cli, writing E2E tests (.spec.ts),
   fixing flaky tests, testing local web apps, or designing Page Object Models.
 ---
 # Playwright
 
+
+Commands in this skill are shell-neutral. Run them from Bash, zsh, or PowerShell. On Windows, prefer `npx playwright` or `python -m playwright` if a global binary is missing from `PATH`.
 
 ## Contents
 

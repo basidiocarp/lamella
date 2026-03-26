@@ -1,6 +1,6 @@
 ---
 name: accessibility
-description: "WCAG 2.2 compliance, ARIA patterns, keyboard navigation, screen reader testing, and accessibility auditing. Use when implementing accessible interfaces, auditing for WCAG compliance, building for screen readers, or ensuring inclusive user experiences."
+description: "Implements and audits accessible frontend experiences. Use when working on WCAG 2.2 compliance, ARIA patterns, keyboard navigation, screen reader support, or accessibility reviews."
 ---
 
 # Accessibility
@@ -128,7 +128,7 @@ For full per-principle checklists, see references.
 ```bash
 npx @axe-core/cli https://example.com
 npx pa11y https://example.com
-lighthouse https://example.com --only-categories=accessibility
+npx lighthouse https://example.com --only-categories=accessibility
 ```
 
 **Note:** Automated testing catches only ~30-50% of issues. Manual testing required.

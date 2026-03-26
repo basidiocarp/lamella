@@ -17,6 +17,11 @@ def setup_libreoffice_macro():
     """Setup LibreOffice macro for recalculation if not already configured"""
     if platform.system() == 'Darwin':
         macro_dir = os.path.expanduser('~/Library/Application Support/LibreOffice/4/user/basic/Standard')
+    elif platform.system() == 'Windows':
+        appdata = os.environ.get('APPDATA')
+        if not appdata:
+            return False
+        macro_dir = os.path.join(appdata, 'LibreOffice', '4', 'user', 'basic', 'Standard')
     else:
         macro_dir = os.path.expanduser('~/.config/libreoffice/4/user/basic/Standard')
     
@@ -75,11 +80,11 @@ def recalc(filename, timeout=30):
         abs_path
     ]
     
-    # Handle timeout command differences between Linux and macOS
+    # Handle timeout helpers on Unix-like systems.
     if platform.system() != 'Windows':
         timeout_cmd = 'timeout' if platform.system() == 'Linux' else None
         if platform.system() == 'Darwin':
-            # Check if gtimeout is available on macOS
+            # Prefer gtimeout on macOS when it is available.
             try:
                 subprocess.run(['gtimeout', '--version'], capture_output=True, timeout=1, check=False)
                 timeout_cmd = 'gtimeout'
@@ -89,8 +94,16 @@ def recalc(filename, timeout=30):
         if timeout_cmd:
             cmd = [timeout_cmd, str(timeout)] + cmd
     
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout if platform.system() == 'Windows' else None,
+        )
+    except subprocess.TimeoutExpired:
+        return {'error': f'Recalculation timed out after {timeout} seconds'}
+
     if result.returncode != 0 and result.returncode != 124:  # 124 is timeout exit code
         error_msg = result.stderr or 'Unknown error during recalculation'
         if 'Module1' in error_msg or 'RecalculateAndSave' not in error_msg:
@@ -98,7 +111,7 @@ def recalc(filename, timeout=30):
         else:
             return {'error': error_msg}
     
-    # Check for Excel errors in the recalculated file - scan ALL cells
+    # Scan the recalculated workbook for Excel errors across all cells.
     try:
         wb = load_workbook(filename, data_only=True)
         
@@ -108,7 +121,7 @@ def recalc(filename, timeout=30):
         
         for sheet_name in wb.sheetnames:
             ws = wb[sheet_name]
-            # Check ALL rows and columns - no limits
+            # Inspect every populated row and column without a scan cap.
             for row in ws.iter_rows():
                 for cell in row:
                     if cell.value is not None and isinstance(cell.value, str):
@@ -121,14 +134,14 @@ def recalc(filename, timeout=30):
         
         wb.close()
         
-        # Build result summary
+        # Build the result summary.
         result = {
             'status': 'success' if total_errors == 0 else 'errors_found',
             'total_errors': total_errors,
             'error_summary': {}
         }
         
-        # Add non-empty error categories
+        # Include only error categories that have matches.
         for err_type, locations in error_details.items():
             if locations:
                 result['error_summary'][err_type] = {
@@ -136,7 +149,7 @@ def recalc(filename, timeout=30):
                     'locations': locations[:20]  # Show up to 20 locations
                 }
         
-        # Add formula count for context - also check ALL cells
+        # Count formulas across all populated cells for context.
         wb_formulas = load_workbook(filename, data_only=False)
         formula_count = 0
         for sheet_name in wb_formulas.sheetnames:

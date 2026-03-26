@@ -1,12 +1,12 @@
 # OS-Checker Integration
 
-> 代码审查和安全审计工具集成
+Audit and verification guidance for Rust-focused reviews.
 
 ## Available Commands
 
 | Use Case | Command | Tools |
 |----------|---------|-------|
-| Daily check | `/rust-review` | clippy |
+| Daily check | `cargo clippy --all-targets --all-features` | clippy |
 | Security audit | `/audit security` | cargo audit, geiger |
 | Unsafe audit | `/audit safety` | miri, rudra |
 | Concurrency audit | `/audit concurrency` | lockbud |
@@ -16,7 +16,7 @@
 
 | User Intent | Suggest |
 |-------------|---------|
-| Code review request | `/rust-review` |
+| Code review request | `cargo clippy --all-targets --all-features` |
 | Security concerns | `/audit security` |
 | Unsafe code review | `/audit safety` |
 | Deadlock/race concerns | `/audit concurrency` |

@@ -1,6 +1,6 @@
 ---
 name: voice-toolkit
-description: Extract voice profiles from sample text and transform voice dictation into structured prompts. Use when capturing writing style, creating voice documentation, or cleaning up dictated input.
+description: Extracts voice profiles from sample text and transforms voice dictation into structured prompts. Use when capturing writing style, creating voice documentation, or cleaning up dictated input.
 ---
 
 # Voice Toolkit

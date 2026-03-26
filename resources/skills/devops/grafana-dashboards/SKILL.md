@@ -1,6 +1,6 @@
 ---
 name: grafana-dashboards
-description: Create and manage production Grafana dashboards for real-time visualization of system and application metrics. Use when building monitoring dashboards, visualizing metrics, or creating operational observability interfaces.
+description: Creates and manages production Grafana dashboards for real-time visualization of system and application metrics. Use when building monitoring dashboards, visualizing metrics, or creating operational observability interfaces.
 ---
 
 # Grafana Dashboards
@@ -51,6 +51,21 @@ Design effective Grafana dashboards for monitoring applications, infrastructure,
 - Implement SLO dashboards
 - Monitor infrastructure
 - Track business KPIs
+- Generate a draft dashboard spec before hand-tuning panels
+
+## Dashboard Drafting
+
+Start with the script when you need a fast first cut for a service or audience:
+
+```bash
+python3 scripts/dashboard_generator.py --input service-definition.json --output dashboard-spec.json
+```
+
+PowerShell:
+
+```powershell
+python scripts\dashboard_generator.py --input .\service-definition.json --output .\dashboard-spec.json
+```
 
 ## Dashboard Design Principles
 

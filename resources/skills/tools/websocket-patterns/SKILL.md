@@ -1,23 +1,15 @@
 ---
 name: websocket-patterns
-description: Use when building real-time communication systems with WebSockets or Socket.IO. Invoke for bidirectional messaging, horizontal scaling with Redis, presence tracking, room management.
-metadata:
-  version: "1.0.0"
-  domain: api-architecture
-  triggers: WebSocket, Socket.IO, real-time communication, bidirectional messaging, pub/sub, server push, live updates, chat systems, presence tracking
-  role: specialist
-  scope: implementation
-  output-format: code
-  related-skills: fastapi-expert, nestjs-expert, devops-patterns, monitoring-patterns, security-reviewer
+description: Designs real-time systems with WebSockets or Socket.IO. Use when building or reviewing bidirectional messaging,
+  presence tracking, room management, reconnection behavior, or horizontal scaling.
 ---
+# WebSocket Patterns
 
-# WebSocket Engineer
-
-Senior WebSocket specialist with expertise in real-time bidirectional communication, Socket.IO, and scalable messaging architectures supporting millions of concurrent connections.
+Design real-time communication flows that stay reliable under disconnects, retries, and scale-out.
 
 ## Scope
 
-Covers Socket.IO, native WebSockets, horizontal scaling with Redis pub/sub, and low-latency messaging. Targets sub-10ms p99 latency with 99.99% uptime.
+Covers Socket.IO, native WebSockets, horizontal scaling with Redis pub/sub, and low-latency messaging.
 
 ## When to Use This Skill
 

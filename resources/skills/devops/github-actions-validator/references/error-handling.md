@@ -9,7 +9,7 @@ Detailed execution flow for handling GitHub Actions validation errors.
 Run commands from the repository root that contains `.github/workflows/`.
 
 ```bash
-SKILL_DIR="devops-skills-plugin/skills/github-actions-validator"
+SKILL_DIR="${CLAUDE_SKILL_DIR}"
 bash "$SKILL_DIR/scripts/validate_workflow.sh" <workflow-file-or-directory>
 ```
 
@@ -51,7 +51,7 @@ Offline mode behavior:
 After applying fixes, rerun validation before finalizing:
 
 ```bash
-SKILL_DIR="devops-skills-plugin/skills/github-actions-validator"
+SKILL_DIR="${CLAUDE_SKILL_DIR}"
 bash "$SKILL_DIR/scripts/validate_workflow.sh" <workflow-file-or-directory>
 ```
 

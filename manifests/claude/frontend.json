@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "author": "William Newton",
-  "description": "Frontend development, UI/UX design, and document generation",
+  "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
   "tags": [
     "frontend",
     "ui",
@@ -24,7 +24,9 @@
       "frontend/frontend-performance",
       "frontend/frontend-slides",
       "frontend/responsive-design",
-      "frontend/screenshot-to-code"
+      "frontend/screenshot-to-code",
+      "frontend/spline-3d-integration",
+      "frontend/threejs-advanced"
     ],
     "agents": [
       "frontend/accessibility-reviewer.md",

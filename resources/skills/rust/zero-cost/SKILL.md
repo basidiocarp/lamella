@@ -1,6 +1,6 @@
 ---
 name: zero-cost
-description: "Use for generics, traits, and zero-cost abstractions. Triggers: E0277, E0308, E0599, E0038, generic, trait, impl, dyn, where, monomorphization, static dispatch, dynamic dispatch"
+description: "Explains Rust generics, traits, and zero-cost abstraction trade-offs. Use when working with trait bounds, static versus dynamic dispatch, monomorphization, object safety, or errors such as E0277, E0308, E0599, and E0038."
 ---
 
 # Generics, Traits & Zero-Cost Abstractions

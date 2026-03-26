@@ -1,7 +1,7 @@
 ---
 name: backend-patterns
 description: >-
-  Backend architecture and production Node.js patterns. Use when designing REST/GraphQL APIs, implementing
+  Applies backend architecture and production Node.js patterns. Use when designing REST or GraphQL APIs, implementing
   repository/service/controller layers, dependency injection, database transactions, Redis caching, rate limiting,
   Zod validation, or graceful shutdown. Standard Express/Fastify/Hono setup is assumed knowledge.
 ---

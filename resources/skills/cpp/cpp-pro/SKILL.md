@@ -1,6 +1,6 @@
 ---
 name: cpp-pro
-description: Use when building C++ applications requiring modern C++20/23 features, template metaprogramming, or high-performance systems. Invoke for concepts, ranges, coroutines, SIMD optimization, memory management.
+description: "Applies modern C++ development patterns. Use when building C++20 or C++23 systems, working with concepts, coroutines, templates, memory management, or performance-critical code."
 ---
 
 # C++ Pro

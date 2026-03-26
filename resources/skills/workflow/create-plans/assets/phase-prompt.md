@@ -30,7 +30,7 @@ From create-meta-prompts patterns:
 - Aim for 3-6 tasks per plan
 - If planning >7 tasks, split into multiple plans (01-01, 01-02, etc.)
 - Target ~80% context usage maximum
-- See references/scope-estimation.md for splitting guidance
+- See ../references/scope-estimation.md for splitting guidance
 </key_elements>
 
 <good_examples>

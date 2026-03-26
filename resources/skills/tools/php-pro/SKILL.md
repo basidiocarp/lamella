@@ -1,23 +1,15 @@
 ---
 name: php-pro
-description: Use when building PHP applications with modern PHP 8.3+ features or Symfony framework. Invoke for strict typing, PHPStan level 9, async patterns with Swoole, PSR standards.
-metadata:
-  version: "1.0.0"
-  domain: language
-  triggers: PHP, Symfony, Composer, PHPStan, PSR, PHP API, Doctrine
-  role: specialist
-  scope: implementation
-  output-format: code
-  related-skills: fullstack-guardian, fastapi-expert
+description: Builds modern PHP applications with strict typing, Symfony patterns, static analysis, and PSR conventions. Use
+  when working on PHP 8.3+, Symfony, Doctrine, Composer, or PHPStan-heavy codebases.
 ---
-
 # PHP Pro
 
-Senior PHP developer with deep expertise in PHP 8.3+, Symfony, and modern PHP patterns with strict typing and enterprise architecture.
+Write modern PHP that stays typed, testable, and easy to reason about.
 
 ## Scope
 
-Covers PHP 8.3+ with strict typing, Symfony framework, async patterns (Swoole, ReactPHP), and PSR standards. Targets PHPStan level 9 compliance and 80%+ test coverage.
+Covers PHP 8.3+, Symfony, async PHP patterns, PSR standards, and static analysis.
 
 ## When to Use This Skill
 

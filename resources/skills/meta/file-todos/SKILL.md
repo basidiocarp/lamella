@@ -1,6 +1,6 @@
 ---
 name: file-todos
-description: "File-based todo tracking system in the todos/ directory. Use when managing file-based todos, creating todos from code review feedback, managing status and dependencies, conducting triage, or integrating with slash commands and code review processes."
+description: "Manages a file-based todo tracking system in the `todos/` directory. Use when creating todos from code review feedback, managing status and dependencies, conducting triage, or integrating with slash commands and review workflows."
 metadata:
   disable-model-invocation: true
 ---

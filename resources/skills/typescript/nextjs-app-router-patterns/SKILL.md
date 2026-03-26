@@ -1,6 +1,6 @@
 ---
 name: nextjs-app-router-patterns
-description: Next.js App Router architecture, caching strategies, and component patterns. Use when building Next.js 13+ App Router projects, configuring layouts, implementing parallel routes, or optimizing caching.
+description: Applies Next.js App Router architecture, caching strategies, and component patterns. Use when building Next.js 13+ App Router projects, configuring layouts, implementing parallel routes, or optimizing caching.
 ---
 
 # Next.js App Router Patterns

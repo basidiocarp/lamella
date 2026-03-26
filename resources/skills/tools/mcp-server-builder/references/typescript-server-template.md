@@ -1,0 +1,19 @@
+# TypeScript Server Template
+
+```ts
+import { FastMCP } from "fastmcp";
+
+const server = new FastMCP({ name: "my-server" });
+
+server.tool(
+  "list_items",
+  "List items from the upstream service",
+  async (input) => {
+    return {
+      content: [{ type: "text", text: JSON.stringify({ status: "todo", input }) }],
+    };
+  }
+);
+
+server.run();
+```

@@ -2,7 +2,7 @@
 
 <required_reading>
 **Read these files NOW:**
-1. templates/continue-here.md
+1. ../assets/continue-here.md
 </required_reading>
 
 <purpose>
@@ -44,7 +44,7 @@ Collect everything needed for seamless resumption:
 </step>
 
 <step name="write_handoff">
-Use template from `templates/continue-here.md`.
+Use template from `../assets/continue-here.md`.
 
 Write to `.planning/phases/XX-name/.continue-here.md`:
 

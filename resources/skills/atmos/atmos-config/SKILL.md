@@ -1,10 +1,6 @@
 ---
 name: atmos-config
-description: "Project configuration: atmos.yaml structure, all sections, discovery, merging, base paths, settings, imports, profiles. Use when configuring atmos.yaml, setting up project structure, defining base paths, or troubleshooting configuration merging."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/sections-reference.md
+description: "Configures atmos.yaml structure, discovery, merging, base paths, settings, imports, and profiles. Use when configuring atmos.yaml, setting up project structure, defining base paths, or troubleshooting configuration merging."
 ---
 
 # Atmos Project Configuration (atmos.yaml)

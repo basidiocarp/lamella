@@ -38,7 +38,10 @@ When asked to create user stories, follow these steps:
 6. **Apply INVEST Criteria**
    Validate each story against INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable. Revise stories that don't meet these criteria.
 
-7. **Add Context and Notes**
+7. **Check Slice Readiness**
+   Make sure the stories can later be grouped into independently deliverable vertical slices. A planning tool should be able to map these stories into real implementation chunks without inventing missing behavior.
+
+8. **Add Context and Notes**
    Include relevant design references, technical considerations, and dependencies. These help implementers understand the full picture.
 
 ## Output Format
@@ -54,6 +57,7 @@ Before finalizing, verify:
 - [ ] Acceptance criteria use Given/When/Then format
 - [ ] Each criterion is testable (someone can verify pass/fail)
 - [ ] Stories are small enough to complete in one sprint
+- [ ] Stories can be grouped into independent delivery slices later
 - [ ] No implementation details in the story statement
 - [ ] Benefit clause explains why this matters to the user
 

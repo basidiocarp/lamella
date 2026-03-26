@@ -1,6 +1,6 @@
 ---
 name: docker-troubleshoot
-description: Diagnose container failures, networking issues, permissions, and port conflicts. Use when debugging Docker container failures, resolving networking issues, fixing permission errors, or clearing port conflicts.
+description: Diagnoses container failures, networking issues, permissions, and port conflicts. Use when debugging Docker container failures, resolving networking issues, fixing permission errors, or clearing port conflicts.
 ---
 
 # Docker Troubleshooting Skill

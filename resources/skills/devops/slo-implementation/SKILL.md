@@ -1,6 +1,6 @@
 ---
 name: slo-implementation
-description: Define and implement Service Level Indicators (SLIs) and Service Level Objectives (SLOs) with error budgets and alerting. Use when establishing reliability targets, implementing SRE practices, or measuring service performance.
+description: Defines and implements Service Level Indicators (SLIs) and Service Level Objectives (SLOs) with error budgets and alerting. Use when establishing reliability targets, implementing SRE practices, or measuring service performance.
 ---
 
 # SLO Implementation
@@ -46,6 +46,7 @@ Implement measurable reliability targets using SLIs, SLOs, and error budgets to 
 - Implement error budgets
 - Create SLO-based alerts
 - Track reliability goals
+- Generate an initial SLO framework from service metadata
 
 ## SLI/SLO/SLA Hierarchy
 
@@ -158,6 +159,19 @@ error_budget_policy:
 **Reference:** See `references/error-budget.md`
 
 ## SLO Implementation
+
+Bootstrap a draft framework with the bundled script, then review it against
+real user journeys and current performance data.
+
+```bash
+python3 scripts/slo_designer.py --input service-definition.json --output slo-framework.json
+```
+
+PowerShell uses the same flow with `python`:
+
+```powershell
+python scripts\slo_designer.py --input .\service-definition.json --output .\slo-framework.json
+```
 
 ### Prometheus Recording Rules
 
@@ -281,6 +295,10 @@ rules:
 - `references/error-budget.md` - Error budget calculations
 
 ## Related Skills
+
+- `grafana-dashboards` for the dashboard layer
+- `prometheus-configuration` for alert and rule wiring
+- `distributed-tracing` when tracing is part of the observability design
 
 - `prometheus-configuration` - For metric collection
 - `grafana-dashboards` - For SLO visualization

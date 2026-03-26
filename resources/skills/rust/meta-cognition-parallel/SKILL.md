@@ -1,8 +1,7 @@
 ---
 name: meta-cognition-parallel
-description: "EXPERIMENTAL: Three-layer parallel meta-cognition analysis. Use when needing deep multi-perspective analysis, examining language mechanics, design choices, and domain constraints in parallel."
-metadata:
-  argument-hint: <rust_question>
+description: "Applies an experimental three-layer Rust analysis workflow. Use when a Rust question needs parallel reasoning across language mechanics, design trade-offs, and domain constraints."
+argument-hint: <rust_question>
 ---
 # Meta-Cognition Parallel Analysis (Experimental)
 
@@ -78,61 +77,22 @@ Domain-Correct Architectural Solution
 /meta-parallel 我的交易系统报 E0382 错误，应该用 clone 吗？
 ```
 
-## Execution Mode Detection
+## Execution Mode
 
-**CRITICAL: Check agent file availability first to determine execution mode.**
+Run the three-layer analysis directly unless this environment already provides a suitable multi-agent workflow. Do not assume bundled analyzer files exist.
 
-Try to read layer analyzer files:
-- `../../agents/layer1-analyzer.md`
-- `../../agents/layer2-analyzer.md`
-- `../../agents/layer3-analyzer.md`
+If parallel sub-agents are available, you may delegate each layer independently. Otherwise, execute the same workflow sequentially in a single answer.
 
 ---
 
-## Agent Mode (Plugin Install) - Parallel Execution
-
-**When all layer analyzer files exist at `../../agents/`:**
+## Direct Workflow
 
 ### Step 1: Parse User Query
 
 Extract from `$ARGUMENTS`:
 - The original question
 - Any code snippets
-- Domain hints (trading, web, embedded, etc.)
-
-### Step 2: Launch Three Parallel Agents
-
-**CRITICAL: Launch all three Tasks in a SINGLE message to enable parallel execution.**
-
-```
-Read agent files, then launch in parallel:
-
-Task(
-  subagent_type: "general-purpose",
-  run_in_background: true,
-// ... (14 lines trimmed)
-  prompt: <content of ../../agents/layer3-analyzer.md>
-          + "\n\n## User Query\n" + $ARGUMENTS
-)
-```
-
-### Step 3: Collect Results
-
-Wait for all three agents to complete. Each returns structured analysis.
-
-### Step 4: Cross-Layer Synthesis
-
-With all three results, perform synthesis per template below.
-
----
-
-## Inline Mode (Skills-only Install) - Sequential Execution
-
-**When layer analyzer files are NOT available, execute analysis directly:**
-
-### Step 1: Parse User Query
-
-Same as Agent Mode - extract question, code, and domain hints from `$ARGUMENTS`.
+- Domain hints such as web, CLI, embedded, fintech, or distributed systems
 
 ### Step 2: Execute Layer 1 - Language Mechanics
 

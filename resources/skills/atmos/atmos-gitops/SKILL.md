@@ -1,8 +1,6 @@
 ---
 name: atmos-gitops
-description: "CI/CD: GitHub Actions, Spacelift, Atlantis, `atmos describe affected` for change detection. Use when setting up Atmos CI/CD pipelines, configuring GitHub Actions/Spacelift/Atlantis, or implementing change detection."
-metadata:
-  version: "1.0.0"
+description: "Implements Atmos CI/CD workflows with GitHub Actions, Spacelift, Atlantis, and affected-stack detection. Use when setting up Atmos CI/CD pipelines, configuring GitHub Actions, Spacelift, or Atlantis, or implementing change detection."
 ---
 
 # Atmos GitOps and CI/CD Integrations

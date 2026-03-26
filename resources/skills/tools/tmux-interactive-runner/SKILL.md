@@ -1,6 +1,7 @@
 ---
 name: tmux-interactive-runner
-description: Use when run interactive CLI tools (vim, git rebase -i, Python REPL, etc.) that require real-time input/output - provides tmux-based approach for controlling interactive sessions through detached sessions and send-keys
+description: Controls interactive CLI tools with tmux sessions and scripted key input. Use when working with vim, REPLs, or interactive git commands that need a real terminal.
+compatibility: Requires tmux on macOS, Linux, or WSL. Native Windows terminals need a different PTY-based approach.
 ---
 
 # Using tmux for Interactive Commands
@@ -19,7 +20,7 @@ description: Use when run interactive CLI tools (vim, git rebase -i, Python REPL
 
 ## Overview
 
-Interactive CLI tools (vim, interactive git rebase, REPLs, etc.) cannot be controlled through standard bash because they require a real terminal. tmux provides detached sessions that can be controlled programmatically via `send-keys` and `capture-pane`.
+Interactive CLI tools like vim, interactive git rebase, and REPLs need a real terminal. Standard non-interactive command execution is not enough. tmux gives you a detached terminal you can script with `send-keys` and `capture-pane`.
 
 ## When to Use
 
@@ -99,19 +100,19 @@ tmux new-session -d -s git_session -c /path/to/repo git rebase -i HEAD~3
 
 ### Helper Wrapper
 
-For easier use, see `/home/jesse/git/interactive-command/tmux-wrapper.sh`:
+For easier use, use the bundled wrapper at `${CLAUDE_SKILL_DIR}/scripts/tmux-wrapper.sh`:
 ```bash
 # Start session
-/path/to/tmux-wrapper.sh start <session-name> <command> [args...]
+${CLAUDE_SKILL_DIR}/scripts/tmux-wrapper.sh start <session-name> <command> [args...]
 
 # Send input
-/path/to/tmux-wrapper.sh send <session-name> 'text' Enter
+${CLAUDE_SKILL_DIR}/scripts/tmux-wrapper.sh send <session-name> 'text' Enter
 
 # Capture current state
-/path/to/tmux-wrapper.sh capture <session-name>
+${CLAUDE_SKILL_DIR}/scripts/tmux-wrapper.sh capture <session-name>
 
 # Stop
-/path/to/tmux-wrapper.sh stop <session-name>
+${CLAUDE_SKILL_DIR}/scripts/tmux-wrapper.sh stop <session-name>
 ```
 
 ## Common Patterns
@@ -187,4 +188,4 @@ tmux kill-session -t session_name
 - Allows automation of interactive git workflows (rebase, add -p)
 - Makes REPL-based testing/debugging possible
 - Unblocks any tool that requires terminal interaction
-- No need to build custom PTY management - tmux handles it all
+- No need to build custom PTY management; tmux handles it

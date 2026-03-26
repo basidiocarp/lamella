@@ -4,7 +4,7 @@
 
 This is the recommended approach for creating visually compelling posters:
 1. Plan all visual elements needed (title, intro, methods, results, conclusions)
-2. Generate each element using scientific-schematics or Nano Banana Pro
+2. Generate each element using the diagram or image-generation tool available in your environment
 3. Assemble generated images in the LaTeX template
 4. Add text content around the visuals
 
@@ -135,29 +135,25 @@ POSTER FORMAT REQUIREMENTS (STRICTLY ENFORCE):
 **Solution**: Generate SIMPLE graphics with FEW elements and LARGE text.
 
 **Example - WRONG (too complex, text will be small):**
-```bash
-# BAD - too many elements in one graphic
-python scripts/generate_schematic.py "Complete ML pipeline showing data collection,
-preprocessing with 5 steps, feature engineering with 8 techniques, model training
-with hyperparameter tuning, validation with cross-validation, and deployment with
-monitoring. Include all labels and descriptions." -o figures/pipeline.png
+```text
+Prompt to avoid:
+Complete ML pipeline showing data collection, preprocessing with 5 steps,
+feature engineering with 8 techniques, model training with hyperparameter
+tuning, validation with cross-validation, and deployment with monitoring.
+Include all labels and descriptions.
 ```
 
 **Example - CORRECT (simple, focused, large text):**
-```bash
-# GOOD - split into multiple simple graphics with large text
+```text
+Graphic 1 prompt for figures/overview.png:
+POSTER FORMAT for A0: Simple 4-step pipeline. Four large boxes:
+DATA → PROCESS → MODEL → RESULTS. GIANT labels (80pt+), thick arrows,
+lots of white space. Only 4 words total. Readable from 8 feet.
 
-# Graphic 1: High-level overview (3-4 elements max)
-python scripts/generate_schematic.py "POSTER FORMAT for A0: Simple 4-step pipeline.
-Four large boxes: DATA → PROCESS → MODEL → RESULTS.
-GIANT labels (80pt+), thick arrows, lots of white space.
-Only 4 words total. Readable from 8 feet." -o figures/overview.png
-
-# Graphic 2: Key result (1 metric highlighted)
-python scripts/generate_schematic.py "POSTER FORMAT for A0: Single key metric display.
-Giant '95%' text (150pt+) with 'ACCURACY' below (60pt+).
-Checkmark icon. Minimal design, high contrast.
-Readable from 10 feet." -o figures/accuracy.png
+Graphic 2 prompt for figures/accuracy.png:
+POSTER FORMAT for A0: Single key metric display. Giant '95%' text (150pt+)
+with 'ACCURACY' below (60pt+). Checkmark icon. Minimal design, high contrast.
+Readable from 10 feet.
 ```
 
 **Rules for AI-generated poster graphics:**

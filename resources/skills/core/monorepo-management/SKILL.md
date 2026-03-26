@@ -1,10 +1,12 @@
 ---
 name: monorepo-management
-description: Monorepo management with Turborepo, Nx, and pnpm workspaces -- setup, build optimization, code sharing, and CI/CD. Use when setting up or optimizing monorepos.
+description: Manages monorepos with Turborepo, Nx, and pnpm workspaces. Use when setting up or optimizing builds, code sharing, and CI/CD in a monorepo.
 ---
 
 # Monorepo Management
 
+Use this skill for both monorepo setup and monorepo orientation. Start by
+mapping the workspace before changing build or dependency behavior.
 
 ## Contents
 
@@ -22,9 +24,20 @@ description: Monorepo management with Turborepo, Nx, and pnpm workspaces -- setu
 
 - Setting up a new monorepo
 - Migrating from multi-repo
+- Mapping existing workspace packages and internal dependencies
 - Optimizing build and CI performance
 - Managing shared dependencies and code sharing
 - Versioning and publishing packages
+
+## Workspace Mapping
+
+Use the bundled analyzer to detect workspace tooling, package roots, and
+internal dependency edges before planning changes:
+
+```bash
+python3 scripts/monorepo_analyzer.py /path/to/monorepo
+python3 scripts/monorepo_analyzer.py /path/to/monorepo --json
+```
 
 ## Turborepo Setup
 
@@ -126,6 +139,8 @@ pnpm changeset publish # Publish
 - Configure cache inputs/outputs correctly to avoid stale builds
 - Share types between frontend and backend
 - Use changesets for versioning
+- Scope CI and local commands to affected packages whenever the toolchain supports it
+- Keep a repo map so shared-package changes do not surprise downstream apps
 
 ## Common Pitfalls
 
@@ -133,3 +148,8 @@ pnpm changeset publish # Publish
 - Phantom dependencies (using deps not in package.json -- pnpm strict mode catches this)
 - Incorrect cache inputs causing stale builds
 - Over-sharing code that should be separate
+
+## References
+
+- `references/monorepo-patterns.md`
+- `references/monorepo-tooling-reference.md`

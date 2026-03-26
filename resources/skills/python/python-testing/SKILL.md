@@ -1,6 +1,6 @@
 ---
 name: python-testing
-description: pytest patterns and configuration. Basic TDD, assertions, and fixtures are assumed knowledge. Use when configuring pytest, setting up fixtures, parametrized tests, mocking, or async testing in Python.
+description: Applies pytest patterns and configuration for Python test suites. Use when configuring pytest, setting up fixtures, parametrized tests, mocking, or async testing in Python.
 ---
 
 # Python Testing Patterns

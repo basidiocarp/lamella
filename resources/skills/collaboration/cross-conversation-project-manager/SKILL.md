@@ -1,6 +1,6 @@
 ---
 name: cross-conversation-project-manager
-description: Maintain project state across MULTIPLE conversations over days/weeks. Use when tracking long-running projects, needing status updates across sessions, managing tasks with blockers, or generating project reports and follow-up reminders.
+description: Maintains project state across multiple conversations over days or weeks. Use when tracking long-running projects, needing status updates across sessions, managing tasks with blockers, or generating project reports and follow-up reminders.
 ---
 
 # Cross-Conversation Project Manager

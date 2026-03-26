@@ -1,6 +1,6 @@
 ---
 name: expert-panel
-description: Assemble 2-3 complementary experts to collaboratively analyze anything. Use when analyzing complex topics requiring multiple domain perspectives, seeking comprehensive recommendations, or needing cross-disciplinary synthesis and insights.
+description: Assembles 2-3 complementary experts to collaboratively analyze a topic. Use when analyzing complex topics that need multiple domain perspectives, comprehensive recommendations, or cross-disciplinary synthesis.
 ---
 
 # Expert Panel
@@ -49,6 +49,8 @@ Good panel composition:
 | **Synthesis** | Combined analysis integrating all perspectives into a coherent picture |
 | **Integrated Recommendations** | Actionable next steps informed by all viewpoints, prioritized |
 
+When the panel is supporting a leadership or strategy decision, use `references/multi-perspective-synthesis.md` to compress the output into consensus themes, named conflicts, a short action list, and one clear decision point.
+
 ## Collaboration Rules
 
 - **Build, don't just agree** — each expert adds new information or reframes, not just "I agree with Expert A"
@@ -72,3 +74,4 @@ Good panel composition:
 - [ ] Synthesis resolves tensions between perspectives rather than listing them side by side
 - [ ] Recommendations are specific enough to act on
 - [ ] Each expert's contribution adds information the others couldn't have provided
+- [ ] Leadership-facing outputs collapse to a short action set and one decision point

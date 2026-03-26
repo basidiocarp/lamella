@@ -1,7 +1,7 @@
 ---
 name: humanizer
 description: >-
-  Remove signs of AI-generated writing from text. Use when making AI-drafted copy sound more natural and human-written, or
+  Removes signs of AI-generated writing from text. Use when making AI-drafted copy sound more natural and human-written, or
   when editing to remove telltale AI patterns. Based on Wikipedia's "Signs of AI writing" guide.
 metadata:
   user-invocable: true

@@ -24,6 +24,8 @@ When asked to create a competitive analysis, follow these steps:
 1. **Define the Scope**
    Clarify what you're analyzing: a specific feature area, overall product positioning, or pricing strategy. Identify 3-5 key competitors—direct competitors (same solution), indirect competitors (different solution to same problem), and potential disruptors.
 
+   If the user needs packaging design, price points, or a price increase plan instead of a market read, use `agile-pm/define-pricing-strategy`.
+
 2. **Gather Intelligence**
    Research each competitor through public sources: websites, pricing pages, G2/Capterra reviews, press releases, job postings, and customer testimonials. Note what verify vs. what you're inferring.
 
@@ -41,6 +43,8 @@ When asked to create a competitive analysis, follow these steps:
 
 7. **Note Confidence Levels**
    Mark which conclusions are based on verified data vs. inference. Competitive intelligence has varying reliability—be honest about uncertainty.
+
+If the user needs a tighter market message after the analysis, use `references/positioning-statement-template.md` to draft a concise positioning statement grounded in the competitive read.
 
 ## Output Format
 

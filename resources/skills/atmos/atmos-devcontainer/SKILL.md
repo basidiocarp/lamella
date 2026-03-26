@@ -1,10 +1,6 @@
 ---
 name: atmos-devcontainer
-description: "Devcontainer orchestration: start/stop/attach/shell/exec/rebuild, instance management, config handling, VS Code integration. Use when managing Atmos devcontainers, starting/stopping instances, or integrating with VS Code development environments."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/commands-reference.md
+description: "Manages Atmos devcontainer lifecycle operations, instance configuration, and VS Code integration. Use when managing Atmos devcontainers, starting or stopping instances, or integrating with VS Code development environments."
 ---
 
 # Atmos Devcontainer
@@ -131,7 +127,9 @@ Override with `settings.runtime` in the devcontainer configuration.
 
 ### Lifecycle Management
 
-```bash
+These commands are shell-neutral and work the same in Bash, Zsh, and PowerShell.
+
+```text
 atmos devcontainer start default           # Start (create if needed)
 atmos devcontainer stop default            # Stop running container
 atmos devcontainer remove default          # Remove container and data
@@ -140,7 +138,7 @@ atmos devcontainer rebuild default         # Destroy and recreate from scratch
 
 ### Interactive Access
 
-```bash
+```text
 atmos devcontainer shell                   # Start + attach in one command
 atmos devcontainer shell default           # Named devcontainer
 atmos devcontainer attach default          # Attach to running container

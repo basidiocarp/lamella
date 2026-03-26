@@ -2,7 +2,7 @@
   "$schema": "./schema.json",
   "name": "writing",
   "version": "1.0.0",
-  "description": "Technical writing: documentation, articles, changelogs, content strategy, and editorial workflows",
+  "description": "Technical and product writing: documentation, articles, content strategy, email sequences, changelogs, and editorial workflows",
   "author": "William Newton",
   "license": "MIT",
   "tags": [
@@ -17,8 +17,10 @@
   ],
   "resources": {
     "skills": [
+      "writing/content-strategy",
       "writing/content-writer",
       "writing/docs-style",
+      "writing/email-sequence",
       "writing/humanizer",
       "writing/latex-posters",
       "writing/release-notes",

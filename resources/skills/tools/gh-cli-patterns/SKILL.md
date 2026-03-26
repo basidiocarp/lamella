@@ -1,7 +1,7 @@
 ---
 name: gh-cli-patterns
 description: >-
-  Guides usage of the GitHub CLI (gh) for interacting with GitHub repositories, PRs, issues, and API. Use when working with
+  Guides use of the GitHub CLI (gh) for interacting with GitHub repositories, PRs, issues, and API. Use when working with
   GitHub resources instead of WebFetch or curl.
 ---
 # Using the GitHub CLI (`gh`)

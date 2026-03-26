@@ -1,8 +1,7 @@
 ---
 name: git-analyze-issue
-description: Analyze a GitHub issue and create a detailed technical specification. Use when starting work on a GitHub issue, creating technical specs from issues, or planning implementation.
-metadata:
-  argument-hint: Issue number (e.g., 42)
+description: Analyzes a GitHub issue and creates a detailed technical specification. Use when starting work on a GitHub issue, creating technical specs from issues, or planning implementation.
+argument-hint: Issue number (e.g., 42)
 ---
 Please analyze GitHub issue #$ARGUMENTS and create a technical specification.
 
@@ -14,8 +13,8 @@ Follow these steps:
    - If not found, fetch the issue details from GitHub (see step 2)
 
 2. Fetch the issue details (if not already loaded):
-   - Read `.claude/commands/load-issues.md` to understand how to fetch issue details
-   - Save the issue file following the load-issues.md format
+   - Use your configured GitHub issue workflow, such as `gh issue view`, to fetch the issue details
+   - Save the issue file using the naming pattern above if you want to keep a local copy
 
 3. Understand the requirements thoroughly
 4. Review related code and project structure

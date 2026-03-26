@@ -1,6 +1,6 @@
 ---
 name: code-review-pro
-description: Comprehensive code review covering security vulnerabilities, performance bottlenecks, best practices, and refactoring opportunities. Use when user requests code review, security audit, or performance analysis.
+description: Reviews code for security vulnerabilities, performance bottlenecks, maintainability issues, and refactoring opportunities. Use when the user requests code review, a security audit, or performance analysis.
 ---
 
 # Code Review Pro
@@ -23,7 +23,7 @@ description: Comprehensive code review covering security vulnerabilities, perfor
 - [Examples](#examples)
 - [Best Practices](#best-practices)
 
-Deep code analysis covering security, performance, maintainability, and best practices.
+Review code for security, performance, maintainability, and correctness issues.
 
 ## When to Use This Skill
 

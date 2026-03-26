@@ -46,8 +46,10 @@ npx @axe-core/cli https://example.com
 npx pa11y https://example.com
 
 # Lighthouse
-lighthouse https://example.com --only-categories=accessibility
+npx lighthouse https://example.com --only-categories=accessibility
 ```
+
+These `npx` commands work the same in Bash, zsh, and PowerShell.
 
 ---
 

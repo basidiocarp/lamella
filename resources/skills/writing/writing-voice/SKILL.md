@@ -1,6 +1,6 @@
 ---
 name: writing-voice
-description: "Voice and tone rules for all written prose. Use when writing content meant to be read by humans: docs, READMEs, blog posts, landing pages, explanations. Triggers on prose writing, technical writing, documentation tone, or when output sounds robotic."
+description: "Defines voice and tone rules for written prose. Use when writing content meant to be read by humans, such as docs, READMEs, blog posts, landing pages, and explanations, or when output sounds robotic."
 ---
 
 # Writing Voice

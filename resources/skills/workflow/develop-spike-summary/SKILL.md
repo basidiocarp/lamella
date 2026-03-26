@@ -1,17 +1,8 @@
 ---
 name: develop-spike-summary
 description: >-
-  Use when documenting results of a time-boxed technical or design exploration (spike). Captures learnings, findings, and
-  recommendations after completing spikes to inform team decisions.
-metadata:
-  category: coordination
-  frameworks:
-  - triple-diamond
-  - lean-startup
-  - design-thinking
-  phase: develop
-  version: 2.0.0
-  updated: 2026-01-26
+  Documents the results of a time-boxed technical or design exploration.
+  Use when summarizing a completed spike, capturing learnings, or turning research into next-step recommendations.
 ---
 # Spike Summary
 

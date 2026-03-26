@@ -15,6 +15,7 @@ A problem statement is a concise document that frames the problem you're solving
 - Communicating up to leadership or stakeholders about priorities
 - Evaluating whether a proposed solution actually addresses the core problem
 - Onboarding new team members to provide context
+- Refreshing product strategy when the team needs to restate the core user problem before planning
 
 ## Instructions
 
@@ -37,6 +38,9 @@ When asked to create a problem statement, follow these steps:
 
 6. **Capture Open Questions**
    Document what you don't know yet. What assumptions need validation? What additional research is needed?
+
+7. **Use it as the anchor for strategy refresh**
+   If the work is a broader product-strategy reset, use the problem statement as the anchor artifact before moving into roadmap or execution planning. Keep the strategy discussion tied to a clear user and business problem instead of jumping straight to a feature list.
 
 ## Output Format
 

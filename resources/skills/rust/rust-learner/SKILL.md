@@ -1,9 +1,8 @@
 ---
 name: rust-learner
 description: >-
-  Use when asking about Rust versions or crate info. Keywords: latest version, what's new, changelog, Rust 1.x, Rust release,
-  stable, nightly, crate info, crates.io, lib.rs, docs.rs, API documentation, crate features, dependencies, which crate, what
-  version, Rust edition, edition 2021, edition 2024, cargo add, cargo update
+  Retrieves Rust release, crate, and documentation information. Use when checking the latest Rust version, reading changelogs,
+  looking up crates, comparing editions, finding API docs, or reviewing crate features and dependencies.
 ---
 # Rust Learner
 
@@ -42,91 +41,31 @@ Fetch Rust and crate information including:
 
 **Primary skill for fetching Rust/crate information.**
 
-## Execution Mode Detection
+## Workflow
 
-**CRITICAL: Check agent file availability first to determine execution mode.**
+Use live sources when the question is time-sensitive. Prefer official or primary sources:
 
-Try to read the agent file for your query type. The execution mode depends on whether the file exists:
-
-| Query Type | Agent File Path |
+| Query Type | Primary Sources |
 |------------|-----------------|
-| Crate info/version | `../../agents/crate-researcher.md` |
-| Rust version features | `../../agents/rust-changelog.md` |
-| Std library docs | `../../agents/std-docs-researcher.md` |
-| Third-party crate docs | `../../agents/docs-researcher.md` |
-| Clippy lints | `../../agents/clippy-researcher.md` |
+| Rust release and edition changes | `blog.rust-lang.org`, `releases.rs` |
+| Crate versions and metadata | `crates.io`, `lib.rs` |
+| Standard library documentation | `doc.rust-lang.org` |
+| Third-party crate documentation | `docs.rs` |
+| Clippy lints | `rust-lang.github.io/rust-clippy` |
+
+If browsing tools are unavailable, say that the answer may be stale and fall back to local knowledge.
 
 ---
 
-## Agent Mode (Plugin Install)
-
-**When agent files exist at `../../agents/`:**
-
-### Workflow
-
-1. Read the appropriate agent file (relative to this skill)
-2. Launch Task with `run_in_background: true`
-3. Continue with other work or wait for completion
-4. Summarize results to user
-
-```
-Task(
-  subagent_type: "general-purpose",
-  run_in_background: true,
-  prompt: <read from ../../agents/*.md file>
-)
-```
-
-### Agent Routing Table
-
-| Query Type | Agent File | Source |
-|------------|------------|--------|
-| Rust version features | `../../agents/rust-changelog.md` | releases.rs |
-| Crate info/version | `../../agents/crate-researcher.md` | lib.rs, crates.io |
-| **Std library docs** (Send, Sync, Arc, etc.) | `../../agents/std-docs-researcher.md` | doc.rust-lang.org |
-| Third-party crate docs (tokio, serde, etc.) | `../../agents/docs-researcher.md` | docs.rs |
-| Clippy lints | `../../agents/clippy-researcher.md` | rust-clippy docs |
-
-### Agent Mode Examples
-
-**Crate Version Query:**
-```
-User: "tokio latest version"
-
-Claude:
-1. Read ../../agents/crate-researcher.md
-2. Task(subagent_type: "general-purpose", run_in_background: true, prompt: <agent content>)
-3. Wait for agent
-4. Summarize results
-```
-
-**Rust Changelog Query:**
-```
-User: "What's new in Rust 1.85?"
-
-Claude:
-1. Read ../../agents/rust-changelog.md
-2. Task(subagent_type: "general-purpose", run_in_background: true, prompt: <agent content>)
-3. Wait for agent
-4. Summarize features
-```
-
----
-
-## Inline Mode (Skills-only Install)
-
-**When agent files are NOT available, execute directly using these steps:**
+## Direct Lookup Steps
 
 ### Crate Info Query
 
 ```
-1. actionbook: mcp__actionbook__search_actions("lib.rs crate info")
-2. Get action details: mcp__actionbook__get_action_by_id(<action_id>)
-3. agent-browser CLI (or WebFetch fallback):
-   - open "https://lib.rs/crates/{crate_name}"
-   - get text using selector from actionbook
-   - close
-4. Parse and format output
+1. Check `lib.rs` or `crates.io` for the crate summary and latest version.
+2. Check `docs.rs` for API docs and feature flags when needed.
+3. Cross-check the repo or changelog if the user asks about release notes or breaking changes.
+4. Summarize the result with links and exact versions.
 ```
 
 **Output Format:**
@@ -146,13 +85,9 @@ Claude:
 ### Rust Version Query
 
 ```
-1. actionbook: mcp__actionbook__search_actions("releases.rs rust changelog")
-2. Get action details for selectors
-3. agent-browser CLI (or WebFetch fallback):
-   - open "https://releases.rs/docs/1.{version}.0/"
-   - get text using selector from actionbook
-   - close
-4. Parse and format output
+1. Check the Rust release post or `releases.rs`.
+2. Capture the release date, headline changes, and stabilized APIs.
+3. Call out edition-specific or tooling changes when relevant.
 ```
 
 **Output Format:**
@@ -169,15 +104,9 @@ Claude:
 ### Std Library Docs (std::*, Send, Sync, Arc, etc.)
 
 ```
-1. Construct URL: "https://doc.rust-lang.org/std/{path}/"
-   - Traits: std/{module}/trait.{Name}.html
-   - Structs: std/{module}/struct.{Name}.html
-   - Modules: std/{module}/index.html
-2. agent-browser CLI (or WebFetch fallback):
-   - open <url>
-   - get text "main .docblock"
-   - close
-3. Parse and format output
+1. Construct the `doc.rust-lang.org/std/` URL.
+2. Confirm the type or trait path.
+3. Extract the signature, summary, and one relevant example.
 ```
 
 **Common Std Library Paths:**
@@ -212,12 +141,9 @@ Claude:
 ### Third-Party Crate Docs (tokio, serde, etc.)
 
 ```
-1. Construct URL: "https://docs.rs/{crate}/latest/{crate}/{path}"
-2. agent-browser CLI (or WebFetch fallback):
-   - open <url>
-   - get text ".docblock"
-   - close
-3. Parse and format output
+1. Open the `docs.rs` page for the crate item.
+2. Capture the signature, purpose, feature-gating notes, and one usage example.
+3. Include version context when the docs reflect a release older than the latest crate version.
 ```
 
 **Output Format:**

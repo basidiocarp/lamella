@@ -1,6 +1,6 @@
 {
   "name": "collaboration",
-  "description": "Team collaboration: meetings, decision-making, debates, and cross-functional coordination",
+  "description": "Team collaboration and leadership: teaching, debate, project continuity, coaching, structured challenge, and cross-functional coordination",
   "source_plugin": "collaboration",
   "resources": {
     "skills": [
@@ -9,7 +9,9 @@
       "collaboration/debate-evaluator",
       "collaboration/debate-simulator",
       "collaboration/devils-advocate",
-      "collaboration/expert-panel"
+      "collaboration/expert-panel",
+      "collaboration/founder-leadership-coaching",
+      "collaboration/stress-test-design"
     ],
     "workflows": [],
     "templates": [],

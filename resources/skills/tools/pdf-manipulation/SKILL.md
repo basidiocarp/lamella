@@ -1,6 +1,6 @@
 ---
 name: pdf-manipulation
-description: PDF manipulation toolkit. Extract text/tables, create PDFs, merge/split, fill forms, for programmatic document processing and analysis. Use when users need to extract content from PDFs, create new PDFs, merge or split documents, or fill PDF forms programmatically.
+description: Extracts text and tables from PDFs, creates PDFs, merges or splits documents, and fills forms. Use when users need to extract content from PDFs, create new PDFs, merge or split documents, or fill PDF forms programmatically.
 ---
 
 # PDF Processing Guide

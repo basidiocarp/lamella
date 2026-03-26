@@ -1,6 +1,6 @@
 ---
 name: bash-script-validator
-description: Validate, lint, audit, or fix bash/shell/.sh scripts via ShellCheck. Use when checking script quality, finding security issues, debugging ShellCheck failures, configuring ShellCheck rules (.shellcheckrc), or making scripts POSIX compliant.
+description: Validates bash and shell scripts with ShellCheck. Use when checking script quality, finding security issues, debugging ShellCheck failures, configuring ShellCheck rules (.shellcheckrc), or making scripts POSIX compliant.
 ---
 
 # Bash Script Validator

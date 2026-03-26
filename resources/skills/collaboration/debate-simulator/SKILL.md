@@ -1,6 +1,6 @@
 ---
 name: debate-simulator
-description: "Spin up 2-3 expert personas to debate any topic from different angles. Use when exploring controversial topics, understanding multiple perspectives on complex issues, preparing for negotiations, or stress-testing arguments before presenting them."
+description: "Simulates debates between 2-3 expert personas from different angles. Use when exploring controversial topics, understanding multiple perspectives on complex issues, preparing for negotiations, or stress-testing arguments before presenting them."
 ---
 
 # Debate Simulator

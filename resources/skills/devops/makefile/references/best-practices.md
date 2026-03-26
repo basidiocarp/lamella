@@ -53,9 +53,9 @@ Use order-only prerequisites (`|`) for large projects with many targets.
 
 | Doc | Full Path |
 |-----|-----------|
-| Structure guide | `devops-skills-plugin/skills/makefile-generator/docs/makefile-structure.md` |
-| Variables guide | `devops-skills-plugin/skills/makefile-generator/docs/variables-guide.md` |
-| Targets guide | `devops-skills-plugin/skills/makefile-generator/docs/targets-guide.md` |
-| Patterns guide | `devops-skills-plugin/skills/makefile-generator/docs/patterns-guide.md` |
-| Optimization guide | `devops-skills-plugin/skills/makefile-generator/docs/optimization-guide.md` |
-| Security guide | `devops-skills-plugin/skills/makefile-generator/docs/security-guide.md` |
+| Structure guide | `references/structure.md` |
+| Variables guide | `references/variables.md` |
+| Targets guide | `references/targets.md` |
+| Patterns guide | `references/patterns.md` |
+| Optimization guide | `references/optimization.md` |
+| Security guide | `references/security.md` |

@@ -1,12 +1,8 @@
 ---
 name: command-development
 description: >-
-  Guide for creating slash commands in Claude Code. Use when the user asks to "create a slash command", "add a command", "write a custom command", "define
-  command arguments", "use command frontmatter", "organize commands", "create command with file references", "interactive
-  command", "use AskUserQuestion in command", or needs guidance on slash command structure, YAML frontmatter fields, dynamic
-  arguments, bash execution in commands, user interaction patterns, or command development best practices for Claude Code.
-metadata:
-  version: 0.3.0
+  Guides slash command development for Claude Code. Use when the user asks to create a slash command, add a command, define
+  command arguments, use command frontmatter, organize commands, add file references, or build interactive command flows.
 ---
 # Command Development for Claude Code
 

@@ -1,6 +1,6 @@
 ---
 name: vector-search-optimization
-description: Implement and optimize similarity search with vector databases. Use when building semantic search, tuning HNSW parameters, selecting quantization strategies, or scaling vector search infrastructure.
+description: "Optimizes vector search infrastructure and retrieval quality. Use when building semantic search, tuning HNSW parameters, selecting quantization strategies, or scaling vector databases."
 ---
 
 # Vector Search Optimization

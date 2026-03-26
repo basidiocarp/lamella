@@ -47,7 +47,7 @@ Document:
 
 For each target language, determine applicability.
 
-See [applicability-analysis.md](applicability-analysis.md) for detailed guidance.
+See [rule-creator-applicability-analysis.md](rule-creator-applicability-analysis.md) for detailed guidance.
 
 ### Step 1.3: Document Verdict
 
@@ -156,7 +156,7 @@ For each ported rule:
 
 ### Step 3.4: Adapt Pattern Syntax
 
-See [language-syntax-guide.md](language-syntax-guide.md) for translation guidance.
+See [rule-creator-language-syntax-guide.md](rule-creator-language-syntax-guide.md) for translation guidance.
 
 ## Phase 4: Validation
 

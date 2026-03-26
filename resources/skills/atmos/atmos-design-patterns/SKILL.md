@@ -1,8 +1,6 @@
 ---
 name: atmos-design-patterns
-description: "Design patterns: stack organization, component catalogs, inheritance, configuration composition, version management, layered configuration. Use when designing Atmos stack organization, implementing inheritance patterns, or architecting multi-environment configs."
-metadata:
-  version: "1.0.0"
+description: "Designs Atmos stack organization, component catalogs, inheritance, configuration composition, version management, and layered configuration. Use when designing Atmos stack organization, implementing inheritance patterns, or architecting multi-environment configs."
 ---
 
 # Atmos Design Patterns

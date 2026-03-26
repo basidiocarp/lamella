@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Four-phase debugging methodology — root cause investigation, pattern analysis, hypothesis testing, and validated implementation. Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes.
+description: Applies a four-phase debugging methodology: root cause investigation, pattern analysis, hypothesis testing, and validated implementation. Use when encountering any bug, test failure, or unexpected behavior before proposing fixes.
 ---
 
 # Systematic Debugging
@@ -59,6 +59,9 @@ Use for ANY technical issue:
 - Issue seems simple (simple bugs have root causes too)
 - You're in a hurry (rushing guarantees rework)
 - Manager wants it fixed NOW (systematic is faster than thrashing)
+
+If the user wants an issue-ready fix plan after debugging, package the findings
+using the behavior-level template in `references/issue-triage.md`.
 
 ## The Four Phases
 

@@ -3,18 +3,18 @@
   "name": "lamella-plugin-index",
   "version": "1.0.0",
   "description": "Index of all available lamella plugins",
-  "generated": "2026-03-07",
+  "generated": "2026-03-26",
   "stats": {
-    "totalPlugins": 21,
-    "totalSkills": 230,
+    "totalPlugins": 20,
+    "totalSkills": 286,
     "coverage": "98%"
   },
   "plugins": [
     {
       "name": "agile-pm",
       "version": "1.0.0",
-      "skills": 12,
-      "description": "Agile and product management: discovery, delivery, iteration, hypothesis testing, and stakeholder workflows",
+      "skills": 33,
+      "description": "Agile and product operations: discovery, customer research and market analysis artifacts, storyboards, pricing strategy, feature investment analysis, working-backwards planning artifacts, delivery, stakeholder workflows, operating rhythms, executive updates, leadership transitions, executive onboarding, health diagnostics, culture design, Jira and Confluence operations, and workspace administration",
       "tags": [
         "agile",
         "product-management",
@@ -23,8 +23,8 @@
         "iteration"
       ],
       "manifest": "agile-pm.json",
-      "skillCount": 12,
-      "skills_count": 12
+      "skillCount": 33,
+      "skills_count": 33
     },
     {
       "name": "ai-agents",
@@ -63,8 +63,8 @@
     {
       "name": "collaboration",
       "version": "1.0.0",
-      "skills": 6,
-      "description": "Team collaboration: meetings, decision-making, debates, and cross-functional coordination",
+      "skills": 8,
+      "description": "Team collaboration and leadership: teaching, debate, project continuity, coaching, structured challenge, and cross-functional coordination",
       "tags": [
         "collaboration",
         "meetings",
@@ -73,13 +73,13 @@
         "communication"
       ],
       "manifest": "collaboration.json",
-      "skillCount": 6,
-      "skills_count": 6
+      "skillCount": 8,
+      "skills_count": 8
     },
     {
       "name": "core",
       "version": "1.0.0",
-      "skills": 24,
+      "skills": 33,
       "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
       "tags": [
         "essential",
@@ -89,8 +89,8 @@
         "git"
       ],
       "manifest": "core.json",
-      "skillCount": 24,
-      "skills_count": 24
+      "skillCount": 33,
+      "skills_count": 33
     },
     {
       "name": "cpp",
@@ -110,8 +110,8 @@
     {
       "name": "database",
       "version": "1.0.0",
-      "skills": 2,
-      "description": "Database development: SQL optimization, PostgreSQL, migrations, and data modeling",
+      "skills": 3,
+      "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
       "tags": [
         "database",
         "sql",
@@ -120,13 +120,13 @@
         "data-modeling"
       ],
       "manifest": "database.json",
-      "skillCount": 2,
-      "skills_count": 2
+      "skillCount": 3,
+      "skills_count": 3
     },
     {
       "name": "devops",
       "version": "1.0.0",
-      "skills": 24,
+      "skills": 27,
       "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
       "tags": [
         "devops",
@@ -138,14 +138,14 @@
         "infrastructure"
       ],
       "manifest": "devops.json",
-      "skillCount": 24,
-      "skills_count": 24
+      "skillCount": 27,
+      "skills_count": 27
     },
     {
       "name": "frontend",
       "version": "1.0.0",
-      "skills": 9,
-      "description": "Frontend development, UI/UX design, and document generation",
+      "skills": 11,
+      "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
       "tags": [
         "frontend",
         "ui",
@@ -155,8 +155,8 @@
         "documents"
       ],
       "manifest": "frontend.json",
-      "skillCount": 9,
-      "skills_count": 9
+      "skillCount": 11,
+      "skills_count": 11
     },
     {
       "name": "go",
@@ -176,7 +176,7 @@
     {
       "name": "meta",
       "version": "1.0.0",
-      "skills": 19,
+      "skills": 17,
       "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
       "tags": [
         "meta",
@@ -186,8 +186,8 @@
         "plugins"
       ],
       "manifest": "meta.json",
-      "skillCount": 19,
-      "skills_count": 19
+      "skillCount": 17,
+      "skills_count": 17
     },
     {
       "name": "microservices",
@@ -240,8 +240,8 @@
     {
       "name": "rust",
       "version": "1.0.0",
-      "skills": 4,
-      "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 179 curated rules",
+      "skills": 11,
+      "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
       "tags": [
         "rust",
         "systems",
@@ -250,14 +250,14 @@
         "memory-safety"
       ],
       "manifest": "rust.json",
-      "skillCount": 4,
-      "skills_count": 4
+      "skillCount": 11,
+      "skills_count": 11
     },
     {
       "name": "security",
       "version": "1.0.0",
-      "skills": 32,
-      "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices",
+      "skills": 26,
+      "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
       "tags": [
         "security",
         "audit",
@@ -266,26 +266,27 @@
         "threat-modeling"
       ],
       "manifest": "security.json",
-      "skillCount": 32,
-      "skills_count": 32
+      "skillCount": 26,
+      "skills_count": 26
     },
     {
       "name": "tools",
       "version": "1.0.0",
-      "skills": 25,
-      "description": "CLI tools, shell scripting, MCP integration, API design, and prompt engineering utilities",
+      "skills": 30,
+      "description": "CLI tools, shell and PowerShell scripting, workspace administration, analytics implementation, MCP integration, API design, and productivity utilities",
       "tags": [
         "cli",
         "shell",
+        "powershell",
         "bash",
         "mcp",
         "api",
-        "prompts",
+        "productivity",
         "automation"
       ],
       "manifest": "tools.json",
-      "skillCount": 25,
-      "skills_count": 25
+      "skillCount": 30,
+      "skills_count": 30
     },
     {
       "name": "typescript",
@@ -307,8 +308,8 @@
     {
       "name": "workflow",
       "version": "1.0.0",
-      "skills": 14,
-      "description": "Development workflows: planning, git operations, decision records, continuous improvement (Kaizen), mental models, and Conductor project management",
+      "skills": 17,
+      "description": "Development workflows: planning, git operations, scenario planning, strategy-to-execution alignment, decision records, continuous improvement (Kaizen), mental models, and Conductor project management",
       "tags": [
         "workflow",
         "planning",
@@ -317,14 +318,14 @@
         "conductor"
       ],
       "manifest": "workflow.json",
-      "skillCount": 14,
-      "skills_count": 14
+      "skillCount": 17,
+      "skills_count": 17
     },
     {
       "name": "writing",
       "version": "1.0.0",
-      "skills": 7,
-      "description": "Technical writing: documentation, articles, changelogs, content strategy, and editorial workflows",
+      "skills": 9,
+      "description": "Technical and product writing: documentation, articles, content strategy, email sequences, changelogs, and editorial workflows",
       "tags": [
         "writing",
         "documentation",
@@ -333,8 +334,8 @@
         "changelog"
       ],
       "manifest": "writing.json",
-      "skillCount": 7,
-      "skills_count": 7
+      "skillCount": 9,
+      "skills_count": 9
     }
   ],
   "categories": {
@@ -357,6 +358,7 @@
       "rag"
     ],
     "product-and-business": [
+      "agile-pm",
       "workflow",
       "collaboration"
     ],
@@ -372,5 +374,5 @@
       "meta"
     ]
   },
-  "totalSkills": 230
+  "totalSkills": 286
 }

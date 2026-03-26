@@ -1,6 +1,6 @@
 ---
 name: design-systems
-description: "Design systems: design tokens, theming, typography, color theory, spacing, iconography, and component architecture. Use when creating design tokens, implementing themes, building style guides, or establishing visual design foundations."
+description: "Builds frontend design systems and visual foundations. Use when defining design tokens, theming, typography, color systems, spacing, iconography, or component-library standards."
 ---
 
 # Design Systems

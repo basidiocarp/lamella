@@ -1,6 +1,6 @@
 {
   "name": "rust",
-  "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 179 curated rules",
+  "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
   "source_plugin": "rust",
   "resources": {
     "skills": [

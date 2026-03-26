@@ -1,12 +1,8 @@
 ---
 name: plugin-structure
 description: >-
-  Guide for Claude Code plugin architecture and directory structure. Use when the user asks to "create a plugin", "scaffold a plugin", "understand plugin structure", "organize
-  plugin components", "set up plugin.json", "use ${CLAUDE_PLUGIN_ROOT}", "add commands/agents/skills/hooks", "configure auto-discovery",
-  or needs guidance on plugin directory layout, manifest configuration, component organization, file naming conventions, or
-  Claude Code plugin architecture best practices.
-metadata:
-  version: 0.1.0
+  Guides Claude Code plugin architecture and directory structure. Use when the user asks to create a plugin, scaffold a plugin,
+  organize commands, agents, skills, or hooks, use `${CLAUDE_PLUGIN_ROOT}`, or configure plugin manifests and auto-discovery.
 ---
 # Plugin Structure for Claude Code
 

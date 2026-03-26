@@ -38,18 +38,23 @@
    ```
 
 2. **Generate SIMPLE visual elements**:
-   ```bash
-   # Introduction - ONLY 3 icons/elements
-   python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE visual with ONLY 3 elements: [icon1] [icon2] [icon3]. ONE word labels (80pt+). 50% white space. Readable from 8 feet." -o figures/intro.png
+   ```text
+   figures/intro.png
+   POSTER FORMAT for A0. SIMPLE visual with ONLY 3 elements: [icon1] [icon2] [icon3].
+   ONE word labels (80pt+). 50% white space. Readable from 8 feet.
 
-   # Methods - ONLY 4 steps maximum
-   python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE flowchart with ONLY 4 boxes: STEP1 → STEP2 → STEP3 → STEP4. GIANT labels (100pt+). 50% white space. NO sub-steps." -o figures/methods.png
+   figures/methods.png
+   POSTER FORMAT for A0. SIMPLE flowchart with ONLY 4 boxes:
+   STEP1 → STEP2 → STEP3 → STEP4. GIANT labels (100pt+). 50% white space.
+   NO sub-steps.
 
-   # Results - ONLY 3 bars/comparisons
-   python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE chart with ONLY 3 bars. GIANT percentages ON bars (120pt+). NO axis, NO legend. 50% white space." -o figures/results.png
+   figures/results.png
+   POSTER FORMAT for A0. SIMPLE chart with ONLY 3 bars. GIANT percentages ON bars
+   (120pt+). NO axis, NO legend. 50% white space.
 
-   # Conclusions - EXACTLY 3 items with GIANT numbers
-   python scripts/generate_schematic.py "POSTER FORMAT for A0. EXACTLY 3 key findings: '[NUMBER]' (150pt) '[LABEL]' (60pt) for each. 50% white space. NO other text." -o figures/conclusions.png
+   figures/conclusions.png
+   POSTER FORMAT for A0. EXACTLY 3 key findings: '[NUMBER]' (150pt) '[LABEL]' (60pt)
+   for each. 50% white space. NO other text.
    ```
 
 3. **Review generated figures - check for overflow:**
@@ -161,10 +166,8 @@
 
 This skill works effectively with:
 
-- **Scientific Schematics**: CRITICAL - Use for generating all poster diagrams and flowcharts
-- **Generate Image / Nano Banana Pro**: For stylized graphics, conceptual illustrations, and summary visuals
-- **Scientific Writing**: For developing poster content from papers
-- **Literature Review**: For contextualizing research
-- **Data Analysis**: For creating result figures and charts
+- **content-writer**: Develop poster copy from papers, notes, or research artifacts
+- **writing-voice**: Tighten headings and body text so they stay concise at poster scale
+- **Available diagram or image-generation tooling**: Create stylized graphics, conceptual illustrations, and summary visuals
 
-**Recommended workflow**: Always use scientific-schematics and generate-image skills BEFORE creating the LaTeX poster to generate all visual elements.
+**Recommended workflow**: Generate all visuals before creating the LaTeX poster so layout and copy can adapt to the final assets.

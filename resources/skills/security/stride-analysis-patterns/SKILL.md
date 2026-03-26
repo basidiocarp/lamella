@@ -1,7 +1,7 @@
 ---
 name: stride-analysis-patterns
 description: >-
-  STRIDE methodology for systematic threat identification, attack tree construction, and security requirement extraction.
+  Applies the STRIDE methodology to threat identification, attack tree construction, and security requirement extraction.
   Use when building threat models, analyzing system security, constructing attack trees, identifying attack vectors,
   deriving security requirements, or creating security user stories and test cases.
 ---
@@ -225,4 +225,3 @@ Detailed templates and implementation code:
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/)
 - [NIST SP 800-53](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final)
 ```
-

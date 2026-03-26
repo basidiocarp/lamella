@@ -1,7 +1,11 @@
 ---
 name: create-plans
-description: Create hierarchical project plans optimized for solo agentic development. Use when planning projects, phases, or tasks that Claude will execute. Produces Claude-executable plans with verification criteria, not enterprise documentation. Handles briefs, roadmaps, phase plans, and context handoffs.
+description: Creates hierarchical project plans optimized for solo agentic development. Use when planning projects, phases, or tasks that Claude will execute. Produces Claude-executable plans with verification criteria, not enterprise documentation. Handles briefs, roadmaps, phase plans, and context handoffs.
 ---
+
+Use `spec-driven-workflow` when the user needs a formal reviewable spec with
+acceptance criteria before implementation. Use this skill when the output should
+be an executable plan for Claude.
 
 <essential_principles>
 

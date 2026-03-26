@@ -1,6 +1,6 @@
 ---
 name: mutability
-description: "Use for mutability issues. Triggers: E0596, E0499, E0502, cannot borrow as mutable, already borrowed as immutable, interior mutability, mut, RefCell, Cell"
+description: "Analyzes Rust mutability and interior mutability issues. Use when encountering mutable borrow errors, interior mutability patterns, RefCell, Cell, or borrow conflicts such as E0596, E0499, and E0502."
 ---
 
 # Mutability & Interior Mutability

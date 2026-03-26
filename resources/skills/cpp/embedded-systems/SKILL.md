@@ -1,6 +1,6 @@
 ---
 name: embedded-systems
-description: Use when developing firmware for microcontrollers, implementing RTOS applications, or optimizing power consumption. Invoke for STM32, ESP32, FreeRTOS, bare-metal, power optimization, real-time systems.
+description: "Builds embedded and firmware systems in C and C++. Use when developing for microcontrollers, implementing RTOS applications, optimizing power consumption, or working on real-time systems."
 ---
 
 # Embedded Systems Engineer

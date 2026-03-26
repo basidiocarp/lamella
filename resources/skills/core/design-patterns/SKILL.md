@@ -1,12 +1,9 @@
 ---
 name: design-patterns
 description: >-
-  Analyze codebase for GoF design patterns - detection, suggestions, evaluation with stack-aware adaptations. Use when auditing code for patterns, suggesting refactoring improvements, or evaluating existing pattern implementations.
-metadata:
-  context: fork
-  agent: specialist
+  Analyzes codebases for GoF design patterns, refactoring opportunities, and stack-aware adaptations. Use when auditing code for patterns, suggesting refactoring improvements, or evaluating existing pattern implementations.
 ---
-# Design Patterns Analyzer Skill
+# Design Patterns
 
 
 ## Contents
@@ -17,7 +14,7 @@ metadata:
 - [Reference Files](#reference-files)
 
 
-**Purpose**: Detect, suggest, and evaluate Gang of Four (GoF) design patterns in TypeScript/JavaScript codebases with stack-aware adaptations.
+Detect, suggest, and evaluate Gang of Four (GoF) design patterns in TypeScript and JavaScript codebases with stack-aware adaptations.
 
 ## Core Capabilities
 

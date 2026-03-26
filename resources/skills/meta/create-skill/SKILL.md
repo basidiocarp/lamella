@@ -1,6 +1,6 @@
 ---
 name: create-skill
-description: Guide for creating effective skills. Use when creating a new skill (or updating an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations. Applies TDD to process documentation by testing with subagents before writing, iterating until bulletproof against rationalization.
+description: Guides effective skill creation. Use when creating a new skill or updating an existing skill that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
 ---
 
 # Create Skill Command

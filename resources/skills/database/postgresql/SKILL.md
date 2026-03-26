@@ -1,6 +1,6 @@
 ---
 name: postgresql
-description: Design PostgreSQL schemas with correct data types, indexing, constraints, and performance patterns. Use when creating tables, adding indexes/constraints, optimizing queries, or implementing row-level security.
+description: "Designs PostgreSQL schemas and database patterns. Use when creating tables, adding indexes and constraints, optimizing queries, or implementing row-level security."
 ---
 
 # PostgreSQL Table Design
@@ -23,6 +23,10 @@ description: Design PostgreSQL schemas with correct data types, indexing, constr
 - [Examples](#examples)
 
 ## Core Rules
+
+Use `database-schema-designer` first when the main problem is entity modeling,
+migration sequencing, or ERD design from requirements. Use this skill when the
+schema already exists and the next step is PostgreSQL-specific design.
 
 - Define a PRIMARY KEY for reference tables. Not always needed for time-series/event/log data. Prefer `BIGINT GENERATED ALWAYS AS IDENTITY`; use `UUID` only when global uniqueness/opacity is needed.
 - Normalize first (to 3NF); denormalize only for measured, high-ROI reads where join performance is proven problematic.

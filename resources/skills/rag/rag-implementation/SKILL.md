@@ -1,6 +1,6 @@
 ---
 name: rag-implementation
-description: Build and architect Retrieval-Augmented Generation (RAG) systems for LLM applications with vector databases and semantic search. Use when implementing knowledge-grounded AI, building document Q&A systems, integrating LLMs with external knowledge bases, or designing RAG architecture.
+description: "Builds Retrieval-Augmented Generation systems for LLM applications. Use when implementing knowledge-grounded AI, building document question-answering systems, integrating external knowledge bases, or designing RAG architecture."
 ---
 
 # RAG Implementation
@@ -19,7 +19,7 @@ description: Build and architect Retrieval-Augmented Generation (RAG) systems fo
 ## Installation
 
 ```bash
-pip install langgraph langchain-anthropic langchain-voyageai langchain-pinecone
+python -m pip install langgraph langchain-anthropic langchain-voyageai langchain-pinecone
 ```
 
 ## When to Use This Skill
@@ -42,14 +42,16 @@ pip install langgraph langchain-anthropic langchain-voyageai langchain-pinecone
 | **pgvector** | PostgreSQL integration |
 | **Qdrant** | Fast filtered search |
 
-### Embedding Models (2026)
+### Embedding Model Families
 
-| Model | Dimensions | Best For |
-|-------|------------|----------|
-| **voyage-3-large** | 1024 | Claude apps (recommended) |
-| **voyage-code-3** | 1024 | Code search |
-| **text-embedding-3-large** | 3072 | OpenAI apps |
-| **bge-large-en-v1.5** | 1024 | Local deployment |
+| Family | Best For |
+|--------|----------|
+| Hosted general-purpose embeddings | Managed production retrieval |
+| Hosted code-focused embeddings | Code search and technical docs |
+| Open-source self-hosted embeddings | Air-gapped or infra-owned deployments |
+| Lightweight local embeddings | Fast prototyping and small datasets |
+
+Use [references/embedding-models.md](references/embedding-models.md) for the current provider and dimension trade-offs rather than copying model rankings into the main skill body.
 
 ### Retrieval Strategies
 

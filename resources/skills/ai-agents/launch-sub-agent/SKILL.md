@@ -1,9 +1,7 @@
 ---
 name: launch-sub-agent
-description: "Launch an intelligent sub-agent with automatic model selection based on task complexity, specialized agent matching, and self-critique verification. Use when delegating complex tasks to a sub-agent, needing automatic model selection, or requiring verified sub-agent execution."
-metadata:
-  argument-hint: "Task description (e.g., \"Implement user authentication\" or \"Research caching strategies\") [--model opus|sonnet|haiku]\
-    \ [--agent <agent-name>] [--output <path>]"
+description: "Launches an intelligent sub-agent with automatic model selection, specialized agent matching, and self-critique verification. Use when delegating complex tasks to a sub-agent, needing automatic model selection, or requiring verified sub-agent execution."
+argument-hint: "Task description (e.g., \"Implement user authentication\" or \"Research caching strategies\") [--model opus|sonnet|haiku] [--agent <agent-name>] [--output <path>]"
 ---
 # launch-sub-agent
 

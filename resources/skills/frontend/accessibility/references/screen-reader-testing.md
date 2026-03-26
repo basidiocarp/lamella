@@ -99,9 +99,9 @@ NVDA + Space       Toggle browse/focus mode
 
 ## References
 
-- [testing-checklists.md](references/testing-checklists.md) - VoiceOver & NVDA test scripts
-- [screen-reader-commands.md](references/screen-reader-commands.md) - Full command reference for all screen readers
-- [aria-patterns.md](references/aria-patterns.md) - Modal, live region, and tab patterns
+- [testing-checklists.md](testing-checklists.md) - VoiceOver & NVDA test scripts
+- [screen-reader-commands.md](screen-reader-commands.md) - Full command reference for all screen readers
+- [aria-patterns.md](aria-patterns.md) - Modal, live region, and tab patterns
 
 ### External Resources
 

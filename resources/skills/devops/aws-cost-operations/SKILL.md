@@ -1,10 +1,9 @@
 ---
 name: aws-cost-operations
 description: >-
-  AWS cost optimization, monitoring, and operational excellence expert. Use when analyzing AWS bills, estimating costs, setting
-  up CloudWatch alarms, querying logs, auditing CloudTrail activity, or assessing security posture. Essential when user mentions
-  AWS costs, spending, billing, budget, pricing, CloudWatch, observability, monitoring, alerting, CloudTrail, audit, or wants
-  to optimize AWS infrastructure costs and operational efficiency.
+  Analyzes AWS costs, monitoring, and operational health. Use when analyzing AWS bills, estimating costs, setting up
+  CloudWatch alarms, querying logs, auditing CloudTrail activity, or assessing security posture. Triggers include AWS costs,
+  spending, billing, budget, pricing, CloudWatch, observability, monitoring, alerting, CloudTrail, and audit workflows.
 metadata:
   context: fork
   skills:

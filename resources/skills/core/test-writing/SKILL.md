@@ -20,6 +20,7 @@ If nothing provided, focus on all changes in current git diff (or latest commit 
 
 - **Write tests**: Adding coverage for new/changed business logic
 - **Fix tests**: Tests failing after refactoring, dependency updates, or logic changes
+- Use `api-test-suite-builder` when the test surface is mainly REST or handler behavior
 
 ## Important Constraints
 

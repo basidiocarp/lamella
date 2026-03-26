@@ -1,6 +1,6 @@
 ---
 name: cpp-testing
-description: C++ testing patterns with GoogleTest and CTest. Use when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, diagnosing failing or flaky tests, or adding coverage/sanitizers.
+description: "Implements C++ testing workflows with GoogleTest and CTest. Use when writing or fixing C++ tests, configuring test runners, diagnosing flaky failures, or adding coverage and sanitizers."
 ---
 
 # C++ Testing (Agent Skill)
@@ -203,6 +203,12 @@ cmake --build build-llvm -j
 LLVM_PROFILE_FILE="build-llvm/default.profraw" ctest --test-dir build-llvm
 llvm-profdata merge -sparse build-llvm/default.profraw -o build-llvm/default.profdata
 llvm-cov report build-llvm/example_tests -instr-profile=build-llvm/default.profdata
+```
+
+PowerShell equivalent for the profiling environment variable:
+
+```powershell
+$env:LLVM_PROFILE_FILE='build-llvm/default.profraw'; ctest --test-dir build-llvm
 ```
 
 ## Sanitizers

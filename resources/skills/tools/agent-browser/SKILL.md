@@ -1,6 +1,6 @@
 ---
 name: agent-browser
-description: Browser automation using Vercel's agent-browser CLI. Use when interact with web pages, fill forms, take screenshots, or scrape data. Alternative to Playwright MCP - uses Bash commands with ref-based element selection. Triggers on "browse website", "fill form", "click button", "take screenshot", "scrape page", "web automation".
+description: Automates browser interactions with Vercel's agent-browser CLI. Use when interacting with web pages, filling forms, taking screenshots, or scraping data. Alternative to Playwright MCP; uses CLI commands with ref-based element selection. Triggers on "browse website", "fill form", "click button", "take screenshot", "scrape page", or "web automation".
 ---
 
 # agent-browser: CLI Browser Automation
@@ -33,16 +33,32 @@ Vercel's headless browser automation CLI designed for AI agents. Uses ref-based 
 
 ## Setup Check
 
-```bash
+Examples below use POSIX shell syntax. For Windows setup, use the PowerShell commands in this section; the `agent-browser` subcommands themselves are the same once installed.
+
+```sh
 # Check installation
 command -v agent-browser >/dev/null 2>&1 && echo "Installed" || echo "NOT INSTALLED - run: npm install -g agent-browser && agent-browser install"
 ```
 
+```powershell
+$cmd = Get-Command agent-browser -ErrorAction SilentlyContinue
+if ($cmd) {
+  Write-Output "Installed"
+} else {
+  Write-Output "NOT INSTALLED - run: npm install -g agent-browser; agent-browser install"
+}
+```
+
 ### Install if needed
 
-```bash
+```sh
 npm install -g agent-browser
 agent-browser install  # Downloads Chromium
+```
+
+```powershell
+npm install -g agent-browser
+agent-browser install
 ```
 
 ## Core Workflow
@@ -58,14 +74,14 @@ agent-browser install  # Downloads Chromium
 # Step 1: Open URL
 agent-browser open https://example.com
 
-# Step 2: Get interactive elements with refs
+# Step 2: Capture Interactive Elements
 agent-browser snapshot -i --json
 
-# Step 3: Interact using refs
+# Step 3: Interact With Refs
 agent-browser click @e1
 agent-browser fill @e2 "search query"
 
-# Step 4: Re-snapshot after changes
+# Step 4: Refresh Snapshot
 agent-browser snapshot -i
 ```
 
@@ -149,11 +165,11 @@ agent-browser find placeholder "Search..." fill "query"
 ## Sessions (Parallel Browsers)
 
 ```bash
-# Run multiple independent browser sessions
+# Start Multiple Browser Sessions
 agent-browser --session browser1 open https://site1.com
 agent-browser --session browser2 open https://site2.com
 
-# List active sessions
+# List Active Sessions
 agent-browser session list
 ```
 
@@ -164,7 +180,7 @@ agent-browser session list
 ```bash
 agent-browser open https://app.example.com/login
 agent-browser snapshot -i
-# Output shows: textbox "Email" [ref=e1], textbox "Password" [ref=e2], button "Sign in" [ref=e3]
+# Output: textbox "Email" [ref=e1], textbox "Password" [ref=e2], button "Sign in" [ref=e3]
 agent-browser fill @e1 "user@example.com"
 agent-browser fill @e2 "password123"
 agent-browser click @e3
@@ -177,7 +193,7 @@ agent-browser snapshot -i  # Verify logged in
 ```bash
 agent-browser open https://news.ycombinator.com
 agent-browser snapshot -i --json
-# Parse JSON to find story links
+# Parse JSON for Story Links
 agent-browser get text @e12  # Get headline text
 agent-browser click @e12     # Click to open story
 ```
@@ -198,7 +214,7 @@ agent-browser screenshot confirmation.png
 ### Debug Mode
 
 ```bash
-# Run with visible browser window
+# Run With a Visible Browser Window
 agent-browser --headed open https://example.com
 agent-browser --headed snapshot -i
 agent-browser --headed click @e1

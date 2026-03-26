@@ -1,6 +1,6 @@
 ---
 name: makefile
-description: Generate, validate, lint, and audit Makefiles with .PHONY targets and build automation. Use when creating Makefiles, validating syntax, linting .mk files, or debugging Make target dependencies.
+description: Generates, validates, lints, and audits Makefiles with `.PHONY` targets and build automation. Use when creating Makefiles, validating syntax, linting `.mk` files, or debugging Make target dependencies.
 ---
 
 # Makefile

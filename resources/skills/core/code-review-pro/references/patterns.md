@@ -3,20 +3,7 @@
 Quick reference for detecting common security issues in code changes.
 
 **Specialized Pattern Resources:**
-For specific contexts, reference these additional pattern databases:
-
-**Domain-Specific:**
-- `domain-specific-audits/defi-bridges/resources/` - 127 bridge-specific findings
-- `domain-specific-audits/tick-math/resources/` - 81 tick math findings
-- `domain-specific-audits/merkle-trees/resources/` - 67 merkle tree findings
-- [Check `domain-specific-audits/skills/` for additional domains]
-
-**Solidity-Specific:**
-- `not-so-smart-contracts` - Automated Solidity vulnerability detectors
-- `token-integration-analyzer` - Token integration safety patterns
-- `building-secure-contracts/development-guidelines` - Solidity best practices
-
-These complement the generic patterns below.
+For domain-specific reviews, use this bundled reference file as the generic baseline, then load the relevant security or smart-contract skill from the repo when the codebase needs deeper domain coverage.
 
 ---
 

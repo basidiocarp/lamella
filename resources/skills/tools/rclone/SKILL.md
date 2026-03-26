@@ -1,6 +1,6 @@
 ---
 name: rclone
-description: Upload, sync, and manage files across cloud storage providers using rclone. Use when uploading files (images, videos, documents) to S3, Cloudflare R2, Backblaze B2, Google Drive, Dropbox, or any S3-compatible storage. Triggers on "upload to S3", "sync to cloud", "rclone", "backup files", "upload video/image to bucket", or requests to transfer files to remote storage.
+description: Uploads, syncs, and manages files across cloud storage providers with rclone. Use when uploading files (images, videos, documents) to S3, Cloudflare R2, Backblaze B2, Google Drive, Dropbox, or any S3-compatible storage. Triggers on "upload to S3", "sync to cloud", "rclone", "backup files", "upload video/image to bucket", or requests to transfer files to remote storage.
 ---
 
 # rclone File Transfer Skill
@@ -17,28 +17,45 @@ description: Upload, sync, and manage files across cloud storage providers using
 
 ## Setup Check (Always Run First)
 
-Before any rclone operation, verify installation and configuration:
+Before any rclone operation, verify installation and configuration.
 
-```bash
-# Check if rclone is installed
+Use the POSIX commands below on macOS and Linux. On Windows, use the PowerShell variant.
+
+```sh
+# Check Installation
 command -v rclone >/dev/null 2>&1 && echo "rclone installed: $(rclone version | head -1)" || echo "NOT INSTALLED"
 
-# List configured remotes
+# List Configured Remotes
 rclone listremotes 2>/dev/null || echo "NO REMOTES CONFIGURED"
+```
+
+```powershell
+$cmd = Get-Command rclone -ErrorAction SilentlyContinue
+if ($cmd) {
+  rclone version | Select-Object -First 1
+} else {
+  Write-Output "NOT INSTALLED"
+}
+
+try {
+  rclone listremotes
+} catch {
+  Write-Output "NO REMOTES CONFIGURED"
+}
 ```
 
 ### If rclone is NOT installed
 
-Guide the user to install:
+Guide the user to install. On Windows, prefer the installer from `rclone.org` or the user's package manager.
 
 ```bash
-# macOS
+# Install on macOS
 brew install rclone
 
-# Linux (script install)
+# Install on Linux
 curl https://rclone.org/install.sh | sudo bash
 
-# Or via package manager
+# Install With a Package Manager
 sudo apt install rclone  # Debian/Ubuntu
 sudo dnf install rclone  # Fedora
 ```
@@ -129,33 +146,33 @@ rclone copy /path remote:bucket/ --dry-run
 For videos and large files, use chunked uploads:
 
 ```bash
-# S3 multipart upload (automatic for >200MB)
+# Use Multipart Uploads
 rclone copy large_video.mp4 remote:bucket/ --s3-chunk-size=64M --progress
 
-# Resume interrupted transfers
+# Resume Interrupted Transfers
 rclone copy /path remote:bucket/ --progress --retries=5
 ```
 
 ## Verify Upload
 
 ```bash
-# Check file exists and matches
+# Verify File Contents
 rclone check /local/file remote:bucket/file
 
-# Get file info
+# Show File Metadata
 rclone lsl remote:bucket/path/to/file
 ```
 
 ## Troubleshooting
 
 ```bash
-# Test connection
+# Test the Connection
 rclone lsd remote:
 
-# Debug connection issues
+# Debug Connection Issues
 rclone lsd remote: -vv
 
-# Check config
+# Show Active Config
 rclone config show remote
 ```
 

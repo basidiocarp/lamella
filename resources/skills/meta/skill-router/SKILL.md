@@ -1,6 +1,6 @@
 ---
 name: skill-router
-description: "Master routing skill that triages questions to the right skill, plugin, or agent. Use when a question spans multiple domains, when unsure which skill applies, or when a problem needs multi-layer reasoning. Triggers on: 'which skill', 'how should I approach', 'where do I start', ambiguous questions, cross-domain problems."
+description: "Routes questions to the right skill, plugin, or agent. Use when a question spans multiple domains, when it is unclear which skill applies, or when a problem needs multi-layer reasoning."
 ---
 
 # Skill Router
@@ -108,7 +108,7 @@ Example: "My React component is slow" -> load BOTH react-patterns AND performanc
 
 ## Externalized Cognition
 
-For complex problems that span multiple levels, create a `_reasoning/` directory with trace, findings, and decision files. See `templates/externalized-cognition.md`.
+For complex problems that span multiple levels, create a `_reasoning/` directory with trace, findings, and decision files.
 
 ## 3-Strike Escalation
 
@@ -116,4 +116,4 @@ If a fix approach fails 3 times at the same level:
 - Level 1 failure -> escalate to Level 2 (question the design)
 - Level 2 failure -> escalate to Level 3 (question the requirements)
 
-See `plugins/debugging/skills/systematic-debugging/three-strike-escalation.md`.
+See the `systematic-debugging` skill for escalation guidance after repeated failed fixes.

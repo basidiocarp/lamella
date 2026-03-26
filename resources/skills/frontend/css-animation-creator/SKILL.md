@@ -1,6 +1,6 @@
 ---
 name: css-animation-creator
-description: Create professional CSS animations, transitions, micro-interactions, and complex motion design. Use when adding animations, hover effects, loading states, page transitions, scroll animations, gesture interactions, or any motion design work.
+description: "Creates frontend motion and animation patterns. Use when adding CSS animations, transitions, micro-interactions, loading states, page transitions, scroll effects, or gesture-driven motion."
 ---
 
 # CSS Animation Creator
@@ -37,9 +37,26 @@ When creating animations:
 4. **Respect accessibility** — Honor prefers-reduced-motion
 5. **Keep timing natural** — Use appropriate easing and duration
 
+When polishing an existing interface, start by identifying the most boring default moments:
+
+- plain hover states
+- abrupt state changes
+- generic loaders
+- static reveal moments
+- interaction points that need more personality
+
+Then improve only the moments that add brand fit or clarity. Delight should reinforce the product story, not distract from it.
+
 ---
 
 ## Animation Principles
+
+### Micro-Interaction Heuristics
+
+- Adapt motion to the product's tone and narrative instead of adding effects generically.
+- Prefer one well-executed moment over several noisy ones.
+- Avoid layout shifts, janky easing, or interaction delays that make the interface feel less reliable.
+- If the effect is not smooth and purposeful, remove it.
 
 ### The 12 Principles (Disney) Applied to UI
 

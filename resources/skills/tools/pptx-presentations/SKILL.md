@@ -1,6 +1,6 @@
 ---
 name: pptx-presentations
-description: Presentation toolkit (.pptx). Create/edit slides, layouts, content, speaker notes, comments, for programmatic presentation creation and modification. Use when users need to create, modify, or analyze PowerPoint presentations programmatically.
+description: Creates, edits, and analyzes PowerPoint presentations (.pptx). Covers slides, layouts, content, speaker notes, and comments for programmatic presentation workflows. Use when users need to create, modify, or analyze PowerPoint presentations programmatically.
 ---
 
 # PPTX creation, editing, and analysis

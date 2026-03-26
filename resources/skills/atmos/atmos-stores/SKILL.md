@@ -1,8 +1,6 @@
 ---
 name: atmos-stores
-description: "Store backends: AWS SSM, Azure Key Vault, Google Secret Manager, Redis, Artifactory configuration, hooks integration, cross-component data sharing. Use when configuring Atmos store backends, integrating with secret managers, or sharing data across components."
-metadata:
-  version: "1.0.0"
+description: "Configures Atmos store backends, secret-manager integrations, hook usage, and cross-component data sharing. Use when configuring Atmos store backends, integrating with secret managers, or sharing data across components."
 ---
 
 # Atmos External Stores

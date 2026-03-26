@@ -1,6 +1,6 @@
 ---
 name: docker-patterns
-description: Docker and Docker Compose patterns — Dockerfile generation, compose configs, container security, networking, volumes, and multi-service orchestration. Use when creating Dockerfiles, generating docker-compose.yml files, initializing Docker in projects, configuring networking, setting up volumes, or securing containers.
+description: Provides Docker and Docker Compose patterns for Dockerfile generation, compose configs, container security, networking, volumes, and multi-service orchestration. Use when creating Dockerfiles, generating `docker-compose.yml` files, initializing Docker in projects, configuring networking, setting up volumes, or securing containers.
 ---
 
 # Docker Patterns

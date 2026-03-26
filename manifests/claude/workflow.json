@@ -2,7 +2,7 @@
   "name": "workflow",
   "version": "1.0.0",
   "author": "William Newton",
-  "description": "Development workflows: planning, git operations, decision records, continuous improvement (Kaizen), mental models, and Conductor project management",
+  "description": "Development workflows: planning, git operations, scenario planning, strategy-to-execution alignment, decision records, continuous improvement (Kaizen), mental models, and Conductor project management",
   "tags": [
     "workflow",
     "planning",
@@ -16,6 +16,7 @@
   "resources": {
     "skills": [
       "workflow/conductor",
+      "workflow/compound-scenario-planning",
       "workflow/context-handoff",
       "workflow/resolve-pr-parallel",
       "workflow/create-plans",
@@ -28,7 +29,9 @@
       "workflow/git-create-pr",
       "workflow/git-worktrees",
       "workflow/kaizen",
-      "workflow/mental-models"
+      "workflow/mental-models",
+      "workflow/spec-driven-workflow",
+      "workflow/strategy-execution-alignment"
     ],
     "agents": [
       "planning/context-manager.md",

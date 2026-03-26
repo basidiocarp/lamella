@@ -1,9 +1,9 @@
 ---
 name: aws-agentic-ai
 description: >-
-  AWS Bedrock AgentCore comprehensive expert for deploying and managing all AgentCore services. Use when working with Gateway,
-  Runtime, Memory, Identity, or any AgentCore component. Covers MCP target deployment, credential management, schema optimization,
-  runtime configuration, memory management, and identity services.
+  Deploys and manages AWS Bedrock AgentCore services. Use when working with Gateway, Runtime, Memory, Identity, or other
+  AgentCore components. Covers MCP target deployment, credential management, schema optimization, runtime configuration,
+  memory management, and identity services.
 metadata:
   aliases:
   - bedrock-agentcore
@@ -122,4 +122,3 @@ For patterns and best practices that span multiple AgentCore services:
 - **AWS Documentation**: [Amazon Bedrock AgentCore](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html)
 - **API Reference**: [Bedrock AgentCore Control Plane API](https://docs.aws.amazon.com/bedrock-agentcore-control/latest/APIReference/)
 - **AWS CLI Reference**: [bedrock-agentcore-control commands](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/bedrock-agentcore-control/index.html)
-

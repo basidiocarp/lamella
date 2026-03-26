@@ -1,6 +1,6 @@
 ---
 name: prometheus-configuration
-description: Set up Prometheus for comprehensive metric collection, storage, and monitoring of infrastructure and applications. Use when implementing metrics collection, setting up monitoring infrastructure, or configuring alerting systems.
+description: Sets up Prometheus for metric collection, storage, and monitoring of infrastructure and applications. Use when implementing metrics collection, setting up monitoring infrastructure, or configuring alerting systems.
 ---
 
 # Prometheus Configuration
@@ -41,6 +41,7 @@ Configure Prometheus for comprehensive metric collection, alerting, and monitori
 - Create recording rules
 - Design alert rules
 - Implement service discovery
+- Review alert quality and noise before shipping paging rules
 
 ## Prometheus Architecture
 
@@ -209,6 +210,20 @@ promtool query instant http://localhost:9090 'up'
 ```
 
 **Reference:** See `scripts/validate-prometheus.sh`
+
+## Alert Review
+
+Use the bundled optimizer to review alert coverage, noisy thresholds, and missing golden signals before promoting rules to production:
+
+```bash
+python3 scripts/alert_optimizer.py --input alerts.json --analyze-only
+```
+
+PowerShell:
+
+```powershell
+python scripts\alert_optimizer.py --input .\alerts.json --analyze-only
+```
 
 ## Best Practices
 

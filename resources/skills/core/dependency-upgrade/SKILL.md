@@ -1,6 +1,6 @@
 ---
 name: dependency-upgrade
-description: Manage major dependency version upgrades with compatibility analysis, staged rollout, and comprehensive testing. Use when upgrading framework versions, updating major dependencies, or managing breaking changes in libraries.
+description: Manages major dependency upgrades with compatibility analysis, staged rollout, and testing. Use when upgrading framework versions, updating major dependencies, or managing breaking changes in libraries.
 ---
 
 # Dependency Upgrade
@@ -13,6 +13,7 @@ Manage major version upgrades with staged rollout, compatibility analysis, and r
 - Updating security-vulnerable dependencies
 - Resolving dependency conflicts
 - Planning incremental upgrade paths
+- Use `security/dependency-auditor` first when you need a wider scan of vulnerability, license, and stale-package risk
 
 ## Semver Quick Reference
 

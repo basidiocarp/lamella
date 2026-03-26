@@ -1,6 +1,6 @@
 ---
 name: plan-fleet
-description: Create implementation plans optimized for GitHub Copilot CLI fleet execution. Use when planning features, refactors, or multi-step tasks that will be delegated to Copilot agents via /delegate or /fleet. Supports model assignment, acceptance criteria tracking, and agent self-validation.
+description: Creates implementation plans optimized for GitHub Copilot CLI fleet execution. Use when planning features, refactors, or multi-step tasks that will be delegated via /delegate or /fleet.
 ---
 
 # Fleet Plan Generator

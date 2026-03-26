@@ -1,6 +1,6 @@
 ---
 name: create-hook
-description: "Create and configure Claude Code hooks with intelligent project analysis, suggestions, and automated testing. Use when setting up auto-formatting, linting, testing, or secret-detection hooks in Claude Code."
+description: "Creates and configures Claude Code hooks, and helps pair them with repo-level guardrails when the workflow should apply outside Claude. Use when setting up formatting, linting, testing, safety, or automation hooks."
 metadata:
   argument-hint: Optional hook type or description of desired behavior
 ---
@@ -36,7 +36,7 @@ Detect project tooling and suggest relevant hooks:
 | Prettier (`.prettierrc`) | Auto-format files after editing |
 | ESLint (`.eslintrc.*`) | Lint and auto-fix after editing |
 | `test` script in package.json | Run tests before stopping |
-| Git repository | Prevent commits with secrets |
+| Git repository | Add destructive-command guardrails and repo hygiene checks |
 
 ### 2. Hook Configuration
 
@@ -46,8 +46,9 @@ Then understand context from description and **only ask about unclear details**:
 
 1. **Trigger timing**: PreToolUse (before, can block), PostToolUse (after), Stop (before completion)
 2. **Scope**: Which tools/operations? (matcher pattern)
-3. **Action**: Command to run, or prompt/agent for LLM-based decisions
-4. **Response**: What to do on success/failure?
+3. **Audience**: Claude-only guardrail or repo-wide workflow for every contributor?
+4. **Action**: Command to run, or prompt/agent for LLM-based decisions
+5. **Response**: What to do on success/failure?
 
 ### 3. Create Hook
 
@@ -143,6 +144,13 @@ Use appropriate template and add to `.claude/settings.json`:
 }
 ```
 
+### Git safety guardrail
+
+Use the bundled scripts in `scripts/block-dangerous-git.sh` or
+`scripts/block-dangerous-git.ps1` when you need to block destructive git
+commands before Claude runs them. Copy the script into the target
+`.claude/hooks/` directory first, then point the hook at that copied path.
+
 ## Quick Reference
 
 ### Hook Events
@@ -204,6 +212,7 @@ For detailed information, see:
 |:------|:----------|
 | First hook setup | [references/getting-started.md](references/getting-started.md) |
 | Common patterns | [references/examples.md](references/examples.md) |
+| Repo guardrails | [references/repo-guardrails.md](references/repo-guardrails.md) |
 | Configuration options | [references/configuration.md](references/configuration.md) |
 | Event schemas | [references/hook-events.md](references/hook-events.md) |
 | I/O formats | [references/input-output.md](references/input-output.md) |

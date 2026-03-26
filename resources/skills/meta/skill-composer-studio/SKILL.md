@@ -1,6 +1,6 @@
 ---
 name: skill-composer-studio
-description: "CHAIN multiple existing skills into custom multi-step workflows. Programmable skill combinations with automatic handoffs. Create composite skills from building blocks with conditional logic. Use when chaining skills into workflows, creating composite automations, or building programmable skill sequences."
+description: "Composes multiple existing skills into custom multi-step workflows with automatic handoffs. Use when chaining skills into workflows, creating composite automations, or building programmable skill sequences."
 ---
 
 # Skill Composer Studio

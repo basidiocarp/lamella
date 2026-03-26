@@ -24,6 +24,7 @@ Dependency risk assessment and supply chain security auditing.
 
 - Runtime dependency analysis
 - License compliance auditing
+- Broad upgrade planning across multiple ecosystems; use `dependency-auditor` for that
 
 ## Purpose
 

@@ -1,6 +1,6 @@
 ---
 name: structured-review
-description: Multi-dimensional review framework for plans, specs, and PRDs. Evaluates across 6 dimensions (completeness, clarity, feasibility, architecture, risk, verification) and categorizes findings. Use before implementing a plan or approving a spec.
+description: Reviews plans, specs, and PRDs across six dimensions: completeness, clarity, feasibility, architecture, risk, and verification. Use before implementing a plan or approving a spec.
 ---
 
 # Structured Review

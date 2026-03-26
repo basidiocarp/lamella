@@ -1,6 +1,6 @@
 ---
 name: modern-javascript-patterns
-description: Non-obvious ES6+ patterns, utilities, and module system guidance. Use when implementing retry logic, debounce/throttle utilities, functional composition, generators, ESM/CJS module systems, or browser/Node.js APIs. Standard syntax is assumed knowledge.
+description: Applies modern JavaScript patterns, utilities, and module-system guidance. Use when implementing retry logic, debounce or throttle utilities, functional composition, generators, ESM or CJS modules, or browser and Node.js APIs. Standard syntax is assumed knowledge.
 ---
 
 # Modern JavaScript Patterns

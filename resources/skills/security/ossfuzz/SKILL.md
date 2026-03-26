@@ -1,10 +1,8 @@
 ---
 name: ossfuzz
-metadata:
-  type: technique
 description: >
-  OSS-Fuzz provides free continuous fuzzing for open source projects.
-  Use when setting up continuous fuzzing infrastructure or enrolling projects.
+  Sets up OSS-Fuzz for continuous fuzzing of open source projects.
+  Use when enrolling projects in OSS-Fuzz or building continuous fuzzing infrastructure.
 ---
 
 # OSS-Fuzz

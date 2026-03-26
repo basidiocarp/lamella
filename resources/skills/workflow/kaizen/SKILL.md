@@ -1,12 +1,8 @@
 ---
 name: kaizen
 description: >-
-  Continuous improvement methodology with method selection, root cause analysis (5 Whys, Fishbone),
-  iterative improvement (PDCA), and comprehensive problem documentation (A3). Use when investigating
-  issues, improving processes, or applying structured problem-solving.
-metadata:
-  category: methodology
-  version: 3.0.0
+  Applies Kaizen continuous-improvement methods such as 5 Whys, Fishbone, PDCA, and A3 problem documentation.
+  Use when investigating issues, improving processes, or applying structured problem-solving.
 ---
 
 # Kaizen: Continuous Improvement

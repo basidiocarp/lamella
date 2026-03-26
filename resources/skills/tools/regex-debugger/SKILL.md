@@ -1,6 +1,6 @@
 ---
 name: regex-debugger
-description: Debug regex patterns with visual breakdowns, plain English explanations, test case generation, and flavor conversion. Use when user needs help with regular expressions or pattern matching.
+description: Debugs regex patterns with visual breakdowns, plain English explanations, test case generation, and flavor conversion. Use when the user needs help with regular expressions or pattern matching.
 ---
 
 # Regex Visual Debugger

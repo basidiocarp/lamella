@@ -1,10 +1,10 @@
 ---
 name: fuzz-harness-writing
 description: >-
-  Techniques for writing effective fuzzing harnesses across languages, including Python (Atheris), dictionary/corpus building,
-  and overcoming fuzzing obstacles. Includes libFuzzer and AFL++ tool-specific guidance, coverage analysis, and fuzz campaign
-  management. Use when creating fuzz targets, improving harness code, building fuzzing dictionaries, measuring coverage,
-  or choosing between libFuzzer, AFL++, and LibAFL.
+  Guides effective fuzzing harness design across languages, including Python (Atheris), dictionary and corpus building,
+  and common fuzzing obstacles. Covers libFuzzer, AFL++, coverage analysis, and fuzz campaign management. Use when creating
+  fuzz targets, improving harness code, building fuzzing dictionaries, measuring coverage, or choosing between libFuzzer,
+  AFL++, and LibAFL.
 ---
 
 # Writing Fuzzing Harnesses

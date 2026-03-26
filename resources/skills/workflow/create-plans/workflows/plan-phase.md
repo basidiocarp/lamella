@@ -2,17 +2,23 @@
 
 <required_reading>
 **Read these files NOW:**
-1. templates/phase-prompt.md
-2. references/plan-format.md
-3. references/scope-estimation.md
-4. references/checkpoints.md
+1. ../assets/phase-prompt.md
+2. ../references/plan-format.md
+3. ../references/scope-estimation.md
+4. ../references/checkpoints.md
 5. Read `.planning/roadmap.md`
 6. Read `.planning/BRIEF.md`
 
+**If planning from a PRD or feature brief:**
+7. Read ../references/vertical-slices.md
+
+**If planning a refactor or restructuring pass:**
+8. Read ../references/refactor-planning.md
+
 **If domain expertise should be loaded (determined by intake):**
-7. Read domain SKILL.md: `~/.claude/skills/expertise/[domain]/SKILL.md`
-8. Determine phase type from ROADMAP (UI, database, API, etc.)
-9. Read ONLY relevant references from domain's `<references_index>` section
+9. Read domain SKILL.md: `~/.claude/skills/expertise/[domain]/SKILL.md`
+10. Determine phase type from ROADMAP (UI, database, API, etc.)
+11. Read ONLY relevant references from domain's `<references_index>` section
 </required_reading>
 
 <purpose>
@@ -44,7 +50,7 @@ For this phase, assess:
 - Are there unknowns about the approach?
 - Do we need to investigate APIs or libraries?
 
-If yes: Route to workflows/research-phase.md first.
+If yes: Route to `research-phase.md` first.
 Research produces FINDINGS.md, then return here.
 
 If no: Proceed with planning.
@@ -82,7 +88,13 @@ Each task must have:
 
 **Critical:** If external resource has CLI/API (Vercel, Stripe, Upstash, GitHub, etc.), use type="auto" to automate it. Only checkpoint for verification AFTER automation.
 
-See references/checkpoints.md and references/cli-automation.md for checkpoint structure and automation guidance.
+**Planning shape rules:**
+- Feature work: Prefer thin vertical slices that end in visible behavior.
+- Refactor work: Prefer tiny behavior-preserving commits with tests close to the change.
+- Header decisions: Keep only durable decisions at the top of the plan.
+- Task body: Keep brittle implementation detail inside the task that needs it.
+
+See `../references/checkpoints.md` and `../references/cli-automation.md` for checkpoint structure and automation guidance.
 </step>
 
 <step name="estimate_scope">
@@ -116,7 +128,7 @@ Split into multiple plans by:
 - Plans with checkpoints → execute in main context (user interaction required)
 - Try to group autonomous work together for maximum fresh contexts
 
-See references/scope-estimation.md for complete splitting guidance and quality degradation analysis.
+See `../references/scope-estimation.md` for complete splitting guidance and quality degradation analysis.
 </step>
 
 <step name="confirm_breakdown">
@@ -184,7 +196,7 @@ Loop until "Create phase prompt" selected.
 </step>
 
 <step name="write_phase_prompt">
-Use template from `templates/phase-prompt.md`.
+Use template from `../assets/phase-prompt.md`.
 
 **If single plan:**
 Write to `.planning/phases/XX-name/{phase}-01-PLAN.md`

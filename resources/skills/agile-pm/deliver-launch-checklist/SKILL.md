@@ -40,6 +40,8 @@ When asked to create a launch checklist, follow these steps:
 7. **Schedule Check-in Cadence**
    Establish when the team will review checklist progress (daily standups, T-2 days review, launch day sync).
 
+If the launch needs channel strategy, phased rollout design, or post-launch momentum planning, use `references/launch-channel-strategy.md` alongside the checklist instead of treating readiness alone as the full launch plan.
+
 ## Output Format
 
 Use the template in `references/template.md` to structure the output.

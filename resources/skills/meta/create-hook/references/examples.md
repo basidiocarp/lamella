@@ -196,6 +196,75 @@ Hook configuration:
 }
 ```
 
+## Block dangerous git commands
+
+Use the bundled guardrail scripts when the policy is "Claude should not run
+destructive git commands in this environment."
+
+Project-scoped Bash example:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-dangerous-git.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Project-scoped PowerShell example:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh -NoProfile -File \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous-git.ps1\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Copy the bundled script into `.claude/hooks/` before enabling the hook. See
+[repo-guardrails.md](repo-guardrails.md) for setup and verification.
+
+## Pair Claude hooks with repo-native pre-commit checks
+
+Claude hooks are good for agent safety. Repo-native hooks are better when every
+contributor should see the same check.
+
+A practical split:
+
+- Claude `PreToolUse` hook blocks dangerous commands or protected files.
+- Repo-native pre-commit hook formats staged files and runs fast checks.
+
+For JavaScript and TypeScript repos, a common repo-native hook stack is:
+
+```text
+lint-staged
+typecheck
+focused tests
+```
+
+Keep commit-time checks fast enough that the team will actually keep them
+enabled.
+
 ## Prompt-based task completion check
 
 Use an LLM to verify all tasks are complete before stopping:

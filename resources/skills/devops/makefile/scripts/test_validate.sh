@@ -9,8 +9,8 @@
 # Exit 0 when all assertions pass; exit 1 on the first failure.
 #
 # Usage:
-#   bash scripts/test_validate.sh          # from makefile-validator/ directory
-#   bash devops-skills-plugin/skills/makefile-validator/scripts/test_validate.sh
+#   bash scripts/test_validate.sh          # from the skill directory
+#   bash resources/skills/devops/makefile/scripts/test_validate.sh
 #
 # Suites:
 #   MAKEFILE_VALIDATOR_TEST_SUITE=offline      # deterministic default (MBAKE_SKIP_INSTALL=1)

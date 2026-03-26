@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "description": "Frontend development, UI/UX design, and document generation",
+  "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
   "source_plugin": "frontend",
   "resources": {
     "skills": [
@@ -12,7 +12,9 @@
       "frontend/frontend-performance",
       "frontend/frontend-slides",
       "frontend/responsive-design",
-      "frontend/screenshot-to-code"
+      "frontend/screenshot-to-code",
+      "frontend/spline-3d-integration",
+      "frontend/threejs-advanced"
     ],
     "workflows": [],
     "templates": [],

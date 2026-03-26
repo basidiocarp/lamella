@@ -3,7 +3,7 @@
 Test suite for validate_syntax.py and check_best_practices.py.
 
 Run from the repository root:
-    python3 devops-skills-plugin/skills/promql-validator/scripts/test_validators.py
+    python3 resources/skills/devops/promql/scripts/test_validators.py
 
 Or directly from the scripts/ directory:
     python3 test_validators.py

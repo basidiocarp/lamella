@@ -1,6 +1,6 @@
 ---
 name: obsidian
-description: "Work with Obsidian vaults and Obsidian Flavored Markdown. Use when managing notes, searching vaults, creating/moving/deleting notes, automating Obsidian workflows, auto-capturing commits/tasks, or writing Obsidian-specific syntax (wikilinks, callouts, embeds, properties, tags)."
+description: "Manages Obsidian vaults and Obsidian Flavored Markdown. Use when managing notes, searching vaults, creating/moving/deleting notes, automating Obsidian workflows, auto-capturing commits/tasks, or writing Obsidian-specific syntax (wikilinks, callouts, embeds, properties, tags)."
 ---
 
 # Obsidian
@@ -23,16 +23,18 @@ Vault structure (typical)
 
 ## Find the active vault(s)
 
-Obsidian desktop tracks vaults here (source of truth):
+Obsidian desktop tracks vaults in `obsidian.json`. Common locations:
 
-- `~/Library/Application Support/obsidian/obsidian.json`
+- macOS: `~/Library/Application Support/obsidian/obsidian.json`
+- Linux: `~/.config/obsidian/obsidian.json`
+- Windows: `%AppData%/obsidian/obsidian.json`
 
 `obsidian-cli` resolves vaults from that file; vault name is typically the **folder name** (path suffix).
 
 Fast “what vault is active / where are the notes?”
 
 - If you’ve already set a default: `obsidian-cli print-default --path-only`
-- Otherwise, read `~/Library/Application Support/obsidian/obsidian.json` and use the vault entry with `"open": true`.
+- Otherwise, read the platform's `obsidian.json` and use the vault entry with `"open": true`.
 
 Notes
 

@@ -1,10 +1,6 @@
 ---
 name: atmos-templates
-description: "Go templates: Sprig/Gomplate functions, atmos.Component, atmos.GomplateDatasource, atmos.Store, template configuration, evaluations. Use when writing Go templates in Atmos, using Sprig/Gomplate functions, or implementing dynamic configuration values."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/go-templates.md
+description: "Writes Atmos Go templates with Sprig, Gomplate, atmos.Component, atmos.GomplateDatasource, and atmos.Store helpers. Use when writing Go templates in Atmos, using Sprig or Gomplate functions, or implementing dynamic configuration values."
 ---
 
 # Atmos Go Templates

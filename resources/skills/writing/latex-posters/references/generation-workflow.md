@@ -6,43 +6,57 @@ This document covers the step-by-step process for generating AI visuals for LaTe
 
 **⚠️ CRITICAL: Review pre-generation checklist before proceeding.**
 
-Use the appropriate tool for each element type:
+Use the diagram or image-generation tool available in your environment, then save
+the outputs under the suggested filenames.
 
-### For Schematics and Diagrams (scientific-schematics)
+### For Schematics and Diagrams
 
 ```bash
 # Create figures directory
 mkdir -p figures
+```
 
-# Drug discovery workflow - HIGH-LEVEL ONLY, 3 stages
-# BAD: "Stage 1: Target ID, Stage 2: Molecular Synthesis, Stage 3: Virtual Screening, Stage 4: AI Lead Opt..."
-// ... (14 lines trimmed)
-python scripts/generate_schematic.py "POSTER FORMAT for A0. ONE case study: Large logo + '18 MONTHS' (150pt bold) + 'to discovery' (60pt). 3 elements total. 60% white space. Readable from 12 feet." -o figures/case1.png
+```text
+figures/case1.png
+POSTER FORMAT for A0. ONE case study: Large logo + '18 MONTHS' (150pt bold) +
+'to discovery' (60pt). 3 elements total. 60% white space. Readable from 12 feet.
 
-# If you need 3 cases → make 3 separate simple graphics (not one complex graphic)
+If you need 3 cases, make 3 separate simple graphics rather than one complex graphic.
 ```
 
 ### For Stylized Blocks and Graphics (Nano Banana Pro)
 
-```bash
-# Title block - SIMPLE
-python scripts/generate_schematic.py "POSTER FORMAT for A0. Title block: 'ML FOR DRUG DISCOVERY' in HUGE bold text (120pt+). Dark blue background. ONE subtle icon. NO other text. 40% white space. Readable from 15 feet." -o figures/title_block.png
+```text
+figures/title_block.png
+POSTER FORMAT for A0. Title block: 'ML FOR DRUG DISCOVERY' in HUGE bold text
+(120pt+). Dark blue background. ONE subtle icon. NO other text. 40% white space.
+Readable from 15 feet.
 
-# Introduction visual - SIMPLE, 3 elements only
-python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE problem visual with ONLY 3 icons: drug icon, arrow, target icon. ONE label per icon (80pt+). 50% white space. NO detailed text. Readable from 8 feet." -o figures/intro_visual.png
+figures/intro_visual.png
+POSTER FORMAT for A0. SIMPLE problem visual with ONLY 3 icons: drug icon, arrow,
+target icon. ONE label per icon (80pt+). 50% white space. NO detailed text.
+Readable from 8 feet.
 
-# Conclusion/summary - ONLY 3 items, GIANT numbers
-python scripts/generate_schematic.py "POSTER FORMAT for A0. KEY FINDINGS with EXACTLY 3 cards only. Card 1: '95%' (150pt font) with 'ACCURACY' (60pt). Card 2: '2X' (150pt) with 'FASTER' (60pt). Card 3: checkmark icon with 'READY' (60pt). 50% white space. NO other text. Readable from 10 feet." -o figures/conclusions_graphic.png
+figures/conclusions_graphic.png
+POSTER FORMAT for A0. KEY FINDINGS with EXACTLY 3 cards only. Card 1: '95%'
+(150pt font) with 'ACCURACY' (60pt). Card 2: '2X' (150pt) with 'FASTER' (60pt).
+Card 3: checkmark icon with 'READY' (60pt). 50% white space. NO other text.
+Readable from 10 feet.
 
-# Background visual - SIMPLE, 3 icons only
-python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE visual with ONLY 3 large icons in a row: problem icon → challenge icon → impact icon. ONE word label each (80pt+). 50% white space. NO detailed text. Readable from 8 feet." -o figures/background_visual.png
+figures/background_visual.png
+POSTER FORMAT for A0. SIMPLE visual with ONLY 3 large icons in a row:
+problem icon → challenge icon → impact icon. ONE word label each (80pt+).
+50% white space. NO detailed text. Readable from 8 feet.
 ```
 
 ### For Data Visualizations
 
-```bash
-# SIMPLE chart with ONLY 3 bars, GIANT labels
-python scripts/generate_schematic.py "POSTER FORMAT for A0. SIMPLE bar chart with ONLY 3 bars: BASELINE (70%), EXISTING (85%), OURS (95%). GIANT percentage labels ON the bars (100pt+). NO axis labels, NO legend, NO gridlines. Our bar highlighted in different color. 40% white space. Readable from 8 feet." -o figures/comparison_chart.png
+```text
+figures/comparison_chart.png
+POSTER FORMAT for A0. SIMPLE bar chart with ONLY 3 bars: BASELINE (70%),
+EXISTING (85%), OURS (95%). GIANT percentage labels ON the bars (100pt+).
+NO axis labels, NO legend, NO gridlines. Our bar highlighted in different color.
+40% white space. Readable from 8 feet.
 ```
 
 ---
@@ -196,12 +210,14 @@ grep "Overfull" poster.log
 
 ---
 
-## Scientific Schematics Integration
+## Visual Generation Integration
 
-For detailed guidance on creating schematics, refer to the **scientific-schematics** skill documentation.
+For detailed guidance on creating visuals, use the bundled prompt patterns in this
+plugin together with whatever diagram or image-generation tooling is available in
+your environment.
 
-**Key capabilities:**
-- Nano Banana Pro automatically generates, reviews, and refines diagrams
-- Creates publication-quality images with proper formatting
-- Ensures accessibility (colorblind-friendly, high contrast)
-- Supports iterative refinement for complex diagrams
+**Key capabilities to look for:**
+- Generate publication-quality images with large, readable text
+- Support iterative refinement for simpler follow-up prompts
+- Preserve high contrast and accessible color choices
+- Export assets you can place directly in the LaTeX template

@@ -10,6 +10,28 @@ A plan is Claude-executable when Claude can read the PLAN.md and immediately sta
 If Claude has to guess, interpret, or make assumptions - the task is too vague.
 </core_principle>
 
+<planning_shapes>
+Feature work and refactor work need different plan shapes.
+
+- **Feature work**: Prefer thin vertical slices. Each slice should cut through
+  the full stack and end in a demoable behavior.
+- **Refactor work**: Prefer tiny commits that keep the system working after
+  every step. The plan should preserve behavior while changing structure.
+
+Keep durable decisions near the top of the plan:
+
+- Route or command names
+- Data model shape
+- Integration boundaries
+- Auth and permission choices
+
+Keep brittle implementation guesses out of the header:
+
+- File paths you have not verified
+- Function names likely to change during the work
+- Layer-by-layer TODO lists that do not produce a working slice
+</planning_shapes>
+
 <prompt_structure>
 Every PLAN.md follows this XML structure:
 
@@ -72,6 +94,21 @@ Should be testable without subjective judgment.
 </field>
 </task_anatomy>
 
+<vertical_slice_rule>
+For feature work, group tasks into vertical slices rather than horizontal layers.
+
+**Good**:
+- Task 1: Add minimal schema, API path, and UI stub for inviting a teammate
+- Task 2: Complete invite acceptance flow end-to-end
+
+**Bad**:
+- Task 1: Add database tables
+- Task 2: Add backend endpoints
+- Task 3: Add frontend later
+
+A finished slice should expose real behavior that the user can verify.
+</vertical_slice_rule>
+
 <task_types>
 Tasks have a `type` attribute that determines how they execute:
 
@@ -112,7 +149,7 @@ Use ONLY for: Email verification links, SMS 2FA codes, manual approvals with no 
 
 Do NOT use for: Anything with a CLI (Vercel, Stripe, Upstash, Railway, GitHub), builds, tests, file creation, deployments.
 
-See: references/cli-automation.md for what Claude can automate.
+See `cli-automation.md` for what Claude can automate.
 
 **Execution:** Claude automates everything with CLI/API, stops only for truly unavoidable manual steps.
 </type>
@@ -168,9 +205,9 @@ Use for: Technology selection, architecture decisions, design choices, feature p
 - Creating resources (Upstash, Stripe, GitHub) → `type="auto"` with CLI/API
 - File operations, tests, builds → `type="auto"`
 
-**Golden rule:** If Claude CAN automate it, Claude MUST automate it. See: references/cli-automation.md
+**Golden rule:** If Claude CAN automate it, Claude MUST automate it. See `cli-automation.md`.
 
-See `references/checkpoints.md` for comprehensive checkpoint guidance.
+See `checkpoints.md` for comprehensive checkpoint guidance.
 </task_types>
 
 <context_references>
@@ -303,5 +340,5 @@ Good task size: 15-60 minutes of Claude work.
 If a task takes multiple sessions, break it down.
 If a task is trivial, combine with related tasks.
 
-**Note on scope:** If a phase has >7 tasks or spans multiple subsystems, split into multiple plans using the naming convention `{phase}-{plan}-PLAN.md`. See `references/scope-estimation.md` for guidance.
+**Note on scope:** If a phase has >7 tasks or spans multiple subsystems, split into multiple plans using the naming convention `{phase}-{plan}-PLAN.md`. See `scope-estimation.md` for guidance.
 </sizing_tasks>

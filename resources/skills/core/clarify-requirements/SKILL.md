@@ -1,6 +1,6 @@
 ---
 name: clarify-requirements
-description: Systematic requirements clarification before implementation. Use when requests have multiple interpretations, key details are ambiguous, scope or constraints are unclear, or when missing information could lead to wrong work.
+description: Clarifies requirements before implementation. Use when requests have multiple interpretations, key details are ambiguous, scope or constraints are unclear, or when missing information could lead to wrong work.
 ---
 
 # Clarify Requirements

@@ -1,17 +1,9 @@
 ---
 name: microservices-design
 description: >-
-  Design microservices architectures with service boundaries, event-driven communication, and resilience patterns.
-  Use when designing distributed systems, decomposing monoliths, or implementing microservices patterns. Invoke for
-  service boundaries, DDD, saga patterns, event sourcing, service mesh, distributed tracing.
-metadata:
-  version: "1.0.0"
-  domain: api-architecture
-  triggers: microservices, service mesh, distributed systems, service boundaries, domain-driven design, event sourcing, CQRS, saga pattern, Kubernetes microservices, Istio, distributed tracing
-  role: architect
-  scope: system-design
-  output-format: architecture
-  related-skills: devops-patterns, kubernetes-operations, graphql-patterns, architecture-designer, monitoring-patterns
+  Designs microservices architectures with service boundaries, event-driven communication, and resilience patterns.
+  Use when decomposing monoliths, designing distributed systems, or evaluating service boundaries, CQRS, sagas,
+  event sourcing, service mesh choices, or distributed tracing.
 ---
 
 # Microservices Architect

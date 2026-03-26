@@ -1,6 +1,6 @@
 ---
 name: wycheproof
-description: Google's Wycheproof test vectors and crypto vulnerability patterns. Use when testing cryptographic implementations, validating crypto libraries against known attacks, or auditing encryption code.
+description: Applies Google's Wycheproof test vectors and crypto vulnerability patterns to cryptographic implementations. Use when testing crypto libraries against known attacks or auditing encryption code.
 ---
 
 # Wycheproof Crypto Testing

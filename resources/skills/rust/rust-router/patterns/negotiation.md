@@ -1,6 +1,6 @@
 # Negotiation Protocol
 
-> 比较查询和跨领域问题的处理协议
+Use this protocol for comparative or cross-layer Rust questions.
 
 ## When to Enable Negotiation
 
@@ -95,15 +95,13 @@ Strike 3: Still insufficient
   → Report gaps to user explicitly
 ```
 
-See `_meta/error-protocol.md` for full escalation rules.
-
 ## Negotiation Routing Examples
 
 **Example 1: No Negotiation Needed**
 ```
 Query: "What is tokio's latest version?"
 Analysis: Single lookup
-Action: Direct dispatch to crate-researcher
+Action: Route to `rust-learner`
 ```
 
 **Example 2: Negotiation Required**
@@ -111,7 +109,7 @@ Action: Direct dispatch to crate-researcher
 Query: "Compare tokio and async-std for a web server"
 Analysis: Comparative + domain context
 Action: Dispatch with negotiation: true
-Expected: Structured responses from both runtime lookups
+Expected: Structured responses from the relevant Rust and domain perspectives
 Evaluation: Check if web-server specific data found
 ```
 
@@ -120,14 +118,7 @@ Evaluation: Check if web-server specific data found
 Query: "E0382 in my trading system"
 Analysis: Error code + domain context
 Action:
-  - Dispatch m01-ownership (standard - error is defined)
-  - Dispatch domain-fintech (negotiation: true - domain context)
+  - Dispatch `ownership`
+  - Add a domain skill if the business constraints change the fix
 Synthesis: Combine error explanation with domain-appropriate fix
 ```
-
-## Related Documents
-
-- `_meta/negotiation-protocol.md` - Full protocol specification
-- `_meta/negotiation-templates.md` - Response templates
-- `_meta/error-protocol.md` - 3-Strike escalation
-- `agents/_negotiation/response-format.md` - Agent response format

@@ -51,7 +51,7 @@ Run in terminal: `grep -i "warning\|overfull\|underfull" poster.log`
 
 ### Automated Checks
 
-Run: `./scripts/review_poster.sh poster.pdf` or manually verify:
+Run: `../scripts/review_poster.sh poster.pdf` or manually verify:
 
 #### Page Specifications
 ```bash
@@ -355,4 +355,3 @@ _________________________________________________________
 
 ## Checklist Version
 Version 1.0 - For use with LaTeX poster packages (beamerposter, tikzposter, baposter)
-

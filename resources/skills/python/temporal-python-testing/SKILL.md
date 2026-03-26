@@ -1,6 +1,6 @@
 ---
 name: temporal-python-testing
-description: Test Temporal workflows with pytest, time-skipping, and mocking strategies. Covers unit testing, integration testing, replay testing, and local development setup. Use when implementing Temporal workflow tests or debugging test failures.
+description: Tests Temporal workflows with pytest, time-skipping, and mocking strategies. Use when implementing Temporal workflow tests, replay checks, or debugging Temporal test failures.
 ---
 
 # Temporal Python Testing Strategies

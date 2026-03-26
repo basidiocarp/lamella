@@ -1,7 +1,7 @@
 ---
 name: markitdown-converter
 description: >-
-  Convert files and office documents to Markdown. Use when extracting text from PDF, DOCX, PPTX, XLSX, images, audio, or other formats
+  Converts files and office documents to Markdown. Use when extracting text from PDF, DOCX, PPTX, XLSX, images, audio, or other formats
   for LLM processing or documentation.
 ---
 
@@ -21,7 +21,7 @@ description: >-
 - [Performance](#performance)
 - [References](#references)
 
-Python tool by Microsoft for converting various file formats to Markdown. Token-efficient format for LLM processing.
+Python tool by Microsoft for converting many file formats to Markdown. Useful when you need LLM-friendly output instead of the original binary format.
 
 ## Supported Formats
 
@@ -42,20 +42,31 @@ Python tool by Microsoft for converting various file formats to Markdown. Token-
 
 ### Installation
 
-```bash
+Use `python -m pip` or `py -m pip` so the commands work in Bash, zsh, and PowerShell.
+
+```sh
 pip install 'markitdown[all]'
+```
+
+```powershell
+py -m pip install 'markitdown[all]'
 ```
 
 ### Command-Line
 
-```bash
-# Basic conversion
+```sh
+# Convert a File
 markitdown document.pdf > output.md
 
-# Specify output
+# Write to a File
 markitdown document.pdf -o output.md
 
-# List plugins
+# List Plugins
+markitdown --list-plugins
+```
+
+```powershell
+markitdown document.pdf -o output.md
 markitdown --list-plugins
 ```
 
@@ -68,7 +79,7 @@ md = MarkItDown()
 result = md.convert("document.pdf")
 print(result.text_content)
 
-# From stream
+# Convert From a Stream
 with open("doc.pdf", "rb") as f:
     result = md.convert_stream(f, file_extension=".pdf")
 ```
@@ -95,7 +106,7 @@ result = md.convert("presentation.pptx")
 
 ## Azure Document Intelligence
 
-```bash
+```sh
 markitdown document.pdf -o output.md -d -e "<endpoint>"
 ```
 
@@ -106,7 +117,7 @@ result = md.convert("complex.pdf")
 
 ## Optional Dependencies
 
-```bash
+```sh
 pip install 'markitdown[pdf]'      # PDF only
 pip install 'markitdown[docx]'     # Word
 pip install 'markitdown[pptx]'     # PowerPoint
@@ -114,6 +125,11 @@ pip install 'markitdown[xlsx]'     # Excel
 pip install 'markitdown[audio-transcription]'
 pip install 'markitdown[youtube-transcription]'
 pip install 'markitdown[all]'      # Everything
+```
+
+```powershell
+py -m pip install 'markitdown[pdf]'
+py -m pip install 'markitdown[all]'
 ```
 
 ## Error Handling
@@ -142,7 +158,7 @@ with open("large.pdf", "rb") as f:
 |-------|----------|
 | Missing dependencies | `pip install 'markitdown[pdf]'` |
 | Binary file errors | Use `"rb"` mode |
-| OCR not working | Install tesseract: `brew install tesseract` |
+| OCR not working | Install Tesseract and ensure it is on `PATH` before retrying |
 
 ## Performance
 

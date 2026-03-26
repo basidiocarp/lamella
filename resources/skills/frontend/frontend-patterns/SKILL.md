@@ -1,6 +1,6 @@
 ---
 name: frontend-patterns
-description: Frontend development patterns for React, Next.js, state management, performance optimization, and UI best practices. Use when implementing React components, managing state, optimizing performance, or applying modern frontend architecture patterns.
+description: "Applies modern frontend architecture patterns. Use when implementing React or Next.js components, managing state, designing UI structure, validating visual quality, planning when 3D belongs in the interface, or improving frontend performance and maintainability."
 ---
 
 # Frontend Development Patterns
@@ -25,6 +25,8 @@ Modern frontend patterns for React, Next.js, and performant user interfaces.
 - Building accessible, responsive UI patterns
 - Implementing error boundaries and fallback UIs
 - Creating distinctive, polished frontend interfaces with strong aesthetics
+- Reviewing visual evidence to confirm that a UI change actually achieved its goal
+- Deciding whether 3D is justified or whether a simpler visual approach would work better
 
 ## Component Patterns
 
@@ -84,5 +86,7 @@ See [references/performance.md](references/performance.md) for full examples.
 - [Forms & Accessibility](references/forms-accessibility.md) - Form validation, animations, keyboard nav, focus management
 - [Error Boundaries](references/error-boundaries.md) - React error boundaries, Next.js error handling, async error patterns, error reporting
 - [Design Aesthetics](references/design-aesthetics.md) - Distinctive UI design, typography, color, motion, spatial composition
+- [Visual Validation](references/visual-validation.md) - Adversarial screenshot review, visual QA checklists, and evidence-first UI verification
+- [3D Experience](references/3d-experience.md) - When 3D belongs in the interface, stack selection, and GLB pipeline checks
 
 **Remember**: Choose patterns that fit your project complexity. Start simple, optimize when needed.

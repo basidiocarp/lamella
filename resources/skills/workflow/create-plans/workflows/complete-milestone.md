@@ -2,7 +2,7 @@
 
 <required_reading>
 **Read these files NOW:**
-1. templates/milestone.md
+1. ../assets/milestone.md
 2. `.planning/roadmap.md`
 3. `.planning/BRIEF.md`
 </required_reading>
@@ -112,7 +112,7 @@ If file doesn't exist:
 
 If exists, prepend new entry (reverse chronological order).
 
-Use template from `templates/milestone.md`:
+Use template from `../assets/milestone.md`:
 
 ```markdown
 ## v[Version] [Name] (Shipped: YYYY-MM-DD)
@@ -227,8 +227,8 @@ Shipped:
 
 Wait for user decision.
 
-If "1": Route to workflows/plan-phase.md (but ask about milestone scope first)
-If "2": Route to workflows/archive-planning.md (to be created)
+If "1": Route to `plan-phase.md` (but ask about milestone scope first)
+If "2": Stop and ask the user how they want to archive planning; no archive workflow is bundled here yet
 </step>
 
 </process>

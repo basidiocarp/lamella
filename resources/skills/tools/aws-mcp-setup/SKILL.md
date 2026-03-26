@@ -1,8 +1,8 @@
 ---
 name: aws-mcp-setup
 description: >-
-  Configure AWS MCP servers for documentation search and API access. Use when setting up AWS MCP, configuring AWS documentation
-  tools, troubleshooting MCP connectivity, or when user mentions aws-mcp, awsdocs, uvx setup, or MCP server configuration.
+  Configures AWS MCP servers for documentation search and API access. Use when setting up AWS MCP, configuring AWS documentation
+  tools, troubleshooting MCP connectivity, or when the user mentions aws-mcp, awsdocs, uvx setup, or MCP server configuration.
   Covers both Full AWS MCP Server (with uvx + credentials) and lightweight Documentation MCP (no auth required).
 ---
 # AWS MCP Server Configuration Guide
@@ -50,14 +50,28 @@ Agent tools use hierarchical configuration (precedence: local → project → us
 
 Check these files for `mcpServers` containing `aws-mcp`, `aws`, or `awsdocs` keys:
 
-```bash
-# Check project config
+Use the POSIX commands below on macOS and Linux. On Windows, use the PowerShell variants.
+
+```sh
+# Check Project Config
 cat .mcp.json 2>/dev/null | grep -E '"(aws-mcp|aws|awsdocs)"'
 
-# Check user config
+# Check User Config
 cat ~/.claude.json 2>/dev/null | grep -E '"(aws-mcp|aws|awsdocs)"'
 
-# Or use Claude CLI
+# Check With Claude CLI
+claude mcp list
+```
+
+```powershell
+if (Test-Path .mcp.json) {
+  Get-Content .mcp.json | Select-String '"(aws-mcp|aws|awsdocs)"'
+}
+
+if (Test-Path "$HOME/.claude.json") {
+  Get-Content "$HOME/.claude.json" | Select-String '"(aws-mcp|aws|awsdocs)"'
+}
+
 claude mcp list
 ```
 
@@ -69,12 +83,27 @@ If AWS MCP is already configured, no further setup needed.
 
 Run these commands to determine which option to use:
 
-```bash
-# Check for uvx (requires Python 3.10+)
+```sh
+# Check for uvx
 which uvx || echo "uvx not available"
 
-# Check for valid AWS credentials
+# Check AWS Credentials
 aws sts get-caller-identity || echo "AWS credentials not configured"
+```
+
+```powershell
+if (Get-Command uvx -ErrorAction SilentlyContinue) {
+  Write-Output "uvx available"
+} else {
+  Write-Output "uvx not available"
+}
+
+try {
+  aws sts get-caller-identity | Out-Null
+  Write-Output "AWS credentials available"
+} catch {
+  Write-Output "AWS credentials not configured"
+}
 ```
 
 ### Option A: Full AWS MCP Server (Recommended)

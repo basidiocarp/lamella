@@ -115,6 +115,6 @@ Before marking C++ work complete:
 
 ## References
 
-- [Code Examples](references/code-examples.md) — Detailed code examples for each guideline
-- [Anti-Patterns](references/anti-patterns.md) — Patterns to avoid by category
+- [Code Examples](code-examples.md) — Detailed code examples for each guideline
+- [Anti-Patterns](anti-patterns.md) — Patterns to avoid by category
 - [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)

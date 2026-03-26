@@ -1,8 +1,6 @@
 ---
 name: atmos-vendoring
-description: "Component vendoring: vendor.yaml manifests, pulling from Git/S3/HTTP/OCI/Terraform Registry. Use when vendoring Atmos components, configuring vendor.yaml manifests, or pulling modules from external sources."
-metadata:
-  version: "1.0.0"
+description: "Vendors Atmos components through vendor.yaml manifests and Git, S3, HTTP, OCI, or Terraform Registry sources. Use when vendoring Atmos components, configuring vendor.yaml manifests, or pulling modules from external sources."
 ---
 
 # Atmos Component Vendoring

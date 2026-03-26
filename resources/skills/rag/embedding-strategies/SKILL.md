@@ -1,6 +1,6 @@
 ---
 name: embedding-strategies
-description: Select and optimize embedding models for semantic search and RAG applications. Use when choosing embedding models, implementing chunking strategies, or optimizing embedding quality for specific domains.
+description: "Selects and optimizes embedding models for RAG systems. Use when choosing embedding models, refining chunking strategies, or improving embedding quality for semantic search and domain-specific retrieval."
 ---
 
 # Embedding Strategies
@@ -9,7 +9,7 @@ description: Select and optimize embedding models for semantic search and RAG ap
 ## Contents
 
 - [When to Use This Skill](#when-to-use-this-skill)
-- [Embedding Model Comparison (2026)](#embedding-model-comparison-2026)
+- [Model Selection Guide](#model-selection-guide)
 - [Embedding Pipeline](#embedding-pipeline)
 - [Quick Start](#quick-start)
 - [Best Practices](#best-practices)
@@ -19,7 +19,7 @@ description: Select and optimize embedding models for semantic search and RAG ap
 ## Installation
 
 ```bash
-pip install langchain-voyageai
+python -m pip install langchain-voyageai
 ```
 
 ## When to Use This Skill
@@ -31,20 +31,19 @@ pip install langchain-voyageai
 - Reducing embedding dimensions
 - Handling multilingual content
 
-## Embedding Model Comparison (2026)
+## Model Selection Guide
 
-| Model | Dimensions | Max Tokens | Best For |
-|-------|------------|------------|----------|
-| **voyage-3-large** | 1024 | 32000 | Claude apps (Anthropic recommended) |
-| **voyage-3** | 1024 | 32000 | Claude apps, cost-effective |
-| **voyage-code-3** | 1024 | 32000 | Code search |
-| **voyage-finance-2** | 1024 | 32000 | Financial documents |
-| **voyage-law-2** | 1024 | 32000 | Legal documents |
-| **text-embedding-3-large** | 3072 | 8191 | OpenAI apps, high accuracy |
-| **text-embedding-3-small** | 1536 | 8191 | OpenAI apps, cost-effective |
-| **bge-large-en-v1.5** | 1024 | 512 | Open source, local deployment |
-| **all-MiniLM-L6-v2** | 384 | 256 | Fast, lightweight |
-| **multilingual-e5-large** | 1024 | 512 | Multi-language |
+Choose the embedding family before choosing a specific model revision:
+
+| Family | Best For | Trade-Off |
+|--------|----------|-----------|
+| Hosted general-purpose | Production search and document retrieval | Ongoing API cost |
+| Hosted code-focused | Code search and technical documentation | Narrower domain fit |
+| Multilingual | Cross-language retrieval | Higher evaluation burden |
+| Open-source and self-hosted | Air-gapped or cost-sensitive deployments | Infra and tuning overhead |
+| Lightweight local | Fast prototyping and low-resource systems | Lower recall ceiling |
+
+Use [references/templates.md](references/templates.md) and the bundled RAG references when you need concrete provider examples. Avoid hard-coding a preferred model family unless the project constraints already point to one.
 
 ## Embedding Pipeline
 
@@ -60,10 +59,10 @@ Document → Chunking → Preprocessing → Embedding Model → Vector
 from langchain_voyageai import VoyageAIEmbeddings
 import os
 
-# Initialize (recommended for Claude apps)
+# Example hosted embedding client
 embeddings = VoyageAIEmbeddings(
 // ... (10 lines trimmed)
-# Domain-specific models
+# Provider-specific model choices
 code_embeddings = VoyageAIEmbeddings(model="voyage-code-3")
 finance_embeddings = VoyageAIEmbeddings(model="voyage-finance-2")
 ```
@@ -77,7 +76,7 @@ finance_embeddings = VoyageAIEmbeddings(model="voyage-finance-2")
 - **Normalize embeddings**: For cosine similarity search
 - **Batch requests**: More efficient than one-by-one
 - **Cache embeddings**: Avoid recomputing for static content
-- **Use Voyage AI for Claude apps**: Recommended by Anthropic
+- **Evaluate with your own corpus**: Retrieval quality depends on your documents and queries
 
 ### Don'ts
 

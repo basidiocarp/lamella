@@ -1,6 +1,6 @@
 ---
 name: component-architecture
-description: "React, Vue, and Svelte component patterns: CSS-in-JS, composition, reusable architecture. Use when building UI component libraries, designing component APIs, or implementing frontend component architecture."
+description: "Designs reusable frontend component architectures. Use when building UI libraries, shaping component APIs, choosing composition patterns, or evaluating React, Vue, or Svelte component structure."
 ---
 
 # Component Architecture

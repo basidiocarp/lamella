@@ -1,10 +1,6 @@
 ---
 name: atmos-yaml-functions
-description: "YAML functions: !terraform.state, !terraform.output, !store, !store.get, !env, !exec, !include, !template, !literal, !random, !aws.*, !cwd, !repo-root. Use when using Atmos YAML functions like !terraform.output, !store, !env, !exec, or debugging function evaluation."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/yaml-functions.md
+description: "Uses Atmos YAML functions such as !terraform.state, !terraform.output, !store, !store.get, !env, !exec, !include, !template, !literal, !random, !aws.*, !cwd, and !repo-root for dynamic configuration. Use when using Atmos YAML functions like !terraform.output, !store, !env, or !exec, or when debugging function evaluation."
 ---
 
 # Atmos YAML Functions

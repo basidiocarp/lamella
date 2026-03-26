@@ -1,10 +1,6 @@
 ---
 name: atmos-introspection
-description: "Introspection & Querying: describe/list commands, config filtering, workspace introspection, dependency graphs, YQ integration. Use when querying Atmos configuration, listing stacks/components, generating dependency graphs, or debugging stack resolution."
-metadata:
-  version: "1.0.0"
-  references:
-    - references/commands-reference.md
+description: "Queries Atmos configuration, workspace state, dependency graphs, and filtered stack data. Use when querying Atmos configuration, listing stacks or components, generating dependency graphs, or debugging stack resolution."
 ---
 
 # Atmos Introspection
@@ -60,7 +56,9 @@ use these commands to understand the user's workspace instead of guessing at con
 
 Display the complete, fully resolved configuration for a specific component in a stack.
 
-```bash
+These commands are shell-neutral and work the same in Bash, Zsh, and PowerShell.
+
+```text
 atmos describe component vpc -s plat-ue2-prod
 atmos describe component vpc -s plat-ue2-prod --format json
 atmos describe component vpc -s plat-ue2-prod --provenance

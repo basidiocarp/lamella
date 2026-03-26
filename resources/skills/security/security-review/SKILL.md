@@ -1,9 +1,9 @@
 ---
 name: security-review
 description: >-
-  Comprehensive security checklist, OWASP Top 10 prevention patterns, and secure coding practices for application development.
+  Reviews application code against security checklists, OWASP Top 10 prevention patterns, and secure coding practices.
   Use when adding authentication, handling user input, working with secrets, creating API endpoints, implementing
-  payment/sensitive features, or hardening existing code against OWASP Top 10 vulnerabilities.
+  payment or sensitive features, or hardening existing code against OWASP Top 10 vulnerabilities.
 ---
 
 # Security Review Skill

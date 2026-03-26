@@ -112,6 +112,30 @@ async def fetch_with_timeout(url: str, timeout: float) -> dict[str, Any]:
         return [None] * len(urls)
 ```
 
+## Backpressure With Semaphores
+
+Use a semaphore when concurrency is correct but unbounded fan-out would overload an upstream service.
+
+```python
+import asyncio
+
+async def fetch_with_limit(
+    item_id: int,
+    semaphore: asyncio.Semaphore,
+) -> dict[str, int]:
+    async with semaphore:
+        await asyncio.sleep(0.1)
+        return {"item_id": item_id}
+
+
+async def fetch_batch(item_ids: list[int]) -> list[dict[str, int]]:
+    semaphore = asyncio.Semaphore(10)
+    tasks = [fetch_with_limit(item_id, semaphore) for item_id in item_ids]
+    return await asyncio.gather(*tasks)
+```
+
+Use this for API rate limits, DB connection pressure, and bounded queue consumers.
+
 ## Background Tasks
 
 ```python
@@ -125,6 +149,28 @@ class BackgroundTaskManager:
 manager = BackgroundTaskManager()
 manager.create_task(background_job())
 ```
+
+## Cancellation Cleanup
+
+Cancellation is part of normal async control flow. Handle it explicitly when cleanup matters.
+
+```python
+import asyncio
+
+async def stream_events() -> None:
+    try:
+        while True:
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        await cleanup_stream()
+        raise
+
+
+async def cleanup_stream() -> None:
+    await asyncio.sleep(0)
+```
+
+If a coroutine owns a socket, stream, temp file, or background subscription, make the cleanup path explicit.
 
 ## Async Iteration Protocol
 

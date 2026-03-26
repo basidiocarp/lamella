@@ -1,12 +1,8 @@
 ---
 name: mental-models
 description: >-
-  Decision-making frameworks: first-principles decomposition, inversion (think backward from failure),
-  pre-mortem risk analysis, and second-order thinking (consequence chains). Use when facing complex
-  decisions, evaluating risks, or challenging assumptions.
-metadata:
-  category: methodology
-  version: 1.0.0
+  Applies decision-making frameworks such as first-principles decomposition, inversion, pre-mortems, and second-order thinking.
+  Use when facing complex decisions, evaluating risks, or challenging assumptions.
 ---
 
 # Mental Models for Decision Making

@@ -1,6 +1,6 @@
 {
   "name": "security",
-  "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices",
+  "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
   "source_plugin": "security",
   "resources": {
     "skills": [
@@ -11,6 +11,7 @@
       "security/cargo-fuzz",
       "security/codeql",
       "security/constant-time-crypto",
+      "security/dependency-auditor",
       "security/fuzz-harness-writing",
       "security/insecure-defaults",
       "security/memory-safety-patterns",
@@ -22,6 +23,7 @@
       "security/secrets-management",
       "security/security-audit-methodology",
       "security/security-review",
+      "security/soc2-compliance",
       "security/semgrep",
       "security/stride-analysis-patterns",
       "security/supply-chain-risk-auditor",

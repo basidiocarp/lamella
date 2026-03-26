@@ -21,7 +21,7 @@ python split-excalidraw-library.py <path-to-library-directory>
 
 1. Create library directory:
    ```bash
-   mkdir -p skills/excalidraw-diagram-generator/libraries/aws-architecture-icons
+   mkdir -p libraries/aws-architecture-icons
    ```
 
 2. Download and place library file:
@@ -32,7 +32,7 @@ python split-excalidraw-library.py <path-to-library-directory>
 
 3. Run the script:
    ```bash
-   python skills/excalidraw-diagram-generator/scripts/split-excalidraw-library.py skills/excalidraw-diagram-generator/libraries/aws-architecture-icons/
+   python scripts/split-excalidraw-library.py libraries/aws-architecture-icons/
    ```
 
 ### Output Structure
@@ -40,7 +40,7 @@ python split-excalidraw-library.py <path-to-library-directory>
 The script creates the following structure in the library directory:
 
 ```
-skills/excalidraw-diagram-generator/libraries/aws-architecture-icons/
+libraries/aws-architecture-icons/
   aws-architecture-icons.excalidrawlib  # Original file (kept)
   reference.md                          # Generated: Quick reference table
   icons/                                # Generated: Individual icon files
@@ -69,7 +69,7 @@ skills/excalidraw-diagram-generator/libraries/aws-architecture-icons/
 
 1. Download desired Excalidraw libraries from https://libraries.excalidraw.com/
 2. Run this script on each library file
-3. Move the generated folders to `../libraries/`
+3. Keep the generated folders under `libraries/`
 4. The AI assistant will use `reference.md` files to locate and use icons efficiently
 
 ### Library Sources (Examples — verify availability)

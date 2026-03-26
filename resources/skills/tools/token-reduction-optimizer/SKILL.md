@@ -1,16 +1,10 @@
 ---
 name: token-reduction-optimizer
-description: Optimize command outputs with RTK (Rust Token Killer) for 70% token reduction. Use when reducing token usage from git or shell commands, optimizing context window usage, or processing large command outputs.
-metadata:
-  version: 1.0.0
-  tags:
-  - optimization
-  - tokens
-  - efficiency
-  - git
+description: Reduces token-heavy command output with RTK. Use when git, test, build, or file commands produce verbose output
+  and a compact summary is more useful than raw logs.
 ---
-# RTK Optimizer Skill
 
+# Token Reduction Optimizer
 
 ## Contents
 
@@ -28,13 +22,13 @@ metadata:
 - [Recommendation](#recommendation)
 - [References](#references)
 
-**Purpose**: Automatically suggest RTK wrappers for high-verbosity commands to reduce token consumption.
+Use RTK when the user wants the result of a noisy command, not every line of the raw output.
 
 ## How It Works
 
 1. **Detect high-verbosity commands** in user requests
 2. **Suggest RTK wrapper** if applicable
-3. **Execute with RTK** when user confirms
+3. **Execute with RTK** when it preserves the information the user needs
 4. **Track savings** over session
 
 ## Supported Commands
@@ -80,44 +74,51 @@ metadata:
 ## Installation Check
 
 Before first use, verify RTK is installed:
-```bash
-rtk --version  # Should output: rtk 0.16.0+
+```sh
+rtk --version
 ```
 
 If not installed:
-```bash
-# Homebrew (macOS/Linux)
+```sh
+# Install With Homebrew
 brew install rtk-ai/tap/rtk
 
-# Cargo (all platforms)
+# Install With Cargo
 cargo install rtk
+```
+
+```powershell
+rtk --version
+if (-not $?) {
+  cargo install rtk
+}
 ```
 
 ## Usage Pattern
 
 ```markdown
-# When user requests high-verbosity command:
+# When the User Asks for a Verbose Command
 
 1. Acknowledge request
 2. Suggest RTK optimization:
    "I'll use `rtk git log` to reduce token usage by ~92%"
 3. Execute RTK command
-4. Track savings (optional):
+4. Report the tradeoff when it matters:
    "Saved ~13K tokens (baseline: 14K, RTK: 1K)"
 ```
 
 ## Session Tracking
 
-Optional: Track cumulative savings across session:
+Optional: Track cumulative savings across the session:
 
 ```bash
-# At session end
+# At Session End
 rtk gain  # Shows total token savings for session (SQLite-backed)
 ```
 
 ## Edge Cases
 
-- **Small outputs** (<100 chars): Skip RTK (overhead not worth it)
+- **Small outputs**: Skip RTK when the raw output is already easy to read
 - **Already using Claude tools**: Grep/Read tools are already optimized
 - **Multiple commands**: Batch with RTK wrapper once, not per command
 
@@ -135,27 +136,26 @@ Use RTK (Rust Token Killer) for high-verbosity commands:
 - file finding and reading
 ```
 
-## Metrics (Verified)
+## Metrics
 
-Based on real-world testing:
+Sample reductions from the skill's reference data:
 - `git log`: 13,994 chars → 1,076 chars (92.3% reduction)
 - `git status`: 100 chars → 24 chars (76.0% reduction)
 - `find`: 780 chars → 185 chars (76.3% reduction)
 - `git diff`: 15,815 chars → 6,982 chars (55.9% reduction)
 - `read file`: 163,587 chars → 61,339 chars (62.5% reduction)
 
-**Average: 72.6% token reduction**
+Treat these numbers as examples, not guarantees. The best check is whether the compact output still answers the user's question.
 
 ## Limitations
 
-- 446 stars on GitHub, actively maintained (30 releases in 23 days)
 - Not suitable for interactive commands
-- Rapid development cadence (check for breaking changes)
+- Output reduction can hide details the user explicitly asked to inspect
 
 ## Recommendation
 
 **Use RTK for**: git workflows, file operations, test frameworks, build tools, package managers
-**Skip RTK for**: small outputs, quick exploration, interactive commands
+**Skip RTK for**: quick exploration, interactive commands, or cases where raw output is the point
 
 ## References
 

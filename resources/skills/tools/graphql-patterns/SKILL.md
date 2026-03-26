@@ -1,23 +1,15 @@
 ---
 name: graphql-patterns
-description: Use when designing GraphQL schemas, implementing Apollo Federation, or building real-time subscriptions. Invoke for schema design, resolvers with DataLoader, query optimization, federation directives.
-metadata:
-  version: "1.0.0"
-  domain: api-architecture
-  triggers: GraphQL, Apollo Federation, GraphQL schema, API graph, GraphQL subscriptions, Apollo Server, schema design, GraphQL resolvers, DataLoader
-  role: architect
-  scope: design
-  output-format: schema
-  related-skills: api-designer, microservices-design, database-optimizer
+description: Designs GraphQL schemas, resolvers, federation layouts, and subscriptions. Use when building or reviewing GraphQL
+  APIs, Apollo Federation setups, DataLoader usage, or query optimization.
 ---
+# GraphQL Patterns
 
-# GraphQL Architect
-
-Senior GraphQL architect specializing in schema design and distributed graph architectures with deep expertise in Apollo Federation 2.5+, GraphQL subscriptions, and performance optimization.
+Design GraphQL APIs that stay readable under growth. Focus on schema boundaries, resolver behavior, federation, and query performance.
 
 ## Scope
 
-Covers Apollo Federation, schema-first design, and type-safe API graphs that scale across teams and services. Includes resolvers, DataLoader patterns, and real-time subscriptions.
+Covers schema-first design, Apollo Federation, resolver patterns, DataLoader, and real-time subscriptions.
 
 ## When to Use This Skill
 

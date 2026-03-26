@@ -1,8 +1,6 @@
 ---
 name: atmos-auth
-description: "Authentication and identity management: providers (SSO/SAML/OIDC/GCP), identities (AWS/Azure/GCP), keyring, identity chaining, login/exec/shell/console. Use when configuring Atmos authentication, setting up SSO/SAML/OIDC, managing cloud identities, or troubleshooting login issues."
-metadata:
-  version: "1.0.0"
+description: "Configures Atmos authentication and identity management across providers, cloud identities, keyring usage, and chained sessions. Use when configuring Atmos authentication, setting up SSO/SAML/OIDC, managing cloud identities, or troubleshooting login issues."
 ---
 
 # Atmos Authentication and Identity Management
@@ -314,10 +312,20 @@ All commands accepting `--identity` support three modes: with value (use that id
 
 Disable Atmos-managed auth to use native cloud provider credentials:
 
-```bash
+```text
 atmos terraform plan mycomponent --stack=dev --identity=false
-# or
+```
+
+Bash or Zsh:
+
+```bash
 export ATMOS_IDENTITY=false
+```
+
+PowerShell:
+
+```powershell
+$env:ATMOS_IDENTITY = "false"
 ```
 
 Recognized disable values: `false`, `0`, `no`, `off` (case-insensitive).

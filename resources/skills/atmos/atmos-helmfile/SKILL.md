@@ -1,8 +1,6 @@
 ---
 name: atmos-helmfile
-description: "Helmfile orchestration: sync/apply/destroy/diff, Kubernetes deployments, varfile generation, EKS integration, source management. Use when orchestrating Helmfile with Atmos, deploying to Kubernetes, or managing Helm releases via stacks."
-metadata:
-  version: "1.0.0"
+description: "Orchestrates Helmfile operations, Kubernetes deployments, varfile generation, EKS integration, and source management through Atmos. Use when orchestrating Helmfile with Atmos, deploying to Kubernetes, or managing Helm releases via stacks."
 ---
 
 # Atmos Helmfile Orchestration

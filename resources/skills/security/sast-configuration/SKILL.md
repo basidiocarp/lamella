@@ -1,7 +1,7 @@
 ---
 name: sast-configuration
 description: >-
-  Configure Static Application Security Testing (SAST) tools for automated vulnerability detection, including SARIF result
+  Configures Static Application Security Testing (SAST) tools for automated vulnerability detection, including SARIF result
   parsing and processing. Use when setting up security scanning, implementing DevSecOps practices, automating code vulnerability
   detection, or processing SARIF output from scanners like CodeQL and Semgrep.
 ---

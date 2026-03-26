@@ -1,6 +1,6 @@
 ---
 name: create-workflow-command
-description: "Create a workflow command that orchestrates multi-step execution through sub-agents with file-based task prompts. Use when building multi-step automation, creating orchestrator commands, or designing sub-agent workflows."
+description: "Creates workflow commands that orchestrate multi-step execution through sub-agents with file-based task prompts. Use when building multi-step automation, creating orchestrator commands, or designing sub-agent workflows."
 metadata:
   argument-hint: "[workflow-name] [description]"
 ---

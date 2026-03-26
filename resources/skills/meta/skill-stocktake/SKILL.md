@@ -1,6 +1,6 @@
 ---
 name: skill-stocktake
-description: "Use when auditing Claude skills and commands for quality. Supports Quick Scan (changed skills only) and Full Stocktake modes with sequential subagent batch evaluation."
+description: "Audits Claude skills and commands for quality. Supports Quick Scan for changed files and Full Stocktake for sequential subagent batch evaluation."
 ---
 
 # skill-stocktake
@@ -10,6 +10,7 @@ description: "Use when auditing Claude skills and commands for quality. Supports
 
 - [Scope](#scope)
 - [Modes](#modes)
+- [Single Skill Checks](#single-skill-checks)
 - [Quick Scan Flow](#quick-scan-flow)
 - [Full Stocktake Flow](#full-stocktake-flow)
 - [Results File Schema](#results-file-schema)
@@ -47,6 +48,37 @@ If the project has no `.claude/skills/` directory, only global skills and comman
 | Full Stocktake | `results.json` absent, or `/skill-stocktake full` | 20–30 min |
 
 **Results cache:** `~/.claude/skills/skill-stocktake/results.json`
+
+## Single Skill Checks
+
+Use these helper scripts when importing or editing one skill and you want a fast local pass before the broader stocktake.
+
+### Structural validation
+
+```bash
+python scripts/validate_skill.py /path/to/skill
+python scripts/validate_skill.py /path/to/skill --json
+```
+
+Checks frontmatter, description shape, local links, and basic layout expectations.
+
+### Bundled Python script tests
+
+```bash
+python scripts/test_python_scripts.py /path/to/skill
+python scripts/test_python_scripts.py /path/to/skill --timeout 15 --json
+```
+
+Compiles bundled Python scripts and smoke-tests `--help` output.
+
+### Lightweight quality score
+
+```bash
+python scripts/score_skill_quality.py /path/to/skill
+python scripts/score_skill_quality.py /path/to/skill --json
+```
+
+Uses the rubric in `references/quality-rubric.md` for quick triage, not as a replacement for human review.
 
 ## Quick Scan Flow
 
@@ -176,3 +208,4 @@ Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximat
 - Evaluation is blind: the same checklist applies to all skills regardless of origin
 - Archive / delete operations always require explicit user confirmation
 - No verdict branching by skill origin
+- For imported skills, use the helper scripts first, then run the broader stocktake or repository validator

@@ -90,7 +90,7 @@ Comprehensive guide to auditing web content against WCAG 2.2 guidelines with act
 # CLI tools
 npx @axe-core/cli https://example.com
 npx pa11y https://example.com
-lighthouse https://example.com --only-categories=accessibility
+npx lighthouse https://example.com --only-categories=accessibility
 ```
 
 ```javascript
@@ -135,9 +135,9 @@ test('should have no accessibility violations', async ({ page }) => {
 
 | File | Description |
 |------|-------------|
-| [perceivable-checklist.md](references/perceivable-checklist.md) | Full WCAG Principle 1 checklist |
-| [operable-checklist.md](references/operable-checklist.md) | Full WCAG Principle 2 checklist |
-| [understandable-checklist.md](references/understandable-checklist.md) | Full WCAG Principle 3 checklist |
-| [robust-checklist.md](references/robust-checklist.md) | Full WCAG Principle 4 checklist |
-| [remediation-patterns.md](references/remediation-patterns.md) | Fix patterns for common issues |
-| [automated-testing.md](references/automated-testing.md) | axe-core integration examples |
+| [perceivable-checklist.md](perceivable-checklist.md) | Full WCAG Principle 1 checklist |
+| [operable-checklist.md](operable-checklist.md) | Full WCAG Principle 2 checklist |
+| [understandable-checklist.md](understandable-checklist.md) | Full WCAG Principle 3 checklist |
+| [robust-checklist.md](robust-checklist.md) | Full WCAG Principle 4 checklist |
+| [remediation-patterns.md](remediation-patterns.md) | Fix patterns for common issues |
+| [automated-testing.md](automated-testing.md) | axe-core integration examples |

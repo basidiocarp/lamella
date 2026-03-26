@@ -63,9 +63,9 @@ html, body {
 | Mood | Good Presets |
 |------|--------------|
 | Impressed / Confident | Bold Signal, Electric Studio, Dark Botanical |
-| Excited / Energized | Creative Voltage, Neon Cyber, Split Pastel |
-| Calm / Focused | Notebook Tabs, Paper & Ink, Swiss Modern |
-| Inspired / Moved | Dark Botanical, Vintage Editorial, Pastel Geometry |
+| Excited / Energized | Creative Voltage, Neon Cyber, Split Pastel, Sunset Boulevard |
+| Calm / Focused | Notebook Tabs, Paper & Ink, Swiss Modern, Ocean Depths |
+| Inspired / Moved | Dark Botanical, Vintage Editorial, Pastel Geometry, Sunset Boulevard |
 
 ## Preset Catalog
 
@@ -164,6 +164,22 @@ html, body {
 - Fonts: Cormorant Garamond + Source Serif 4
 - Palette: warm cream, charcoal, crimson accent
 - Signature: pull quotes, drop caps, elegant rules
+
+### 13. Ocean Depths
+
+- Vibe: calm, trustworthy, executive-ready
+- Best for: financial reviews, consulting decks, internal strategy updates
+- Fonts: Manrope + Source Sans 3
+- Palette: deep navy, teal, seafoam, warm cream
+- Signature: dark surfaces with restrained aquatic accents and low-noise contrast
+
+### 14. Sunset Boulevard
+
+- Vibe: warm, cinematic, optimistic
+- Best for: launch storytelling, brand narratives, creative strategy reviews
+- Fonts: Sora + DM Sans
+- Palette: ember orange, deep plum, soft gold, evening neutrals
+- Signature: warm gradient fields, glowing edge accents, and contrast-heavy highlight cards
 
 ## Direct Selection Prompts
 

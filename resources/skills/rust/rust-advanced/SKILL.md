@@ -1,23 +1,15 @@
 ---
 name: rust-advanced
-description: Use when building Rust applications requiring memory safety, systems programming, or zero-cost abstractions. Invoke for ownership patterns, lifetimes, traits, async/await with tokio.
-metadata:
-  version: "1.0.0"
-  domain: language
-  triggers: Rust, Cargo, ownership, borrowing, lifetimes, async Rust, tokio, zero-cost abstractions, memory safety, systems programming
-  role: specialist
-  scope: implementation
-  output-format: code
-  related-skills: test-master
+description: "Guides advanced Rust implementation work. Use when building memory-safe systems, designing trait-heavy APIs, structuring async Rust code, or balancing ownership, lifetimes, and performance."
 ---
 
-# Rust Engineer
+# Advanced Rust Development
 
-Senior Rust engineer with deep expertise in Rust 2021 edition, systems programming, memory safety, and zero-cost abstractions. Specializes in building reliable, high-performance software leveraging Rust's ownership system.
+Guidance for advanced Rust work that spans ownership, async execution, trait design, performance, and API ergonomics.
 
 ## Scope
 
-Covers Rust's ownership model, async programming with tokio, trait-based design, and performance optimization. Focus on memory-safe, concurrent systems with zero-cost abstractions.
+Covers Rust 2024, async programming with tokio, trait-based design, and performance-aware implementation. Focus on memory-safe concurrent systems with clear APIs and explicit trade-offs.
 
 ## When to Use This Skill
 
@@ -36,17 +28,19 @@ Covers Rust's ownership model, async programming with tokio, trait-based design,
 4. **Handle errors** - Use Result/Option with ? operator and custom error types
 5. **Test thoroughly** - Unit tests, integration tests, property testing, benchmarks
 
-## Reference Guide
+## Related Skills
 
-Load detailed guidance based on context:
+Load the focused skill that matches the bottleneck:
 
-| Topic | Reference | Load When |
-|-------|-----------|-----------|
-| Ownership | `references/ownership.md` | Lifetimes, borrowing, smart pointers, Pin |
-| Traits | `references/traits.md` | Trait design, generics, associated types, derive |
-| Error Handling | `references/error-handling.md` | Result, Option, ?, custom errors, thiserror |
-| Async | `references/async.md` | async/await, tokio, futures, streams, concurrency |
-| Testing | `references/testing.md` | Unit/integration tests, proptest, benchmarks |
+| Topic | Skill | Load When |
+|-------|-------|-----------|
+| Ownership and lifetimes | `ownership` | Lifetimes, borrowing, moved values, clone trade-offs |
+| Smart pointers | `resource-mgmt` | Box, Rc, Arc, Weak, RefCell, Cell |
+| Mutability | `mutability` | Borrow conflicts, interior mutability, mutable aliasing |
+| Generics and traits | `zero-cost` | Trait bounds, object safety, dispatch choices |
+| Async and threading | `concurrency` | Send or Sync, async runtimes, channels, locks |
+| Unsafe code | `unsafe-checker` | FFI, raw pointers, transmute, SAFETY invariants |
+| Latest crate or Rust info | `rust-learner` | Versions, changelogs, docs.rs, edition questions |
 
 ## Constraints
 
@@ -81,4 +75,4 @@ When implementing Rust features, provide:
 
 ## Knowledge Reference
 
-Rust 2021, Cargo, ownership/borrowing, lifetimes, traits, generics, async/await, tokio, Result/Option, thiserror/anyhow, serde, clippy, rustfmt, cargo-test, criterion benchmarks, MIRI, unsafe Rust
+Rust 2024, Cargo, ownership and borrowing, lifetimes, traits, generics, async and await, tokio, Result and Option, thiserror and anyhow, serde, clippy, rustfmt, cargo test, criterion benchmarks, Miri, unsafe Rust

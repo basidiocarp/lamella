@@ -1,6 +1,6 @@
 ---
 name: deployment
-description: Deployment strategies, CI/CD pipeline design, Docker containerization, health checks, rollback procedures, and production readiness. Use when implementing deployment workflows, configuring CI/CD pipelines, planning rollback procedures, or preparing production releases.
+description: Guides deployment strategies, CI/CD pipeline design, Docker containerization, health checks, rollback procedures, and production readiness. Use when implementing deployment workflows, configuring CI/CD pipelines, planning rollback procedures, or preparing production releases.
 ---
 
 # Deployment

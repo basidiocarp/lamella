@@ -1,6 +1,6 @@
 ---
 name: aws-serverless-eda
-description: AWS serverless and event-driven architecture. Lambda, API Gateway, DynamoDB, Step Functions, EventBridge, SQS, SNS patterns. Use when designing AWS serverless architectures, implementing Lambda/API Gateway, or building event-driven systems with EventBridge/SQS/SNS.
+description: Designs AWS serverless and event-driven architectures with Lambda, API Gateway, DynamoDB, Step Functions, EventBridge, SQS, and SNS. Use when implementing AWS serverless systems or building event-driven workflows.
 metadata:
   context: fork
   skills:

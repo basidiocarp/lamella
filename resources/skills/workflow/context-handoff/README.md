@@ -74,9 +74,9 @@ The handoff lets Claude hit the ground running without lengthy re-explanation.
 
 ## Related: Compaction Hook
 
-For in-session continuity (when context compacts but session continues), see the
-[compaction-hook](../compaction-hook/). It automatically improves what gets
-preserved during compaction.
+For in-session continuity when the session continues but context compacts, use
+your configured compaction or continuation workflow. This skill is specifically
+for cross-session handoff files.
 
 | Handoff Skill            | Compaction Hook           |
 | ------------------------ | ------------------------- |

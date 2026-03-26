@@ -1,9 +1,10 @@
 {
   "name": "database",
-  "description": "Database development: SQL optimization, PostgreSQL, migrations, and data modeling",
+  "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
   "source_plugin": "database",
   "resources": {
     "skills": [
+      "database/database-schema-designer",
       "database/postgresql",
       "database/sql-pro"
     ],

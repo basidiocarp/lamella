@@ -1,7 +1,7 @@
 ---
 name: context-handoff
 description:
-  Create a structured session handoff document for continuity across sessions.
+  Creates a structured session handoff document for continuity across sessions.
   Use when ending a work session, switching contexts, or before a break.
   Captures decisions, progress, code changes, and next steps so a future session
   can pick up where you left off without losing context.
@@ -158,7 +158,7 @@ re-explanation.
 ```markdown
 # Session Handoff: Auth System Implementation
 
-**Date:** 2025-01-15 **Project:** /Users/robert/projects/my-api **Session
+**Date:** 2025-01-15 **Project:** /path/to/my-api **Session
 Duration:** ~2 hours
 
 // ... (49 lines trimmed)

@@ -1,6 +1,6 @@
 ---
 name: payload
-description: Use when working with Payload CMS projects (payload.config.ts, collections, fields, hooks, access control, Payload API). Use when debugging validation errors, security issues, relationship queries, transactions, or hook behavior.
+description: Guides development in Payload CMS projects, including config, collections, fields, hooks, access control, and the Payload API. Use when debugging validation errors, security issues, relationship queries, transactions, or hook behavior.
 ---
 
 # Payload CMS Application Development

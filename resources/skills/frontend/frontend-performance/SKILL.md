@@ -1,6 +1,6 @@
 ---
 name: frontend-performance
-description: "Frontend performance profiling: Core Web Vitals, bundle analysis, React optimization, rendering performance. Use when debugging slow page loads, optimizing React rendering, analyzing bundle size, or improving Core Web Vitals scores."
+description: "Profiles and improves frontend performance. Use when debugging slow page loads, analyzing bundle size, optimizing React rendering, or improving Core Web Vitals."
 ---
 
 # Frontend Performance
@@ -53,6 +53,12 @@ npx webpack-bundle-analyzer stats.json
 
 # Vite
 npx vite-bundle-visualizer
+```
+
+PowerShell equivalent for the Next.js example:
+
+```powershell
+$env:ANALYZE='true'; npm run build
 ```
 
 ## React Performance

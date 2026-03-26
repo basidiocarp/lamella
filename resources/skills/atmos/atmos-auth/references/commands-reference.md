@@ -254,24 +254,39 @@ ARM_CLIENT_ID                # Azure AD application (client) ID for OIDC
 
 ### Examples
 
-```shell
-# Set environment in current shell
-eval $(atmos auth env)
-eval $(atmos auth env --identity prod-admin)
+Bash or Zsh:
 
-# JSON output for scripting
-// ... (9 lines trimmed)
-# PowerShell
+```bash
+# Set environment in current shell
+eval "$(atmos auth env)"
+eval "$(atmos auth env --identity prod-admin)"
+```
+
+JSON output for scripting:
+
+```shell
+atmos auth env --format json
+atmos auth env --identity prod-admin --format json
+```
+
+PowerShell:
+
+```powershell
 $envVars = atmos auth env --format json | ConvertFrom-Json
 $envVars.PSObject.Properties | ForEach-Object { Set-Item -Path "Env:$($_.Name)" -Value $_.Value }
 ```
 
 ### Shell Profile Integration
 
-Safe to add to `~/.bashrc` or `~/.zshrc` -- does not trigger login prompts:
+Safe to add to `~/.bashrc`, `~/.zshrc`, or your PowerShell profile. It does not trigger login prompts.
 
 ```bash
-eval $(atmos auth env)
+eval "$(atmos auth env)"
+```
+
+```powershell
+$envVars = atmos auth env --format json | ConvertFrom-Json
+$envVars.PSObject.Properties | ForEach-Object { Set-Item -Path "Env:$($_.Name)" -Value $_.Value }
 ```
 
 ---
@@ -313,9 +328,15 @@ atmos auth console --identity prod-admin                # Specific identity
 atmos auth console --destination s3                     # AWS S3 console (alias)
 atmos auth console --destination ec2 --duration 4h      # EC2 with custom duration
 atmos auth console --destination https://console.aws.amazon.com/cloudformation
-atmos auth console --print-only | pbcopy                # Copy URL to clipboard (macOS)
+atmos auth console --print-only                         # Print URL to stdout for copy/paste or clipboard tools
 atmos auth console --no-open                            # Display URL only
 atmos auth console --issuer devops-team --duration 2h   # Custom issuer
+```
+
+PowerShell clipboard example:
+
+```powershell
+atmos auth console --print-only | Set-Clipboard
 ```
 
 ### Notes

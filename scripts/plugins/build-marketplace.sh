@@ -19,6 +19,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 BUILD_SCRIPT="$SCRIPT_DIR/build-plugin.sh"
+VERSION_FILE="$BASE_DIR/VERSION"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -35,12 +36,19 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 MARKETPLACE_NAME="lamella"
 MARKETPLACE_OWNER="William Newton"
 MARKETPLACE_DESCRIPTION="Skill-Issue — curated skills, agents, and commands for Claude Code"
-MARKETPLACE_VERSION="1.0.0"
+DEFAULT_BUILD_VERSION="1.0.0"
+if [[ -f "$VERSION_FILE" ]]; then
+    DEFAULT_BUILD_VERSION="$(tr -d '[:space:]' < "$VERSION_FILE")"
+fi
+
+MARKETPLACE_VERSION="$DEFAULT_BUILD_VERSION"
+PLUGIN_VERSION="$DEFAULT_BUILD_VERSION"
 SOURCE_MODE="local"
 GIT_SOURCE_URL=""
 GIT_SOURCE_REF=""
 OUTPUT_DIR=""
 CATALOG_ONLY=false
+semver_regex='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
 
 usage() {
     cat <<EOF
@@ -55,6 +63,7 @@ Options:
   --owner-name <name>    Marketplace owner name
   --description <text>   Marketplace description
   --version <version>    Marketplace version
+  --plugin-version <v>   Version stamped into built plugin.json files and entries
   --source-mode <mode>   Plugin source mode: local | git-subdir
   --git-url <url>        Git URL used for hosted plugin sources
   --git-ref <ref>        Git branch/tag used for hosted plugin sources
@@ -80,6 +89,26 @@ check_deps() {
     fi
 }
 
+is_semver() {
+    local version="$1"
+    [[ "$version" =~ $semver_regex ]]
+}
+
+clear_output_dir() {
+    local output_dir="$1"
+
+    rm -rf "$output_dir" 2>/dev/null || true
+    if [[ -e "$output_dir" ]]; then
+        find "$output_dir" -mindepth 1 -exec rm -rf {} + 2>/dev/null || true
+        rmdir "$output_dir" 2>/dev/null || true
+    fi
+
+    if [[ -e "$output_dir" ]]; then
+        log_error "Could not clear output directory: $output_dir"
+        exit 1
+    fi
+}
+
 parse_args() {
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -101,6 +130,10 @@ parse_args() {
                 ;;
             --version)
                 MARKETPLACE_VERSION="$2"
+                shift 2
+                ;;
+            --plugin-version)
+                PLUGIN_VERSION="$2"
                 shift 2
                 ;;
             --source-mode)
@@ -142,6 +175,16 @@ parse_args() {
 }
 
 validate_config() {
+    if ! is_semver "$MARKETPLACE_VERSION"; then
+        log_error "Invalid marketplace version: $MARKETPLACE_VERSION"
+        exit 1
+    fi
+
+    if ! is_semver "$PLUGIN_VERSION"; then
+        log_error "Invalid plugin version: $PLUGIN_VERSION"
+        exit 1
+    fi
+
     case "$SOURCE_MODE" in
         local)
             if $CATALOG_ONLY; then
@@ -344,7 +387,7 @@ build_marketplace() {
 
     if ! $CATALOG_ONLY; then
         # Clean output
-        rm -rf "$output_dir"
+        clear_output_dir "$output_dir"
         mkdir -p "$plugins_dir"
     else
         mkdir -p "$output_dir/.claude-plugin"
@@ -355,22 +398,13 @@ build_marketplace() {
     local failed=0
     local plugin_entries=""
 
-    # Build each plugin
-    for manifest in "$manifests_dir"/*.json; do
-        local basename_file
-        basename_file=$(basename "$manifest")
-
-        # Skip non-plugin files
-        [[ "$basename_file" == "schema.json" ]] && continue
-        [[ "$basename_file" == "index.json" ]] && continue
-
-        local name
-        name=$(jq -r '.name // empty' "$manifest")
+    # Build each plugin in stable plugin-name order.
+    while IFS=$'\t' read -r name manifest; do
         [[ -z "$name" ]] && continue
 
         local description version
         description=$(jq -r '.description // ""' "$manifest")
-        version=$(jq -r '.version // "1.0.0"' "$manifest")
+        version="$PLUGIN_VERSION"
 
         if $CATALOG_ONLY; then
             local entry
@@ -382,7 +416,7 @@ build_marketplace() {
             fi
             built=$((built + 1))
         else
-            if bash "$BUILD_SCRIPT" "$manifest" "$plugins_dir/$name" 2>&1 | sed 's/^/  /'; then
+            if bash "$BUILD_SCRIPT" --version "$PLUGIN_VERSION" "$manifest" "$plugins_dir/$name" 2>&1 | sed 's/^/  /'; then
                 built=$((built + 1))
 
                 local entry
@@ -400,7 +434,18 @@ build_marketplace() {
         fi
 
         echo ""
-    done
+    done < <(
+        for manifest in "$manifests_dir"/*.json; do
+            basename_file=$(basename "$manifest")
+            [[ "$basename_file" == "schema.json" ]] && continue
+            [[ "$basename_file" == "index.json" ]] && continue
+
+            plugin_name=$(jq -r '.name // empty' "$manifest")
+            [[ -z "$plugin_name" ]] && continue
+
+            printf '%s\t%s\n' "$plugin_name" "$manifest"
+        done | LC_ALL=C sort -t $'\t' -k1,1
+    )
 
     mkdir -p "$output_dir/.claude-plugin"
     generate_marketplace_json "$output_dir" "$plugin_entries"
@@ -428,6 +473,8 @@ build_marketplace() {
         echo -e "  Failed:        ${RED}$failed${NC}"
     fi
     echo -e "  Output:        $output_dir"
+    echo -e "  Catalog ver:   $MARKETPLACE_VERSION"
+    echo -e "  Plugin ver:    $PLUGIN_VERSION"
     echo ""
     echo -e "${BOLD}Install the marketplace:${NC}"
     echo "  /plugin marketplace add $output_dir"

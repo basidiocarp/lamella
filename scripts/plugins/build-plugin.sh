@@ -34,11 +34,12 @@ log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 usage() {
-    echo "Usage: $0 <manifest.json> [output-dir]"
+    echo "Usage: $0 [--version <version>] <manifest.json> [output-dir]"
     echo ""
     echo "Builds a Skill-Issue manifest into an official Claude Code plugin."
     echo ""
     echo "Arguments:"
+    echo "  --version       Override plugin.json version for this build"
     echo "  manifest.json   Path to plugin manifest (e.g., manifests/claude/core.json)"
     echo "  output-dir      Output directory (default: dist/claude/plugins/<plugin-name>)"
     echo ""
@@ -58,6 +59,19 @@ check_deps() {
         log_error "jq is required. Install with: brew install jq"
         exit 1
     fi
+}
+
+VERSION_FILE="$BASE_DIR/VERSION"
+DEFAULT_BUILD_VERSION=""
+if [[ -f "$VERSION_FILE" ]]; then
+    DEFAULT_BUILD_VERSION="$(tr -d '[:space:]' < "$VERSION_FILE")"
+fi
+
+semver_regex='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+
+is_semver() {
+    local version="$1"
+    [[ "$version" =~ $semver_regex ]]
 }
 
 json_get() { jq -r "$2 // empty" "$1"; }
@@ -272,11 +286,11 @@ copy_standalone() {
 
 # Generate .claude-plugin/plugin.json from our manifest
 generate_plugin_json() {
-    local manifest="$1" output_dir="$2"
+    local manifest="$1" output_dir="$2" plugin_version="$3"
     mkdir -p "$output_dir/.claude-plugin"
-    jq '{
+    jq --arg version "$plugin_version" '{
         name: .name,
-        version: .version,
+        version: $version,
         description: .description,
         author: { name: (.author // "lamella") },
         license: (.license // "MIT"),
@@ -285,19 +299,30 @@ generate_plugin_json() {
 }
 
 build_plugin() {
-    local manifest="$1" output_dir="$2"
+    local manifest="$1" output_dir="$2" version_override="${3:-}"
 
     if [[ ! -f "$manifest" ]]; then
         log_error "Manifest not found: $manifest"
         exit 1
     fi
 
-    local name version
+    local name version manifest_version
     name=$(json_get "$manifest" ".name")
-    version=$(json_get "$manifest" ".version")
+    manifest_version=$(json_get "$manifest" ".version")
+    version="${version_override:-${DEFAULT_BUILD_VERSION:-$manifest_version}}"
 
     if [[ -z "$name" ]]; then
         log_error "Manifest missing required field: name"
+        exit 1
+    fi
+
+    if [[ -z "$version" ]]; then
+        log_error "No plugin version found for $name. Set --version or add VERSION."
+        exit 1
+    fi
+
+    if ! is_semver "$version"; then
+        log_error "Invalid plugin version '$version' for $name"
         exit 1
     fi
 
@@ -308,7 +333,7 @@ build_plugin() {
     rm -rf "$output_dir"
     mkdir -p "$output_dir"
 
-    generate_plugin_json "$manifest" "$output_dir"
+    generate_plugin_json "$manifest" "$output_dir" "$version"
     log_success "  .claude-plugin/plugin.json"
 
     local total_missing=0
@@ -356,8 +381,38 @@ main() {
     check_deps
     [[ $# -lt 1 ]] && usage
 
-    local manifest="$1"
-    local output_dir="${2:-}"
+    local version_override=""
+    local manifest=""
+    local output_dir=""
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --version)
+                version_override="$2"
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                ;;
+            -*)
+                log_error "Unknown option: $1"
+                usage
+                ;;
+            *)
+                if [[ -z "$manifest" ]]; then
+                    manifest="$1"
+                elif [[ -z "$output_dir" ]]; then
+                    output_dir="$1"
+                else
+                    log_error "Unexpected extra argument: $1"
+                    usage
+                fi
+                shift
+                ;;
+        esac
+    done
+
+    [[ -z "$manifest" ]] && usage
 
     if [[ ! "$manifest" = /* ]]; then
         if [[ -f "$manifest" ]]; then
@@ -367,7 +422,7 @@ main() {
         fi
     fi
 
-    build_plugin "$manifest" "$output_dir"
+    build_plugin "$manifest" "$output_dir" "$version_override"
 }
 
 main "$@"

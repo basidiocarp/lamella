@@ -2,6 +2,18 @@
 
 All notable changes to Lamella are documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- **Version source of truth**: Added a root `VERSION` file and a marketplace catalog validator so tracked marketplace metadata stays aligned with the current release target.
+
+### Changed
+
+- **Build-time version stamping**: `build-plugin.sh` and `build-marketplace.sh` now support explicit version overrides and default to the root `VERSION` file for local builds.
+- **Main marketplace publishing**: `publish-marketplace.yml` now publishes moving `-dev.<run>` snapshots from `main` instead of reusing tag events for mutable `gh-pages` builds.
+- **Release asset versioning**: `release.yml` now stamps the tag-derived semver into built Claude marketplace artifacts before packaging them.
+
 ## [0.4.2] - 2026-03-22
 
 ### Fixed

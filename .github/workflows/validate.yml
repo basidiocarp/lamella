@@ -36,5 +36,8 @@ jobs:
       - name: Validate manifests
         run: node scripts/ci/validate-manifests.js
 
+      - name: Validate marketplace catalog
+        run: node scripts/ci/validate-marketplace-catalog.js
+
       - name: Validate cross-references
         run: node scripts/ci/validate-xrefs.js

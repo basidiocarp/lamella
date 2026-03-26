@@ -3,7 +3,6 @@ name: Publish Marketplace
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
@@ -23,9 +22,20 @@ jobs:
       - name: Run validators
         run: make validate
 
+      - name: Resolve snapshot version
+        run: |
+          BASE_VERSION="$(tr -d '[:space:]' < VERSION)"
+          if ! [[ "$BASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid VERSION: $BASE_VERSION" >&2
+            exit 1
+          fi
+          echo "MARKETPLACE_VERSION=${BASE_VERSION}-dev.${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+
       - name: Build hosted Claude marketplace
         run: |
           ./lamella build-marketplace \
+            --version "${{ env.MARKETPLACE_VERSION }}" \
+            --plugin-version "${{ env.MARKETPLACE_VERSION }}" \
             --source-mode git-subdir \
             --git-url "https://github.com/${{ github.repository }}.git" \
             --git-ref gh-pages

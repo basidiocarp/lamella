@@ -26,6 +26,7 @@ validate: ## Run all CI validators
 	@node scripts/ci/validate-rules.js
 	@node scripts/ci/validate-skills.js
 	@node scripts/ci/validate-manifests.js
+	@node scripts/ci/validate-marketplace-catalog.js
 	@node scripts/ci/validate-xrefs.js
 	@echo "All validators passed."
 

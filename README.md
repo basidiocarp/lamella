@@ -98,6 +98,15 @@ After GitHub Pages is enabled for the repository, add the marketplace in Claude 
 
 The hosted catalog points plugin installs back to the same repository's `gh-pages` branch, so users can install and update plugins from a stable marketplace URL without needing a local checkout.
 
+### Marketplace versioning
+
+`lamella` uses a two-layer versioning flow:
+
+- `VERSION` holds the next base release version for Claude marketplace builds on `main`
+- tagged releases (`vX.Y.Z`) stamp `X.Y.Z` into the built marketplace and plugin manifests
+
+The hosted `gh-pages` marketplace is intentionally mutable. Pushes to `main` publish snapshot builds as `<VERSION>-dev.<run-number>`, while tagged releases publish immutable `.tar.gz` and `.zip` artifacts stamped with the tag version.
+
 ### Repository settings example
 
 If you want another repository to automatically offer lamella as a known marketplace, add this to that repo's Claude settings:
@@ -263,7 +272,7 @@ Install built plugins to `~/.claude/plugins/lamella/`:
 ## Validation
 
 ```bash
-make validate          # Source validators (7 scripts)
+make validate          # Source validators (8 scripts)
 node scripts/ci/validate-build.js  # Post-build validator
 ```
 
@@ -277,6 +286,8 @@ git push origin v1.2.3
 ```
 
 Windows users can download `lamella-claude-v1.2.3.zip`, extract it, and add the extracted `claude/` directory as a marketplace in Claude Code.
+
+Keep `CHANGELOG.md` current with an `Unreleased` section. When you cut a release, move those notes into a dated `X.Y.Z` entry, tag `vX.Y.Z`, and then bump `VERSION` to the next target on `main`.
 
 ## Environment Variables
 

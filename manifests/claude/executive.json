@@ -1,0 +1,31 @@
+{
+  "name": "executive",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning",
+  "tags": [
+    "executive",
+    "leadership",
+    "operating-rhythm",
+    "board",
+    "strategy"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "agile-pm/board-update-decks",
+      "agile-pm/company-culture-design",
+      "agile-pm/company-operating-rhythm",
+      "agile-pm/director-transition-coaching",
+      "agile-pm/executive-onboarding-diagnostic",
+      "agile-pm/manage-change-rollout",
+      "agile-pm/organizational-health-diagnostic",
+      "agile-pm/vp-cpo-transition-coaching",
+      "collaboration/founder-leadership-coaching",
+      "workflow/compound-scenario-planning",
+      "workflow/strategy-execution-alignment"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

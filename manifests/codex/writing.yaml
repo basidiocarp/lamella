@@ -1,13 +1,10 @@
 {
   "name": "writing",
-  "description": "Technical and product writing: documentation, articles, content strategy, email sequences, changelogs, and editorial workflows",
+  "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
   "source_plugin": "writing",
   "resources": {
     "skills": [
-      "writing/content-strategy",
-      "writing/content-writer",
       "writing/docs-style",
-      "writing/email-sequence",
       "writing/humanizer",
       "writing/latex-posters",
       "writing/release-notes",

@@ -1,6 +1,6 @@
 {
   "name": "tools",
-  "description": "CLI tools, shell and PowerShell scripting, workspace administration, analytics implementation, MCP integration, API design, and productivity utilities",
+  "description": "CLI tools, shell and PowerShell scripting, analytics implementation, MCP integration, API design, and productivity utilities",
   "source_plugin": "tools",
   "resources": {
     "skills": [
@@ -15,12 +15,10 @@
       "tools/docx-word-documents",
       "tools/excalidraw-diagram-generator",
       "tools/gh-cli-patterns",
-      "tools/google-workspace-operations",
       "tools/graphql-patterns",
       "tools/markitdown-converter",
       "tools/mcp-server-builder",
       "tools/mcp-integration",
-      "tools/microsoft-365-tenant-admin",
       "tools/mermaid-diagrams",
       "tools/obsidian",
       "tools/openapi-spec-generation",

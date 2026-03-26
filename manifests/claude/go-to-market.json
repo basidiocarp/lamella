@@ -1,0 +1,26 @@
+{
+  "name": "go-to-market",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
+  "tags": [
+    "go-to-market",
+    "launch",
+    "pricing",
+    "content",
+    "product-marketing"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "agile-pm/define-pricing-strategy",
+      "agile-pm/deliver-launch-checklist",
+      "agile-pm/deliver-working-backwards-press-release",
+      "writing/content-strategy",
+      "writing/content-writer",
+      "writing/email-sequence"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

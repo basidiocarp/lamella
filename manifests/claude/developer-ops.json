@@ -1,0 +1,27 @@
+{
+  "name": "developer-ops",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
+  "tags": [
+    "developer-ops",
+    "operations",
+    "incident-response",
+    "release",
+    "runbooks"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/incident-commander",
+      "devops/release-manager",
+      "devops/runbook-generator",
+      "workflow/spec-driven-workflow",
+      "core/tech-debt-tracker"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

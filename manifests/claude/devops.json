@@ -33,7 +33,6 @@
       "devops/gitops-workflow",
       "devops/grafana-dashboards",
       "devops/helm-charts",
-      "devops/incident-commander",
       "devops/kubernetes-manifest-generator",
       "devops/kubernetes-security-policies",
       "devops/makefile",
@@ -41,8 +40,6 @@
       "devops/postmortem-writing",
       "devops/prometheus-configuration",
       "devops/promql",
-      "devops/release-manager",
-      "devops/runbook-generator",
       "devops/slo-implementation",
       "devops/terraform-patterns",
       "devops/turborepo-caching"

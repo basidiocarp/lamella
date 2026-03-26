@@ -138,30 +138,35 @@ copied or symlinked into `~/.codex/skills/`.
 
 ## Plugins
 
-| Plugin | Skills | Agents | Cmds | Description |
-|--------|--------|--------|------|-------------|
-| **tools** | 26 | 3 | 6 | CLI tools, shell scripting, MCP integration, API design |
-| **security** | 24 | 13 | 5 | Vulnerability scanning, threat modeling, fuzzing |
-| **core** | 24 | 9 | 5 | Coding standards, testing, git workflow, debugging |
-| **devops** | 24 | 9 | 2 | Docker, Kubernetes, Terraform, AWS, CI/CD |
-| **atmos** | 20 | — | — | Cloud Posse Atmos stack orchestration |
-| **meta** | 17 | — | — | Framework internals, skill management |
-| **workflow** | 14 | — | — | Planning, git operations, decision records |
-| **agile-pm** | 12 | — | — | Agile, product management, discovery |
-| **python** | 10 | 3 | 2 | Django, FastAPI, async patterns |
-| **ai-agents** | 9 | 5 | 4 | Multi-agent patterns, LLM evaluation |
-| **frontend** | 9 | — | — | UI/UX design, component patterns |
-| **typescript** | 9 | 3 | 1 | React, Next.js, Node.js patterns |
-| **writing** | 7 | 12 | 4 | Documentation, articles, changelogs |
-| **collaboration** | 6 | — | — | Meetings, decision-making, coordination |
-| **microservices** | 4 | — | — | Event sourcing, distributed systems |
-| **rag** | 4 | — | — | Vector search, embeddings, RAG architecture |
-| **rust** | 4 | 1 | 1 | Async patterns, testing, idiomatic Rust |
-| **cpp** | 3 | — | — | Modern C++ patterns, coding standards |
-| **database** | 2 | 4 | 3 | SQL optimization, PostgreSQL, migrations |
-| **go** | 2 | 1 | 1 | Concurrency patterns, testing, idiomatic Go |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| **devops** | 24 | Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns |
+| **developer-ops** | 5 | Incident command, release management, runbooks, tech debt tracking, and spec-driven execution |
+| **security** | 26 | Vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices |
+| **core** | 32 | Coding standards, testing, git workflow, debugging, and code review |
+| **tools** | 28 | CLI tools, shell and PowerShell scripting, analytics, MCP integration, and productivity utilities |
+| **atmos** | 20 | Cloud Posse Atmos stack orchestration |
+| **meta** | 17 | Framework internals, skill management, and plugin utilities |
+| **workflow** | 14 | Planning, git operations, decision records, and project workflows |
+| **ai-agents** | 9 | Multi-agent patterns, LLM evaluation, and Claude-specific tooling |
+| **python** | 10 | Django, FastAPI, async patterns, testing, and modern Python practices |
+| **collaboration** | 7 | Team facilitation, debate, project continuity, and expert synthesis |
+| **typescript** | 9 | React, Next.js, Node.js patterns, and frontend architecture |
+| **rust** | 11 | Ownership, concurrency, unsafe review, and idiomatic Rust practices |
+| **microservices** | 4 | Event sourcing, sagas, CQRS, and distributed systems |
+| **agile-pm** | 10 | Product planning and delivery artifacts |
+| **customer-insights** | 9 | JTBD, interview planning, market analysis, and journey mapping |
+| **executive** | 11 | Board updates, operating rhythms, executive coaching, and scenario planning |
+| **go-to-market** | 6 | Pricing, launch content, press releases, content strategy, and email programs |
+| **enterprise-it** | 5 | Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations |
+| **frontend** | 11 | Accessibility, design systems, 3D interfaces, responsive layouts, and performance |
+| **go** | 2 | Concurrency patterns, testing, and idiomatic Go |
+| **cpp** | 3 | Modern C++, testing, and embedded systems patterns |
+| **database** | 3 | Schema design, PostgreSQL, SQL optimization, and query tuning |
+| **rag** | 4 | Embeddings, hybrid search, vector optimization, and RAG architecture |
+| **writing** | 6 | Documentation, voice, style, changelogs, and poster workflows |
 
-**Total: 230 skills, 175 agents, 213 commands across 20 plugins**
+**Total: 286 skills across 25 plugins**
 
 ## Directory Structure
 

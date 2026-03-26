@@ -1,0 +1,25 @@
+{
+  "name": "enterprise-it",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
+  "tags": [
+    "enterprise-it",
+    "workspace-admin",
+    "atlassian",
+    "google-workspace",
+    "microsoft-365"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "agile-pm/atlassian-workspace-admin",
+      "agile-pm/confluence-knowledge-ops",
+      "agile-pm/jira-project-operations",
+      "tools/google-workspace-operations",
+      "tools/microsoft-365-tenant-admin"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

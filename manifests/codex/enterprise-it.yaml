@@ -1,0 +1,21 @@
+{
+  "name": "enterprise-it",
+  "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
+  "source_plugin": "enterprise-it",
+  "resources": {
+    "skills": [
+      "agile-pm/atlassian-workspace-admin",
+      "agile-pm/confluence-knowledge-ops",
+      "agile-pm/jira-project-operations",
+      "tools/google-workspace-operations",
+      "tools/microsoft-365-tenant-admin"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

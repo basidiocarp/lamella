@@ -4,6 +4,8 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-03-26
+
 ### Added
 
 - **Version source of truth**: Added a root `VERSION` file and a marketplace catalog validator so tracked marketplace metadata stays aligned with the current release target.

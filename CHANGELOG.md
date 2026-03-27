@@ -4,6 +4,20 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **Cleanup tracking docs**: Added the trimmed-placeholder cleanup plan, classification, and execution log to document the large repo-wide normalization pass.
+
+### Changed
+
+- **Resource surface alignment**: Audited and standardized Lamella skills, agents, commands, hooks, rules, workflows, templates, manifests, and supporting docs so the shipped guidance matches the current plugin layout and authoring model.
+- **Reference doc labeling**: Marked imported Claude Code reference pages as upstream snapshots and pointed readers back to Lamella-specific architecture and packaging docs.
+
+### Fixed
+
+- **Stale packaging and path guidance**: Removed outdated `resources/scripts`, standalone rule-install, and legacy template-copy guidance across docs and resource READMEs.
+- **Legacy agent and workflow references**: Updated rule and workflow docs to reflect the current agent roster and plugin-bundled resource surfaces.
+
 ## [0.5.0] - 2026-03-26
 
 ### Added

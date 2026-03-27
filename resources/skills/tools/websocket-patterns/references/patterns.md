@@ -1,115 +1,148 @@
-# WebSocket Patterns Reference
+# WebSocket Patterns
 
 ## Rooms and Namespaces
 
-### Rooms (Channel Grouping)
+### Rooms
 
-```javascript
-const io = require('socket.io')(3000);
+Use rooms to group clients that should receive the same broadcast.
 
-io.on('connection', (socket) => {
-  // Join a room
-  socket.on('join-room', (roomId) => {
-// ... (43 lines trimmed)
-// Get all sockets in a room
-const sockets = await io.in('room123').fetchSockets();
-console.log(`Room has ${sockets.length} connections`);
+```ts
+io.on("connection", (socket) => {
+  socket.on("join-room", (roomId: string) => {
+    socket.join(roomId);
+    socket.to(roomId).emit("system", `${socket.id} joined`);
+  });
+
+  socket.on("message", ({ roomId, text }) => {
+    io.to(roomId).emit("message", {
+      sender: socket.id,
+      text,
+    });
+  });
+});
 ```
 
-### Namespaces (Logical Separation)
+### Namespaces
 
-```javascript
-// Admin namespace
-const adminNs = io.of('/admin');
-adminNs.on('connection', (socket) => {
-  console.log('Admin connected:', socket.id);
+Use namespaces when whole groups of sockets need separate middleware or event
+contracts.
 
-// ... (21 lines trimmed)
-    namespace.emit('message', data);
-  });
+```ts
+const admin = io.of("/admin");
+
+admin.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) return next(new Error("missing auth"));
+  next();
+});
+
+admin.on("connection", (socket) => {
+  socket.emit("ready", { role: "admin" });
 });
 ```
 
 ## Broadcasting Patterns
 
-```javascript
-// Broadcast to everyone including sender
-io.emit('event', data);
+```ts
+// everyone
+io.emit("announcement", { message: "deploy starting" });
 
-// Broadcast to everyone except sender
-socket.broadcast.emit('event', data);
-// ... (21 lines trimmed)
-    console.log('All clients acknowledged:', responses);
-  }
-});
+// everyone except sender
+socket.broadcast.emit("typing", { userId: socket.id });
+
+// a room only
+io.to("project-123").emit("task-updated", { taskId: "abc" });
 ```
 
 ## Acknowledgments
 
-```javascript
-// Server expects acknowledgment
-socket.emit('question', 'Do you agree?', (answer) => {
-  console.log('Client answered:', answer);
-});
+Use acknowledgments when the sender needs confirmation or validation feedback.
 
-// ... (21 lines trimmed)
-    callback({ success: false, error: error.message });
+```ts
+socket.on("send-message", async (payload, ack) => {
+  try {
+    const saved = await messages.create(payload);
+    ack({ ok: true, id: saved.id });
+  } catch (error) {
+    ack({ ok: false, error: "message_persist_failed" });
   }
 });
 ```
 
 ## Presence System
 
-```javascript
-const redis = require('ioredis');
-const redisClient = new redis();
+```ts
+const onlineUsers = new Map<string, Set<string>>();
 
-class PresenceManager {
-  async userConnected(userId, socketId) {
-// ... (92 lines trimmed)
-    callback(presenceData);
+io.on("connection", (socket) => {
+  const userId = socket.handshake.auth.userId;
+  const sessions = onlineUsers.get(userId) ?? new Set<string>();
+  sessions.add(socket.id);
+  onlineUsers.set(userId, sessions);
+
+  io.emit("presence", { userId, online: true });
+
+  socket.on("disconnect", () => {
+    const remaining = onlineUsers.get(userId);
+    if (!remaining) return;
+    remaining.delete(socket.id);
+    if (remaining.size === 0) {
+      onlineUsers.delete(userId);
+      io.emit("presence", { userId, online: false });
+    }
   });
 });
 ```
 
 ## Message Queue Pattern
 
-```javascript
-// Queue messages when client disconnected
-const messageQueue = new Map();
+Queue messages when the downstream consumer is slower than the incoming stream.
 
-io.on('connection', (socket) => {
-  const userId = socket.handshake.auth.userId;
-// ... (35 lines trimmed)
-    await saveMessageToDb(userId, message);
-  }
-}
+```ts
+const queue: Array<{ event: string; payload: unknown }> = [];
+
+socket.on("event", (payload) => {
+  queue.push({ event: "event", payload });
+});
+
+setInterval(() => {
+  const next = queue.shift();
+  if (!next) return;
+  processEvent(next.payload);
+}, 25);
 ```
 
 ## Pub/Sub Pattern
 
-```javascript
-const EventEmitter = require('events');
+Use Redis or another broker when events must cross multiple Socket.IO nodes.
 
-class MessageBus extends EventEmitter {
-  constructor(io, redis) {
-    super();
-// ... (39 lines trimmed)
-    });
-  });
+```ts
+sub.on("message", (_channel, message) => {
+  const event = JSON.parse(message);
+  io.to(event.roomId).emit(event.type, event.payload);
+});
+
+socket.on("publish", (event) => {
+  pub.publish("ws-events", JSON.stringify(event));
 });
 ```
 
 ## Backpressure Handling
 
-```javascript
-io.on('connection', (socket) => {
-  const MAX_BUFFER_SIZE = 10000;
-  let bufferSize = 0;
+Protect the server from slow consumers and oversized bursts.
 
-  const originalEmit = socket.emit.bind(socket);
-// ... (21 lines trimmed)
-    console.log('Socket buffer drained');
-  });
+```ts
+socket.on("stream-chunk", (chunk) => {
+  if (socket.conn.transport.writable === false) {
+    socket.emit("slow-consumer", { retryInMs: 250 });
+    return;
+  }
+
+  if (chunk.length > MAX_CHUNK_SIZE) {
+    socket.emit("error", { code: "chunk_too_large" });
+    return;
+  }
+
+  handleChunk(chunk);
 });
 ```

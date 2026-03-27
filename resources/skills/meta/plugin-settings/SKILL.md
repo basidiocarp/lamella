@@ -78,7 +78,15 @@ set -euo pipefail
 
 STATE_FILE=".claude/my-plugin.local.md"
 
-// ... (12 lines trimmed)
+mkdir -p "$(dirname "$STATE_FILE")"
+
+ENABLED=$(awk -F': ' '/^enabled:/ {print $2}' "$STATE_FILE" 2>/dev/null || true)
+PROFILE=$(awk -F': ' '/^profile:/ {print $2}' "$STATE_FILE" 2>/dev/null || true)
+
+if [[ -z "${ENABLED:-}" ]]; then
+  ENABLED="true"
+fi
+
 if [[ "$ENABLED" != "true" ]]; then
   exit 0  # Disabled
 fi

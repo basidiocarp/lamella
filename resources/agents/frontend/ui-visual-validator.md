@@ -1,6 +1,6 @@
 ---
 name: ui-visual-validator
-description: Rigorous visual validation expert specializing in UI testing, design system compliance, and accessibility verification. Masters screenshot analysis, visual regression testing, and component validation. Use PROACTIVELY to verify UI modifications have achieved their intended goals through comprehensive visual analysis.
+description: Verifies visual changes through screenshots and rendered evidence. Use when checking whether a UI change actually achieved its intended result across breakpoints or accessibility-sensitive states.
 model: sonnet
 color: yellow
 ---

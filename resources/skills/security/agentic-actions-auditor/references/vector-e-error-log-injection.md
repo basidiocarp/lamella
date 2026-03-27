@@ -66,7 +66,15 @@ on:
     inputs:
       error_logs:
         type: string                                # CI logs passed as workflow input
-// ... (9 lines trimmed)
+        required: true
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        with:
+          prompt: |
             Error logs:
             ${{ github.event.inputs.error_logs }}   # Attacker-controlled CI output
             Analyze the CI failure logs above and attempt to fix the issues.

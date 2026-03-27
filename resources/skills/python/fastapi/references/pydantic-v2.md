@@ -1,100 +1,65 @@
 # Pydantic V2 Schemas
 
-## Schema Patterns
+Use this reference for the main Pydantic v2 model patterns in FastAPI and modern
+Python services.
+
+## Core Schema Patterns
+
+Common model needs:
+- field constraints with `Field(...)`
+- `field_validator` for per-field rules
+- `model_validator` for cross-field validation
+- separate create, update, and response schemas
+
+Prefer explicit request and response models over one schema that tries to do
+everything.
+
+## ORM / Attribute Loading
+
+Use:
 
 ```python
-from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
-from typing import Self
-
-class UserCreate(BaseModel):
-    email: EmailStr
-// ... (20 lines trimmed)
-class UserUpdate(BaseModel):
-    email: EmailStr | None = None
-    username: str | None = Field(None, min_length=3, max_length=50)
+model_config = {"from_attributes": True}
 ```
 
-## ORM Mode (from_attributes)
-
-```python
-class UserResponse(BaseModel):
-    model_config = {"from_attributes": True}
-
-    id: int
-    email: EmailStr
-    username: str
-    is_active: bool = True
-    created_at: datetime
-
-# Usage with SQLAlchemy model
-user_response = UserResponse.model_validate(db_user)
-```
-
-## Model Validator
-
-```python
-class OrderCreate(BaseModel):
-    items: list[OrderItem]
-    discount_code: str | None = None
-    total: float
-
-    @model_validator(mode='after')
-    def validate_order(self) -> Self:
-        calculated = sum(item.price * item.quantity for item in self.items)
-        if abs(self.total - calculated) > 0.01:
-            raise ValueError('Total does not match items')
-        return self
-```
+This replaces the old `orm_mode` pattern. Use `model_validate(...)` to build a
+response model from ORM objects.
 
 ## Nested Models
 
-```python
-class Address(BaseModel):
-    street: str
-    city: str
-    country: str = Field(default="US")
+Nested Pydantic models work well when:
+- the response shape is stable
+- the nesting is part of the API contract
+- you want schema generation to stay explicit
 
-class UserWithAddress(BaseModel):
-    name: str
-    addresses: list[Address] = Field(default_factory=list)
-```
+Use `default_factory` for list or dict defaults instead of mutable literals.
 
-## Serialization Control
+## Serialization Controls
 
-```python
-class User(BaseModel):
-    model_config = {
-        "from_attributes": True,
-        "json_schema_extra": {
-            "example": {"email": "user@example.com", "username": "johndoe"}
-// ... (10 lines trimmed)
-    model_config = {"populate_by_name": True}
+Reach for aliases and schema extras when the public API naming differs from the
+internal model naming. Keep alias behavior deliberate; overusing it makes models
+harder to read.
 
-    user_id: int = Field(alias="userId", serialization_alias="user_id")
-```
+## Settings
 
-## Settings (Pydantic V2)
+Pydantic settings moved to `pydantic-settings`.
 
-```python
-from pydantic_settings import BaseSettings, SettingsConfigDict
+Use settings models for:
+- environment variables
+- `.env` loading
+- shared typed configuration defaults
 
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-// ... (8 lines trimmed)
-    API_V1_PREFIX: str = "/api/v1"
+Keep runtime settings separate from request/response schemas.
 
-settings = Settings()
-```
+## V1 to V2 Mapping
 
-## Quick Reference
-
-| V1 Syntax | V2 Syntax |
-|-----------|-----------|
+| V1 | V2 |
+|---|---|
 | `@validator` | `@field_validator` |
 | `@root_validator` | `@model_validator` |
 | `class Config` | `model_config = {}` |
 | `orm_mode = True` | `from_attributes = True` |
-| `Optional[X]` | `X \| None` |
 | `.dict()` | `.model_dump()` |
 | `.parse_obj()` | `.model_validate()` |
+
+Use this as a migration and authoring checklist when writing new schemas.

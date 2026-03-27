@@ -2,6 +2,9 @@
 
 Workflows for preparing and executing releases.
 
+These release workflows currently live as source-side playbooks. They are not
+bundled into the shipped `core` plugin manifest.
+
 ## Workflows
 
 | File | Description |
@@ -30,4 +33,4 @@ Workflows for preparing and executing releases.
 ## See Also
 
 - [Quality workflows](../quality/) - Pre-deploy checks
-- [GitHub scripts](../../scripts/github/) - Release automation
+- [Release scripts](../../../scripts/release/) - Release automation

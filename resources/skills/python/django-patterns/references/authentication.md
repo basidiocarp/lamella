@@ -1,102 +1,66 @@
 # Authentication
 
-## SimpleJWT Setup
+Use this reference for the standard Django REST authentication shapes: JWT,
+permission classes, registration, and “current user” endpoints.
 
-```python
-# settings.py
-INSTALLED_APPS = [
-    ...
-    'rest_framework_simplejwt',
-]
-// ... (24 lines trimmed)
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-]
-```
+## JWT with SimpleJWT
 
-## Custom Token Claims
+Use SimpleJWT when the API needs stateless auth for browser or mobile clients.
 
-```python
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+Typical setup includes:
+- `rest_framework_simplejwt` in installed apps
+- token obtain and refresh endpoints
+- DRF authentication configured to accept JWTs
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        # Add custom claims
-        token['email'] = user.email
-        token['role'] = user.role
-        return token
+Add custom claims only when clients truly need them.
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-```
+## Custom Claims
 
-## Custom Permissions
+If extra claims are required:
+- keep them small
+- avoid sensitive data that should be fetched separately
+- prefer stable identifiers over presentation data
 
-```python
-from rest_framework import permissions
+JWT claims should help authorization or routing, not duplicate the whole user
+profile.
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-// ... (10 lines trimmed)
-    def has_permission(self, request, view):
-        api_key = request.headers.get('X-API-Key')
-        return api_key == settings.API_KEY
-```
+## Permission Classes
 
-## Permission Classes on ViewSet
+Use permission classes to separate access policy from view logic.
 
-```python
-class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+Typical layers:
+- `AllowAny` for public endpoints
+- `IsAuthenticated` for logged-in access
+- object-level permissions such as owner checks
+- action-specific permission switching in viewsets when needed
 
-    def get_permissions(self):
-        if self.action == 'destroy':
-            return [permissions.IsAdminUser()]
-        if self.action in ['create', 'update', 'partial_update']:
-            return [permissions.IsAuthenticated()]
-        return [permissions.AllowAny()]
-```
+If a viewset’s `get_permissions()` becomes complex, the policy probably needs to
+be split or simplified.
 
-## User Registration
+## Registration and Current User
 
-```python
-class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
-    password_confirm = serializers.CharField(write_only=True)
+Common endpoints:
+- registration create view
+- token obtain / refresh
+- current-user retrieve or update view
 
-    class Meta:
-// ... (12 lines trimmed)
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
-```
+Registration serializers should:
+- validate password confirmation
+- enforce password policy
+- create the user atomically
 
-## Current User Endpoint
+The current-user endpoint should return `request.user` directly instead of
+treating it like an arbitrary lookup.
 
-```python
-class CurrentUserView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+## Quick Mapping
 
-    def get_object(self):
-        return self.request.user
-```
+| Need | Common pattern |
+|---|---|
+| API login | JWT token obtain endpoint |
+| refresh auth | refresh token endpoint |
+| per-object write protection | custom object permission |
+| public reads, auth writes | `IsAuthenticatedOrReadOnly` |
+| self profile | current-user endpoint |
 
-## Quick Reference
-
-| Permission | Access |
-|------------|--------|
-| `AllowAny` | Everyone |
-| `IsAuthenticated` | Logged in users |
-| `IsAdminUser` | Staff users |
-| `IsAuthenticatedOrReadOnly` | Auth for write |
-
-| JWT Endpoint | Purpose |
-|--------------|---------|
-| `/token/` | Get access + refresh |
-| `/token/refresh/` | New access from refresh |
-| `/token/verify/` | Validate token |
+Keep auth policy explicit and predictable. Hidden permission logic is harder to
+audit than duplicated but readable access rules.

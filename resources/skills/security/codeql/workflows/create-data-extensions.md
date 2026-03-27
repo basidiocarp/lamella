@@ -70,7 +70,15 @@ if [ -z "$DB_NAME" ]; then
   while IFS= read -r yml; do
     FOUND_DBS+=("$(dirname "$yml")")
   done < <(find "$OUTPUT_DIR" -maxdepth 2 -name "codeql-database.yml" 2>/dev/null)
-// ... (11 lines trimmed)
+
+  if [ "${#FOUND_DBS[@]}" -eq 0 ]; then
+    echo "No CodeQL database found in $OUTPUT_DIR" >&2
+    exit 1
+  fi
+
+  DB_NAME="${FOUND_DBS[0]}"
+fi
+
 CODEQL_LANG=$(codeql resolve database --format=json -- "$DB_NAME" | jq -r '.languages[0]')
 DIAG_DIR="$OUTPUT_DIR/diagnostics"
 mkdir -p "$DIAG_DIR"
@@ -228,7 +236,11 @@ echo "Findings: $BASELINE → $WITH_EXT (+$((WITH_EXT - BASELINE)))"
 **Output directory:** $OUTPUT_DIR
 **Database:** $DB_NAME
 **Language:** <LANG>
-// ... (11 lines trimmed)
+**Extension files:** `<list of created files>`
+**Baseline findings:** <BASELINE>
+**With extensions:** <WITH_EXT>
+**Delta:** <WITH_EXT - BASELINE>
+
 Extensions deployed to `<lang>-all` ext/ directory (auto-loaded).
 Source files in `$OUTPUT_DIR/extensions/` for version control.
 Run the run-analysis workflow to use them.

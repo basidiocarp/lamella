@@ -147,7 +147,23 @@ Present plan to user with **explicit ruleset listing**:
 **Target:** /path/to/codebase
 **Output directory:** $OUTPUT_DIR
 **Engine:** Semgrep Pro (cross-file analysis) | Semgrep OSS (single-file)
-// ... (27 lines trimmed)
+**Mode:** <run-all|important-only>
+
+**Detected languages/frameworks**
+- Python
+- JavaScript/TypeScript
+- Docker
+
+**Approved rulesets**
+- [ ] p/security-audit
+- [ ] p/secrets
+- [ ] p/python
+- [ ] p/django
+- [ ] p/javascript
+- [ ] p/react
+- [ ] p/nodejs
+- [ ] p/dockerfile
+- [ ] https://github.com/trailofbits/semgrep-rules
 
 **Want to modify rulesets?** Tell me which to add or remove.
 **Ready to scan?** Say "proceed" or "yes".
@@ -263,7 +279,10 @@ If verification fails, the merge script produced invalid output — investigate 
 **Scanned:** 1,804 files
 **Rulesets used:** 9 (including Trail of Bits)
 **Total findings:** 156
-// ... (14 lines trimmed)
+**Output directory:** $OUTPUT_DIR
+**Merged SARIF:** `$OUTPUT_DIR/results/results.sarif`
+**Ruleset log:** `$OUTPUT_DIR/rulesets.txt`
+
 - $OUTPUT_DIR/results/results.sarif (merged SARIF)
 - $OUTPUT_DIR/raw/ (per-scan raw results, unfiltered)
 - $OUTPUT_DIR/rulesets.txt (approved rulesets)

@@ -1,99 +1,98 @@
-# Wycheproof - Implementation Guide
+# Wycheproof Implementation Guide
 
-## Phase 1: Add Wycheproof to Your Project
+Use Wycheproof to prove your crypto implementation rejects malformed, weak, or edge-case inputs that still look plausible to developers.
 
-**Option 1: Git Submodule (Recommended)**
+## 1. Add the Test Vectors
 
-Adding Wycheproof as a git submodule ensures automatic updates:
+Preferred:
 
 ```bash
 git submodule add https://github.com/C2SP/wycheproof.git
 ```
 
-**Option 2: Fetch Specific Test Vectors**
-
-If submodules aren't possible, fetch specific JSON files:
+If submodules are not practical, fetch only the vectors you need:
 
 ```bash
-#!/bin/bash
-
-TMP_WYCHEPROOF_FOLDER=".wycheproof/"
-TEST_VECTORS=('aes_gcm_test.json' 'aes_eax_test.json')
-BASE_URL="https://raw.githubusercontent.com/C2SP/wycheproof/master/testvectors_v1/"
-// ... (11 lines trimmed)
-    fi
-  fi
-done
+mkdir -p .wycheproof
+curl -fsSL \
+  https://raw.githubusercontent.com/C2SP/wycheproof/master/testvectors_v1/aes_gcm_test.json \
+  -o .wycheproof/aes_gcm_test.json
 ```
 
-## Phase 2: Parse Test Vectors
+## 2. Parse the Vectors
 
-Identify the test file for your algorithm and parse the JSON:
-
-**Python Example:**
+Python example:
 
 ```python
 import json
 
-def load_wycheproof_test_vectors(path: str):
-    testVectors = []
-    try:
-// ... (19 lines trimmed)
-            testVectors.append(tv)
+def load_wycheproof_test_vectors(path: str) -> list[dict]:
+    with open(path, "r", encoding="utf-8") as handle:
+        raw = json.load(handle)
 
-    return testVectors
+    vectors = []
+    for group in raw["testGroups"]:
+        for test in group["tests"]:
+            test["key"] = group.get("key")
+            test["iv"] = group.get("iv")
+            vectors.append(test)
+    return vectors
 ```
 
-**JavaScript Example:**
+JavaScript example:
 
 ```javascript
-const fs = require('fs').promises;
+const fs = require("fs").promises;
 
 async function loadWycheproofTestVectors(path) {
-  const tests = [];
+  const raw = JSON.parse(await fs.readFile(path, "utf8"));
+  const vectors = [];
 
-// ... (15 lines trimmed)
+  for (const group of raw.testGroups) {
+    for (const test of group.tests) {
+      vectors.push({ ...test, key: group.key, iv: group.iv });
+    }
+  }
 
-  return tests;
+  return vectors;
 }
 ```
 
-## Phase 3: Write Testing Harness
+## 3. Build the Harness
 
-Create test functions that handle both valid and invalid test cases.
+The harness should distinguish:
 
-**Python/pytest Example:**
+- valid cases that must succeed
+- invalid cases that must fail
+- acceptable edge cases such as legacy or weak-but-documented inputs
+
+Python example:
 
 ```python
 import pytest
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-tvs = load_wycheproof_test_vectors("wycheproof/testvectors_v1/aes_gcm_test.json")
+vectors = load_wycheproof_test_vectors(".wycheproof/aes_gcm_test.json")
 
-// ... (28 lines trimmed)
+@pytest.mark.parametrize("tv", vectors)
+def test_aes_gcm(tv):
+    aesgcm = AESGCM(bytes.fromhex(tv["key"]))
+    nonce = bytes.fromhex(tv["iv"])
+    ciphertext = bytes.fromhex(tv["ct"] + tv["tag"])
+    aad = bytes.fromhex(tv.get("aad", ""))
 
-    assert tv['result'] == 'valid', f"No invalid test case should pass: {tv['comment']}"
-    assert decrypted_msg == tv['msg'], f"Decryption mismatch: {tv['comment']}"
+    if tv["result"] == "valid":
+        plaintext = aesgcm.decrypt(nonce, ciphertext, aad)
+        assert plaintext == bytes.fromhex(tv["msg"])
+    else:
+        with pytest.raises(Exception):
+            aesgcm.decrypt(nonce, ciphertext, aad)
 ```
 
-**JavaScript/Mocha Example:**
+## 4. CI Integration
 
-```javascript
-const assert = require('assert');
+- update the submodule or fetched vectors before test execution
+- pin the vector version if reproducibility matters
+- schedule periodic updates so newly published negative tests do not lag behind your library
 
-function testFactory(tcId, tests) {
-  it(`[${tcId + 1}] ${tests[tcId].comment}`, function () {
-    const test = tests[tcId];
-// ... (20 lines trimmed)
-for (var tcId = 0; tcId < tests.length; tcId++) {
-  testFactory(tcId, tests);
-}
-```
-
-## Phase 4: CI Integration
-
-Ensure test vectors stay up to date by:
-
-1. **Using git submodules**: Update submodule in CI before running tests
-2. **Fetching latest vectors**: Run fetch script before test execution
-3. **Scheduled updates**: Set up weekly/monthly updates to catch new test vectors
+The implementation is only good enough once invalid vectors reliably fail in CI, not just on a local smoke run.

@@ -1,15 +1,16 @@
 # Pinecone Implementation
 
-Complete Pinecone vector store with reranking support.
+Use Pinecone when you want a managed vector store with namespace isolation and hosted operations.
 
-```python
-from pinecone import Pinecone, ServerlessSpec
-from typing import List, Dict, Optional
-import hashlib
+## Core Workflow
 
-class PineconeVectorStore:
-// ... (105 lines trimmed)
-    def delete_by_filter(self, filter: Dict, namespace: str = ""):
-        """Delete vectors matching filter."""
-        self.index.delete(filter=filter, namespace=namespace)
-```
+1. Create the index with the right dimension and metric.
+2. Partition tenants or environments with namespaces.
+3. Upsert vectors plus compact metadata.
+4. Query candidates, then rerank outside the store if needed.
+
+## Guardrails
+
+- Keep metadata lean.
+- Avoid overloading namespaces with too many responsibilities.
+- Treat reranking and business scoring as separate layers.

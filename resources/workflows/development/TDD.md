@@ -7,12 +7,13 @@ Step-by-step workflows for feature development and bug fixing using TDD.
 All development workflows use this agent chain:
 
 ```
-code-fixer → test-runner → browser-qa-agent (if UI)
+code-fixer → test-runner → browser-tester or e2e-runner (if UI)
 ```
 
 1. **code-fixer** — Write tests first, then implement to pass them
 2. **test-runner** — Run all tests, verify no regressions, check coverage (80%+)
-3. **browser-qa-agent** — Visual verification for UI features (skip for pure API/library code)
+3. **browser-tester** or **e2e-runner** — UI verification when the change
+   affects browser flows (skip for pure API or library work)
 
 ---
 

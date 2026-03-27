@@ -1,39 +1,31 @@
 # Auto-Format Hook
 
-Automatically formats files after Claude edits them, keeping code consistently styled without manual intervention.
+Automatically formats files after Claude edits them.
 
-## What It Does
-
-This `PostToolUse` hook fires after every `Edit`, `MultiEdit`, or `Write` tool call. It detects the file type and runs the appropriate formatter:
-
-| File Type       | Formatter | What It Does                            |
-| --------------- | --------- | --------------------------------------- |
-| Python (`.py`)  | ruff      | Formats code + auto-fixes lint issues   |
-| Go (`.go`)      | goimports | Formats code + manages imports          |
-| Everything else | prettier  | JS, TS, JSON, CSS, HTML, MD, YAML, etc. |
+This folder contains a **standalone Bash example**. The Lamella plugin's shared catalog uses the Node-based [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js) hook instead.
 
 ## Behavior
 
-**Python files:**
+The standalone script:
+- formats Python with `ruff format` and `ruff check --fix`
+- formats Go with `goimports`
+- formats other supported files with `prettier`
+- exits successfully even if formatting fails, so it does not block Claude
 
-1. Runs `ruff format` to format the code
-2. Runs `ruff check --fix` to auto-fix linting issues
-3. Preserves unused imports (allows Claude to add imports before using them)
+## Platform Notes
 
-**Go files:**
+Because `auto-format.sh` is Bash-based, it is best on macOS, Linux, or Windows via Git Bash or WSL.
 
-1. Runs `goimports -w` to format and manage imports
+If you want the cross-platform Lamella default on Windows, prefer the plugin-bundled Node hook:
 
-**Other files:**
-
-1. Runs `prettier --write` for supported file types
-2. Prettier auto-detects supported formats
-
-The hook exits successfully even if formatting fails — it won't block Claude's work.
+```json
+{
+  "type": "command",
+  "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/post-edit-format.js\""
+}
+```
 
 ## Prerequisites
-
-Install the formatters you need:
 
 ```bash
 # Python
@@ -48,14 +40,12 @@ npm install -g prettier
 
 ## Installation
 
-### Step 1: Copy the hook
+### Standalone example
 
 ```bash
 cp auto-format.sh ~/.claude/hooks/auto-format.sh
 chmod +x ~/.claude/hooks/auto-format.sh
 ```
-
-### Step 2: Configure in settings.json
 
 Add to `~/.claude/settings.json`:
 
@@ -77,70 +67,17 @@ Add to `~/.claude/settings.json`:
 }
 ```
 
-## Configuration
-
-The hook uses [mise](https://mise.jdx.dev/) for tool version management if available. It also checks common paths:
-
-- `$HOME/.local/share/mise/shims`
-- `/usr/local/bin`
-- `/opt/homebrew/bin`
-- `$HOME/go/bin`
-
-If your tools are installed elsewhere, add the paths to the script.
-
-## Customization
-
-### Adding more formatters
-
-Edit the script to add support for other file types:
-
-```bash
-# Example: Add Rust formatting
-if [[ "$file_path" == *.rs ]]; then
-  rustfmt "$file_path" 2>&1
-  exit $?
-fi
-```
-
-### Changing formatter options
-
-Modify the formatter commands in the script. For example, to change ruff's line length:
-
-```bash
-ruff format --line-length 100 "$file_path" 2>&1
-```
-
-### Disabling for specific file types
-
-Add early returns for file types you don't want formatted:
-
-```bash
-# Skip formatting for generated files
-if [[ "$file_path" == *_generated.* ]]; then
-  exit 0
-fi
-```
-
 ## Troubleshooting
 
 ### Formatter not found
 
-The hook silently skips if a formatter isn't installed. Check that the formatter is in your PATH:
-
-```bash
-which ruff
-which goimports
-which prettier
-```
+The hook skips missing formatters. Check that they are in your `PATH`.
 
 ### Wrong formatter version
 
-If using mise, ensure the correct version is activated. The hook runs `eval "$(mise activate bash)"` to load mise.
-
-### Formatting conflicts with project config
-
-The hook uses default formatter settings. If your project has specific config (`.prettierrc`, `ruff.toml`, etc.), the formatter should pick it up automatically.
+The script activates `mise` when available and also checks common local binary paths. If your tools are installed elsewhere, add those paths to the script.
 
 ## Related Hooks
 
-- **[change-summary](../change-summary/)** — Runs TypeScript type checking at session end (complements this hook by checking types after all edits are done)
+- [change-summary](../change-summary/)
+- [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js)

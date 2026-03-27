@@ -97,9 +97,17 @@ int result;
 if (condition) {
     result = compute();
 }
-// ... (8 lines trimmed)
-s.a = 'x';
-s.b = 42;
+use_result(result);  // Reads garbage if condition is false
+
+// DANGEROUS: Partially initialized struct leaks stack bytes
+struct Packet {
+    char tag;
+    int id;
+};
+
+struct Packet s;  // Uninitialized padding and fields
+s.tag = 'x';
+s.id = 42;
 send(sock, &s, sizeof(s), 0);  // Leaks 3 bytes of stack
 ```
 

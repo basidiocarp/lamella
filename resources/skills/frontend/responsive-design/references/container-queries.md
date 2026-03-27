@@ -1,149 +1,76 @@
-# Container Queries Deep Dive
+# Container Queries
 
-## Overview
+Container queries let components respond to their own available space instead of the whole viewport.
 
-Container queries enable component-based responsive design by allowing elements to respond to their container's size rather than the viewport. This paradigm shift makes truly reusable components possible.
-
-## Browser Support
-
-Container queries have excellent modern browser support (Chrome 105+, Firefox 110+, Safari 16+). For older browsers, provide graceful fallbacks.
-
-## Containment Basics
-
-### Container Types
+## Basic Setup
 
 ```css
-/* Size containment - queries based on inline and block size */
-.container {
-  container-type: size;
-}
-
-/* Inline-size containment - queries based on inline (width) size only */
-/* Most common and recommended */
-.container {
-  container-type: inline-size;
-}
-
-/* Normal - style queries only, no size queries */
-.container {
-  container-type: normal;
-}
-```
-
-### Named Containers
-
-```css
-/* Named container for targeted queries */
 .card-wrapper {
   container-type: inline-size;
-  container-name: card;
 }
-// ... (9 lines trimmed)
-    display: flex;
+
+@container (min-width: 32rem) {
+  .card {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 1rem;
   }
 }
 ```
 
-## Container Query Syntax
+Prefer `inline-size` unless you truly need both width and height containment.
 
-### Width-Based Queries
-
-```css
-.container {
-  container-type: inline-size;
-}
-
-/* Minimum width */
-// ... (23 lines trimmed)
-    /* styles */
-  }
-}
-```
-
-### Combining Conditions
+## Named Containers
 
 ```css
-/* AND condition */
-@container (min-width: 400px) and (max-width: 800px) {
-  .element {
-    /* styles */
-  }
-// ... (12 lines trimmed)
-    /* styles */
-  }
-}
-```
-
-### Named Container Queries
-
-```css
-/* Multiple named containers */
-.page-wrapper {
-  container: page / inline-size;
+.dashboard-panel {
+  container: panel / inline-size;
 }
 
-// ... (14 lines trimmed)
+@container panel (min-width: 40rem) {
+  .panel-body {
     grid-template-columns: 1fr 1fr;
   }
 }
 ```
 
-## Container Query Units
+Use named containers when multiple queryable containers exist in the same view.
+
+## Query Units
 
 ```css
-/* Container query length units */
-.element {
-  /* Container query width - 1cqw = 1% of container width */
-  width: 50cqw;
+.card-title {
+  font-size: clamp(1rem, 3cqi, 1.5rem);
+}
 
-// ... (21 lines trimmed)
 .card-body {
   padding: clamp(0.75rem, 4cqi, 1.5rem);
 }
 ```
 
-## Style Queries
+Useful units:
+- `cqi` for inline size
+- `cqb` for block size
+- `cqw` and `cqh` for container width and height
 
-Style queries allow querying CSS custom property values. Currently limited support.
+## Best-Fit Patterns
 
-```css
-/* Define a custom property */
-.card {
-  --layout: stack;
-}
-
-// ... (16 lines trimmed)
-.card.horizontal {
-  --layout: inline;
-}
-```
-
-## Practical Patterns
-
-### Responsive Card Component
+### Responsive Card
 
 ```css
-.card-container {
+.card-shell {
   container: card / inline-size;
 }
 
 .card {
-// ... (47 lines trimmed)
-    gap: 0.5rem;
-  }
-}
-```
-
-### Responsive Grid Items
-
-```css
-.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  gap: 0.75rem;
 }
-// ... (24 lines trimmed)
-    gap: 1rem;
+
+@container card (min-width: 28rem) {
+  .card {
+    grid-template-columns: auto 1fr;
+    align-items: start;
   }
 }
 ```
@@ -151,92 +78,54 @@ Style queries allow querying CSS custom property values. Currently limited suppo
 ### Dashboard Widget
 
 ```css
-.widget-container {
+.widget-shell {
   container: widget / inline-size;
 }
 
-.widget {
-// ... (43 lines trimmed)
-    gap: 0.5rem;
+@container widget (min-width: 36rem) {
+  .widget-stats {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 ```
 
-### Navigation Component
+### Navigation Cluster
 
 ```css
-.nav-container {
+.nav-shell {
   container: nav / inline-size;
 }
 
-.nav {
-// ... (36 lines trimmed)
-    padding: 0.5rem 1rem;
+@container nav (min-width: 30rem) {
+  .nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }
 ```
 
-## Tailwind CSS Integration
-
-```tsx
-// Tailwind v3.2+ supports container queries
-// tailwind.config.js
-module.exports = {
-  plugins: [require("@tailwindcss/container-queries")],
-};
-// ... (33 lines trimmed)
-    </div>
-  );
-}
-```
-
-## Fallback Strategies
+## Fallback Strategy
 
 ```css
-/* Provide fallbacks for browsers without support */
 .card {
-  /* Default (fallback) styles */
   display: flex;
   flex-direction: column;
-// ... (39 lines trimmed)
-    }
+}
+
+@supports (container-type: inline-size) {
+  .card-shell {
+    container-type: inline-size;
   }
 }
 ```
 
-## Performance Considerations
+Start with a sane default layout, then layer container-query enhancements behind `@supports` if broader compatibility matters.
 
-```css
-/* Avoid over-nesting containers */
-/* Bad: Too many nested containers */
-.level-1 {
-  container-type: inline-size;
-}
-// ... (18 lines trimmed)
-  container-type: inline-size; /* Preferred */
-  /* container-type: size; */ /* Only when needed */
-}
-```
+## When to Use Them
 
-## Testing Container Queries
+Use container queries when:
+- the same component appears in narrow and wide slots
+- viewport breakpoints are too blunt
+- reusable components need local layout intelligence
 
-```javascript
-// Test container query support
-const supportsContainerQueries = CSS.supports("container-type", "inline-size");
-
-// Resize observer for testing
-const observer = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    console.log("Container width:", entry.contentRect.width);
-  }
-});
-
-observer.observe(document.querySelector(".container"));
-```
-
-## Resources
-
-- [MDN Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries)
-- [CSS Container Queries Spec](https://www.w3.org/TR/css-contain-3/)
-- [Una Kravets: Container Queries](https://web.dev/cq-stable/)
-- [Ahmad Shadeed: Container Queries Guide](https://ishadeed.com/article/container-queries-are-finally-here/)
+Do not use them just because they are newer. If the whole page shifts together, a normal media query is still simpler.

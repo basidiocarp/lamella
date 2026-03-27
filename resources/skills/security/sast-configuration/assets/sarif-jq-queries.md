@@ -42,7 +42,15 @@ jq '.runs[].results[] | select(.level == "error")' results.sarif
 
 # Only warnings
 jq '.runs[].results[] | select(.level == "warning")' results.sarif
-// ... (9 lines trimmed)
+
+# Only one rule
+jq '.runs[].results[] | select(.ruleId == "RULE001")' results.sarif
+
+# Only one file
+jq '.runs[].results[] | select(.locations[0].physicalLocation.artifactLocation.uri == "src/auth.py")' results.sarif
+
+# Messages matching text
+jq '.runs[].results[] | select(.message.text | test("token|secret"; "i"))' results.sarif
 
 # Multiple conditions
 jq '.runs[].results[] | select(.level == "error" and (.ruleId | startswith("SEC")))' results.sarif

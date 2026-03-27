@@ -14,7 +14,18 @@ ansible-playbook -i inventory playbook.yml --check
 
 # Check mode with diff
 ansible-playbook -i inventory playbook.yml --check --diff
-// ... (9 lines trimmed)
+
+# Limit to one host while reviewing a risky change
+ansible-playbook -i inventory playbook.yml --check --limit web-01
+
+# Validate only the tasks you are changing
+ansible-playbook -i inventory playbook.yml --check --tags nginx
+
+# Include variables to test a specific branch of logic
+ansible-playbook -i inventory playbook.yml --check -e env=staging
+
+# Syntax check before running the dry-run
+ansible-playbook -i inventory playbook.yml --syntax-check
 
 # Step through tasks
 ansible-playbook -i inventory playbook.yml --check --step
@@ -88,7 +99,30 @@ cd roles/myrole
 molecule init scenario --driver-name docker
 
 # List scenarios
-// ... (17 lines trimmed)
+molecule list
+
+# Run the full lifecycle for the default scenario
+molecule test
+
+# Run a specific scenario
+molecule test -s default
+
+# Lint and syntax-check only
+molecule lint
+molecule syntax
+
+# Provision and apply without destroying instances
+molecule create
+molecule converge
+
+# Verify idempotence and assertions separately
+molecule idempotence
+molecule verify
+
+# Tear down when finished
+molecule cleanup
+molecule destroy
+
 # Keep instances for debugging
 molecule converge
 molecule login       # SSH into test instance

@@ -1,69 +1,43 @@
-## Checklists & Templates
+## First Principles Templates
 
-### First Principles Analysis Template
+Use these templates when the goal is to strip away convention and reason from fundamentals.
 
-```
+### Analysis Template
+
+```markdown
 ## First Principles Analysis: [Topic]
 
-### 1. THE ASSUMPTION AUDIT
+### 1. Assumption Audit
+- What does everyone treat as true here?
+- Which claims are physics, math, biology, or actual constraints?
+- Which claims are just convention?
 
-**What "everyone knows" about this:**
-// ... (53 lines trimmed)
-**First experiment to test:**
+### 2. Fundamental Parts
+- What are the raw components?
+- What is the true minimum input, cost, or effort?
+- Which dependencies are essential versus inherited?
 
-**What could go wrong:**
+### 3. Rebuild
+- If starting from zero, what would the simplest version look like?
+- What would you remove first?
+- What experiment would falsify the current assumption fastest?
 ```
 
----
+### Quick Checklist
 
-### Quick First Principles Checklist
-
-```
-## Before Accepting Any "Truth"
-
-□ Is this a law of physics/math/biology?
-□ Or is it "how things are done"?
-□ Who benefits from this being "true"?
-□ What would a complete outsider think?
-□ Has anyone ever done it differently?
-□ What would this look like if we started fresh?
-
-## The Musk Test
-
-□ Can I explain the atomic components?
-□ Do I know the theoretical minimum cost?
-□ Is there a 10x gap I can't explain?
-□ Am I reasoning by analogy or from fundamentals?
+```markdown
+- Is this a law or a habit?
+- Who benefits from the current assumption?
+- What would an outsider question first?
+- What real constraint makes this necessary?
 ```
 
----
+### Warning Signs
 
-### Common First Principles Domains
-
-```
-## Where to Apply First Principles
-
-### COST REDUCTION
-- What are the raw materials?
-- What is labor actually required?
-// ... (18 lines trimmed)
-- What does the customer fundamentally want?
-- What is assumed about competition?
-- What constraints are real vs. imagined?
-```
-
----
-
-### Red Flags: When You're NOT Using First Principles
-
-```
-## Warning Signs
-
-You're reasoning by ANALOGY (not First Principles) when you say:
-
-- [ ] "Industry standard is..."
-// ... (12 lines trimmed)
-"But WHY? What fundamental truth makes this necessary?"
-
-If you can't answer with physics, math, or biology - it's changeable.
+```markdown
+You are drifting away from first principles when you rely on:
+- "industry standard"
+- "everyone does it this way"
+- inherited architecture with no cost model
+- requirements that cannot be traced to a real constraint
 ```

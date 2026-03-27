@@ -55,7 +55,19 @@ cat <<'EOF' > ./afl++
 AFL_VERSION="${AFL_VERSION:-"stable"}"
 case "$1" in
    host)
-// ... (17 lines trimmed)
+      shift
+      exec "$@"
+      ;;
+   docker)
+      shift
+      exec docker run --rm -it \
+        -v "$PWD:/work" -w /work \
+        "aflplusplus/aflplusplus:${AFL_VERSION}" "$@"
+      ;;
+   *)
+      echo "usage: ./afl++ <host|docker> <command> [args...]"
+      exit 1
+      ;;
 esac
 EOF
 chmod +x ./afl++

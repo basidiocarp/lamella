@@ -1,16 +1,22 @@
 # Marketplace Considerations for Commands
 
-Guidelines for creating commands designed for distribution and marketplace success.
+Guidance for commands intended for broad distribution rather than a single
+developer's local setup.
 
 ## Overview
 
-Commands distributed through marketplaces need additional consideration beyond personal use commands. They must work across environments, handle diverse use cases, and provide excellent user experience for unknown users.
+Marketplace-ready commands should:
+- run across multiple environments
+- fail clearly when prerequisites are missing
+- guide unknown users toward success on the first run
+- avoid hidden assumptions about shell, tools, or repository layout
 
 ## Design for Distribution
 
 ### Universal Compatibility
 
-**Cross-platform considerations:**
+Prefer shell-neutral logic when possible. If shell commands are required, detect
+platform differences explicitly.
 
 ```markdown
 ---
@@ -18,27 +24,22 @@ description: Cross-platform command
 allowed-tools: Bash(*)
 ---
 
-// ... (22 lines trimmed)
-fi
-
-[Platform-appropriate implementation...]
-```
-
-**Avoid platform-specific commands:**
-
-```markdown
-<!-- BAD: macOS-specific -->
-!`pbcopy < file.txt`
-
-<!-- GOOD: Platform detection -->
-// ... (7 lines trimmed)
-  echo "Clipboard not available on this platform"
+if [[ "$OSTYPE" == darwin* ]]; then
+  echo "Running macOS-specific setup"
+elif [[ "$OSTYPE" == linux* ]]; then
+  echo "Running Linux-specific setup"
+else
+  echo "Unsupported platform for this step"
+  exit 1
 fi
 ```
+
+Avoid commands that only work on one platform unless the command is clearly
+documented as platform-specific.
 
 ### Minimal Dependencies
 
-**Check for required tools:**
+Check for required tools early and stop with a useful message.
 
 ```markdown
 ---
@@ -46,45 +47,55 @@ description: Dependency-aware command
 allowed-tools: Bash(*)
 ---
 
-// ... (30 lines trimmed)
-✓ All dependencies available
+for tool in git jq; do
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    echo "Missing required tool: $tool"
+    echo "Install it and re-run the command."
+    exit 1
+  fi
+done
 
-[Continue with command...]
+echo "All dependencies available"
 ```
 
-**Document optional dependencies:**
+Document optional dependencies separately so the user knows which features will
+degrade gracefully.
 
 ```markdown
 <!--
 DEPENDENCIES:
   Required:
-  - git 2.0+: Version control
-// ... (6 lines trimmed)
-  Feature availability depends on installed tools.
+  - git: repository operations
+  Optional:
+  - jq: prettier JSON formatting
 -->
 ```
 
 ### Graceful Degradation
 
-**Handle missing features:**
+If an optional capability is missing, continue with a simpler path instead of
+failing the whole command.
 
 ```markdown
 ---
 description: Feature-aware command
+allowed-tools: Bash(*)
 ---
 
-# Feature Detection
-// ... (22 lines trimmed)
+if command -v jq >/dev/null 2>&1; then
+  cat package.json | jq '.name'
+else
+  echo "jq not installed; printing raw package.json instead"
+  cat package.json
 fi
-
-[Adapt behavior based on available features...]
 ```
 
 ## User Experience for Unknown Users
 
 ### Clear Onboarding
 
-**First-run experience:**
+The first run should explain what the command will do and what files or inputs
+it expects.
 
 ```markdown
 ---
@@ -92,89 +103,77 @@ description: Command with onboarding
 allowed-tools: Read, Write
 ---
 
-// ... (23 lines trimmed)
+if [[ ! -f .claude/plugin.json ]]; then
+  echo "This command expects to run in a Claude Code plugin repository."
+  echo "Create or open a plugin repo, then try again."
+  exit 1
 fi
 
-[Normal command execution...]
+echo "Detected plugin repository. Continuing..."
 ```
 
-**Progressive feature discovery:**
+### Progressive Discovery
+
+Keep the default path short, but point users toward deeper help.
 
 ```markdown
 ---
 description: Command with tips
 ---
 
-# Command Execution
-// ... (8 lines trimmed)
-  /command --fast [args]
-
-For more tips: /command tips
+echo "Fast mode: /command --fast [args]"
+echo "Need more guidance? Run: /command tips"
 ```
 
 ### Comprehensive Error Handling
 
-**Anticipate user mistakes:**
+Anticipate the mistakes a new user is most likely to make.
 
 ```markdown
 ---
 description: Forgiving command
 ---
 
-# User Input Handling
-// ... (24 lines trimmed)
+if [[ -z "$ARGUMENTS" ]]; then
+  echo "Usage: /command [required-input]"
+  echo "Example: /command my-feature"
+  exit 1
 fi
-
-[Command continues...]
 ```
 
-**Helpful diagnostics:**
+Helpful diagnostics should include enough context to debug without drowning the
+user in raw logs.
 
 ```markdown
 ---
 description: Diagnostic command
 ---
 
-# Operation Failed
-// ... (16 lines trimmed)
-This information helps debug the issue.
-
-For support, include the above diagnostics.
+echo "Operation failed"
+echo "Working directory: $(pwd)"
+echo "Git branch: $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+echo "Node version: $(node --version 2>/dev/null || echo unavailable)"
 ```
 
 ## Distribution Best Practices
 
 ### Namespace Awareness
 
-**Avoid name collisions:**
+Use command names that are descriptive and unlikely to collide with common
+verbs.
 
 ```markdown
 ---
-description: Namespaced command
+description: Review a plugin manifest for marketplace readiness
 ---
-
-<!--
-// ... (14 lines trimmed)
-# Plugin Name Command
-
-[Implementation...]
 ```
 
-**Document naming rationale:**
-
-```markdown
-<!--
-NAMING DECISION:
-
-Command name: /deploy-app
-// ... (9 lines trimmed)
-- Uniqueness (unlikely conflicts)
--->
-```
+Prefer a scoped name like `/plugin-review-marketplace` over a generic name like
+`/review`.
 
 ### Configurability
 
-**User preferences:**
+Let users opt into project-specific defaults without editing the command body.
 
 ```markdown
 ---
@@ -182,283 +181,113 @@ description: Configurable command
 allowed-tools: Read
 ---
 
-// ... (19 lines trimmed)
+if [[ -f .claude/my-plugin.local.md ]]; then
+  echo "Loading local plugin settings"
 fi
-
-[Use configuration in command...]
 ```
 
-**Sensible defaults:**
+### Sensible Defaults
+
+Defaults should help the median user succeed without reading the source.
 
 ```markdown
 ---
 description: Command with smart defaults
 ---
 
-# Smart Defaults
-// ... (16 lines trimmed)
-verbose: true
----
-\`\`\`
+# Defaults:
+# - dry-run enabled unless --apply is passed
+# - concise output unless --verbose is passed
 ```
 
 ### Version Compatibility
 
-**Version checking:**
+Be explicit when a command relies on repo or platform versions.
 
 ```markdown
 ---
 description: Version-aware command
+allowed-tools: Bash(*)
 ---
 
-<!--
-// ... (29 lines trimmed)
-✓ Version compatible
+required_major=20
+node_major=$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)
 
-[Command continues...]
-```
-
-**Deprecation warnings:**
-
-```markdown
----
-description: Command with deprecation warnings
----
-
-# Deprecation Check
-// ... (16 lines trimmed)
+if (( node_major < required_major )); then
+  echo "Node 20+ is required for this command."
+  exit 1
 fi
-
-[Handle both old and new flags during deprecation period...]
 ```
 
 ## Marketplace Presentation
 
 ### Command Discovery
 
-**Descriptive naming:**
+Descriptions should tell users what the command does, not just what domain it
+belongs to.
+
+Good:
 
 ```markdown
 ---
-description: Review pull request with security and quality checks
+description: Review pull request changes for security and release risk
 ---
-
-<!-- GOOD: Descriptive name and description -->
 ```
+
+Bad:
 
 ```markdown
 ---
 description: Do the thing
 ---
-
-<!-- BAD: Vague description -->
-```
-
-**Searchable keywords:**
-
-```markdown
-<!--
-KEYWORDS: security, code-review, quality, validation, audit
-
-These keywords help users discover this command when searching
-for related functionality in the marketplace.
--->
 ```
 
 ### Showcase Examples
 
-**Compelling demonstrations:**
+Include one short example of a realistic invocation.
 
 ```markdown
----
-description: Advanced code analysis command
----
-
-# Code Analysis Command
-// ... (37 lines trimmed)
-Ready to analyze your code...
-
-[Command implementation...]
+Example:
+/release-check docs-and-manifests --verbose
 ```
 
-### User Reviews and Feedback
+### Quality Standards
 
-**Feedback mechanism:**
-
-```markdown
----
-description: Command with feedback
----
-
-# Command Complete
-// ... (16 lines trimmed)
-- /command feedback
-
-Your feedback matters!
-```
-
-**Usage analytics preparation:**
-
-```markdown
-<!--
-ANALYTICS NOTES:
-
-Track for improvement:
-// ... (8 lines trimmed)
-- User opt-out respected
--->
-```
-
-## Quality Standards
-
-### Professional Polish
-
-**Consistent branding:**
-
-```markdown
----
-description: Branded command
----
-
-# ✨ Command Name
-// ... (10 lines trimmed)
-- Community: https://community.example.com
-
-Powered by Plugin Name v2.1.0
-```
-
-**Attention to detail:**
-
-```markdown
-<!-- Details that matter -->
-
-✓ Use proper emoji/symbols consistently
-✓ Align output columns neatly
-✓ Format numbers with thousands separators
-✓ Use color/formatting appropriately
-✓ Provide progress indicators
-✓ Show estimated time remaining
-✓ Confirm successful operations
-```
-
-### Reliability
-
-**Idempotency:**
-
-```markdown
----
-description: Idempotent command
----
-
-# Safe Repeated Execution
-// ... (20 lines trimmed)
-
-Marking complete...
-echo "$(date)" > .claude/operation-completed.flag
-```
-
-**Atomic operations:**
-
-```markdown
----
-description: Atomic command
----
-
-# Atomic Operation
-// ... (21 lines trimmed)
-
-  No changes applied. Safe to retry.
-fi
-```
+Before distributing a command, verify:
+- frontmatter is valid and minimal
+- help text matches actual behavior
+- optional dependencies degrade cleanly
+- platform assumptions are documented
+- failure messages suggest the next action
 
 ## Testing for Distribution
 
 ### Pre-Release Checklist
 
-```markdown
-<!--
-PRE-RELEASE CHECKLIST:
-
-Functionality:
-- [ ] Works on macOS
-// ... (31 lines trimmed)
-- [ ] Feedback mechanism
-- [ ] License specified
--->
-```
+- Run the command in a clean checkout
+- Run it with missing optional tools
+- Run it with missing required input
+- Verify output is still understandable in non-happy paths
+- Check both concise and verbose modes if supported
 
 ### Beta Testing
 
-**Beta release approach:**
-
-```markdown
----
-description: Beta command (v0.9.0)
----
-
-# 🧪 Beta Command
-// ... (27 lines trimmed)
-**Thank you for beta testing!**
-
-Your feedback helps make this command better.
-```
+Have at least one person unfamiliar with the command try it without coaching.
+Note where they hesitate or misread the expected inputs.
 
 ## Maintenance and Updates
 
-### Update Strategy
-
-**Versioned commands:**
-
-```markdown
-<!--
-VERSION STRATEGY:
-
-Major (X.0.0): Breaking changes
-- Document all breaking changes
-// ... (15 lines trimmed)
-- Minors: Monthly
-- Majors: Annually or as needed
--->
-```
-
-**Update notifications:**
-
-```markdown
----
-description: Update-aware command
----
-
-# Check for Updates
-// ... (19 lines trimmed)
-fi
-
-[Command continues...]
-```
+Commands distributed through a marketplace age faster than local scripts.
+Review them when:
+- supported toolchains change
+- platform assumptions change
+- plugin layout changes
+- user error reports cluster around the same failure mode
 
 ## Best Practices Summary
 
-### Distribution Design
-
-1. **Universal**: Works across platforms and environments
-2. **Self-contained**: Minimal dependencies, clear requirements
-3. **Graceful**: Degrades gracefully when features unavailable
-4. **Forgiving**: Anticipates and handles user mistakes
-5. **Helpful**: Clear errors, good defaults, excellent docs
-
-### Marketplace Success
-
-1. **Discoverable**: Clear name, good description, searchable keywords
-2. **Professional**: Polished presentation, consistent branding
-3. **Reliable**: Tested thoroughly, handles edge cases
-4. **Maintainable**: Versioned, updated regularly, supported
-5. **User-focused**: Great UX, responsive to feedback
-
-### Quality Standards
-
-1. **Complete**: Fully documented, all features working
-2. **Tested**: Works in real environments, edge cases handled
-3. **Secure**: No vulnerabilities, safe operations
-4. **Performant**: Reasonable speed, resource-efficient
-5. **Ethical**: Privacy-respecting, user consent
-
-With these considerations, commands become marketplace-ready and delight users across diverse environments and use cases.
+- Design for unknown users
+- Fail early on missing prerequisites
+- Prefer graceful degradation over brittle branching
+- Use clear names and direct descriptions
+- Keep examples short but complete

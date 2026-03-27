@@ -277,26 +277,20 @@ Use this skill when:
 
 ## Additional Resources
 
-For detailed operational patterns and best practices, refer to the comprehensive reference:
+For detailed operational patterns and best practices, start with the routing reference:
 
 **File**: `references/operations-patterns.md`
 
-This reference includes:
-- Cost optimization strategies
-- Monitoring and alerting patterns
-- Observability best practices
-- Security and compliance guidelines
-- Troubleshooting workflows
+Focused follow-on references:
+- `references/cost-optimization-patterns.md`
+- `references/monitoring-and-observability-patterns.md`
+- `references/security-and-troubleshooting-patterns.md`
 
 ## CloudWatch Alarms Reference
 
-**File**: `references/cloudwatch-alarms.md`
+**Routing file**: `references/cloudwatch-alarms.md`
 
-Common alarm configurations for:
-- Lambda functions
-- EC2 instances
-- RDS databases
-- DynamoDB tables
-- API Gateway
-- ECS services
-- Application Load Balancers
+Focused alarm references:
+- `references/serverless-and-api-alarms.md`
+- `references/data-and-compute-alarms.md`
+- `references/container-and-queue-alarms.md`

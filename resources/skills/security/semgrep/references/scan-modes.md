@@ -79,7 +79,20 @@ for f in "$OUTPUT_DIR/raw"/*-*.json; do
   [[ "$f" == *-triage.json || "$f" == *-important.json ]] && continue
   jq '{
     results: [.results[] |
-// ... (13 lines trimmed)
+      ((.extra.metadata.category // "security") | ascii_downcase) as $cat |
+      ((.extra.metadata.confidence // "HIGH") | ascii_upcase) as $conf |
+      ((.extra.metadata.impact // "HIGH") | ascii_upcase) as $imp |
+      select(
+        ($cat == "security") and
+        ($conf == "MEDIUM" or $conf == "HIGH") and
+        ($imp == "MEDIUM" or $imp == "HIGH")
+      )
+    ],
+    errors: .errors,
+    paths: .paths
+  }' "$f" > "${f%.json}-important.json"
+
+  BEFORE=$(jq '.results | length' "$f")
   AFTER=$(jq '.results | length' "${f%.json}-important.json")
   echo "$f: $BEFORE → $AFTER findings (filtered $(( BEFORE - AFTER )))"
 done

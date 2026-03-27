@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://lamella.dev/plugin-manifest.schema.json",
   "title": "Plugin Manifest",
-  "description": "Schema for Skill-Issue plugin manifests",
+  "description": "Schema for Lamella source plugin manifests",
   "type": "object",
   "required": ["name", "version", "description"],
   "properties": {
@@ -14,7 +14,7 @@
     "version": {
       "type": "string",
       "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "description": "Semantic version (e.g., 1.0.0)"
+      "description": "Source manifest semantic version (e.g., 1.0.0). Generated marketplace and built plugin metadata may append prerelease suffixes such as -dev.<run-number>."
     },
     "description": {
       "type": "string",

@@ -1,200 +1,106 @@
 # Integration Testing with Mocked Activities
 
-Comprehensive patterns for testing workflows with mocked external dependencies, error injection, and complex scenarios.
+Patterns for testing workflow orchestration while keeping external dependencies mocked and deterministic.
 
-## Activity Mocking Strategy
-
-**Purpose**: Test workflow orchestration logic without calling real external services
-
-### Basic Mock Pattern
+## Mocked Activity Pattern
 
 ```python
 import pytest
+from unittest.mock import Mock
+from temporalio import activity, workflow
 from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
-from unittest.mock import Mock
 
-// ... (29 lines trimmed)
+mock_activity = Mock(return_value="mocked-result")
+
+@activity.defn
+async def fetch_data(value: str) -> str:
+    return mock_activity(value)
+
+@workflow.defn
+class ExampleWorkflow:
+    @workflow.run
+    async def run(self, value: str) -> str:
+        result = await workflow.execute_activity(
+            fetch_data,
+            value,
+            start_to_close_timeout=30,
         )
-        assert result == "processed: mocked-result"
-        mock_activity.assert_called_once()
-```
+        return f"processed: {result}"
 
-### Dynamic Mock Responses
-
-**Scenario-Based Mocking**:
-
-```python
 @pytest.mark.asyncio
-async def test_workflow_multiple_mock_scenarios(workflow_env):
-    """Test different workflow paths with dynamic mocks"""
-
-    # Mock returns different values based on input
-// ... (39 lines trimmed)
-            task_queue="test",
-        )
-        assert "Validation failed" in result_error
+async def test_workflow_with_mocked_activity():
+    env = await WorkflowEnvironment.start_time_skipping()
+    try:
+        async with Worker(env.client, task_queue="test", workflows=[ExampleWorkflow], activities=[fetch_data]):
+            result = await env.client.execute_workflow(
+                ExampleWorkflow.run,
+                "input",
+                id="wf-mock",
+                task_queue="test",
+            )
+            assert result == "processed: mocked-result"
+            mock_activity.assert_called_once_with("input")
+    finally:
+        await env.shutdown()
 ```
 
-## Error Injection Patterns
+## Error Injection
 
-### Testing Transient Failures
-
-**Retry Behavior**:
+Use controlled failures to verify retry and compensation paths.
 
 ```python
-@pytest.mark.asyncio
-async def test_workflow_transient_errors(workflow_env):
-    """Test retry logic with controlled failures"""
+attempts = 0
 
-    attempt_count = 0
-// ... (34 lines trimmed)
-        )
-        assert result == "success-after-retries"
-        assert attempt_count == 3
+@activity.defn
+async def flaky_fetch() -> str:
+    global attempts
+    attempts += 1
+    if attempts < 3:
+        raise RuntimeError("temporary failure")
+    return "success-after-retries"
 ```
 
-### Testing Non-Retryable Errors
+Keep assertions on both the final result and the retry count.
 
-**Business Validation Failures**:
+## Multi-Activity Workflows
+
+For orchestration tests:
+- record activity call order in a list
+- assert the final workflow output
+- assert the sequence of side effects
+
+This is the most reliable way to check sequential workflows without inspecting internal workflow state.
+
+## Signals and Queries
+
+Use handles to send signals and then assert on `handle.result()` or registered queries:
 
 ```python
-@pytest.mark.asyncio
-async def test_workflow_non_retryable_error(workflow_env):
-    """Test handling of permanent failures"""
-
-    @activity.defn
-// ... (31 lines trimmed)
-            task_queue="test",
-        )
-        assert "validation-failed" in result
+handle = await env.client.start_workflow(...)
+await handle.signal(MyWorkflow.update_status, "completed")
+assert await handle.result() == "completed"
 ```
 
-## Multi-Activity Workflow Testing
+## Test Organization
 
-### Sequential Activity Pattern
+Recommended layout:
 
-```python
-@pytest.mark.asyncio
-async def test_workflow_sequential_activities(workflow_env):
-    """Test workflow orchestrating multiple activities"""
-
-    activity_calls = []
-// ... (48 lines trimmed)
-        )
-        assert result == "start-step1-step2-step3"
-        assert activity_calls == ["step_1", "step_2", "step_3"]
-```
-
-### Parallel Activity Pattern
-
-```python
-@pytest.mark.asyncio
-async def test_workflow_parallel_activities(workflow_env):
-    """Test concurrent activity execution"""
-
-    @activity.defn
-// ... (28 lines trimmed)
-            task_queue="test",
-        )
-        assert result == ["task-0", "task-1", "task-2"]
-```
-
-## Signal and Query Testing
-
-### Signal Handlers
-
-```python
-@pytest.mark.asyncio
-async def test_workflow_signals(workflow_env):
-    """Test workflow signal handling"""
-
-    @workflow.defn
-// ... (42 lines trimmed)
-        await handle.signal(SignalWorkflow.update_status, "completed")
-        result = await handle.result()
-        assert result == "completed"
-```
-
-## Coverage Strategies
-
-### Workflow Logic Coverage
-
-**Target**: ≥80% coverage of workflow decision logic
-
-```python
-# Test all branches
-@pytest.mark.parametrize("condition,expected", [
-    (True, "branch-a"),
-    (False, "branch-b"),
-])
-async def test_workflow_branches(workflow_env, condition, expected):
-    """Ensure all code paths are tested"""
-    # Test implementation
-    pass
-```
-
-### Activity Coverage
-
-**Target**: ≥80% coverage of activity logic
-
-```python
-# Test activity edge cases
-@pytest.mark.parametrize("input,expected", [
-    ("valid", "success"),
-    ("", "empty-input-error"),
-    (None, "null-input-error"),
-])
-async def test_activity_edge_cases(activity_env, input, expected):
-    """Test activity error handling"""
-    # Test implementation
-    pass
-```
-
-## Integration Test Organization
-
-### Test Structure
-
-```
+```text
 tests/
-├── integration/
-│   ├── conftest.py              # Shared fixtures
-│   ├── test_order_workflow.py   # Order processing tests
-│   ├── test_payment_workflow.py # Payment tests
-│   └── test_fulfillment_workflow.py
-├── unit/
-│   ├── test_order_activities.py
-│   └── test_payment_activities.py
-└── fixtures/
-    └── test_data.py             # Test data builders
-```
-
-### Shared Fixtures
-
-```python
-# conftest.py
-import pytest
-from temporalio.testing import WorkflowEnvironment
-
-@pytest.fixture(scope="session")
-// ... (12 lines trimmed)
-def mock_inventory_service():
-    """Mock external inventory service"""
-    return Mock()
+  integration/
+    conftest.py
+    test_order_workflow.py
+    test_payment_workflow.py
+  unit/
+    test_order_activities.py
+    test_payment_activities.py
 ```
 
 ## Best Practices
 
-1. **Mock External Dependencies**: Never call real APIs in tests
-2. **Test Error Scenarios**: Verify compensation and retry logic
-3. **Parallel Testing**: Use pytest-xdist for faster test runs
-4. **Isolated Tests**: Each test should be independent
-5. **Clear Assertions**: Verify both results and side effects
-6. **Coverage Target**: ≥80% for critical workflows
-7. **Fast Execution**: Use time-skipping, avoid real delays
-
-## Additional Resources
-
-- Mocking Strategies: docs.temporal.io/develop/python/testing-suite
-- pytest Best Practices: docs.pytest.org/en/stable/goodpractices.html
-- Python SDK Samples: github.com/temporalio/samples-python
+- mock external systems, not Temporal primitives
+- verify both outcome and orchestration path
+- use time skipping by default
+- keep fixtures reusable but explicit
+- test success, transient failure, and non-retryable failure paths

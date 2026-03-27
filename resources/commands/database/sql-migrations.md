@@ -39,7 +39,19 @@ CREATE INDEX CONCURRENTLY idx_users_email_verified ON users(email_verified);
 
 -- Phase 2: MIGRATE DATA (in batches)
 DO $$
-# ... (20 lines trimmed)
+DECLARE batch_size INT := 1000;
+BEGIN
+  LOOP
+    WITH moved AS (
+      INSERT INTO user_emails (user_id, email)
+      SELECT id, email FROM users
+      WHERE email IS NOT NULL
+      LIMIT batch_size
+      RETURNING user_id
+    )
+    EXIT WHEN NOT EXISTS (SELECT 1 FROM moved);
+  END LOOP;
+END $$;
 -- Phase 3: CONTRACT (after code deployment)
 ALTER TABLE users DROP COLUMN email_confirmation_token;
 ```
@@ -53,7 +65,15 @@ CREATE TABLE v2_orders (
     customer_id UUID NOT NULL,
     total_amount DECIMAL(12,2) NOT NULL,
     status VARCHAR(50) NOT NULL,
-# ... (50 lines trimmed)
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+DO $$
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO orders (id, customer_id, total_amount, status)
+    VALUES (gen_random_uuid(), gen_random_uuid(), 100.00 + i, 'pending');
+  END LOOP;
     END LOOP;
 END $$;
 ```
@@ -90,7 +110,11 @@ BEGIN;
 CREATE TABLE IF NOT EXISTS user_preferences (
     user_id UUID PRIMARY KEY,
     theme VARCHAR(20) DEFAULT 'light' NOT NULL,
-# ... (15 lines trimmed)
+    email_notifications BOOLEAN DEFAULT true NOT NULL,
+    timezone VARCHAR(64) DEFAULT 'UTC' NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
 COMMIT;
 ```
@@ -104,7 +128,14 @@ Revision ID: 001_user_prefs
 """
 from alembic import op
 import sqlalchemy as sa
-# ... (22 lines trimmed)
+def upgrade():
+    op.create_table(
+        'user_preferences',
+        sa.Column('user_id', sa.Uuid(), primary_key=True),
+        sa.Column('theme', sa.String(length=20), nullable=False, server_default='light'),
+        sa.Column('email_notifications', sa.Boolean(), nullable=False, server_default=sa.true()),
+    )
+
 def downgrade():
     op.drop_table('user_preferences')
 ```
@@ -118,7 +149,12 @@ def validate_pre_migration(db_connection):
     # Check 1: NULL values in critical columns
     null_check = db_connection.execute("""
         SELECT table_name, COUNT(*) as null_count
-# ... (45 lines trimmed)
+        FROM some_validation_view
+        GROUP BY table_name
+    """)
+
+    validations["null_checks"] = list(null_check)
+    validations["status"] = "pass" if not validations["null_checks"] else "review"
 
     return validations
 ```
@@ -132,7 +168,14 @@ from contextlib import contextmanager
 class MigrationRunner:
     def __init__(self, db_config):
         self.db_config = db_config
-# ... (45 lines trimmed)
+        self.conn = None
+
+    def run(self, sql_file):
+        try:
+            self.conn = self.connect()
+            self.apply(sql_file)
+            self.verify()
+        except Exception:
             self.rollback_from_snapshot()
             raise
 ```
@@ -146,7 +189,13 @@ class MigrationRunner:
 set -e
 
 MIGRATION_VERSION=$1
-# ... (22 lines trimmed)
+if [[ -z "${MIGRATION_VERSION:-}" ]]; then
+  echo "Usage: $0 <migration-version>"
+  exit 1
+fi
+
+echo "Running migration ${MIGRATION_VERSION}"
+python3 scripts/run_migration.py "$MIGRATION_VERSION"
     exit 1
 fi
 ```
@@ -162,7 +211,15 @@ class BatchMigrator:
         self.batch_size = batch_size
 
     def migrate_large_table(self, source_query, target_query, cursor_column='id'):
-# ... (23 lines trimmed)
+        cursor = None
+        batch_number = 0
+        while True:
+            rows = self.fetch_batch(source_query, cursor, cursor_column)
+            if not rows:
+                break
+            self.write_batch(target_query, rows)
+            cursor = rows[-1][cursor_column]
+            batch_number += 1
             print(f"Batch {batch_number}: {len(rows)} rows")
             time.sleep(0.1)
 ```
@@ -176,7 +233,12 @@ class ParallelMigrator:
     def __init__(self, db_config, num_workers=4):
         self.db_config = db_config
         self.num_workers = num_workers
-# ... (36 lines trimmed)
+        self.pool = ThreadPoolExecutor(max_workers=num_workers)
+
+    def run_parallel(self, tasks):
+        futures = [self.pool.submit(task) for task in tasks]
+        for future in futures:
+            future.result()
 
         conn.close()
 ```
@@ -190,7 +252,16 @@ SELECT indexname, indexdef
 FROM pg_indexes
 WHERE tablename = 'large_table'
   AND indexname NOT LIKE '%pkey%';
-# ... (21 lines trimmed)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_indexes
+    WHERE tablename = 'large_table'
+      AND indexname = 'idx_large_table_created_at'
+  ) THEN
+    CREATE INDEX CONCURRENTLY idx_large_table_created_at
+      ON large_table (created_at);
+  END IF;
     END LOOP;
 END $$;
 ```

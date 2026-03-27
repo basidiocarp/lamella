@@ -1,124 +1,99 @@
 # RTOS Patterns
 
-## Task Creation and Management
+## Task Creation
 
 ```c
 #include "FreeRTOS.h"
-#include "task.h"
 #include "queue.h"
 #include "semphr.h"
+#include "task.h"
 
-// ... (44 lines trimmed)
-    xTaskCreate(vProcessingTask, "Process", STACK_SIZE_PROCESS, NULL,
-                PRIORITY_PROCESSING, &xProcessTaskHandle);
+static void vSensorTask(void *arg) {
+    for (;;) {
+        ReadSensors();
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+static void vProcessingTask(void *arg) {
+    for (;;) {
+        ProcessTelemetry();
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
+
+void InitTasks(void) {
+    xTaskCreate(vSensorTask, "Sensor", 256, NULL, 2, NULL);
+    xTaskCreate(vProcessingTask, "Process", 384, NULL, 3, NULL);
 }
 ```
 
 ## Queue Communication
 
 ```c
-// Queue creation and usage
 QueueHandle_t xDataQueue;
-QueueHandle_t xCommandQueue;
 
 void InitQueues(void) {
-// ... (37 lines trimmed)
+    xDataQueue = xQueueCreate(8, sizeof(SensorSample_t));
+}
+
+void vProducerTask(void *arg) {
+    SensorSample_t sample;
+    for (;;) {
+        sample = ReadSample();
+        xQueueSend(xDataQueue, &sample, portMAX_DELAY);
+    }
+}
+
+void vConsumerTask(void *arg) {
+    SensorSample_t sample;
+    for (;;) {
+        if (xQueueReceive(xDataQueue, &sample, portMAX_DELAY) == pdPASS) {
+            HandleSample(sample);
         }
     }
 }
 ```
 
-## Mutex and Critical Sections
+## Mutexes and Critical Sections
 
 ```c
 SemaphoreHandle_t xI2CMutex;
-SemaphoreHandle_t xUARTMutex;
 
 void InitMutexes(void) {
     xI2CMutex = xSemaphoreCreateMutex();
-// ... (26 lines trimmed)
-    g_shared_counter++;
-    taskEXIT_CRITICAL();
 }
-```
 
-## Binary Semaphores (Signaling)
-
-```c
-SemaphoreHandle_t xDataReadySemaphore;
-
-// Interrupt signals task
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-// ... (15 lines trimmed)
-        }
+void ReadSharedSensor(void) {
+    if (xSemaphoreTake(xI2CMutex, pdMS_TO_TICKS(20)) == pdTRUE) {
+        ReadSensorOverI2C();
+        xSemaphoreGive(xI2CMutex);
     }
 }
 ```
 
-## Software Timers
-
-```c
-TimerHandle_t xWatchdogTimer;
-TimerHandle_t xBlinkTimer;
-
-void vWatchdogCallback(TimerHandle_t xTimer) {
-    // Periodic watchdog check
-// ... (19 lines trimmed)
-    xTimerStart(xWatchdogTimer, 0);
-    xTimerStart(xBlinkTimer, 0);
-}
-```
-
-## Event Groups
-
-```c
-EventGroupHandle_t xSystemEvents;
-
-#define EVENT_SENSOR_READY   (1 << 0)
-#define EVENT_COMM_READY     (1 << 1)
-#define EVENT_CALIBRATED     (1 << 2)
-// ... (23 lines trimmed)
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
-}
-```
-
-## Memory Management
-
-```c
-// FreeRTOSConfig.h settings
-#define configTOTAL_HEAP_SIZE           ((size_t)(20 * 1024))  // 20KB heap
-#define configMINIMAL_STACK_SIZE        ((uint16_t)128)
-#define configUSE_MALLOC_FAILED_HOOK    1
-
-// ... (17 lines trimmed)
-    printf("MALLOC FAILED\n");
-    Error_Handler();
-}
-```
-
-## Task Notifications (Lightweight Alternative)
+## Task Notifications
 
 ```c
 TaskHandle_t xWorkerTaskHandle;
 
-// ISR notifies task (faster than semaphore)
 void EXTI_IRQHandler(void) {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-// ... (16 lines trimmed)
-        }
+    vTaskNotifyGiveFromISR(xWorkerTaskHandle, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+void vWorkerTask(void *arg) {
+    for (;;) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        HandleInterruptWork();
     }
 }
 ```
 
 ## Best Practices
 
-- Use `vTaskDelayUntil()` for periodic tasks (prevents drift)
-- Keep ISRs short - defer work to tasks via queues/semaphores
-- Size stacks appropriately (monitor with `uxTaskGetStackHighWaterMark()`)
-- Use task notifications instead of semaphores when possible (lower overhead)
-- Protect shared resources with mutexes, not critical sections (unless very short)
-- Configure watchdog for production builds
-- Monitor heap usage to prevent fragmentation
-- Use priority inheritance mutexes to avoid priority inversion
+- Use `vTaskDelayUntil()` for periodic work to avoid drift.
+- Prefer task notifications over semaphores for one-to-one ISR signaling.
+- Keep ISRs short and push work into tasks.
+- Watch stack high-water marks and tune task stack sizes.

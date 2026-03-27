@@ -197,7 +197,14 @@ Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximat
   "mode": "full",
   "batch_progress": {
     "total": 80,
-// ... (9 lines trimmed)
+    "completed": 20,
+    "current_batch": 3,
+    "remaining": 60,
+    "findings": {
+      "critical": 1,
+      "medium": 4,
+      "low": 7
+    }
     }
   }
 }

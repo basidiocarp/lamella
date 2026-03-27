@@ -1,144 +1,38 @@
-# Validation, Linting & SDK Generation
+# Validation and SDK Generation
 
-Tools and configurations for validating OpenAPI specs and generating client SDKs.
+Use this reference when an OpenAPI spec needs linting, bundling, or generated
+clients.
 
-## Validation Tools Setup
+## Linting
 
-```bash
-# Install validation tools
-npm install -g @stoplight/spectral-cli
-npm install -g @redocly/cli
-```
+Common tools:
 
-## Spectral Configuration
+- `spectral` for rule-based spec linting
+- `redocly` for spec validation and bundling
 
-Create `.spectral.yaml` in your project root:
-
-```yaml
-extends: ["spectral:oas", "spectral:asyncapi"]
-
-rules:
-  # Enforce operation IDs
-  operation-operationId: error
-// ... (29 lines trimmed)
-      function: casing
-      functionOptions:
-        type: camel
-```
-
-### Run Spectral
+Typical commands:
 
 ```bash
 spectral lint openapi.yaml
-```
-
-## Redocly Configuration
-
-Create `redocly.yaml` in your project root:
-
-```yaml
-extends:
-  - recommended
-
-rules:
-  no-invalid-media-type-examples: error
-// ... (16 lines trimmed)
-        - lang: curl
-        - lang: python
-        - lang: javascript
-```
-
-### Run Redocly
-
-```bash
-# Lint spec
 redocly lint openapi.yaml
-
-# Bundle multiple files into one
 redocly bundle openapi.yaml -o bundled.yaml
-
-# Preview documentation locally
-redocly preview-docs openapi.yaml
 ```
 
 ## SDK Generation
 
-Use OpenAPI Generator to create client SDKs in multiple languages.
-
-### Installation
+`openapi-generator-cli` covers the common client targets:
 
 ```bash
-npm install -g @openapitools/openapi-generator-cli
+openapi-generator-cli generate -i openapi.yaml -g typescript-fetch -o ./sdk
+openapi-generator-cli generate -i openapi.yaml -g python -o ./python-client
 ```
 
-### TypeScript Client
+## CI Rule
 
-```bash
-openapi-generator-cli generate \
-  -i openapi.yaml \
-  -g typescript-fetch \
-  -o ./generated/typescript-client \
-  --additional-properties=supportsES6=true,npmName=@myorg/api-client
-```
+Run validation before SDK generation. Broken specs should fail the pipeline
+before generated clients drift further from reality.
 
-### Python Client
+## Practical Rule
 
-```bash
-openapi-generator-cli generate \
-  -i openapi.yaml \
-  -g python \
-  -o ./generated/python-client \
-  --additional-properties=packageName=api_client
-```
-
-### Go Client
-
-```bash
-openapi-generator-cli generate \
-  -i openapi.yaml \
-  -g go \
-  -o ./generated/go-client
-```
-
-### Available Generators
-
-| Generator | Language/Framework |
-|-----------|-------------------|
-| `typescript-fetch` | TypeScript with Fetch API |
-| `typescript-axios` | TypeScript with Axios |
-| `python` | Python with urllib3 |
-| `python-pydantic-v1` | Python with Pydantic v1 |
-| `go` | Go |
-| `java` | Java |
-| `kotlin` | Kotlin |
-| `swift5` | Swift 5 |
-| `csharp` | C# |
-| `rust` | Rust |
-
-### Custom Templates
-
-```bash
-# List available templates
-openapi-generator-cli author template -g typescript-fetch --list
-
-# Extract templates for customization
-openapi-generator-cli author template \
-  -g typescript-fetch \
-  -o ./templates/typescript-fetch
-```
-
-## CI/CD Integration
-
-### GitHub Actions Example
-
-```yaml
-name: OpenAPI Validation
-on: [push, pull_request]
-
-jobs:
-  validate:
-// ... (19 lines trimmed)
-            -i openapi.yaml \
-            -g typescript-fetch \
-            -o ./sdk
-```
+Treat generated SDKs as build artifacts tied to a validated spec, not as
+hand-maintained source-of-truth code.

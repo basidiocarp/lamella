@@ -8,7 +8,17 @@ fetch(url, { cache: "no-store" });
 
 // Cache forever (static)
 fetch(url, { cache: "force-cache" });
-// ... (13 lines trimmed)
+
+// Revalidate after 60 seconds
+fetch(url, { next: { revalidate: 60 } });
+
+// Cache tagged data for targeted invalidation
+fetch(url, { next: { tags: ["products"] } });
+
+// Server Action invalidation
+import { revalidatePath, revalidateTag } from "next/cache";
+
+export async function updateProduct() {
   revalidateTag("products");
   revalidatePath("/products");
 }
@@ -35,9 +45,15 @@ export default async function Page() {
   const data = await getData();
   return <div>{data}</div>;
 }
-// ... (8 lines trimmed)
-  const cookieStore = await cookies(); // Makes route dynamic
-  // ...
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+
+// Or opt into runtime signals that make the route dynamic
+export default async function DynamicPage() {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("theme");
+  return <div>{theme?.value}</div>;
 }
 ```
 
@@ -47,7 +63,7 @@ export default async function Page() {
 // Prefetch links (default behavior)
 import Link from "next/link";
 
-<Link href="/products">Products</Link>; // Prefetched on hover
+<Link href="/products">Products</Link>;
 
 // Disable prefetch
 <Link href="/products" prefetch={false}>
@@ -58,7 +74,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const router = useRouter();
-router.refresh(); // Invalidate router cache
+router.refresh();
 ```
 
 ## Cache Best Practices
@@ -67,6 +83,6 @@ router.refresh(); // Invalidate router cache
 |----------|----------|
 | Static content | `force-cache` (default) |
 | User-specific data | `no-store` |
-| Frequently updated | Short revalidate (e.g., 60s) |
+| Frequently updated | Short revalidate window |
 | On-demand updates | Tag-based invalidation |
-| Real-time data | `no-store` + client polling |
+| Real-time data | `no-store` plus client polling |

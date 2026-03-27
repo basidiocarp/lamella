@@ -19,7 +19,17 @@ Use AskUserQuestion to gather configuration:
     {
       "question": "Enable plugin for this project?",
       "header": "Enable Plugin",
-// ... (30 lines trimmed)
+      "id": "enabled",
+      "options": [
+        {
+          "label": "Enabled",
+          "description": "Load the plugin on this project."
+        },
+        {
+          "label": "Disabled",
+          "description": "Keep the plugin installed but inactive."
+        }
+      ]
     }
   ]
 }

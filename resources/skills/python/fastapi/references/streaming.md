@@ -1,88 +1,45 @@
 # Streaming
 
-## Stream JSON Lines
+Use FastAPI streaming when the response should arrive incrementally instead of as
+one buffered payload.
 
-To stream JSON Lines, declare the return type and use `yield` to return the data.
+## Main Streaming Shapes
 
-```python
-@app.get("/items/stream")
-async def stream_items() -> AsyncIterable[Item]:
-    for item in items:
-        yield item
-```
+### JSON Lines or Incremental Items
 
-## Server-Sent Events (SSE)
+Use an async iterator when the client can consume records one at a time.
 
-To stream Server-Sent Events, use `response_class=EventSourceResponse` and `yield` items from the endpoint.
+Good fits:
+- event feeds
+- long-running result streams
+- incremental export or processing responses
 
-Plain objects are automatically JSON-serialized as `data:` fields, declare the return type so the serialization is done by Pydantic:
+### Server-Sent Events
 
-```python
-from collections.abc import AsyncIterable
+Use SSE when the client is browser-friendly and the stream is event-oriented.
 
-from fastapi import FastAPI
-from fastapi.sse import EventSourceResponse
-from pydantic import BaseModel
-// ... (10 lines trimmed)
-async def stream_items() -> AsyncIterable[Item]:
-    yield Item(name="Plumbus", price=32.99)
-    yield Item(name="Portal Gun", price=999.99)
-```
+SSE is a good fit for:
+- progress updates
+- notifications
+- live status feeds
 
-For full control over SSE fields (`event`, `id`, `retry`, `comment`), yield `ServerSentEvent` instances:
+Use structured event names and IDs only when the client actually needs them.
 
-```python
-from collections.abc import AsyncIterable
+### Byte Streaming
 
-from fastapi import FastAPI
-from fastapi.sse import EventSourceResponse, ServerSentEvent
+Use `StreamingResponse` or a typed subclass when sending:
+- large files
+- generated media
+- incremental binary output
 
-app = FastAPI()
+Prefer explicit response classes over ad hoc streaming return values when the
+media type matters.
 
+## Streaming Rules
 
-@app.get("/events", response_class=EventSourceResponse)
-async def stream_events() -> AsyncIterable[ServerSentEvent]:
-    yield ServerSentEvent(data={"status": "started"}, event="status", id="1")
-    yield ServerSentEvent(data={"progress": 50}, event="progress", id="2")
-```
+- keep the generator simple
+- handle disconnects and cleanup
+- choose the right response class for the payload
+- use streaming only when incremental delivery has real value
 
-Use `raw_data` instead of `data` to send pre-formatted strings without JSON encoding:
-
-```python
-yield ServerSentEvent(raw_data="plain text line", event="log")
-```
-
-## Stream bytes
-
-To stream bytes, declare a `response_class=` of `StreamingResponse` or a sub-class, and use `yield` to return the data.
-
-```python
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
-from app.utils import read_image
-
-app = FastAPI()
-
-
-class PNGStreamingResponse(StreamingResponse):
-    media_type = "image/png"
-
-@app.get("/image", response_class=PNGStreamingResponse)
-def stream_image_no_async_no_annotation():
-    with read_image() as image_file:
-        yield from image_file
-```
-
-prefer this over returning a `StreamingResponse` directly:
-
-```python
-# DO NOT DO THIS
-
-import anyio
-from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
-// ... (9 lines trimmed)
-@app.get("/")
-async def main():
-    return PNGStreamingResponse(read_image())
-```
+If the response is naturally small and immediate, normal JSON is simpler.

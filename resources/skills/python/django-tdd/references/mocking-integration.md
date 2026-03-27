@@ -1,64 +1,44 @@
 # Mocking and Integration Testing
 
-Patterns for mocking external services and full-flow integration tests.
+Use mocking to isolate external boundaries, and use integration tests to verify
+that the whole flow still works together.
 
-## Mocking External Services
+## Mock at the Boundary
 
-```python
-# tests/test_views.py
-from unittest.mock import patch, Mock
-import pytest
+Good mocking targets:
+- payment gateways
+- email transport
+- third-party APIs
+- queue or background job adapters
 
-class TestPaymentView:
-// ... (31 lines trimmed)
+Bad mocking targets:
+- your own internal logic
+- ORM behavior you actually need to verify
+- code paths whose integration is the thing under test
 
-        assert response.status_code == 302
-        assert 'error' in response.url
-```
+## Integration Tests
 
-## Mocking Email Sending
+Use integration tests for:
+- multi-step request flows
+- database persistence checks
+- auth and permission behavior
+- full user-visible outcomes
 
-```python
-# tests/test_email.py
-from django.core import mail
-from django.test import override_settings
+They are the counterweight to over-mocking.
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
-def test_order_confirmation_email(db, order):
-    """Test order confirmation email."""
-    order.send_confirmation_email()
+## Email Testing
 
-    assert len(mail.outbox) == 1
-    assert order.user.email in mail.outbox[0].to
-    assert 'Order Confirmation' in mail.outbox[0].subject
-```
+Use the local-memory email backend or equivalent test backend so the test can
+assert:
+- message count
+- recipient
+- subject or key body content
 
-## Integration Testing
+## Design Rule
 
-### Full Flow Testing
+Prefer:
+- unit tests with mocks for boundary behavior
+- integration tests for system behavior
 
-```python
-# tests/test_integration.py
-import pytest
-from django.urls import reverse
-from tests.factories import UserFactory, ProductFactory
-
-// ... (41 lines trimmed)
-
-        assert response.status_code == 302
-        assert Order.objects.filter(user__email='test@example.com').exists()
-```
-
-## Mocking Best Practices
-
-### DO
-- Mock at the boundary (external APIs, databases for unit tests)
-- Use `@patch` decorator for clean test setup
-- Configure return values that match real API responses
-- Test both success and failure scenarios
-
-### DON'T
-- Mock internal implementation details
-- Over-mock (prefer integration tests when possible)
-- Forget to test error handling paths
-- Use mocks without assertions on calls
+If a test needs many mocks to stand up a normal product flow, it is probably the
+wrong test level.

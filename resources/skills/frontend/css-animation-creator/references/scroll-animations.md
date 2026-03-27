@@ -1,81 +1,64 @@
 # Scroll Animations
 
-Intersection Observer patterns, Framer Motion scroll-triggered animations, and native CSS scroll-driven animations.
+Use scroll animation only when scroll position helps tell the story or reveal
+state. If the page has no narrative arc, keep the motion minimal.
 
-## Narrative Scroll Planning
+## Good Scroll Uses
 
-Use scroll as a sequencing tool, not just as motion decoration.
+- progressive reveals in landing pages
+- step-by-step product walkthroughs
+- pinned comparisons or explainers
+- subtle section entry cues
 
-Typical story beats:
+## Implementation Options
 
-1. Hook
-2. Context
-3. Journey
-4. Reveal
-5. Resolution
+### Intersection Observer
 
-If the page has no real narrative arc, keep the motion light.
+Best for:
+- reveal-on-enter patterns
+- lightweight section activation
+- toggling classes or state without heavy motion logic
 
-## Intersection Observer
+### Framer Motion Scroll Hooks
 
-```tsx
-function useInView(options = {}) {
-  const ref = useRef(null);
-  const [isInView, setIsInView] = useState(false);
+Best for:
+- parallax and progress-linked transforms
+- coordinated scroll-driven motion
+- shared animation logic inside a React app
 
-  useEffect(() => {
-// ... (27 lines trimmed)
-    </div>
-  );
-}
-```
+### Native Scroll-Driven CSS
 
-## Scroll-triggered with Framer Motion
-
-```tsx
-import { motion, useScroll, useTransform } from 'framer-motion';
-
-function ParallaxSection() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-// ... (22 lines trimmed)
-    />
-  );
-}
-```
-
-## CSS Scroll-driven Animations
-
-```css
-/* Native scroll-driven animations (Chrome 115+) */
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-// ... (21 lines trimmed)
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-```
+Best for:
+- progressive enhancement where browser support is acceptable
+- simple timeline-linked effects without extra JS
 
 ## Sticky and Pinned Sections
 
-Use sticky or pinned sections when the user needs to keep one visual anchor in place while the explanation changes around it.
+Use pinned sections when one anchor element should stay visible while the copy or
+adjacent panels change.
 
-Good uses:
-
-- step-by-step product walkthroughs
+Good fits:
 - before-and-after comparisons
-- horizontal galleries with clear progress
+- product walkthroughs
+- step sequences with one persistent visual
 
-Bad uses:
+Bad fits:
+- decorative pinning with no informational payoff
+- long sections that trap the user in one scroll region
 
-- generic parallax for its own sake
-- layouts that trap the user in a pinned section too long
+## Design Rules
+
+- sequence content before adding motion
+- keep one dominant scroll effect per section
+- avoid layered parallax plus stagger plus pinned motion at once
+- respect reduced-motion preferences
+- test on lower-powered devices before keeping heavy effects
 
 ## Anti-Patterns
 
-- Scroll hijacking that replaces natural page scroll
-- Too many layered effects at once
-- Heavy motion with no reduced-motion fallback
-- Pinned sections that make the user work to regain normal page flow
+- scroll hijacking
+- excessive parallax
+- pinned sections that delay normal reading flow
+- motion that matters more than the content reveal
+
+Scroll animation should support comprehension, not compete with it.

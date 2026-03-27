@@ -1,18 +1,18 @@
 # Phase 1: Exploration (Propose Approaches)
 
-Launch **3 independent agents in parallel** (recommended: Sonnet for speed):
+Launch **3 independent agents in parallel**. Sonnet is usually enough for this stage.
 
-1. Each agent receives **identical task description and context**
-2. Each agent **generates 6 high-level approaches** (not full implementations)
-3. For each approach, agent provides:
-   - **Approach description** (2-3 paragraphs)
-   - **Key design decisions** and trade-offs
-   - **Probability estimate** (0.0-1.0)
-   - **Estimated complexity** (low/medium/high)
-   - **Potential risks** and failure modes
-4. Proposals saved to `.specs/research/{solution-name}-{date}.proposals.[a|b|c].md`
+1. Each agent receives the same task description and context.
+2. Each agent generates **6 high-level approaches**, not full implementations.
+3. For each approach, the agent should provide:
+   - a short description
+   - key design decisions and trade-offs
+   - probability estimate
+   - estimated complexity
+   - risks and failure modes
+4. Save proposals to `.specs/research/{solution-name}-{date}.proposals.[a|b|c].md`.
 
-**Key principle:** Systematic exploration through probabilistic sampling from the full distribution of possible approaches.
+**Key principle:** Explore broadly before committing to one branch.
 
 ## Prompt Template for Explorers
 
@@ -22,17 +22,26 @@ Launch **3 independent agents in parallel** (recommended: Sonnet for speed):
 </task>
 
 <constraints>
-// ... (51 lines trimmed)
+{constraints}
+</constraints>
+
+<goal>
+Generate 6 genuinely different high-level approaches.
+</goal>
+
+For each approach include:
+1. Summary
+2. Key design decisions
+3. Main trade-offs
+4. Complexity estimate
+5. Risks
+6. Confidence estimate
+
 CRITICAL:
-- Do NOT implement full solutions yet - only high-level approaches
-- Ensure approaches are genuinely different, not minor variations
+- Do not implement full solutions yet.
+- Ensure approaches are genuinely different, not minor variations.
 ```
 
 ## Output Naming
 
 **File format:** `.specs/research/{solution-name}-{YYYY-MM-DD}.proposals.[a|b|c].md`
-
-Where:
-- `{solution-name}` - Derived from output path (e.g., `users-api` from output `specs/api/users.md`)
-- `{YYYY-MM-DD}` - Current date
-- `[a|b|c]` - Unique agent identifier

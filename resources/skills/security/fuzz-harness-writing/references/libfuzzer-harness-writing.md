@@ -1,70 +1,98 @@
 # Writing a Harness
 
-The harness is the entry point for the fuzzer. libFuzzer calls the `LLVMFuzzerTestOneInput` function repeatedly with different inputs.
+The libFuzzer harness is the entry point the engine calls for every generated
+input. Keep it small, deterministic, and focused on one parser or behavior
+surface.
 
-## Harness Structure
+## Minimal Harness
 
 ```c++
-#include <stdint.h>
 #include <stddef.h>
-
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    // 1. Optional: Validate input size
-// ... (15 lines trimmed)
-    // 4. Always return 0 (non-zero reserved for future use)
-    return 0;
-}
-```
-
-## Harness Rules
-
-| Do | Don't |
-|----|-------|
-| Handle all input types (empty, huge, malformed) | Call `exit()` - stops fuzzing process |
-| Join all threads before returning | Leave threads running |
-| Keep harness fast and simple | Add excessive logging or complexity |
-| Maintain determinism | Use random number generators or read `/dev/random` |
-| Reset global state between runs | Rely on state from previous executions |
-| Use narrow, focused targets | Mix unrelated data formats (PNG + TCP) in one harness |
-
-**Rationale:**
-- **Speed matters:** Aim for 100s-1000s executions per second per core
-- **Reproducibility:** Crashes must be reproducible after fuzzing completes
-- **Isolation:** Each execution should be independent
-
-## Using FuzzedDataProvider for Complex Inputs
-
-For complex inputs (strings, multiple parameters), use the `FuzzedDataProvider` helper:
-
-```c++
 #include <stdint.h>
-#include <stddef.h>
-#include "FuzzedDataProvider.h"  // From LLVM project
 
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-// ... (12 lines trimmed)
-
-    return 0;
-}
-```
-
-Download `FuzzedDataProvider.h` from the [LLVM repository](https://github.com/llvm/llvm-project/blob/main/compiler-rt/include/fuzzer/FuzzedDataProvider.h).
-
-## Interleaved Fuzzing
-
-Use a single harness to test multiple related functions:
-
-```c++
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    if (size < 1 + 2 * sizeof(int32_t)) {
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    if (size == 0) {
         return 0;
     }
 
-// ... (11 lines trimmed)
+    target_function(data, size);
+    return 0;
+}
+```
+
+## Basic Guardrails
+
+- Reject obviously invalid sizes before calling deep parsing code.
+- Reset global state before each iteration if the target mutates shared state.
+- Join threads and release resources before returning.
+- Avoid logging, sleeping, or reading from the network or filesystem.
+- Return `0` for every non-crashing input.
+
+## Using `FuzzedDataProvider`
+
+Use `FuzzedDataProvider` when the target expects multiple fields instead of a
+single byte slice.
+
+```c++
+#include <stddef.h>
+#include <stdint.h>
+#include "FuzzedDataProvider.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    FuzzedDataProvider provider(data, size);
+
+    auto mode = provider.ConsumeIntegral<uint8_t>();
+    auto count = provider.ConsumeIntegralInRange<size_t>(0, 32);
+    auto name = provider.ConsumeRandomLengthString(64);
+    auto payload = provider.ConsumeRemainingBytes<uint8_t>();
+
+    target_function(mode, count, name, payload.data(), payload.size());
+    return 0;
+}
+```
+
+Use it when:
+- the API takes multiple scalars or strings
+- field boundaries matter
+- you want deterministic slicing instead of ad hoc casts
+
+## Interleaved Harnesses
+
+One harness can exercise a small family of related operations if the input
+format stays simple.
+
+```c++
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    FuzzedDataProvider provider(data, size);
+
+    switch (provider.ConsumeIntegralInRange<uint8_t>(0, 2)) {
+        case 0:
+            parse_message(provider.ConsumeRemainingBytes<uint8_t>().data(), size);
+            break;
+        case 1:
+            validate_message(provider.ConsumeRandomLengthString(128));
+            break;
+        case 2:
+            serialize_message(provider.ConsumeIntegral<uint32_t>());
+            break;
+    }
 
     return 0;
 }
 ```
 
-> **See Also:** For detailed harness writing techniques, patterns for handling complex inputs,
-> structure-aware fuzzing, and protobuf-based fuzzing, see the **fuzz-harness-writing** technique skill.
+Only do this when the targets share the same domain. If the branches represent
+different protocols or unrelated subsystems, split them into separate harnesses.
+
+## Review Checklist
+
+| Check | Why |
+|---|---|
+| Deterministic behavior | Crashes must reproduce |
+| No process exit or abort paths | Fuzzing should continue after non-crash failures |
+| No persistent global state | One input should not poison the next |
+| No unbounded allocations | Avoid harness-created OOM noise |
+| Narrow target surface | Better coverage and corpus quality |
+
+> See also: `common-patterns.md` for casting, structure-aware, and state-reset
+> patterns.

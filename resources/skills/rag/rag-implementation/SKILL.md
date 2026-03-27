@@ -69,7 +69,17 @@ from langchain_anthropic import ChatAnthropic
 from langchain_voyageai import VoyageAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from typing import TypedDict
-// ... (25 lines trimmed)
+
+class RAGState(TypedDict):
+    question: str
+    context: list[str]
+    answer: str
+
+builder = StateGraph(RAGState)
+builder.add_node("retrieve", retrieve_docs)
+builder.add_node("generate", generate_answer)
+builder.add_edge(START, "retrieve")
+builder.add_edge("retrieve", "generate")
 builder.add_edge("generate", END)
 
 rag_chain = builder.compile()

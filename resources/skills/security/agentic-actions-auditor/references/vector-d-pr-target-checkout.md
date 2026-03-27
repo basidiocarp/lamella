@@ -66,7 +66,17 @@ on:
     types: [opened, synchronize]
 
 jobs:
-// ... (8 lines trimmed)
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}  # Step 2: Checks out attacker PR head
+      - uses: anthropics/claude-code-action@v1
+        with:
           prompt: |
             Please review this pull request and provide feedback
             # AI reads attacker-modified files from disk with base repo secrets available

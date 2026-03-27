@@ -230,7 +230,8 @@ LEARNING FILE: [full path to .md file]
 1. Read this learning file completely
 2. This learning documents a previously solved problem
 
-# ... (12 lines trimmed)
+3. Compare it against the current task, not just by keywords
+4. Explain the match or mismatch in one sentence
 - Say 'Not applicable: [reason]'
 "
 ```
@@ -298,7 +299,8 @@ find .claude/agents -name "*.md" 2>/dev/null
 
 # 2. User's global agents (~/.claude/)
 find ~/.claude/agents -name "*.md" 2>/dev/null
-# ... (10 lines trimmed)
+# 3. Project-local agents
+find .claude/agents -name "*.md" 2>/dev/null
 # 6. For local plugins (isLocal: true), check their source directories
 # Parse installed_plugins.json and find local plugin paths
 ```
@@ -390,7 +392,7 @@ Merge research findings back into the plan, adding depth without changing the or
 [Original content preserved]
 
 ### Research Insights
-# ... (8 lines trimmed)
+- [Key implementation constraint or prior art]
 
 **Implementation Details:**
 ```[language]
@@ -484,7 +486,7 @@ Use React Query for data fetching with optimistic updates.
 Use React Query for data fetching with optimistic updates.
 
 ### Research Insights
-# ... (10 lines trimmed)
+- [Observed tradeoff or dependency]
 
 **Implementation Details:**
 ```typescript

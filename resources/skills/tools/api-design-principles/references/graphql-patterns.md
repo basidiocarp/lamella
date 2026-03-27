@@ -1,59 +1,39 @@
 # GraphQL Design Patterns
 
-## Pattern 1: Schema Design
+Use these patterns when turning GraphQL principles into concrete schema and
+resolver choices.
+
+## Schema Shape
+
+Keep types focused on client tasks:
 
 ```graphql
-# schema.graphql
-
-# Clear type definitions
 type User {
   id: ID!
-// ... (84 lines trimmed)
-  field: String
-  message: String!
+  email: String!
+  orders(first: Int, after: String): OrderConnection!
 }
 ```
 
----
+Prefer explicit inputs and payloads for mutations.
 
-## Pattern 2: Resolver Design
+## Resolver Design
 
-```python
-from typing import Optional, List
-from ariadne import QueryType, MutationType, ObjectType
-from dataclasses import dataclass
+Resolvers should orchestrate domain calls, not contain the whole business
+system. Keep validation, persistence, and transformation boundaries obvious.
 
-query = QueryType()
-// ... (80 lines trimmed)
-            "user": None,
-            "errors": [{"field": e.field, "message": e.message}]
-        }
-```
+## DataLoader
 
----
+Use DataLoaders or equivalent batching to avoid N+1 query behavior when fields
+fan out across related entities.
 
-## Pattern 3: DataLoader (N+1 Problem Prevention)
+## Error Handling
 
-```python
-from aiodataloader import DataLoader
-from typing import List, Optional
+Mutation payloads should return structured errors instead of relying entirely on
+transport-level exceptions.
 
-class UserLoader(DataLoader):
-    """Batch load users by ID."""
-// ... (32 lines trimmed)
-            "orders_by_user": OrdersByUserLoader()
-        }
-    }
-```
+## Practical Rule
 
----
-
-## GraphQL Best Practices
-
-1. **Schema First**: Design schema before writing resolvers
-2. **Avoid N+1**: Use DataLoaders for efficient data fetching
-3. **Input Validation**: Validate at schema and resolver levels
-4. **Error Handling**: Return structured errors in mutation payloads
-5. **Pagination**: Use cursor-based pagination (Relay spec)
-6. **Deprecation**: Use `@deprecated` directive for gradual migration
-7. **Monitoring**: Track query complexity and execution time
+Good GraphQL design is not “one endpoint for everything.” It is a disciplined
+schema plus resolver layer that stays predictable for clients and efficient for
+the backend.

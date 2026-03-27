@@ -78,7 +78,17 @@ const MemoizedList = React.memo(function List({ items }) {
   return items.map(item => <Item key={item.id} {...item} />);
 });
 
-// ... (35 lines trimmed)
+function SearchResults({ query }: { query: string }) {
+  const deferredQuery = useDeferredValue(query);
+  const [isPending, startTransition] = useTransition();
+
+  const onSortChange = (nextSort: string) => {
+    startTransition(() => setSort(nextSort));
+  };
+
+  return (
+    <Suspense fallback={<Spinner />}>
+      <ResultsList query={deferredQuery} pending={isPending} onSortChange={onSortChange} />
     </Suspense>
   );
 }

@@ -171,12 +171,12 @@ with open("large.pdf", "rb") as f:
 
 - [use-cases.md](references/use-cases.md) - Scientific papers, batch conversion, YouTube
 - [advanced-features.md](references/advanced-features.md) - AI enhancement, Azure, Docker, best practices
+- [api_reference.md](references/api_reference.md) - Routing page for core API, plugins, LLM image descriptions, and Azure DI
 - [MarkItDown GitHub](https://github.com/microsoft/markitdown)
 - [OpenRouter](https://openrouter.ai) - AI-enhanced conversions
 ### Additional Resources
 
 - [Example Usage](assets/example_usage.md)
-- [Api Reference](references/api_reference.md)
 - [File Formats](references/file_formats.md)
 - [Batch Convert](scripts/batch_convert.py)
 - [Convert Literature](scripts/convert_literature.py)

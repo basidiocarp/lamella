@@ -3,13 +3,16 @@
 Generate security-focused user stories and epics from requirements.
 
 ```python
-class SecurityUserStoryGenerator:
-    """Generate security-focused user stories."""
+def generate_user_story(requirement: dict) -> str:
+    return (
+        f"As a security-conscious team, we need {requirement['requirement']} "
+        f"so that {requirement['outcome']}."
+    )
 
-    STORY_TEMPLATES = {
-        SecurityDomain.AUTHENTICATION: {
-// ... (99 lines trimmed)
-{chr(10).join(f'- {d}' for r in reqs for d in r.dependencies) or '- None identified'}
-"""
-        return epic
+
+def generate_epic(title: str, requirements: list[dict]) -> str:
+    lines = [f"# Epic: {title}", "", "## Stories"]
+    for req in requirements:
+        lines.append(f"- {generate_user_story(req)}")
+    return "\n".join(lines)
 ```

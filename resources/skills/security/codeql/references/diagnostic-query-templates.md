@@ -1,24 +1,22 @@
 # Diagnostic Query Templates
 
-Language-specific QL queries for enumerating sources and sinks recognized by CodeQL. Used during the data extensions creation process.
+Use these templates to enumerate the sources and sinks CodeQL already recognizes before you write custom extensions.
 
-## Source Enumeration Query
+## Source Enumeration
 
-All languages use the class `RemoteFlowSource`. The import differs per language.
+All supported languages expose a `RemoteFlowSource`-style abstraction, but the imports differ.
 
-### Import Reference
+| Language | Imports |
+|----------|---------|
+| Python | `import python` and `import semmle.python.dataflow.new.RemoteFlowSources` |
+| JavaScript / TypeScript | `import javascript` |
+| Go | `import go` |
+| Java | `import java` and `import semmle.code.java.dataflow.FlowSources` |
+| C / C++ | `import cpp` and `import semmle.code.cpp.security.FlowSources` |
+| C# | `import csharp` and `import semmle.code.csharp.security.dataflow.flowsources.Remote` |
+| Ruby | `import ruby` and `import codeql.ruby.dataflow.RemoteFlowSources` |
 
-| Language | Imports | Class |
-|----------|---------|-------|
-| Python | `import python` + `import semmle.python.dataflow.new.RemoteFlowSources` | `RemoteFlowSource` |
-| JavaScript | `import javascript` | `RemoteFlowSource` |
-| Java | `import java` + `import semmle.code.java.dataflow.FlowSources` | `RemoteFlowSource` |
-| Go | `import go` | `RemoteFlowSource` |
-| C/C++ | `import cpp` + `import semmle.code.cpp.security.FlowSources` | `RemoteFlowSource` |
-| C# | `import csharp` + `import semmle.code.csharp.security.dataflow.flowsources.Remote` | `RemoteFlowSource` |
-| Ruby | `import ruby` + `import codeql.ruby.dataflow.RemoteFlowSources` | `RemoteFlowSource` |
-
-### Template (Python — swap imports per table above)
+Python template:
 
 ```ql
 /**
@@ -37,29 +35,11 @@ select src,
     + ":" + src.getLocation().getStartLine().toString()
 ```
 
-**Note:** `getSourceType()` is available on Python, Java, and C#. For Go, JavaScript, Ruby, and C++ replace the select with:
-```ql
-select src,
-  src.getLocation().getFile().getRelativePath()
-    + ":" + src.getLocation().getStartLine().toString()
-```
+For Go, JavaScript, Ruby, and C++, drop `getSourceType()` and select only the file and line.
 
----
+## Sink Enumeration Strategy
 
-## Sink Enumeration Queries
-
-The Concepts API differs significantly across languages. Use the correct template.
-
-### Concept Class Reference
-
-| Concept | Python | JavaScript | Go | Ruby |
-|---------|--------|------------|-----|------|
-| SQL | `SqlExecution.getSql()` | `DatabaseAccess.getAQueryArgument()` | `SQL::QueryString` (is-a Node) | `SqlExecution.getSql()` |
-| Command exec | `SystemCommandExecution.getCommand()` | `SystemCommandExecution.getACommandArgument()` | `SystemCommandExecution.getCommandName()` | `SystemCommandExecution.getAnArgument()` |
-| File access | `FileSystemAccess.getAPathArgument()` | `FileSystemAccess.getAPathArgument()` | `FileSystemAccess.getAPathArgument()` | `FileSystemAccess.getAPathArgument()` |
-| HTTP client | `Http::Client::Request.getAUrlPart()` | — | — | — |
-| Decoding | `Decoding.getAnInput()` | — | — | — |
-| XML parsing | — | — | — | `XmlParserCall.getAnInput()` |
+The sink APIs are not uniform across languages. Use the template that matches the language’s concepts API instead of trying to share one query across all packs.
 
 ### Python
 
@@ -68,8 +48,19 @@ The Concepts API differs significantly across languages. Use the correct templat
  * @name List recognized dataflow sinks
  * @description Enumerates security-relevant sinks CodeQL recognizes
  * @kind problem
- * @id custom/list-sinks
-// ... (24 lines trimmed)
+ * @id custom/list-sinks-python
+ */
+import python
+import semmle.python.Concepts
+
+from DataFlow::Node sink, string kind
+where
+  sink = SqlExecution::range().getSql() and kind = "sql" or
+  sink = SystemCommandExecution::range().getCommand() and kind = "command" or
+  sink = FileSystemAccess::range().getAPathArgument() and kind = "file" or
+  sink = Http::Client::Request::range().getAUrlPart() and kind = "http-client" or
+  sink = Decoding::range().getAnInput() and kind = "decoding"
+select sink,
   kind
     + " | " + sink.getLocation().getFile().getRelativePath()
     + ":" + sink.getLocation().getStartLine().toString()
@@ -83,7 +74,16 @@ The Concepts API differs significantly across languages. Use the correct templat
  * @description Enumerates security-relevant sinks CodeQL recognizes
  * @kind problem
  * @id custom/list-sinks-js
-// ... (17 lines trimmed)
+ */
+import javascript
+import semmle.javascript.Concepts
+
+from DataFlow::Node sink, string kind
+where
+  sink = DatabaseAccess::range().getAQueryArgument() and kind = "sql" or
+  sink = SystemCommandExecution::range().getACommandArgument() and kind = "command" or
+  sink = FileSystemAccess::range().getAPathArgument() and kind = "file"
+select sink,
   kind
     + " | " + sink.getLocation().getFile().getRelativePath()
     + ":" + sink.getLocation().getStartLine().toString()
@@ -97,7 +97,16 @@ The Concepts API differs significantly across languages. Use the correct templat
  * @description Enumerates security-relevant sinks CodeQL recognizes
  * @kind problem
  * @id custom/list-sinks-go
-// ... (16 lines trimmed)
+ */
+import go
+import semmle.go.Concepts
+
+from DataFlow::Node sink, string kind
+where
+  sink = SQL::QueryString::range() and kind = "sql" or
+  sink = SystemCommandExecution::range().getCommandName() and kind = "command" or
+  sink = FileSystemAccess::range().getAPathArgument() and kind = "file"
+select sink,
   kind
     + " | " + sink.getLocation().getFile().getRelativePath()
     + ":" + sink.getLocation().getStartLine().toString()
@@ -111,86 +120,51 @@ The Concepts API differs significantly across languages. Use the correct templat
  * @description Enumerates security-relevant sinks CodeQL recognizes
  * @kind problem
  * @id custom/list-sinks-ruby
-// ... (18 lines trimmed)
+ */
+import ruby
+import codeql.ruby.Concepts
+
+from DataFlow::Node sink, string kind
+where
+  sink = SqlExecution::range().getSql() and kind = "sql" or
+  sink = SystemCommandExecution::range().getAnArgument() and kind = "command" or
+  sink = FileSystemAccess::range().getAPathArgument() and kind = "file" or
+  sink = XmlParserCall::range().getAnInput() and kind = "xml"
+select sink,
   kind
     + " | " + sink.getLocation().getFile().getRelativePath()
     + ":" + sink.getLocation().getStartLine().toString()
 ```
 
-### Java
+## Languages With Per-Pack Setup
 
-Java lacks a unified Concepts module. Use language-specific sink classes. The diagnostics query needs its own `qlpack.yml` with a `codeql/java-all` dependency — create it alongside the `.ql` files:
+Java, C / C++, and C# typically need a dedicated diagnostics pack next to the `.ql` file.
+
+Template:
 
 ```yaml
-# $DIAG_DIR/qlpack.yml
 name: custom/diagnostics
 version: 0.0.1
 dependencies:
-  codeql/java-all: "*"
+  codeql/<language>-all: "*"
 ```
 
-Then run `codeql pack install` in the diagnostics directory before executing queries.
+Use:
 
-```ql
-/**
- * @name List recognized dataflow sinks
- * @description Enumerates security-relevant sinks CodeQL recognizes
- * @kind problem
- * @id custom/list-sinks
-// ... (24 lines trimmed)
-  kind
-    + " | " + sink.getLocation().getFile().getRelativePath()
-    + ":" + sink.getLocation().getStartLine().toString()
+- `codeql/java-all` for Java
+- `codeql/cpp-all` for C / C++
+- `codeql/csharp-all` for C#
+
+Then run:
+
+```bash
+codeql pack install
 ```
 
-### C / C++
+inside the diagnostics directory before executing the query.
 
-C++ uses a similar per-vulnerability-class pattern. Requires a `qlpack.yml` with `codeql/cpp-all` dependency (same approach as Java):
+## Practical Advice
 
-```yaml
-# $DIAG_DIR/qlpack.yml
-name: custom/diagnostics
-version: 0.0.1
-dependencies:
-  codeql/cpp-all: "*"
-```
-
-Then run `codeql pack install` in the diagnostics directory before executing queries.
-
-```ql
-/**
- * @name List recognized dataflow sinks
- * @description Enumerates security-relevant sinks CodeQL recognizes
- * @kind problem
- * @id custom/list-sinks-cpp
-// ... (33 lines trimmed)
-  kind
-    + " | " + sink.getLocation().getFile().getRelativePath()
-    + ":" + sink.getLocation().getStartLine().toString()
-```
-
-### C\#
-
-C# uses per-vulnerability sink classes. Requires a `qlpack.yml` with `codeql/csharp-all` dependency:
-
-```yaml
-# $DIAG_DIR/qlpack.yml
-name: custom/diagnostics
-version: 0.0.1
-dependencies:
-  codeql/csharp-all: "*"
-```
-
-Then run `codeql pack install` in the diagnostics directory before executing queries.
-
-```ql
-/**
- * @name List recognized dataflow sinks
- * @description Enumerates security-relevant sinks CodeQL recognizes
- * @kind problem
- * @id custom/list-sinks-csharp
-// ... (18 lines trimmed)
-  kind
-    + " | " + sink.getLocation().getFile().getRelativePath()
-    + ":" + sink.getLocation().getStartLine().toString()
-```
+- Start with sources first so you know whether the library model already covers the framework.
+- Keep the sink query narrow to one or two vulnerability classes at a time.
+- Save the output and compare it with the code you expected to see. Missing entries usually mean you need a different concept class, not a looser query.

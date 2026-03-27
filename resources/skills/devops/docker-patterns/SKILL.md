@@ -5,296 +5,78 @@ description: Provides Docker and Docker Compose patterns for Dockerfile generati
 
 # Docker Patterns
 
-
-## Contents
-
-- [When to Use](#when-to-use)
-- [Docker Init by Project Type](#docker-init-by-project-type)
-- [Docker Compose for Local Development](#docker-compose-for-local-development)
-  - [Standard Web App Stack](#standard-web-app-stack)
-  - [Development vs Production Dockerfile](#development-vs-production-dockerfile)
-  - [Override Files](#override-files)
-- [Networking](#networking)
-  - [Service Discovery](#service-discovery)
-  - [Custom Networks](#custom-networks)
-  - [Exposing Only What's Needed](#exposing-only-whats-needed)
-- [Volume Strategies](#volume-strategies)
-  - [Common Patterns](#common-patterns)
-- [Container Security](#container-security)
-  - [Dockerfile Hardening](#dockerfile-hardening)
-  - [Compose Security](#compose-security)
-  - [Secret Management](#secret-management)
-- [.dockerignore](#dockerignore)
-- [Debugging](#debugging)
-  - [Common Commands](#common-commands)
-  - [Debugging Network Issues](#debugging-network-issues)
-- [Anti-Patterns](#anti-patterns)
-
-
-Docker and Docker Compose best practices for containerized development.
+Use this skill when the task is to design or harden containerized development and deployment flows. Keep the main file focused on decision points and minimal safe patterns rather than long framework-specific boilerplate.
 
 ## When to Use
 
-- Initializing Docker in a new or existing project
-- Creating Dockerfiles from scratch
-- Generating docker-compose.yml files
-- Setting up Docker Compose for local development
-- Designing multi-container architectures
-- Troubleshooting container networking or volume issues
-- Reviewing Dockerfiles for security and size
+- Adding Docker to a project for the first time
+- Building a local multi-service stack with Compose
+- Hardening images or Compose definitions for production
+- Debugging container networking, bind mounts, or health checks
+- Standardizing `.dockerignore`, runtime users, and secret handling
 
-## Docker Init by Project Type
+## Core Workflow
 
-When initializing Docker for a project, detect the language/framework and generate: Dockerfile, docker-compose.yaml, .dockerignore, and .env.example.
+1. Pick the smallest base image that still supports the runtime.
+2. Separate build and runtime stages where possible.
+3. Run as a non-root user.
+4. Mount source only for local development, not production.
+5. Expose only the ports and networks that are actually needed.
+6. Keep secrets out of images and committed Compose files.
 
-### Node.js
+## Minimal Production Dockerfile Pattern
 
 ```dockerfile
-FROM node:22-alpine AS builder
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-// ... (10 lines trimmed)
+RUN npm run build
+
+FROM node:22-alpine
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package*.json ./
+RUN npm ci --omit=dev
+USER node
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3000/health || exit 1
 CMD ["node", "dist/server.js"]
 ```
 
-### Python
-
-```dockerfile
-FROM python:3.12-slim AS builder
-WORKDIR /app
-RUN pip install --no-cache-dir uv
-COPY requirements.txt .
-RUN uv pip install --system --no-cache -r requirements.txt
-// ... (8 lines trimmed)
-ENV PYTHONUNBUFFERED=1
-EXPOSE 8000
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
-```
-
-### Go
-
-```dockerfile
-FROM golang:1.22-alpine AS builder
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-// ... (8 lines trimmed)
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:8080/health || exit 1
-CMD ["/server"]
-```
-
-## Docker Compose for Local Development
-
-### Standard Web App Stack
+## Minimal Compose Pattern
 
 ```yaml
-# docker-compose.yml
 services:
   app:
-    build:
-      context: .
-// ... (47 lines trimmed)
-volumes:
-  pgdata:
-  redisdata:
-```
-
-### Development vs Production Dockerfile
-
-```dockerfile
-# Stage: dependencies
-FROM node:22-alpine AS deps
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-// ... (25 lines trimmed)
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3000/health || exit 1
-CMD ["node", "dist/server.js"]
-```
-
-### Override Files
-
-```yaml
-# docker-compose.override.yml (auto-loaded, dev-only settings)
-services:
-  app:
-    environment:
-      - DEBUG=app:*
-// ... (12 lines trimmed)
-        limits:
-          cpus: "1.0"
-          memory: 512M
-```
-
-```bash
-# Development (auto-loads override)
-docker compose up
-
-# Production
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-```
-
-## Networking
-
-### Service Discovery
-
-Services in the same Compose network resolve by service name:
-```
-# From "app" container:
-postgres://postgres:postgres@db:5432/app_dev    # "db" resolves to the db container
-redis://redis:6379/0                             # "redis" resolves to the redis container
-```
-
-### Custom Networks
-
-```yaml
-services:
-  frontend:
-    networks:
-      - frontend-net
-
-// ... (9 lines trimmed)
-networks:
-  frontend-net:
-  backend-net:
-```
-
-### Exposing Only What's Needed
-
-```yaml
-services:
-  db:
+    build: .
     ports:
-      - "127.0.0.1:5432:5432"   # Only accessible from host, not network
-    # Omit ports entirely in production -- accessible only within Docker network
-```
-
-## Volume Strategies
-
-```yaml
-volumes:
-  # Named volume: persists across container restarts, managed by Docker
-  pgdata:
-
-  # Bind mount: maps host directory into container (for development)
-  # - ./src:/app/src
-
-  # Anonymous volume: preserves container-generated content from bind mount override
-  # - /app/node_modules
-```
-
-### Common Patterns
-
-```yaml
-services:
-  app:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - .:/app                   # Source code (bind mount for hot reload)
-// ... (5 lines trimmed)
-      - pgdata:/var/lib/postgresql/data          # Persistent data
-      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql  # Init scripts
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
 ```
 
-## Container Security
+## Guardrails
 
-### Dockerfile Hardening
+- Pin image tags; avoid `latest`.
+- Use `.dockerignore` to exclude VCS data, env files, and build artifacts.
+- Prefer named volumes for database state and bind mounts only for source code.
+- Add health checks only when the service exposes a real readiness endpoint.
+- Use `env_file` or runtime injection for secrets, not `ENV` in the image.
 
-```dockerfile
-# 1. Use specific tags (never :latest)
-FROM node:22.12-alpine3.20
+## Common Pitfalls
 
-# 2. Run as non-root
-RUN addgroup -g 1001 -S app && adduser -S app -u 1001
-USER app
-
-# 3. Drop capabilities (in compose)
-# 4. Read-only root filesystem where possible
-# 5. No secrets in image layers
-```
-
-### Compose Security
-
-```yaml
-services:
-  app:
-    security_opt:
-      - no-new-privileges:true
-// ... (6 lines trimmed)
-    cap_add:
-      - NET_BIND_SERVICE          # Only if binding to ports < 1024
-```
-
-### Secret Management
-
-```yaml
-# GOOD: Use environment variables (injected at runtime)
-services:
-  app:
-    env_file:
-      - .env                     # Never commit .env to git
-// ... (12 lines trimmed)
-
-# BAD: Hardcoded in image
-# ENV API_KEY=sk-proj-xxxxx      # NEVER DO THIS
-```
-
-## .dockerignore
-
-```
-node_modules
-.git
-.env
-.env.*
-// ... (7 lines trimmed)
-README.md
-tests/
-```
-
-## Debugging
-
-### Common Commands
-
-```bash
-# View logs
-docker compose logs -f app           # Follow app logs
-docker compose logs --tail=50 db     # Last 50 lines from db
-
-# Execute commands in running container
-// ... (13 lines trimmed)
-docker compose down                   # Stop and remove containers
-docker compose down -v                # Also remove volumes (DESTRUCTIVE)
-docker system prune                   # Remove unused images/containers
-```
-
-### Debugging Network Issues
-
-```bash
-# Check DNS resolution inside container
-docker compose exec app nslookup db
-
-# Check connectivity
-docker compose exec app wget -qO- http://api:3000/health
-
-# Inspect network
-docker network ls
-docker network inspect <project>_default
-```
-
-## Anti-Patterns
-
-```
-# BAD: Using docker compose in production without orchestration
-# Use Kubernetes, ECS, or Docker Swarm for production multi-container workloads
-
-# BAD: Storing data in containers without volumes
-# Containers are ephemeral -- all data lost on restart without volumes
-// ... (9 lines trimmed)
-
-# BAD: Putting secrets in docker-compose.yml
-# Use .env files (gitignored) or Docker secrets
-```
+- Shipping dev dependencies in the runtime image
+- Running containers as root by default
+- Publishing database or internal service ports unnecessarily
+- Letting bind mounts hide installed dependencies
+- Treating Compose as a production secret manager

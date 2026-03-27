@@ -125,9 +125,12 @@ NO_COLOR=1 bash scripts/validate_makefile.sh <path> > /tmp/validator.log 2>&1
 | [references/code-templates.md](references/code-templates.md) | Complete templates by language |
 | [references/documentation-lookup.md](references/documentation-lookup.md) | External doc lookup |
 | [references/best-practices.md](references/best-practices.md) | Generation best practices |
-| [references/makefile-structure.md](references/makefile-structure.md) | Structure guide |
+| [references/makefile-layout.md](references/makefile-layout.md) | Top-level file order and special targets |
 | [references/variables-guide.md](references/variables-guide.md) | Variable usage |
-| [references/targets-guide.md](references/targets-guide.md) | Target patterns |
+| [references/standard-targets.md](references/standard-targets.md) | Conventional public targets |
+| [references/phony-and-help-targets.md](references/phony-and-help-targets.md) | `.PHONY` and help target patterns |
+| [references/target-dependencies.md](references/target-dependencies.md) | Prerequisites and pattern rules |
+| [references/rules-and-modularization.md](references/rules-and-modularization.md) | Includes, recipe shape, multi-directory rules |
 | [references/patterns-guide.md](references/patterns-guide.md) | Common patterns |
 | [references/optimization-guide.md](references/optimization-guide.md) | Optimization |
 | [references/security-guide.md](references/security-guide.md) | Security hardening |

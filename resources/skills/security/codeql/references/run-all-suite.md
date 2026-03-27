@@ -1,48 +1,35 @@
 # Run-All Query Suite
 
-In run-all mode, generate a custom `.qls` query suite file at runtime. This ensures all queries from all installed packs actually execute, avoiding the silent filtering caused by each pack's `defaultSuiteFile`.
+Use run-all mode when the goal is breadth rather than noise reduction.
 
 ## Why a Custom Suite
 
-When you pass a pack name directly to `codeql database analyze` (e.g., `-- codeql/cpp-queries`), CodeQL uses the pack's `defaultSuiteFile` field from `qlpack.yml`. For official packs, this is typically `codeql-suites/<lang>-code-scanning.qls`, which applies strict precision and severity filters. This silently drops many queries and can produce zero results for small codebases.
+Passing packs directly to `codeql database analyze` can silently apply each
+pack’s default suite behavior. A custom run-all `.qls` file makes the execution
+surface explicit and broader.
 
-The run-all suite explicitly references the broadest built-in suite (`security-and-quality`) for official packs and loads third-party packs with minimal filtering.
+## What Run-All Means
 
-## Suite Template
+Run-all mode is for:
+- broad security and quality coverage
+- exploratory audits
+- validating what installed packs can actually surface
 
-Generate this file as `run-all.qls` in the results directory before running analysis:
+It is the opposite of important-only mode:
+- broader query set
+- no severity-based post-filter
+- more noise, but fewer silent omissions
 
-```yaml
-- description: Run-all — all security and quality queries from all installed packs
-# Official queries: use security-and-quality suite (broadest built-in suite)
-- import: codeql-suites/<CODEQL_LANG>-security-and-quality.qls
-  from: codeql/<CODEQL_LANG>-queries
-# Third-party packs (include only if installed, one entry per pack)
-// ... (12 lines trimmed)
-    tags contain:
-      - modeleditor
-      - modelgenerator
-```
+## When to Use It
 
-## Generation Script
+Use run-all when:
+- the codebase is small enough to review more output
+- you want to compare pack behavior
+- you suspect default suites are hiding relevant queries
 
-```bash
-RAW_DIR="$OUTPUT_DIR/raw"
-SUITE_FILE="$RAW_DIR/run-all.qls"
+Use important-only mode when the review surface must stay tighter.
 
-# NOTE: CODEQL_LANG must be set before running this script (e.g., CODEQL_LANG=cpp)
-# NOTE: INSTALLED_THIRD_PARTY_PACKS must be a space-separated list of pack names
-// ... (34 lines trimmed)
-  echo "ERROR: Suite file failed to resolve. Check CODEQL_LANG=$CODEQL_LANG and installed packs."
-fi
-echo "Suite generated: $SUITE_FILE"
-```
+## Operational Rule
 
-## How This Differs From Important-Only
-
-| Aspect | Run all | Important only |
-|--------|---------|----------------|
-| Official pack suite | `security-and-quality` (all security + code quality) | All queries loaded, filtered by precision |
-| Third-party packs | All `problem`/`path-problem` queries | Only `security`-tagged queries with precision metadata |
-| Precision filter | None | high/very-high always; medium only if security-severity >= 6.0 |
-| Post-analysis filter | None | Drops medium-precision results with security-severity < 6.0 |
+Generate the suite from the installed packs and treat it as an explicit
+“maximize coverage” mode. Expect more findings and more triage work.

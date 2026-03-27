@@ -1,555 +1,363 @@
 # Kubernetes Service Specification Reference
 
-Comprehensive reference for Kubernetes Service resources, covering service types, networking, load balancing, and service discovery patterns.
+Use this page to choose a Service type, wire ports correctly, and debug how traffic reaches pods.
 
-## Overview
+## Choose a Service Type
 
-A Service provides stable network endpoints for accessing Pods. Services enable loose coupling between microservices by providing service discovery and load balancing.
+| Type | Use for | Avoid when |
+|------|---------|------------|
+| `ClusterIP` | Internal traffic inside the cluster | Clients must connect from outside the cluster |
+| `NodePort` | Simple external access in development or bare-metal clusters | You need managed load balancing or fine-grained ingress control |
+| `LoadBalancer` | Public or private cloud load balancers | Your cluster does not support a cloud load balancer |
+| `ExternalName` | DNS alias to an external dependency | You need kube-proxy routing or endpoint health checks |
+| Headless (`clusterIP: None`) | Stateful workloads that need direct pod addresses | You want a single virtual IP with built-in load balancing |
 
-## Service Types
-
-### 1. ClusterIP (Default)
-
-Exposes the service on an internal cluster IP. Only reachable from within the cluster.
+## Minimal Service Shape
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
-// ... (9 lines trimmed)
+  name: web-api
+  namespace: production
+  labels:
+    app.kubernetes.io/name: web-api
+    app.kubernetes.io/component: api
+spec:
+  selector:
+    app.kubernetes.io/name: web-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
       protocol: TCP
+  type: ClusterIP
   sessionAffinity: None
 ```
 
-**Use cases:**
+## Key Fields
 
-- Internal microservice communication
-- Database services
-- Internal APIs
-- Message queues
+### Metadata
 
-### 2. NodePort
+- `metadata.name` becomes part of the DNS name.
+- `metadata.namespace` scopes the Service and its DNS entry.
+- `metadata.labels` should follow the same label vocabulary as the workload.
 
-Exposes the service on each Node's IP at a static port (30000-32767 range).
+### Selector
+
+- `spec.selector` must match pod labels exactly or the Service will have no endpoints.
+- Use stable labels such as `app.kubernetes.io/name` rather than rollout-specific labels.
+
+### Ports
+
+- `port` is the port clients connect to on the Service.
+- `targetPort` is the destination port on the container and can be a number or a named port.
+- `nodePort` is only valid for `NodePort` and `LoadBalancer`.
+- Give ports names when a pod exposes more than one protocol or endpoint.
+
+```yaml
+ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+```
+
+### Traffic Policies
+
+- `externalTrafficPolicy: Local` preserves client IP for external traffic but only sends traffic to nodes with ready endpoints.
+- `internalTrafficPolicy: Local` keeps cluster-internal traffic on the same node when possible.
+- Leave both at `Cluster` unless you have a clear latency or source-IP requirement.
+
+```yaml
+spec:
+  externalTrafficPolicy: Local
+  internalTrafficPolicy: Cluster
+```
+
+### Session Affinity
+
+- `sessionAffinity: None` is the default.
+- `sessionAffinity: ClientIP` is useful for sticky sessions, WebSockets, and some stateful protocols.
+
+```yaml
+spec:
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+```
+
+## Service Types
+
+### ClusterIP
+
+Use `ClusterIP` for internal APIs, databases, queues, and most service-to-service traffic.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
-// ... (8 lines trimmed)
-      nodePort: 30080 # Optional, auto-assigned if omitted
-      protocol: TCP
+  name: backend
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
 ```
 
-**Use cases:**
+### NodePort
 
-- Development/testing external access
-- Small deployments without load balancer
-- Direct node access requirements
+Use `NodePort` for development clusters, simple demos, or when an external load balancer is managed outside Kubernetes.
 
-**Limitations:**
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: staging
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 30080
+```
 
-- Limited port range (30000-32767)
-- Must handle node failures
-- No built-in load balancing across nodes
+Notes:
 
-### 3. LoadBalancer
+- The valid `nodePort` range is usually `30000-32767`.
+- Clients must reach a node IP directly.
+- Health checks and failover are your responsibility.
 
-Exposes the service using a cloud provider's load balancer.
+### LoadBalancer
+
+Use `LoadBalancer` when the cluster should provision a public or private load balancer for you.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: public-api
+  namespace: production
   annotations:
-// ... (10 lines trimmed)
-      protocol: TCP
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: public-api
   loadBalancerSourceRanges:
     - 203.0.113.0/24
+  ports:
+    - name: https
+      port: 443
+      targetPort: https
 ```
 
-**Cloud-specific annotations:**
+Provider-specific annotations vary by platform:
 
-**AWS:**
+- AWS: NLB type, scheme, SSL certificate ARN, backend protocol.
+- Azure: internal/public setting and public IP selection.
+- GCP: internal/external load balancer behavior and backend config integration.
 
-```yaml
-annotations:
-  service.beta.kubernetes.io/aws-load-balancer-type: "nlb" # or "external"
-  service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
-  service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
-  service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:..."
-  service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-```
+### ExternalName
 
-**Azure:**
-
-```yaml
-annotations:
-  service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-  service.beta.kubernetes.io/azure-pip-name: "my-public-ip"
-```
-
-**GCP:**
-
-```yaml
-annotations:
-  cloud.google.com/load-balancer-type: "Internal"
-  cloud.google.com/backend-config: '{"default": "my-backend-config"}'
-```
-
-### 4. ExternalName
-
-Maps service to external DNS name (CNAME record).
+Use `ExternalName` when the cluster only needs a DNS alias to an external dependency.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-db
+  name: billing-api
+  namespace: production
 spec:
   type: ExternalName
-  externalName: db.external.example.com
-  ports:
-    - port: 5432
+  externalName: billing.internal.example.com
 ```
 
-**Use cases:**
+Notes:
 
-- Accessing external services
-- Service migration scenarios
-- Multi-cluster service references
+- `ExternalName` does not create endpoints.
+- DNS resolution happens on the client side.
+- This is useful during service migrations or hybrid deployments.
 
-## Complete Service Specification
+### Headless Service
+
+Use a headless Service for StatefulSets and direct pod addressing.
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: postgres
   namespace: production
-// ... (53 lines trimmed)
-
-  # Publishing strategy
-  publishNotReadyAddresses: false
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
 ```
 
-## Port Configuration
+Notes:
 
-### Named Ports
+- DNS returns pod IPs rather than a virtual IP.
+- This is the normal companion Service for StatefulSets.
+- Clients can resolve pod-specific names such as `postgres-0.postgres.production.svc.cluster.local`.
 
-Use named ports in Pods for flexibility:
+## Service Discovery
 
-**Deployment:**
+Use these DNS forms:
 
-```yaml
-spec:
-  template:
-    spec:
-      containers:
-        - name: app
-          ports:
-            - name: http
-              containerPort: 8080
-            - name: metrics
-              containerPort: 9090
-```
+- Same namespace: `http://backend`
+- Cross-namespace: `http://backend.production.svc.cluster.local`
+- Headless pod: `postgres-0.postgres.production.svc.cluster.local`
 
-**Service:**
+Kubernetes can also inject environment variables such as `BACKEND_SERVICE_HOST`, but DNS is the preferred mechanism because it does not depend on resource creation order.
+
+## Common Patterns
+
+### Internal Microservice
 
 ```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: users
+  namespace: backend
 spec:
+  selector:
+    app.kubernetes.io/name: users
   ports:
     - name: http
-      port: 80
-      targetPort: http # References named port
+      port: 8080
+      targetPort: http
+```
+
+### Public API with Metrics Port
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: production
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: gateway
+  ports:
+    - name: https
+      port: 443
+      targetPort: https
     - name: metrics
       port: 9090
       targetPort: metrics
 ```
 
-### Multiple Ports
+### External Service Mapping with Endpoints
+
+If you need a stable in-cluster name for a fixed external IP, pair a selector-less Service with `Endpoints` or `EndpointSlice`.
 
 ```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: legacy-db
+  namespace: production
 spec:
   ports:
-    - name: http
-      port: 80
-// ... (8 lines trimmed)
-      targetPort: 9090
-      protocol: TCP
-```
-
-## Session Affinity
-
-### None (Default)
-
-Distributes requests randomly across pods.
-
-```yaml
-spec:
-  sessionAffinity: None
-```
-
-### ClientIP
-
-Routes requests from same client IP to same pod.
-
-```yaml
-spec:
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 10800 # 3 hours
-```
-
-**Use cases:**
-
-- Stateful applications
-- Session-based applications
-- WebSocket connections
-
-## Traffic Policies
-
-### External Traffic Policy
-
-**Cluster (Default):**
-
-```yaml
-spec:
-  externalTrafficPolicy: Cluster
-```
-
-- Load balances across all nodes
-- May add extra network hop
-- Source IP is masked
-
-**Local:**
-
-```yaml
-spec:
-  externalTrafficPolicy: Local
-```
-
-- Traffic goes only to pods on receiving node
-- Preserves client source IP
-- Better performance (no extra hop)
-- May cause imbalanced load
-
-### Internal Traffic Policy
-
-```yaml
-spec:
-  internalTrafficPolicy: Local # or Cluster
-```
-
-Controls traffic routing for cluster-internal clients.
-
-## Headless Services
-
-Service without cluster IP for direct pod access.
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: database
-// ... (5 lines trimmed)
-    - port: 5432
+    - name: postgres
+      port: 5432
       targetPort: 5432
-```
-
-**Use cases:**
-
-- StatefulSet pod discovery
-- Direct pod-to-pod communication
-- Custom load balancing
-- Database clusters
-
-**DNS returns:**
-
-- Individual pod IPs instead of service IP
-- Format: `<pod-name>.<service-name>.<namespace>.svc.cluster.local`
-
-## Service Discovery
-
-### DNS
-
-**ClusterIP Service:**
-
-```
-<service-name>.<namespace>.svc.cluster.local
-```
-
-Example:
-
-```bash
-curl http://backend-service.production.svc.cluster.local
-```
-
-**Within same namespace:**
-
-```bash
-curl http://backend-service
-```
-
-**Headless Service (returns pod IPs):**
-
-```
-<pod-name>.<service-name>.<namespace>.svc.cluster.local
-```
-
-### Environment Variables
-
-Kubernetes injects service info into pods:
-
-```bash
-# Service host and port
-BACKEND_SERVICE_SERVICE_HOST=10.0.0.100
-BACKEND_SERVICE_SERVICE_PORT=80
-
-# For named ports
-BACKEND_SERVICE_SERVICE_PORT_HTTP=80
-```
-
-**Note:** Pods must be created after the service for env vars to be injected.
-
-## Load Balancing
-
-### Algorithms
-
-Kubernetes uses random selection by default. For advanced load balancing:
-
-**Service Mesh (Istio example):**
-
-```yaml
-apiVersion: networking.istio.io/v1beta1
-kind: DestinationRule
-metadata:
-  name: my-destination-rule
-// ... (6 lines trimmed)
-      tcp:
-        maxConnections: 100
-```
-
-### Connection Limits
-
-Use pod disruption budgets and resource limits:
-
-```yaml
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  name: my-app-pdb
-spec:
-  minAvailable: 2
-  selector:
-    matchLabels:
-      app: my-app
-```
-
-## Service Mesh Integration
-
-### Istio Virtual Service
-
-```yaml
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: my-service
-spec:
-// ... (17 lines trimmed)
-            host: my-service
-            subset: v2
-          weight: 10
-```
-
-## Common Patterns
-
-### Pattern 1: Internal Microservice
-
-```yaml
+---
 apiVersion: v1
-kind: Service
+kind: Endpoints
 metadata:
-  name: user-service
-  namespace: backend
-// ... (13 lines trimmed)
-      port: 9090
-      targetPort: grpc
-      protocol: TCP
-```
-
-### Pattern 2: Public API with Load Balancer
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: api-gateway
-  annotations:
-// ... (11 lines trimmed)
-      protocol: TCP
-  loadBalancerSourceRanges:
-    - 0.0.0.0/0
-```
-
-### Pattern 3: StatefulSet with Headless Service
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: cassandra
-spec:
-// ... (22 lines trimmed)
-      containers:
-        - name: cassandra
-          image: cassandra:4.0
-```
-
-### Pattern 4: External Service Mapping
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: external-database
-spec:
-// ... (20 lines trimmed)
+  name: legacy-db
+  namespace: production
+subsets:
+  - addresses:
       - ip: 203.0.113.100
     ports:
-      - port: 443
+      - name: postgres
+        port: 5432
 ```
 
-### Pattern 5: Multi-Port Service with Metrics
+## Network Policy Reminder
 
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: web-app
-  annotations:
-// ... (11 lines trimmed)
-    - name: metrics
-      port: 9090
-      targetPort: 9090
-```
-
-## Network Policies
-
-Control traffic to services:
+Services do not enforce access control by themselves. If traffic should be restricted, define a matching `NetworkPolicy`.
 
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-frontend-to-backend
+  namespace: production
 spec:
-// ... (10 lines trimmed)
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
       ports:
         - protocol: TCP
           port: 8080
 ```
 
-## Best Practices
+## Validation Checklist
 
-### Service Configuration
-
-1. **Use named ports** for flexibility
-2. **Set appropriate service type** based on exposure needs
-3. **Use labels and selectors consistently** across Deployments and Services
-4. **Configure session affinity** for stateful apps
-5. **Set external traffic policy to Local** for IP preservation
-6. **Use headless services** for StatefulSets
-7. **Implement network policies** for security
-8. **Add monitoring annotations** for observability
-
-### Production Checklist
-
-- [ ] Service type appropriate for use case
-- [ ] Selector matches pod labels
-- [ ] Named ports used for clarity
-- [ ] Session affinity configured if needed
-- [ ] Traffic policy set appropriately
-- [ ] Load balancer annotations configured (if applicable)
-- [ ] Source IP ranges restricted (for public services)
-- [ ] Health check configuration validated
-- [ ] Monitoring annotations added
-- [ ] Network policies defined
-
-### Performance Tuning
-
-**For high traffic:**
-
-```yaml
-spec:
-  externalTrafficPolicy: Local
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 3600
-```
-
-**For WebSocket/long connections:**
-
-```yaml
-spec:
-  sessionAffinity: ClientIP
-  sessionAffinityConfig:
-    clientIP:
-      timeoutSeconds: 86400 # 24 hours
-```
+- Service type matches the intended exposure model.
+- Selector matches the pod labels on the workload.
+- `targetPort` matches an actual container port or named port.
+- Sticky sessions and traffic policies are set only when needed.
+- Public Services restrict source ranges where possible.
+- Network policies are defined for sensitive backends.
 
 ## Troubleshooting
 
-### Service not accessible
+### Service Has No Endpoints
 
 ```bash
-# Check service exists
-kubectl get service <service-name>
-
-# Check endpoints (should show pod IPs)
-// ... (5 lines trimmed)
-# Check if pods match selector
-kubectl get pods -l app=<app-name>
+kubectl get service web-api -n production
+kubectl get endpoints web-api -n production
+kubectl get pods -n production -l app.kubernetes.io/name=web-api --show-labels
 ```
 
-**Common issues:**
-
-- Selector doesn't match pod labels
-- No pods running (endpoints empty)
-- Ports misconfigured
-- Network policy blocking traffic
-
-### DNS resolution failing
+### DNS Lookup Fails
 
 ```bash
-# Test DNS from pod
-kubectl run debug --rm -it --image=busybox -- nslookup <service-name>
-
-# Check CoreDNS
+kubectl run dns-debug --rm -it --restart=Never --image=busybox:1.36 -- nslookup web-api.production.svc.cluster.local
 kubectl get pods -n kube-system -l k8s-app=kube-dns
-kubectl logs -n kube-system -l k8s-app=kube-dns
 ```
 
-### Load balancer issues
+### Load Balancer Never Provisions
 
 ```bash
-# Check load balancer status
-kubectl describe service <service-name>
-
-# Check events
-kubectl get events --sort-by='.lastTimestamp'
-
-# Verify cloud provider configuration
-kubectl describe node
+kubectl describe service public-api -n production
+kubectl get events -n production --sort-by='.lastTimestamp'
 ```
 
 ## Related Resources
 
-- [Kubernetes Service API Reference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#service-v1-core)
-- [Service Networking](https://kubernetes.io/docs/concepts/services-networking/service/)
-- [DNS for Services and Pods](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
+- `manifest-templates.md` for copy-pasteable manifests
+- `troubleshooting.md` for broader kubectl checks
+- https://kubernetes.io/docs/concepts/services-networking/service/

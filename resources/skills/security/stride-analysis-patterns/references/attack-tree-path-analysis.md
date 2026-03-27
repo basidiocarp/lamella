@@ -3,13 +3,29 @@
 Analyze attack paths, identify critical nodes, and prioritize mitigations.
 
 ```python
-from typing import Set, Tuple
+def rank_paths(paths: list[dict]) -> list[dict]:
+    scored = []
+    for path in paths:
+        score = path["likelihood"] * path["impact"]
+        scored.append(
+            {
+                "path": path["name"],
+                "score": score,
+                "critical_nodes": path.get("critical_nodes", []),
+            }
+        )
+    return sorted(scored, key=lambda item: item["score"], reverse=True)
 
-class AttackPathAnalyzer:
-    """Analyze attack paths and coverage."""
 
-// ... (141 lines trimmed)
-                })
-
-        return sorted(recommendations, key=lambda x: x["coverage_impact"], reverse=True)
+def mitigation_recommendations(paths: list[dict]) -> list[dict]:
+    recommendations = []
+    for item in rank_paths(paths):
+        recommendations.append(
+            {
+                "path": item["path"],
+                "coverage_impact": item["score"],
+                "recommendation": f"Add controls around {', '.join(item['critical_nodes']) or 'entry nodes'}",
+            }
+        )
+    return recommendations
 ```

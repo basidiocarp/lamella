@@ -1,555 +1,260 @@
 # Serverless Architecture Patterns
 
-Comprehensive patterns for building serverless applications on AWS based on Well-Architected Framework principles.
+Practical AWS serverless patterns for APIs, event-driven systems, and
+orchestration. Keep the examples small enough to adapt quickly.
 
-## Table of Contents
+## Core Patterns
 
-- [Core Serverless Patterns](#core-serverless-patterns)
-- [API Patterns](#api-patterns)
-- [Data Processing Patterns](#data-processing-patterns)
-- [Integration Patterns](#integration-patterns)
-- [Orchestration Patterns](#orchestration-patterns)
-- [Anti-Patterns](#anti-patterns)
+### Serverless Microservice
 
-## Core Serverless Patterns
+Use when a service owns its own data and scales independently.
 
-### Pattern: Serverless Microservices
-
-**Use case**: Independent, scalable services with separate databases
-
-**Architecture**:
-```
-API Gateway → Lambda Functions → DynamoDB/RDS
-              ↓ (events)
-         EventBridge → Other Services
-```
-
-**CDK Implementation**:
-```typescript
-// User Service
-const userTable = new dynamodb.Table(this, 'Users', {
-  partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
+```ts
+const ordersTable = new dynamodb.Table(this, "Orders", {
+  partitionKey: { name: "orderId", type: dynamodb.AttributeType.STRING },
   billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 });
-// ... (23 lines trimmed)
 
-orderTable.grantReadWriteData(orderFunction);
-eventBus.grantPutEventsTo(orderFunction);
-```
-
-**Benefits**:
-- Independent deployment and scaling
-- Database per service (data isolation)
-- Technology diversity
-- Fault isolation
-
-### Pattern: Serverless API Backend
-
-**Use case**: REST or GraphQL API with serverless compute
-
-**REST API with API Gateway**:
-```typescript
-const api = new apigateway.RestApi(this, 'Api', {
-  restApiName: 'serverless-api',
-  deployOptions: {
-    stageName: 'prod',
-    tracingEnabled: true,
-// ... (16 lines trimmed)
-item.addMethod('GET', new apigateway.LambdaIntegration(getFunction));
-item.addMethod('PUT', new apigateway.LambdaIntegration(updateFunction));
-item.addMethod('DELETE', new apigateway.LambdaIntegration(deleteFunction));
-```
-
-**GraphQL API with AppSync**:
-```typescript
-const api = new appsync.GraphqlApi(this, 'Api', {
-  name: 'serverless-graphql-api',
-  schema: appsync.SchemaFile.fromAsset('schema.graphql'),
-  authorizationConfig: {
-    defaultAuthorization: {
-// ... (10 lines trimmed)
-  typeName: 'Query',
-  fieldName: 'getItem',
+const ordersFn = new NodejsFunction(this, "OrdersHandler", {
+  entry: "src/orders/handler.ts",
+  environment: { TABLE_NAME: ordersTable.tableName },
 });
+
+ordersTable.grantReadWriteData(ordersFn);
 ```
 
-### Pattern: Serverless Data Lake
+### Serverless API Backend
 
-**Use case**: Ingest, process, and analyze large-scale data
+Use API Gateway plus Lambda for straightforward REST APIs.
 
-**Architecture**:
+```ts
+const api = new apigateway.RestApi(this, "Api", {
+  deployOptions: { stageName: "prod", tracingEnabled: true },
+});
+
+const items = api.root.addResource("items");
+items.addMethod("GET", new apigateway.LambdaIntegration(listItemsFn));
+items.addMethod("POST", new apigateway.LambdaIntegration(createItemFn));
 ```
-S3 (raw data) → Lambda (transform) → S3 (processed)
-                  ↓ (catalog)
-               AWS Glue → Athena (query)
-```
 
-**Implementation**:
-```typescript
-const rawBucket = new s3.Bucket(this, 'RawData');
-const processedBucket = new s3.Bucket(this, 'ProcessedData');
+### Event-Driven Processing
 
-// Trigger Lambda on file upload
-rawBucket.addEventNotification(
-// ... (24 lines trimmed)
-    });
-  }
-};
+Use EventBridge when multiple consumers should react to the same event.
+
+```ts
+const bus = new events.EventBus(this, "AppBus");
+
+new events.Rule(this, "OrderCreatedRule", {
+  eventBus: bus,
+  eventPattern: {
+    source: ["app.orders"],
+    detailType: ["order.created"],
+  },
+  targets: [new targets.LambdaFunction(sendNotificationFn)],
+});
 ```
 
 ## API Patterns
 
-### Pattern: Authorizer Pattern
+### Lambda Authorizer
 
-**Use case**: Custom authentication and authorization
+```ts
+const authorizer = new apigateway.TokenAuthorizer(this, "Authorizer", {
+  handler: authFn,
+});
 
-```typescript
-// Lambda authorizer
-const authorizer = new apigateway.TokenAuthorizer(this, 'Authorizer', {
-  handler: authorizerFunction,
-  identitySource: 'method.request.header.Authorization',
-// ... (6 lines trimmed)
+items.addMethod("GET", new apigateway.LambdaIntegration(listItemsFn), {
   authorizer,
+  authorizationType: apigateway.AuthorizationType.CUSTOM,
 });
 ```
 
-### Pattern: Request Validation
+### Request Validation
 
-**Use case**: Validate requests before Lambda invocation
-
-```typescript
-const requestModel = api.addModel('RequestModel', {
-  contentType: 'application/json',
+```ts
+const requestModel = api.addModel("CreateItemModel", {
+  contentType: "application/json",
   schema: {
     type: apigateway.JsonSchemaType.OBJECT,
-    required: ['name', 'email'],
-// ... (14 lines trimmed)
-    'application/json': requestModel,
+    required: ["name"],
+    properties: {
+      name: { type: apigateway.JsonSchemaType.STRING },
+    },
   },
 });
 ```
 
-### Pattern: Response Caching
+### Response Caching
 
-**Use case**: Reduce backend load and improve latency
+Use API Gateway caching only for stable, cacheable reads.
 
-```typescript
-const api = new apigateway.RestApi(this, 'Api', {
+```ts
+const api = new apigateway.RestApi(this, "CachedApi", {
   deployOptions: {
     cachingEnabled: true,
     cacheTtl: Duration.minutes(5),
-    cacheClusterEnabled: true,
-// ... (10 lines trimmed)
-    },
-  }],
+  },
 });
 ```
 
 ## Data Processing Patterns
 
-### Pattern: S3 Event Processing
+### S3 Event Processing
 
-**Use case**: Process files uploaded to S3
+```ts
+const bucket = new s3.Bucket(this, "Uploads");
 
-```typescript
-const bucket = new s3.Bucket(this, 'DataBucket');
-
-// Process images
 bucket.addEventNotification(
   s3.EventType.OBJECT_CREATED,
-// ... (14 lines trimmed)
-  new s3n.SfnDestination(processingStateMachine),
-  { prefix: 'large-files/' }
+  new s3n.LambdaDestination(processUploadFn),
+  { prefix: "incoming/" },
 );
 ```
 
-### Pattern: DynamoDB Streams Processing
+### DynamoDB Streams
 
-**Use case**: React to database changes
-
-```typescript
-const table = new dynamodb.Table(this, 'Table', {
-  partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
+```ts
+const table = new dynamodb.Table(this, "Events", {
+  partitionKey: { name: "id", type: dynamodb.AttributeType.STRING },
   stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
 });
 
-// ... (26 lines trimmed)
-    }
-  }
-};
-```
-
-### Pattern: Kinesis Stream Processing
-
-**Use case**: Real-time data streaming and analytics
-
-```typescript
-const stream = new kinesis.Stream(this, 'EventStream', {
-  shardCount: 2,
-  streamMode: kinesis.StreamMode.PROVISIONED,
-});
-
-// ... (16 lines trimmed)
+new NodejsFunction(this, "Projector", {
+  entry: "src/projector/handler.ts",
+  events: [
+    new DynamoEventSource(table, {
+      startingPosition: lambda.StartingPosition.LATEST,
     }),
   ],
 });
 ```
 
+### Kinesis Consumers
+
+Use Kinesis when ordered, high-throughput event streams matter.
+
+```ts
+const stream = new kinesis.Stream(this, "EventStream", {
+  shardCount: 2,
+});
+```
+
 ## Integration Patterns
 
-### Pattern: Service Integration with EventBridge
+### API Gateway to SQS
 
-**Use case**: Decouple services with events
+Use this when request acceptance matters more than immediate completion.
 
-```typescript
-const eventBus = new events.EventBus(this, 'AppBus');
+```ts
+const queue = new sqs.Queue(this, "RequestQueue");
+// Direct API Gateway integrations work well for async ingestion paths.
+```
 
-// Service A publishes events
-const serviceA = new NodejsFunction(this, 'ServiceA', {
-  entry: 'src/services/a/handler.ts',
-// ... (23 lines trimmed)
+### EventBridge to Step Functions
+
+```ts
+new events.Rule(this, "WorkflowTrigger", {
+  eventPattern: {
+    source: ["app.orders"],
+    detailType: ["order.ready"],
   },
-  targets: [new targets.LambdaFunction(serviceCFunction)],
-});
-```
-
-### Pattern: API Gateway + SQS Integration
-
-**Use case**: Async API requests without Lambda
-
-```typescript
-const queue = new sqs.Queue(this, 'RequestQueue');
-
-const api = new apigateway.RestApi(this, 'Api');
-
-// Direct SQS integration (no Lambda)
-// ... (18 lines trimmed)
-api.root.addMethod('POST', sqsIntegration, {
-  methodResponses: [{ statusCode: '200' }],
-});
-```
-
-### Pattern: EventBridge + Step Functions
-
-**Use case**: Event-triggered workflow orchestration
-
-```typescript
-// State machine for order processing
-const orderStateMachine = new stepfunctions.StateMachine(this, 'OrderFlow', {
-  definition: /* ... */,
-});
-// ... (7 lines trimmed)
-  targets: [new targets.SfnStateMachine(orderStateMachine)],
+  targets: [new targets.SfnStateMachine(orderFlow)],
 });
 ```
 
 ## Orchestration Patterns
 
-### Pattern: Sequential Workflow
+### Sequential Workflow
 
-**Use case**: Multi-step process with dependencies
+Use Step Functions for multi-step business flows with retries and visibility.
 
-```typescript
-const definition = new tasks.LambdaInvoke(this, 'Step1', {
-  lambdaFunction: step1Function,
-  outputPath: '$.Payload',
-})
-  .next(new tasks.LambdaInvoke(this, 'Step2', {
-// ... (8 lines trimmed)
-new stepfunctions.StateMachine(this, 'Sequential', {
-  definition,
-});
-```
-
-### Pattern: Parallel Execution
-
-**Use case**: Execute independent tasks concurrently
-
-```typescript
-const parallel = new stepfunctions.Parallel(this, 'ParallelProcessing');
-
-parallel.branch(new tasks.LambdaInvoke(this, 'ProcessA', {
-  lambdaFunction: functionA,
-}));
-// ... (11 lines trimmed)
-}));
-
-new stepfunctions.StateMachine(this, 'Parallel', { definition });
-```
-
-### Pattern: Map State (Dynamic Parallelism)
-
-**Use case**: Process array of items in parallel
-
-```typescript
-const mapState = new stepfunctions.Map(this, 'ProcessItems', {
-  maxConcurrency: 10,
-  itemsPath: '$.items',
-});
-// ... (6 lines trimmed)
-  lambdaFunction: finalizeFunction,
-}));
-```
-
-### Pattern: Choice State (Conditional Logic)
-
-**Use case**: Branching logic based on input
-
-```typescript
-const choice = new stepfunctions.Choice(this, 'OrderType');
-
-choice.when(
-  stepfunctions.Condition.stringEquals('$.orderType', 'STANDARD'),
-// ... (7 lines trimmed)
-
-choice.otherwise(defaultProcessing);
-```
-
-### Pattern: Wait State
-
-**Use case**: Delay between steps or wait for callbacks
-
-```typescript
-// Fixed delay
-const wait = new stepfunctions.Wait(this, 'Wait30Seconds', {
-  time: stepfunctions.WaitTime.duration(Duration.seconds(30)),
-});
-
-// ... (11 lines trimmed)
-    data: stepfunctions.JsonPath.entirePayload,
+```ts
+const definition = new tasks.LambdaInvoke(this, "Validate", {
+  lambdaFunction: validateFn,
+  outputPath: "$.Payload",
+}).next(
+  new tasks.LambdaInvoke(this, "Charge", {
+    lambdaFunction: chargeFn,
+    outputPath: "$.Payload",
   }),
-});
+);
+```
+
+### Parallel Execution
+
+Use `Parallel` for independent branches.
+
+```ts
+const parallel = new stepfunctions.Parallel(this, "RunChecks")
+  .branch(new tasks.LambdaInvoke(this, "InventoryCheck", { lambdaFunction: inventoryFn }))
+  .branch(new tasks.LambdaInvoke(this, "FraudCheck", { lambdaFunction: fraudFn }));
+```
+
+### Choice State
+
+```ts
+const route = new stepfunctions.Choice(this, "RouteOrder")
+  .when(stepfunctions.Condition.stringEquals("$.priority", "high"), fastPath)
+  .otherwise(standardPath);
 ```
 
 ## Anti-Patterns
 
-### ❌ Lambda Monolith
+### Lambda Monolith
 
-**Problem**: Single Lambda handling all operations
+Avoid one function that handles unrelated domains, routes, and event types.
 
-```typescript
-// BAD
-export const handler = async (event: any) => {
-  switch (event.operation) {
-    case 'createUser': return createUser(event);
-// ... (5 lines trimmed)
-  }
-};
-```
+### Recursive Lambda Chains
 
-**Solution**: Separate Lambda functions per operation
+Avoid using Lambda-to-Lambda chains as a hidden workflow engine.
 
-```typescript
-// GOOD - Separate functions
-export const createUser = async (event: any) => { /* ... */ };
-export const getUser = async (event: any) => { /* ... */ };
-export const updateUser = async (event: any) => { /* ... */ };
-```
+### Synchronous Waiting
 
-### ❌ Recursive Lambda Pattern
+Do not keep Lambda invocations open while waiting for long-running external
+processes.
 
-**Problem**: Lambda invoking itself (runaway costs)
+### Large Deployment Packages
 
-```typescript
-// BAD
-export const handler = async (event: any) => {
-  await processItem(event);
+Keep package size down to improve cold starts and deploy times.
 
-// ... (6 lines trimmed)
-  }
-};
-```
+## Performance Practices
 
-**Solution**: Use SQS or Step Functions
+### Cold Start Reduction
 
-```typescript
-// GOOD - Use SQS for iteration
-export const handler = async (event: SQSEvent) => {
-  for (const record of event.Records) {
-    await processItem(record);
-  }
-  // SQS handles iteration automatically
-};
-```
+- keep handlers small
+- trim dependencies
+- prefer provisioned concurrency only where justified
 
-### ❌ Lambda Chaining
+### Right-Size Memory
 
-**Problem**: Lambda directly invoking another Lambda
+Benchmark memory settings; more memory can reduce overall duration and lower
+cost.
 
-```typescript
-// BAD
-export const handler1 = async (event: any) => {
-  const result = await processStep1(event);
+### Concurrency Controls
 
-  // Directly invoking next Lambda
-  await lambda.invoke({
-    FunctionName: 'handler2',
-    Payload: JSON.stringify(result),
-  });
-};
-```
-
-**Solution**: Use EventBridge, SQS, or Step Functions
-
-```typescript
-// GOOD - Publish to EventBridge
-export const handler1 = async (event: any) => {
-  const result = await processStep1(event);
-
-// ... (6 lines trimmed)
-  });
-};
-```
-
-### ❌ Synchronous Waiting in Lambda
-
-**Problem**: Lambda waiting for slow operations
-
-```typescript
-// BAD - Blocking on slow operation
-export const handler = async (event: any) => {
-  await startBatchJob(); // Returns immediately
-
-// ... (5 lines trimmed)
-  }
-};
-```
-
-**Solution**: Use Step Functions with callback pattern
-
-```typescript
-// GOOD - Step Functions waits, not Lambda
-const waitForJob = new tasks.LambdaInvoke(this, 'StartJob', {
-  lambdaFunction: startJobFunction,
-  integrationPattern: stepfunctions.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-  payload: stepfunctions.TaskInput.fromObject({
-    token: stepfunctions.JsonPath.taskToken,
-  }),
-});
-```
-
-### ❌ Large Deployment Packages
-
-**Problem**: Large Lambda packages increase cold start time
-
-**Solution**:
-- Use layers for shared dependencies
-- Externalize AWS SDK
-- Minimize bundle size
-
-```typescript
-new NodejsFunction(this, 'Function', {
-  entry: 'src/handler.ts',
-  bundling: {
-    minify: true,
-    externalModules: ['@aws-sdk/*'], // Provided by runtime
-    nodeModules: ['only-needed-deps'], // Selective bundling
-  },
-});
-```
-
-## Performance Optimization
-
-### Cold Start Optimization
-
-**Techniques**:
-1. Minimize package size
-2. Use provisioned concurrency for critical paths
-3. Lazy load dependencies
-4. Reuse connections outside handler
-5. Use Lambda SnapStart (Java)
-
-```typescript
-// For latency-sensitive APIs
-const apiFunction = new NodejsFunction(this, 'ApiFunction', {
-  entry: 'src/api.ts',
-  memorySize: 1769, // 1 vCPU for faster initialization
-// ... (7 lines trimmed)
-  utilizationTarget: 0.7,
-});
-```
-
-### Right-Sizing Memory
-
-**Test different memory configurations**:
-
-```typescript
-// CPU-bound workload
-new NodejsFunction(this, 'ComputeFunction', {
-  memorySize: 1769, // 1 vCPU
-  timeout: Duration.seconds(30),
-});
-// ... (9 lines trimmed)
-  memorySize: 256,
-  timeout: Duration.seconds(10),
-});
-```
-
-### Concurrent Execution Control
-
-```typescript
-// Protect downstream services
-new NodejsFunction(this, 'Function', {
-  reservedConcurrentExecutions: 10, // Max 10 concurrent
-});
-
-// Unreserved concurrency (shared pool)
-new NodejsFunction(this, 'Function', {
-  // Uses unreserved account concurrency
-});
-```
+Use reserved concurrency, queue buffers, or backpressure when downstream systems
+cannot absorb bursts safely.
 
 ## Testing Strategies
 
-### Unit Testing
+### Unit Tests
 
-Test business logic separate from AWS services:
+Keep business logic outside handlers so it can be tested without cloud
+infrastructure.
 
-```typescript
-// handler.ts
-export const processOrder = async (order: Order): Promise<Result> => {
-  // Business logic (easily testable)
-  const validated = validateOrder(order);
-  const priced = calculatePrice(validated);
-// ... (13 lines trimmed)
-  const result = processOrder(order);
-  expect(result.total).toBe(20);
-});
-```
+### Integration Tests
 
-### Integration Testing
+Test event contracts, permissions, and failure handling against deployed or
+ephemeral environments.
 
-Test with actual AWS services:
+### Local Testing
 
-```typescript
-// integration.test.ts
-import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
-
-test('Lambda processes order correctly', async () => {
-// ... (8 lines trimmed)
-  expect(result.statusCode).toBe(200);
-});
-```
-
-### Local Testing with SAM
-
-```bash
-# Test API locally
-sam local start-api
-
-# Invoke function locally
-sam local invoke MyFunction -e events/test-event.json
-
-# Generate sample event
-sam local generate-event apigateway aws-proxy > event.json
-```
+Use SAM, LocalStack, or framework-specific emulators only as a fast feedback
+loop, not as the final source of truth.
 
 ## Summary
 
-- **Single Purpose**: One function, one responsibility
-- **Concurrent Design**: Think concurrency, not volume
-- **Stateless**: Use external storage for state
-- **State Machines**: Orchestrate with Step Functions
-- **Event-Driven**: Use events over direct calls
-- **Idempotent**: Handle failures and duplicates gracefully
-- **Observability**: Enable tracing and structured logging
+- Prefer small, event-driven building blocks
+- Use EventBridge and Step Functions for visible orchestration
+- Design for retries, idempotency, and observability from the start
+- Avoid hiding workflows inside Lambda chains

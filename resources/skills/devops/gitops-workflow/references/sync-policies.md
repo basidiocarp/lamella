@@ -1,24 +1,35 @@
 # GitOps Sync Policies
 
-## ArgoCD Sync Policies
+Use sync policy settings to control reconciliation speed, safety, and operator
+expectations. The exact knobs differ between Argo CD and Flux, but the policy
+goals are the same: predictable rollout behavior, bounded retries, and clear
+guardrails for production.
+
+## Argo CD
 
 ### Automated Sync
 
 ```yaml
 syncPolicy:
   automated:
-    prune: true # Delete resources removed from Git
-    selfHeal: true # Reconcile manual changes
-    allowEmpty: false # Prevent empty sync
+    prune: true
+    selfHeal: true
+    allowEmpty: false
 ```
 
-### Manual Sync
+Use automated sync by default in lower environments. In production, decide
+explicitly whether `prune` and `selfHeal` are acceptable for the workload.
+
+### Retry Policy
 
 ```yaml
 syncPolicy:
-  syncOptions:
-    - PrunePropagationPolicy=foreground
-    - CreateNamespace=true
+  retry:
+    limit: 5
+    backoff:
+      duration: 5s
+      factor: 2
+      maxDuration: 3m
 ```
 
 ### Sync Windows
@@ -37,21 +48,15 @@ syncWindows:
       - "*"
 ```
 
-### Retry Policy
+### Useful Sync Options
 
-```yaml
-syncPolicy:
-  retry:
-    limit: 5
-    backoff:
-      duration: 5s
-      factor: 2
-      maxDuration: 3m
-```
+- `PrunePropagationPolicy=foreground`
+- `CreateNamespace=true`
+- `PruneLast=true`
+- `RespectIgnoreDifferences=true`
+- `ApplyOutOfSyncOnly=true`
 
-## Flux Sync Policies
-
-### Kustomization Sync
+## Flux
 
 ```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -67,8 +72,6 @@ spec:
   force: false
 ```
 
-### Source Sync Interval
-
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
@@ -79,42 +82,28 @@ spec:
   timeout: 60s
 ```
 
-## Health Assessment
+## Health Checks
 
-### Custom Health Checks
+Add custom health assessment only when the controller cannot infer readiness
+from the resource type.
 
 ```yaml
-# ArgoCD
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cm
-// ... (20 lines trimmed)
+data:
+  resource.customizations.health.argoproj.io/Rollout: |
+    hs = {}
+    if obj.status ~= nil and obj.status.phase == "Healthy" then
+      hs.status = "Healthy"
+      hs.message = "Rollout healthy"
+      return hs
+    end
     hs.status = "Progressing"
     hs.message = "Waiting for status"
     return hs
 ```
 
-## Sync Options
+## Rules
 
-### Common Sync Options
-
-- `PrunePropagationPolicy=foreground` - Wait for pruned resources to be deleted
-- `CreateNamespace=true` - Auto-create namespace
-- `Validate=false` - Skip kubectl validation
-- `PruneLast=true` - Prune resources after sync
-- `RespectIgnoreDifferences=true` - Honor ignore differences
-- `ApplyOutOfSyncOnly=true` - Only apply out-of-sync resources
-
-## Best Practices
-
-1. Use automated sync for non-production
-2. Require manual approval for production
-3. Configure sync windows for maintenance
-4. Implement health checks for custom resources
-5. Use selective sync for large applications
-6. Configure appropriate retry policies
-7. Monitor sync failures with alerts
-8. Use prune with caution in production
-9. Test sync policies in staging
-10. Document sync behavior for teams
+- Non-production can usually tolerate full automated sync.
+- Production should document whether sync is automatic, operator-approved, or
+  window-limited.
+- Retry and prune settings should match the blast radius of the application.

@@ -44,7 +44,12 @@ SKILL_DIR="${CLAUDE_SKILL_DIR}"
 
 # Install tools
 bash "$SKILL_DIR/scripts/install_tools.sh"
-// ... (9 lines trimmed)
+
+# Validate workflow syntax and embedded shell blocks
+bash "$SKILL_DIR/scripts/validate_workflow.sh" .github/workflows/
+
+# Run security-oriented checks
+bash "$SKILL_DIR/scripts/audit_workflow.sh" .github/workflows/
 
 # Test-only with act
 bash "$SKILL_DIR/scripts/validate_workflow.sh" --test-only .github/workflows/

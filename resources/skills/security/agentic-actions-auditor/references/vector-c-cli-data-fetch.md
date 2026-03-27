@@ -55,7 +55,18 @@ on:
     types: [opened, edited]
 
 jobs:
-// ... (13 lines trimmed)
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      contents: read
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prompt: |
+            Run `gh issue view ${{ github.event.issue.number }} --json title,body`.
             2. Analyze the issue and suggest appropriate labels.
             # The issue NUMBER is safe to interpolate (integer)
             # But gh issue view returns the FULL issue body, which IS attacker-controlled

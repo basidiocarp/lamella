@@ -75,7 +75,17 @@ Three actions with dangerous configurations (from research Example 8):
   with:
     claude_args: "--allowedTools Bash(*)"
     prompt: "Review this issue and fix the code"
-// ... (11 lines trimmed)
+
+# Codex -- full filesystem access with safety disabled
+- uses: openai/codex-action@v1
+  with:
+    sandbox: danger-full-access
+    safety-strategy: unsafe
+    prompt: "Analyze and fix this issue"
+
+# Gemini -- sandbox disabled in settings JSON
+- uses: google-github-actions/run-gemini-cli@v0
+  with:
     settings: |
       {"sandbox": false}
     prompt: "Analyze and fix this issue"

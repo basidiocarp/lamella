@@ -2,31 +2,43 @@
 
 ### Inversion Canvas
 
-```
-## Inversion Canvas: [Goal/Problem]
+```text
+## Inversion Canvas: [Goal / Problem]
 
-┌─────────────────────────────────────────────────────────────────┐
-│                         FORWARD VIEW                             │
-│                                                                  │
-// ... (38 lines trimmed)
-│  3. ________________________________________________________    │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+FORWARD VIEW
+- What am I trying to achieve?
+- What would success look like in one sentence?
+
+INVERTED VIEW
+- How would I reliably cause this to fail?
+- What behaviors, assumptions, or omissions would create that failure?
+
+FAILURE MODES
+1. ______________________________________________
+2. ______________________________________________
+3. ______________________________________________
+
+PREVENTION MOVES
+1. ______________________________________________
+2. ______________________________________________
+3. ______________________________________________
 ```
 
 ---
 
 ### Rapid Inversion Checklist
 
-```
+```text
 ## Quick Inversion (5 Minutes)
 
-**Goal:** ________________________
+Goal: ________________________
+Invert: "How do I guarantee failure?"
 
-**Invert:** "How do I guarantee failure?"
-// ... (8 lines trimmed)
+- What obvious risk am I ignoring?
+- What assumption would hurt me if it is wrong?
+- What single action would make success less likely?
 
-**One Anti-Goal to commit to:**
+One anti-goal to commit to:
 "I will NEVER ________________________________"
 ```
 
@@ -34,46 +46,35 @@
 
 ### Inversion for Decisions
 
-```
+```text
 ## Decision Inversion Template
 
-**Decision:** Should I [option A] or [option B]?
+Decision: Should I choose option A or option B?
 
-### Invert Option A:
-// ... (20 lines trimmed)
+Invert option A:
+- How could this fail badly?
+- What would make it hard to recover?
 
-**Decision:**
-[Which option has more avoidable failure modes?]
+Invert option B:
+- How could this fail badly?
+- What hidden costs would show up later?
+
+Decision:
+Which option has fewer catastrophic or hard-to-reverse failure modes?
 ```
 
 ---
 
 ### Munger's Standard Inversion Questions
 
-```
+```text
 ## Charlie Munger's Inversion Questions
 
-Apply these to any goal or decision:
-
-1. "What could cause this to fail completely?"
-// ... (11 lines trimmed)
-7. "How would a smart, well-resourced enemy attack this?"
-
-8. "What would I have to believe for this to fail?"
-```
-
----
-
-### Red Flags: When Inversion is Critical
-
-```
-## You MUST Apply Inversion When:
-
-- [ ] Stakes are high (career, money, relationships)
-- [ ] Decision is irreversible or hard to reverse
-- [ ] You're feeling overconfident
-// ... (9 lines trimmed)
-- "Sure things" aren't sure at all
-- You've been avoiding obvious risks
-- The easy path leads to failure
+1. What could cause this to fail completely?
+2. What would make this harder than it looks?
+3. What am I assuming without evidence?
+4. What would I regret not checking first?
+5. How would a smart adversary attack this?
+6. What would make recovery expensive or slow?
+7. What would I do differently if I had to avoid failure, not chase success?
 ```

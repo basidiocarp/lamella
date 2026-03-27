@@ -36,7 +36,16 @@ int main(int argc, char **argv) {
     // ... directory opening code ...
 
     while ((entry = readdir(dir)) != NULL) {
-// ... (12 lines trimmed)
+        pid_t pid = fork();
+        if (pid == 0) {
+            run_input(entry->d_name);
+            _exit(0);
+        }
+
+        int status = 0;
+        waitpid(pid, &status, 0);
+        if (WIFSIGNALED(status)) {
+            fprintf(stderr, "crash on %s\n", entry->d_name);
         }
     }
 }

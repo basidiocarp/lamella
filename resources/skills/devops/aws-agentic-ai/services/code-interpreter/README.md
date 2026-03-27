@@ -66,7 +66,11 @@ Agent Request
 ┌─────────────────────────────────────────┐
 │  Code Interpreter Service               │
 │  - Parse code execution request         │
-// ... (15 lines trimmed)
+│  - Validate allowed runtime + limits    │
+│  - Materialize sandbox workspace        │
+│  - Execute code in isolated container   │
+│  - Capture stdout/stderr and artifacts  │
+│  - Enforce timeout and resource caps    │
 │  - Package outputs and artifacts        │
 │  - Return to agent                      │
 └─────────────────────────────────────────┘

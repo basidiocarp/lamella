@@ -1,217 +1,57 @@
 # Ruff Configuration Reference
 
-Ruff is an extremely fast Python linter and formatter written in Rust. It replaces flake8, black, isort, pyupgrade, pydocstyle, and many other tools.
+Use Ruff as the default linter and formatter for modern Python projects unless
+the repo has a strong reason to keep a different stack.
 
-## Basic Setup
+## Core Setup
 
-Add to `pyproject.toml`:
+Typical configuration lives in `pyproject.toml` and defines:
+- target Python version
+- line length
+- source roots
+- selected or ignored rule families
+- formatter preferences
 
-```toml
-[tool.ruff]
-line-length = 100
-target-version = "py311"
-src = ["src"]
+Keep the config small at first. Expand only when the repo actually needs more
+granular rule tuning.
 
-// ... (9 lines trimmed)
-quote-style = "double"
-indent-style = "space"
-docstring-code-format = true
-```
+## Common Commands
 
-## Running Ruff
+Typical workflow:
+- `ruff check .`
+- `ruff check --fix .`
+- `ruff format .`
+- `ruff format --check .`
 
-```bash
-# Lint
-uv run ruff check .
-uv run ruff check --fix .        # Auto-fix
-uv run ruff check --fix --unsafe-fixes .  # Including unsafe fixes
+Use `--unsafe-fixes` only when you are prepared to review broader changes.
 
-# Format
-uv run ruff format .
-uv run ruff format --check .     # Check only
-uv run ruff format --diff .      # Show diff
-```
+## Rule Strategy
 
-## Rule Categories
+A practical approach:
+- start with core correctness and import/style families
+- add stronger rule groups gradually
+- use per-file ignores only where there is a stable reason
 
-Using `select = ["ALL"]` enables all rules. Common categories:
+Do not enable everything just because Ruff can. The best config is the one the
+repo will actually keep clean.
 
-| Code | Category | Description |
-|------|----------|-------------|
-| `E`, `W` | pycodestyle | Style errors and warnings |
-| `F` | Pyflakes | Logical errors |
-| `I` | isort | Import sorting |
-| `N` | pep8-naming | Naming conventions |
-| `D` | pydocstyle | Docstring conventions |
-| `UP` | pyupgrade | Python upgrade suggestions |
-| `B` | flake8-bugbear | Bug detection |
-| `S` | flake8-bandit | Security issues |
-| `A` | flake8-builtins | Built-in shadowing |
-| `C4` | flake8-comprehensions | Comprehension improvements |
-| `DTZ` | flake8-datetimez | Timezone-aware datetime |
-| `T10` | flake8-debugger | Debugger statements |
-| `T20` | flake8-print | Print statements |
-| `PT` | flake8-pytest-style | Pytest style |
-| `Q` | flake8-quotes | Quote consistency |
-| `SIM` | flake8-simplify | Simplification suggestions |
-| `TID` | flake8-tidy-imports | Import hygiene |
-| `ARG` | flake8-unused-arguments | Unused arguments |
-| `ERA` | eradicate | Commented-out code |
-| `PL` | Pylint | Pylint rules |
-| `RUF` | Ruff-specific | Ruff's own rules |
-| `ANN` | flake8-annotations | Type annotation checks |
+## Formatter Relationship
 
-## Recommended Ignores
-
-### Always Ignore (Formatter Conflicts)
-
-```toml
-ignore = [
-    "COM812",   # missing-trailing-comma
-    "ISC001",   # single-line-implicit-string-concatenation
-]
-```
-
-### Common Ignores
-
-```toml
-ignore = [
-    "D",        # Docstrings (enable selectively)
-    "ANN401",   # Dynamically typed Any
-    "TD002",    # Missing TODO author
-    "TD003",    # Missing TODO link
-    "FIX002",   # Line contains TODO
-]
-```
-
-## Per-File Ignores
-
-```toml
-[tool.ruff.lint.per-file-ignores]
-# Tests
-"tests/**/*.py" = [
-    "S101",     # assert usage
-    "PLR2004",  # magic values
-// ... (16 lines trimmed)
-"**/migrations/*.py" = [
-    "ALL",      # ignore all
-]
-```
-
-## Import Sorting (isort)
-
-```toml
-[tool.ruff.lint.isort]
-force-single-line = false
-known-first-party = ["myproject"]
-required-imports = ["from __future__ import annotations"]
-section-order = [
-    "future",
-    "standard-library",
-    "third-party",
-    "first-party",
-    "local-folder",
-]
-```
-
-## Docstring Style (pydocstyle)
-
-If enabling docstring checks:
-
-```toml
-[tool.ruff.lint]
-select = ["D"]
-ignore = [
-    "D100",     # Missing module docstring
-    "D104",     # Missing public package docstring
-    "D203",     # 1 blank line before class docstring (conflicts D211)
-    "D213",     # Multi-line summary second line (conflicts D212)
-]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"  # or "numpy", "pep257"
-```
-
-## Formatter Configuration
-
-```toml
-[tool.ruff.format]
-quote-style = "double"           # or "single"
-indent-style = "space"           # or "tab"
-skip-magic-trailing-comma = false
-line-ending = "auto"             # or "lf", "crlf"
-docstring-code-format = true
-docstring-code-line-length = 80
-```
+Ruff can replace separate lint and formatting tools for many repos. If you do
+that, remove redundant tool config instead of maintaining overlapping style
+systems.
 
 ## Type Checking
 
-Ruff does NOT do type checking. Use **ty** (from Astral, the same team behind ruff and uv):
+Ruff is not a type checker. Pair it with a dedicated type-checking tool when the
+project needs typed validation.
 
-```bash
-# Add ty to dev dependencies
-uv add --group dev ty
+## Migration Rule
 
-# Run type checking
-uv run ty check src/
-```
+When moving from older tools:
+- match the repo’s current line length first
+- keep churn low
+- tighten policy only after the migration is stable
 
-ty is significantly faster than mypy or pyright and integrates well with the modern Python toolchain.
-
-## CI Configuration
-
-```yaml
-# GitHub Actions
-- name: Lint
-  run: uv run ruff check --output-format=github .
-
-- name: Format check
-  run: uv run ruff format --check .
-```
-
-## Migration from Other Tools
-
-### From flake8
-
-Ruff covers most flake8 plugins. Remove:
-- flake8
-- flake8-* plugins
-- .flake8 config file
-
-### From black
-
-Remove black and use `ruff format`. Remove:
-- black
-- [tool.black] config
-
-### From isort
-
-Ruff includes isort. Remove:
-- isort
-- [tool.isort] config
-
-Use `[tool.ruff.lint.isort]` for isort settings.
-
-## Code Modernization
-
-Run pyupgrade rules to modernize syntax to your target Python version:
-
-```bash
-uv run ruff check --select=UP --fix .  # Auto-fix upgrades
-uv run ruff check --select=UP .        # Preview only
-```
-
-Common modernizations include:
-- `typing.Optional[X]` → `X | None`
-- `typing.List[X]` → `list[X]`
-- `super(ClassName, self)` → `super()`
-- Format strings and other syntax upgrades
-
-## Line Length Migration
-
-If migrating from 120 to 100 char lines, expect manual fixes.
-For less churn during initial migration, keep existing:
-
-```toml
-line-length = 120  # Match existing; tighten later
-```
+A good Ruff setup improves speed and consistency without turning every cleanup
+into a config war.

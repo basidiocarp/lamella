@@ -120,8 +120,14 @@ meta:
     // Sample identification (hash field can repeat)
     hash = "abc123def456..."               // SHA256 of reference sample
     hash = "789xyz..."                     // Additional samples (repeat field)
-
-// ... (11 lines trimmed)
+    score = 80                             // Confidence / triage score
+    family = "Emotet"                      // Malware family or cluster
+    category = "banking-trojan"            // Detection category
+    actor = "TA542"                        // Threat actor / campaign if known
+    tlp = "TLP:CLEAR"                      // Sharing restriction
+    license = "CC BY-NC 4.0"               // Rule sharing terms
+    source = "internal-hunting"            // Where the rule came from
+    target = "pe"                          // Target file class or platform
 
     // MITRE ATT&CK
     mitre_attack = "T1055"                 // Technique ID

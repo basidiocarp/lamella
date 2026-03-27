@@ -31,7 +31,7 @@ Structured methodology for finding vulnerabilities through attacker modeling.
 
 ## 2. Identify Concrete Attack Vectors
 
-```
+```text
 ENTRY POINT: [Exact function/endpoint attacker can access]
 
 ATTACK SEQUENCE:
@@ -69,13 +69,23 @@ PROOF OF ACCESSIBILITY:
 
 ## 4. Build Complete Exploit Scenario
 
-```
+```text
 ATTACKER STARTING POSITION:
 [What the attacker has at the beginning]
 
 STEP-BY-STEP EXPLOITATION:
 Step 1: [Concrete action through accessible interface]
-// ... (15 lines trimmed)
+Step 2: [State transition or validation bypass]
+Step 3: [Second action or repeated call if needed]
+Step 4: [Final effect observed by attacker]
+
+EVIDENCE TO COLLECT:
+- Request, transaction, or CLI invocation
+- Code path reached
+- Missing guard or broken invariant
+- Observable effect in balances, state, permissions, or outputs
+
+IMPACT:
 - Exact amount of funds drained
 - Specific privileges escalated
 - Particular data exposed
@@ -103,19 +113,28 @@ Generate this for each finding:
 **Attacker Model:**
 - WHO: [Specific attacker type]
 - ACCESS: [Exact privileges]
-// ... (9 lines trimmed)
+- ENTRY POINT: [Concrete endpoint/function]
+
+**Exploitability:** EASY | MEDIUM | HARD
+
+**Attack Path:**
+1. [Initial action]
+2. [Reach vulnerable code]
+3. [Exploit effect]
+
+**Impact:**
 [Specific, measurable harm - not theoretical]
 
 **Proof of Concept:**
 ```code
-// Exact code to reproduce
+// Exact code or request to reproduce
 ```
 
 **Root Cause:**
-[Reference specific code change at file.sol:L123]
+[Reference specific code change at file.ext:L123]
 
-**Blast Radius:** [N callers affected]
-**Baseline Violation:** [Which invariant/pattern broken]
+**Blast Radius:** [N callers or assets affected]
+**Baseline Violation:** [Which invariant or pattern is broken]
 ```
 
 ---
@@ -134,9 +153,9 @@ Generate this for each finding:
 
 **ATTACK SEQUENCE:**
 1. Call `withdraw(0)` from attacker address
-2. Code bypasses amount check (removed)
-3. Withdraw event emitted with 0 amount
-4. Accounting updated incorrectly
+2. Code bypasses amount check
+3. Withdraw event emits with 0 amount
+4. Accounting updates incorrectly
 
 **PROOF:** Function is `external`, no auth required
 
@@ -157,25 +176,20 @@ Step 1: attacker.withdraw(0)
   - Updates withdrawnAmount[user] += 0
 
 Step 2: Off-chain indexer sees Withdraw event
-  - Credits attacker for 0 withdrawal
-  - But accounting thinks withdrawal happened
-
-Step 3: Accounting mismatch exploited
-  - Total supply decremented
-  - User balance not changed
-  - System invariants broken
+  - Credits attacker for a withdrawal path
+  - Accounting now diverges from balances
 ```
 
 **IMPACT:**
 - Protocol accounting corrupted
-- Can be used to manipulate LP calculations
-- Estimated $50K impact on pool prices
+- Can poison downstream calculations
+- Estimated business impact depends on settlement path
 
 ### 5. Baseline Violation
-- Violates invariant: "All withdrawals must transfer non-zero value"
-- Breaks validation pattern: Amount checks present in all other value transfers
-- Regression: Check added in commit abc123 "Fix zero-amount exploit"
+- Violates invariant: all withdrawals must transfer non-zero value
+- Breaks validation pattern used in other value-transfer paths
+- Regression of a previously enforced safety check
 
 ---
 
-**Next:** Document all findings in final report (see [reporting.md](reporting.md))
+**Next:** Document all findings in the final report (see [reporting.md](reporting.md))

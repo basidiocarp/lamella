@@ -323,7 +323,10 @@ const v8 = require("v8");
 const fs = require("fs");
 
 function takeHeapSnapshot(filename) {
-# ... (9 lines trimmed)
+  const v8 = require("v8");
+  const stream = v8.getHeapSnapshot();
+  stream.pipe(fs.createWriteStream(filename));
+}
 // Analyze in Chrome DevTools Memory profiler
 // Look for objects with increasing retained size
 ```
@@ -336,7 +339,8 @@ import cProfile
 import pstats
 from pstats import SortKey
 
-# ... (10 lines trimmed)
+stats = pstats.Stats("profile.out")
+stats.strip_dirs()
     stats.sort_stats(SortKey.CUMULATIVE)
     stats.print_stats(20)  # Top 20 time-consuming functions
 ```

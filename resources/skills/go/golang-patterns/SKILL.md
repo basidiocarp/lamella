@@ -94,7 +94,14 @@ func process() (result int, err error) {
     // ... 50 lines ...
     return // What is being returned?
 }
-// ... (17 lines trimmed)
+
+// Better: explicit return values
+func process() (int, error) {
+    result := 42
+    return result, nil
+}
+
+// Bad: mixed receiver semantics on one type
 type Counter struct{ n int }
 func (c Counter) Value() int     // Value receiver
 func (c *Counter) Increment()    // Pointer receiver - be consistent

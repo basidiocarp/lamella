@@ -156,9 +156,12 @@ async def list_users(
 
 - [rest-patterns.md](references/rest-patterns.md) - Full REST patterns with pagination, errors, HATEOAS
 - [graphql-patterns.md](references/graphql-patterns.md) - Schema design, resolvers, DataLoader
+- [graphql-schema-design.md](references/graphql-schema-design.md) - GraphQL schema routing guide
+- [graphql-schema-shape.md](references/graphql-schema-shape.md) - Types, interfaces, unions, pagination
+- [graphql-operations-and-errors.md](references/graphql-operations-and-errors.md) - Mutations, subscriptions, directives, errors
+- [rest-best-practices.md](references/rest-best-practices.md) - REST design checklist
+
 ### Additional Resources
 
 - [Api Design Checklist](assets/api-design-checklist.md)
 - [Rest Api Template](assets/rest-api-template.py)
-- [Graphql Schema Design](references/graphql-schema-design.md)
-- [Rest Best Practices](references/rest-best-practices.md)

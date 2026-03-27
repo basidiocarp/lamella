@@ -1,15 +1,16 @@
 # Weaviate Implementation
 
-Weaviate vector store with hybrid search support.
+Use Weaviate when you want a vector store with stronger built-in search features
+than a minimal embedding bucket.
 
-```python
-import weaviate
-from weaviate.util import generate_uuid5
-from typing import List, Dict, Optional
+## Good Fits
 
-class WeaviateVectorStore:
-// ... (93 lines trimmed)
-            }
-            for item in results["data"]["Get"][self.class_name]
-        ]
-```
+- hybrid semantic and keyword search
+- richer schema or filtering needs
+- teams comfortable with Weaviate's API and operational model
+
+## Rules
+
+- keep schema design and class layout explicit
+- choose hybrid, vector-only, or filter-heavy queries deliberately
+- benchmark Weaviate against simpler stores before assuming you need it

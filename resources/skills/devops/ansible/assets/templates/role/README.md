@@ -26,7 +26,15 @@
 [role_name]_service_name: [service_name]  # Service name
 [role_name]_version: latest                # Version to install
 
-// ... (10 lines trimmed)
+# Network and paths
+[role_name]_listen_port: 8080
+[role_name]_config_dir: /etc/[role_name]
+[role_name]_data_dir: /var/lib/[role_name]
+
+# Users and permissions
+[role_name]_user: [role_name]
+[role_name]_group: [role_name]
+
 # Features
 [role_name]_enable_ssl: false
 [role_name]_enable_monitoring: true

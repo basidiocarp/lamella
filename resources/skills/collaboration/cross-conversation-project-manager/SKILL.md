@@ -26,7 +26,26 @@ Maintain a **project state file** (markdown) for each active project, stored whe
 **Status**: active | paused | completed
 **Started**: {date}
 **Last Updated**: {date}
-// ... (17 lines trimmed)
+**Goal**: {one-sentence desired outcome}
+**Owner**: {person or team}
+**Success Criteria**:
+- {criterion 1}
+- {criterion 2}
+
+## Current State
+- Summary: {where the project stands right now}
+- Next Milestone: {nearest meaningful checkpoint}
+
+## Active Tasks
+| Task | Status | Owner | Notes |
+|---|---|---|---|
+| {task} | todo | {owner} | {notes} |
+
+## Blockers
+- {blocker or "none"}
+
+## Decisions
+- {date}: {decision made}
 ## Session History
 | Date | What Was Done | Open Items Carried Forward |
 |---|---|---|

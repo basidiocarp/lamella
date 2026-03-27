@@ -56,7 +56,15 @@ Harness that finds a division-by-zero bug:
 
 double divide(uint32_t numerator, uint32_t denominator) {
     // Bug: No check if denominator is zero
-// ... (12 lines trimmed)
+    return numerator / denominator;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    if (size < 8) return 0;
+
+    uint32_t numerator = *(const uint32_t *)(data);
+    uint32_t denominator = *(const uint32_t *)(data + 4);
+    (void)divide(numerator, denominator);
 
     return 0;
 }

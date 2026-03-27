@@ -18,7 +18,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 check_deps() {
     if ! command -v jq >/dev/null 2>&1; then
-        log_error "jq is required. Install with: brew install jq"
+        log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
         exit 1
     fi
 }

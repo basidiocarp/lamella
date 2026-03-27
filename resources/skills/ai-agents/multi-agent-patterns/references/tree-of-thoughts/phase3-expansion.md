@@ -1,18 +1,18 @@
 # Phase 3: Expansion (Develop Full Solutions)
 
-Launch **3 independent agents in parallel** (recommended: Opus for quality):
+Launch **3 independent agents in parallel**. Use a higher-capability model if the task is complex.
 
 1. Each agent receives:
-   - **One selected proposal** to expand
-   - **Original task description** and context
-   - **Judge feedback** from pruning phase (concerns, questions)
-2. Agent produces **complete solution** implementing the proposal:
-   - Full implementation details
-   - Addresses concerns raised by judges
-   - Documents key decisions made during expansion
-3. Solutions saved to `solution.a.md`, `solution.b.md`, `solution.c.md`
+   - one selected proposal
+   - the original task description
+   - judge feedback from pruning
+2. Each agent develops a complete solution:
+   - full implementation details
+   - direct responses to pruning concerns
+   - documented decisions made during expansion
+3. Save outputs to `solution.a.md`, `solution.b.md`, and `solution.c.md`.
 
-**Key principle:** Focused development of validated approaches with awareness of evaluation feedback.
+**Key principle:** Expand validated directions without changing course midway.
 
 ## Prompt Template for Expansion Agents
 
@@ -22,12 +22,26 @@ You are developing a full solution based on a selected proposal.
 <task>
 {task_description}
 </task>
-// ... (75 lines trimmed)
-- Do not switch to a different approach midway
-- Address judge feedback explicitly
-- Produce a complete, implementable solution
+
+<selected_proposal>
+{proposal}
+</selected_proposal>
+
+<judge_feedback>
+{feedback}
+</judge_feedback>
+
+Deliver:
+1. Full solution
+2. Explicit responses to judge concerns
+3. Key decisions made during expansion
+
+CRITICAL:
+- Do not switch to a different approach midway.
+- Address judge feedback explicitly.
+- Produce a complete, implementable solution.
 ```
 
 ## Output Naming
 
-**Solution files:** `solution.[a|b|c].md` (in specified output location)
+**Solution files:** `solution.[a|b|c].md`

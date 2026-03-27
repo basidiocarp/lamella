@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# build-marketplace.sh - Build all Skill-Issue plugins into a Claude Code marketplace
+# build-marketplace.sh - Build all Lamella plugins into a Claude Code marketplace
 #
 # Builds every Claude manifest in manifests/claude/ and generates a marketplace.json
 # so the dist/claude directory can be used as a local Claude Code plugin marketplace.
@@ -35,7 +35,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
 MARKETPLACE_NAME="lamella"
 MARKETPLACE_OWNER="William Newton"
-MARKETPLACE_DESCRIPTION="Skill-Issue — curated skills, agents, and commands for Claude Code"
+MARKETPLACE_DESCRIPTION="Lamella — curated skills, agents, and commands for Claude Code"
 DEFAULT_BUILD_VERSION="1.0.0"
 if [[ -f "$VERSION_FILE" ]]; then
     DEFAULT_BUILD_VERSION="$(tr -d '[:space:]' < "$VERSION_FILE")"
@@ -80,7 +80,7 @@ EOF
 
 check_deps() {
     if ! command -v jq &>/dev/null; then
-        log_error "jq is required. Install with: brew install jq"
+        log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
         exit 1
     fi
     if [[ ! -x "$BUILD_SCRIPT" ]]; then
@@ -381,7 +381,7 @@ build_marketplace() {
     local plugins_dir="$output_dir/plugins"
     local built_label="Plugins built"
 
-    echo -e "${BOLD}Building Skill-Issue Marketplace${NC}"
+    echo -e "${BOLD}Building Lamella Marketplace${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 

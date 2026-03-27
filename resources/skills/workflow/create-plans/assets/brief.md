@@ -1,31 +1,31 @@
 # Brief Template
 
-## Greenfield Brief (v1.0)
+Use this for `.planning/BRIEF.md`.
 
-Copy and fill this structure for `.planning/BRIEF.md` when starting a new project:
+## Greenfield Brief
 
 ```markdown
 # [Project Name]
 
-**One-liner**: [What this is in one sentence]
+**One-liner:** [what this project is]
 
 ## Problem
-// ... (22 lines trimmed)
+[what needs to change]
 
-- [Not doing X]
-- [Not doing Y]
+## Users
+- [primary user]
+- [secondary user]
+
+## Success Criteria
+- [measurable outcome]
+- [measurable outcome]
+
+## Out of Scope
+- [explicit non-goal]
+- [explicit non-goal]
 ```
 
-<guidelines>
-- Keep under 50 lines
-- Success criteria must be measurable/verifiable
-- Out of scope prevents "while we're at it" creep
-- This is the ONLY human-focused document
-</guidelines>
-
-## Brownfield Brief (v1.1+)
-
-After shipping v1.0, update BRIEF.md to include current state:
+## Brownfield Brief
 
 ```markdown
 # [Project Name]
@@ -33,43 +33,19 @@ After shipping v1.0, update BRIEF.md to include current state:
 ## Current State (Updated: YYYY-MM-DD)
 
 **Shipped:** v[X.Y] [Name] (YYYY-MM-DD)
-// ... (62 lines trimmed)
-- [Not doing Y]
+**Reality:** [current product or codebase status]
 
-</details>
+## Next Goals
+- [goal]
+- [goal]
+
+## Out of Scope
+- [non-goal]
+- [non-goal]
 ```
 
-<brownfield_guidelines>
-**When to update BRIEF:**
-- After completing each milestone (v1.0 → v1.1 → v2.0)
-- When starting new phases after a shipped version
-- Use `complete-milestone.md` workflow to update systematically
+## Rules
 
-**Current State captures:**
-- What shipped (version, date)
-- Real-world status (production, beta, etc.)
-- User metrics (if applicable)
-- User feedback themes
-- Codebase stats (LOC, tech stack)
-- Known issues needing attention
-
-**Next Goals captures:**
-- Vision for next version
-- Why now (motivation)
-- What's in scope
-- What's measurable
-- What's explicitly out
-
-**Original Vision:**
-- Collapsed in `<details>` tag
-- Reference for "where we came from"
-- Shows evolution of product thinking
-- Checkboxes marked [x] for achieved goals
-
-This structure makes all new plans brownfield-aware automatically because they read BRIEF and see:
-- "v1.0 shipped"
-- "2,450 lines of existing Swift code"
-- "Users reporting X, requesting Y"
-- Plans naturally reference existing files in @context
-</brownfield_guidelines>
-
+- keep it under 50 lines where possible
+- make success criteria measurable
+- keep out-of-scope explicit so plans do not sprawl

@@ -10,9 +10,15 @@ from datetime import datetime
 
 @dataclass
 class User:
-// ... (10 lines trimmed)
+    id: int
+    name: str
+    email: str
+    created_at: datetime = field(default_factory=datetime.utcnow)
+
+user = User(
+    id=1,
     name="Alice",
-    email="alice@example.com"
+    email="alice@example.com",
 )
 ```
 
@@ -57,7 +63,7 @@ class Point(NamedTuple):
     x: float
     y: float
 
-    def distance(self, other: 'Point') -> float:
+    def distance(self, other: "Point") -> float:
         return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
 
 # Usage
@@ -79,11 +85,27 @@ print(p1.distance(p2))  # 5.0
 
 ```python
 from dataclasses import dataclass, field
+from datetime import datetime
 
 @dataclass
 class Config:
     # Required field
-// ... (10 lines trimmed)
+    host: str
+
+    # Simple default
+    port: int = 5432
+
+    # Mutable defaults must use a factory
+    tags: list[str] = field(default_factory=list)
+
+    # Hide secrets in repr output
+    password: str = field(repr=False, default="")
+
+    # Derived field, not passed to __init__
+    connection_string: str = field(init=False)
+
+    def __post_init__(self):
+        self.connection_string = f"{self.host}:{self.port}"
 
     # Excluded from comparison
     created_at: datetime = field(compare=False, default_factory=datetime.now)

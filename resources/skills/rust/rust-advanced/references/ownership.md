@@ -3,43 +3,49 @@
 ## Ownership Patterns
 
 ```rust
-// Move semantics (ownership transfer)
 fn take_ownership(s: String) {
-    println!("{}", s);
-} // s dropped here
+    println!("{s}");
+}
 
-// ... (12 lines trimmed)
-borrow(&s);           // OK, immutable borrow
-let mut s2 = s;       // Move, s no longer valid
-borrow_mut(&mut s2);  // OK, mutable borrow
+fn borrow(s: &str) {
+    println!("{s}");
+}
+
+fn borrow_mut(s: &mut String) {
+    s.push('!');
+}
+
+let s = String::from("hello");
+borrow(&s);
+
+let mut s2 = s;
+borrow_mut(&mut s2);
+take_ownership(s2);
 ```
 
 ## Lifetime Annotations
 
 ```rust
-// Explicit lifetime: returned reference lives as long as input
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() { x } else { y }
 }
 
-// ... (16 lines trimmed)
-
-// Static lifetime (lives for entire program)
 const GREETING: &'static str = "Hello, world!";
 ```
 
 ## Smart Pointers
 
 ```rust
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 
-// Box: heap allocation, single owner
-// ... (26 lines trimmed)
-    let mut num = counter_clone.lock().unwrap();
-    *num += 1;
-});
+let boxed = Box::new(42);
+
+let shared = Rc::new(RefCell::new(vec![1, 2, 3]));
+shared.borrow_mut().push(4);
+
+let counter = Arc::new(Mutex::new(0usize));
 ```
 
 ## Interior Mutability
@@ -47,80 +53,44 @@ use std::sync::{Arc, Mutex};
 ```rust
 use std::cell::{Cell, RefCell};
 
-// Cell: Copy types only
 let c = Cell::new(5);
 c.set(10);
-// ... (21 lines trimmed)
-        self.messages.borrow().clone()
-    }
-}
+
+let log = RefCell::new(Vec::new());
+log.borrow_mut().push("started");
 ```
 
-## Pin and Self-Referential Types
-
-```rust
-use std::pin::Pin;
-use std::marker::PhantomPinned;
-
-// Self-referential struct (requires Pin)
-struct SelfReferential {
-// ... (28 lines trimmed)
-    let pinned = Box::pin(fut);
-    pinned.await;
-}
-```
-
-## Cow (Clone on Write)
+## Cow
 
 ```rust
 use std::borrow::Cow;
 
-fn process_text(input: &str) -> Cow<str> {
+fn process_text(input: &str) -> Cow<'_, str> {
     if input.contains("bad") {
-        // Need to modify: allocate new String
-// ... (10 lines trimmed)
-
-let text2 = "bad word";
-let result2 = process_text(text2);  // Owned (allocated)
+        Cow::Owned(input.replace("bad", "good"))
+    } else {
+        Cow::Borrowed(input)
+    }
+}
 ```
 
-## Drop Trait and RAII
+## RAII and Drop
 
 ```rust
 struct FileGuard {
     name: String,
 }
 
-impl FileGuard {
-// ... (14 lines trimmed)
-    let _file = FileGuard::new("data.txt".to_string());
-    // Use file...
-} // Drop called automatically here
-```
-
-## Common Patterns
-
-```rust
-// Builder pattern with ownership
-struct Config {
-    host: String,
-    port: u16,
+impl Drop for FileGuard {
+    fn drop(&mut self) {
+        println!("closing {}", self.name);
+    }
 }
-// ... (33 lines trimmed)
-    .host("localhost")
-    .port(3000)
-    .build()?;
 ```
 
 ## Best Practices
 
-- Prefer borrowing (&T) over ownership transfer when possible
-- Use &str over String for function parameters
-- Use &[T] over Vec<T> for function parameters
-- Clone only when necessary (profile first)
-- Use Cow<'a, T> for conditional cloning
-- Document lifetime relationships in complex cases
-- Use Arc<Mutex<T>> for shared mutable state across threads
-- Use Rc<RefCell<T>> for shared mutable state in single thread
-- Implement Drop for RAII patterns
-- Use PhantomData to constrain variance when needed
+- Borrow by default and move only when ownership transfer is intended.
+- Use `&str` and slices for read-only APIs when possible.
+- Reach for `Rc<RefCell<T>>` only in single-threaded shared-mutation cases.
+- Use `Arc<Mutex<T>>` only when you truly need cross-thread shared mutation.

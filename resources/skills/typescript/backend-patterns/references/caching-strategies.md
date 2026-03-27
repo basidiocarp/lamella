@@ -8,8 +8,24 @@ class CachedMarketRepository implements MarketRepository {
     private baseRepo: MarketRepository,
     private redis: RedisClient
   ) {}
-// ... (21 lines trimmed)
+
+  async getById(id: string): Promise<Market | null> {
+    const cacheKey = `market:${id}`
+    const cached = await this.redis.get(cacheKey)
+    if (cached) return JSON.parse(cached) as Market
+
+    const market = await this.baseRepo.getById(id)
+    if (market) {
+      await this.redis.set(cacheKey, JSON.stringify(market), { EX: 300 })
+    }
+
+    return market
+  }
+
+  async update(id: string, input: UpdateMarketInput): Promise<Market> {
+    const updated = await this.baseRepo.update(id, input)
     await this.redis.del(`market:${id}`)
+    return updated
   }
 }
 ```
@@ -21,11 +37,13 @@ class CachedMarketRepository implements MarketRepository {
 ```typescript
 async function getMarketWithCache(id: string): Promise<Market> {
   const cacheKey = `market:${id}`
-
-  // Try cache
   const cached = await redis.get(cacheKey)
-// ... (9 lines trimmed)
+  if (cached) return JSON.parse(cached) as Market
 
+  const market = await marketRepository.getById(id)
+  if (!market) throw new Error('Market not found')
+
+  await redis.set(cacheKey, JSON.stringify(market), { EX: 300 })
   return market
 }
 ```
@@ -38,9 +56,20 @@ async function getMarketWithCache(id: string): Promise<Market> {
 class CacheManager {
   constructor(private redis: RedisClient) {}
 
-  // Invalidate on write
   async onMarketUpdate(marketId: string): Promise<void> {
-// ... (11 lines trimmed)
+    await Promise.all([
+      this.redis.del(`market:${marketId}`),
+      this.redis.del('markets:list:active'),
+      this.redis.del('markets:list:featured'),
+    ])
+  }
+
+  async withRefresh<T>(key: string, ttlSeconds: number, load: () => Promise<T>): Promise<T> {
+    const cached = await this.redis.get(key)
+    if (cached) return JSON.parse(cached) as T
+
+    const data = await load()
+    await this.redis.set(key, JSON.stringify(data), { EX: ttlSeconds })
     return data
   }
 }

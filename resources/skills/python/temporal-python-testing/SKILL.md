@@ -50,7 +50,7 @@ This skill provides detailed guidance through progressive disclosure. Load speci
 
 ### Unit Testing Resources
 
-**File**: `resources/unit-testing.md`
+**File**: `assets/unit-testing.md`
 **When to load**: Testing individual workflows or activities in isolation
 **Contains**:
 
@@ -62,7 +62,7 @@ This skill provides detailed guidance through progressive disclosure. Load speci
 
 ### Integration Testing Resources
 
-**File**: `resources/integration-testing.md`
+**File**: `assets/integration-testing.md`
 **When to load**: Testing workflows with mocked external dependencies
 **Contains**:
 
@@ -74,7 +74,7 @@ This skill provides detailed guidance through progressive disclosure. Load speci
 
 ### Replay Testing Resources
 
-**File**: `resources/replay-testing.md`
+**File**: `assets/replay-testing.md`
 **When to load**: Validating determinism or deploying workflow changes
 **Contains**:
 
@@ -85,7 +85,7 @@ This skill provides detailed guidance through progressive disclosure. Load speci
 
 ### Local Development Resources
 
-**File**: `resources/local-setup.md`
+**File**: `assets/local-setup.md`
 **When to load**: Setting up development environment
 **Contains**:
 
@@ -104,7 +104,21 @@ from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
 @pytest.fixture
-// ... (17 lines trimmed)
+async def workflow_env():
+    async with await WorkflowEnvironment.start_time_skipping() as env:
+        yield env
+
+async def test_workflow_happy_path(workflow_env):
+    async with Worker(
+        workflow_env.client,
+        workflows=[OrderWorkflow],
+        activities=[charge_card],
+        task_queue="test-queue",
+    ):
+        result = await workflow_env.client.execute_workflow(
+            OrderWorkflow.run,
+            {"order_id": "order-123"},
+            id="order-123",
             task_queue="test-queue",
         )
         assert result == expected
@@ -142,10 +156,10 @@ async def test_activity():
 
 **Load specific resource when needed**:
 
-- "Show me unit testing patterns" → Load `resources/unit-testing.md`
-- "How do I mock activities?" → Load `resources/integration-testing.md`
-- "Setup local Temporal server" → Load `resources/local-setup.md`
-- "Validate determinism" → Load `resources/replay-testing.md`
+- "Show me unit testing patterns" → Load `assets/unit-testing.md`
+- "How do I mock activities?" → Load `assets/integration-testing.md`
+- "Setup local Temporal server" → Load `assets/local-setup.md`
+- "Validate determinism" → Load `assets/replay-testing.md`
 
 ## Additional References
 

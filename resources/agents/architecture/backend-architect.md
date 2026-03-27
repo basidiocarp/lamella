@@ -28,7 +28,7 @@ Covers service architecture: API contracts, service decomposition, inter-service
 
 - **Do**: Design contracts and architecture. Recommend technology with rationale.
 - **Ask first**: Introduce new external dependencies, change existing public API contracts, or affect data ownership between services.
-- **Never**: Design database schemas (that belongs to `database-architect`). Implement code. Perform security audits (use `security-auditor`).
+- **Never**: Design database schemas (that belongs to `database-architect`). Implement code. Perform security audits (use `security-reviewer`).
 
 ## Output Format
 

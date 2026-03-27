@@ -1,83 +1,87 @@
 # Operational Patterns
 
+Use this page for backend concerns that sit between application code and
+production runtime behavior.
+
 ## Rate Limiting
 
-### Simple In-Memory Rate Limiter
+- keep auth, write-heavy, and public-read endpoints on separate budgets
+- enforce rate limits in shared middleware so every route returns the same error
+  shape
+- use Redis or another shared store once you have more than one process
 
 ```typescript
-class RateLimiter {
-  private requests = new Map<string, number[]>()
-
-  async checkLimit(
-    identifier: string,
-// ... (31 lines trimmed)
-
-  // Continue with request
-}
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: true,
+})
 ```
 
----
+## Background Jobs
 
-## Background Jobs & Queues
-
-### Simple Queue Pattern
+- queue work that is slow, retryable, or safe to run after the request returns
+- keep the API response small: return the accepted job id, not the whole worker
+  result
+- make retries explicit and idempotent so duplicate delivery does not corrupt
+  state
 
 ```typescript
-class JobQueue<T> {
-  private queue: T[] = []
-  private processing = false
+type EmailJob = { userId: string; template: 'welcome' | 'receipt' }
 
-  async add(job: T): Promise<void> {
-// ... (38 lines trimmed)
+await jobQueue.add<EmailJob>('email', {
+  userId,
+  template: 'welcome',
+})
 
-  return NextResponse.json({ success: true, message: 'Job queued' })
-}
+return NextResponse.json({ accepted: true }, { status: 202 })
 ```
-
----
 
 ## Structured Logging
 
-```typescript
-interface LogContext {
-  userId?: string
-  requestId?: string
-  method?: string
-  path?: string
-// ... (49 lines trimmed)
-    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
-  }
-}
-```
+- log objects, not concatenated strings
+- include request id, route, actor, and deployment metadata on every entry
+- treat stack traces and raw request bodies as error-only fields
 
----
+```typescript
+logger.info('market created', {
+  requestId: req.id,
+  userId: req.user.id,
+  marketId,
+  route: req.path,
+})
+```
 
 ## Error Handling
 
-### Centralized Error Handler
+- convert domain errors into a stable HTTP error shape in one place
+- distinguish client, auth, conflict, and retryable infrastructure failures
+- add retry logic only around transient operations such as HTTP calls or queue
+  publishes
 
 ```typescript
-class ApiError extends Error {
+export class ApiError extends Error {
   constructor(
-    public statusCode: number,
-    public message: string,
-    public isOperational = true
-// ... (27 lines trimmed)
-    error: 'Internal server error'
-  }, { status: 500 })
+    public status: number,
+    message: string,
+    public code: string,
+  ) {
+    super(message)
+  }
 }
-```
 
-### Retry with Exponential Backoff
-
-```typescript
-async function fetchWithRetry<T>(
-  fn: () => Promise<T>,
-  maxRetries = 3
-): Promise<T> {
-  let lastError: Error
-// ... (14 lines trimmed)
-
-  throw lastError!
+export async function withRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  let attempt = 0
+  while (true) {
+    try {
+      return await fn()
+    } catch (error) {
+      if (attempt >= retries) throw error
+      attempt += 1
+      await new Promise((resolve) => setTimeout(resolve, 2 ** attempt * 100))
+    }
+  }
 }
 ```

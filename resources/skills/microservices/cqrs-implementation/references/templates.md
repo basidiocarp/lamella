@@ -1,145 +1,164 @@
-# CQRS Implementation - Templates
+# CQRS Templates
 
 ## Template 1: Command Infrastructure
 
 ```python
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Dict, Any, Type
-from datetime import datetime
-import uuid
-// ... (81 lines trimmed)
-        )
 
-        return order.id
+
+@dataclass
+class CreateOrder:
+    order_id: str
+    customer_id: str
+    total_cents: int
+
+
+class CreateOrderHandler:
+    def __init__(self, repo, event_bus):
+        self.repo = repo
+        self.event_bus = event_bus
+
+    async def handle(self, command: CreateOrder) -> None:
+        order = Order.create(
+            order_id=command.order_id,
+            customer_id=command.customer_id,
+            total_cents=command.total_cents,
+        )
+        await self.repo.save(order)
+        await self.event_bus.publish(order.pull_events())
 ```
 
 ## Template 2: Query Infrastructure
 
 ```python
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import TypeVar, Generic, List, Optional
 
-# Query base
-// ... (134 lines trimmed)
-                page=query.page,
-                page_size=query.page_size
-            )
+
+@dataclass
+class GetOrderSummary:
+    order_id: str
+
+
+class GetOrderSummaryHandler:
+    def __init__(self, read_store):
+        self.read_store = read_store
+
+    async def handle(self, query: GetOrderSummary) -> dict:
+        return await self.read_store.fetch_order_summary(query.order_id)
 ```
 
-## Template 3: FastAPI CQRS Application
+## Template 3: FastAPI CQRS Endpoint
 
 ```python
-from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
-from typing import List, Optional
+from fastapi import APIRouter, Depends
 
-app = FastAPI()
-// ... (105 lines trimmed)
-):
-    query = SearchOrders(query=q, sort_by=sort_by)
-    return await query_bus.dispatch(query)
+router = APIRouter()
+
+
+@router.post("/orders")
+async def create_order(payload: CreateOrderRequest, bus=Depends(get_command_bus)):
+    command = CreateOrder(
+        order_id=payload.order_id,
+        customer_id=payload.customer_id,
+        total_cents=payload.total_cents,
+    )
+    await bus.dispatch(command)
+    return {"status": "accepted"}
+
+
+@router.get("/orders/{order_id}")
+async def get_order(order_id: str, bus=Depends(get_query_bus)):
+    return await bus.ask(GetOrderSummary(order_id=order_id))
 ```
 
 ## Template 4: Read Model Synchronization
 
 ```python
-class ReadModelSynchronizer:
-    """Keeps read models in sync with events."""
+class OrderProjector:
+    def __init__(self, read_repo):
+        self.read_repo = read_repo
 
-    def __init__(self, event_store, read_db, projections: List[Projection]):
-        self.event_store = event_store
-// ... (52 lines trimmed)
-                projection_name,
-                events[-1].global_position
-            )
+    async def on_order_created(self, event: OrderCreated) -> None:
+        await self.read_repo.upsert(
+            order_id=event.order_id,
+            customer_id=event.customer_id,
+            total_cents=event.total_cents,
+            status="created",
+        )
 ```
 
 ## Template 5: Eventual Consistency Handling
 
 ```python
-class ConsistentQueryHandler:
-    """Query handler that can wait for consistency."""
-
-    def __init__(self, read_db, event_store):
-        self.read_db = read_db
-// ... (35 lines trimmed)
-                "SELECT last_event_version FROM projection_state WHERE stream_id = $1",
-                stream_id
-            ) or 0
+async def wait_for_projection(read_repo, order_id: str, timeout_s: int = 5) -> dict | None:
+    deadline = time.monotonic() + timeout_s
+    while time.monotonic() < deadline:
+        result = await read_repo.fetch_order_summary(order_id)
+        if result is not None:
+            return result
+        await asyncio.sleep(0.1)
+    return None
 ```
-
----
 
 ## Projection Templates
 
-### Template P1: Basic Projector
+### Basic Projector
 
 ```python
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import List
-import asyncio
-import asyncpg
-// ... (49 lines trimmed)
-    async def rebuild(self, projection: Projection):
-        await self.checkpoint_store.delete(projection.name)
-        await self._run_projection(projection, batch_size=1000)
+class UserProjector:
+    async def on_user_created(self, event: UserCreated) -> None:
+        await self.read_repo.upsert_user(
+            user_id=event.user_id,
+            email=event.email,
+            status="active",
+        )
 ```
 
-### Template P2: Order Summary Projection
+### Order Summary Projection
 
 ```python
-class OrderSummaryProjection(Projection):
-    def __init__(self, db_pool: asyncpg.Pool):
-        self.pool = db_pool
-
-    @property
-// ... (32 lines trimmed)
-                WHERE order_id = $1
-            """, event.data['order_id'],
-                event.data['price'] * event.data['quantity'])
+class OrderSummaryProjector:
+    async def on_order_paid(self, event: OrderPaid) -> None:
+        await self.read_repo.mark_paid(
+            order_id=event.order_id,
+            paid_at=event.paid_at,
+        )
 ```
 
-### Template P3: Elasticsearch Search Projection
+### Search Projection
 
 ```python
-from elasticsearch import AsyncElasticsearch
-
-class ProductSearchProjection(Projection):
-    def __init__(self, es_client: AsyncElasticsearch):
-        self.es = es_client
-// ... (24 lines trimmed)
-                doc={'price': event.data['new_price']})
-        elif event.event_type == "ProductDeleted":
-            await self.es.delete(index=self.index, id=event.data['product_id'])
+class ProductSearchProjector:
+    async def on_product_published(self, event: ProductPublished) -> None:
+        await self.search_index.index(
+            id=event.product_id,
+            document={
+                "name": event.name,
+                "category": event.category,
+                "published": True,
+            },
+        )
 ```
 
-### Template P4: Aggregating Projection (Daily Sales)
+### Aggregating Projection
 
 ```python
-class DailySalesProjection(Projection):
-    def __init__(self, db_pool: asyncpg.Pool):
-        self.pool = db_pool
-
-    @property
-// ... (16 lines trimmed)
-                        total_items = daily_sales.total_items + $3,
-                        updated_at = NOW()
-                """, date, event.data['total_amount'], event.data['item_count'])
+class DailySalesProjector:
+    async def on_order_paid(self, event: OrderPaid) -> None:
+        await self.analytics.increment_sales_total(
+            day=event.paid_at.date(),
+            amount_cents=event.total_cents,
+        )
 ```
 
-### Template P5: Multi-Table Projection
+### Multi-Table Projection
 
 ```python
-class CustomerActivityProjection(Projection):
-    def __init__(self, db_pool: asyncpg.Pool):
-        self.pool = db_pool
-
-    @property
-// ... (27 lines trimmed)
-                        WHERE customer_id = $1
-                    """, event.data['customer_id'],
-                        event.data['total_amount'], event.data['completed_at'])
+class CustomerOrderProjector:
+    async def on_order_created(self, event: OrderCreated) -> None:
+        await self.read_repo.upsert_customer_order(
+            order_id=event.order_id,
+            customer_id=event.customer_id,
+            total_cents=event.total_cents,
+        )
 ```

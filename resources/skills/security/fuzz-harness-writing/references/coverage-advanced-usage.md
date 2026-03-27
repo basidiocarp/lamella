@@ -84,7 +84,13 @@ cmake_minimum_required(VERSION 3.0)
 
 # Main binary
 add_executable(program main.cc)
-// ... (9 lines trimmed)
+
+# Shared library under test
+add_library(target_lib STATIC parser.cc)
+
+# Coverage-enabled harness
+add_executable(fuzz_exec harness.cc)
+target_link_libraries(fuzz_exec PRIVATE target_lib)
 target_compile_definitions(fuzz_exec PRIVATE NO_MAIN)
 target_compile_options(fuzz_exec PRIVATE -O2 -fprofile-instr-generate -fcoverage-mapping)
 target_link_libraries(fuzz_exec -fprofile-instr-generate)

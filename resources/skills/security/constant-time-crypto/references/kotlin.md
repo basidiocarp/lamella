@@ -122,10 +122,20 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 
 val keyGenerator = KeyGenerator.getInstance(
-// ... (9 lines trimmed)
+    KeyProperties.KEY_ALGORITHM_AES,
+    "AndroidKeyStore"
+)
+
+val spec = KeyGenParameterSpec.Builder(
+    "session-key",
+    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+)
+    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
     .build()
-)
+
+keyGenerator.init(spec)
+val secretKey = keyGenerator.generateKey()
 ```
 
 ### Constant-Time Comparison on Android

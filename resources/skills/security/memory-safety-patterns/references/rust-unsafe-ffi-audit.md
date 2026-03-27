@@ -50,7 +50,29 @@ mod ffi {
     extern "C" {
         fn c_create() -> *mut c_void;
         fn c_destroy(ptr: *mut c_void);
-// ... (27 lines trimmed)
+        fn c_process(ptr: *mut c_void, input: *const u8, len: usize) -> c_int;
+    }
+}
+
+pub struct Handle {
+    ptr: NonNull<c_void>,
+}
+
+impl Handle {
+    pub fn new() -> Option<Self> {
+        let ptr = unsafe { ffi::c_create() };
+        NonNull::new(ptr).map(|ptr| Self { ptr })
+    }
+
+    pub fn process(&mut self, input: &[u8]) -> Result<(), i32> {
+        let rc = unsafe { ffi::c_process(self.ptr.as_ptr(), input.as_ptr(), input.len()) };
+        if rc == 0 { Ok(()) } else { Err(rc) }
+    }
+}
+
+impl Drop for Handle {
+    fn drop(&mut self) {
+        // SAFETY: `self.ptr` came from `c_create` and is owned by this wrapper.
         unsafe { ffi::c_destroy(self.ptr.as_ptr()); }
     }
 }

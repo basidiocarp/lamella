@@ -1,89 +1,59 @@
 # Error Propagation Analysis Workflow
 
-In multi-agent chains, errors from early agents propagate and amplify through subsequent agents. This workflow traces errors to their source.
+Use this workflow when a multi-agent chain produces a bad final result and you
+need to determine where the error entered and how it spread.
 
 ## When to Use
 
-- When final output contains errors despite correct intermediate steps
-- When debugging complex multi-agent workflows
-- When establishing error boundaries in agent chains
-- During post-mortem analysis of failed agent tasks
+- final output is wrong but the chain is long enough that local debugging is not
+  obvious
+- an early mistake appears to be amplified by later agents
+- you want to place better verification boundaries in an existing chain
 
-## Error Trace Pattern
+## Workflow
 
-### Step 1: Capture Agent Chain Outputs
+### 1. Capture the Chain
 
-Record the output of each agent in your chain:
+Record the output of each stage or agent in order. You need a comparable trace,
+not only the final artifact.
 
-```markdown
-Agent Chain Record:
-- Agent 1 (Analyzer): {output_1}
-- Agent 2 (Planner): {output_2}
-- Agent 3 (Implementer): {output_3}
-- Agent 4 (Reviewer): {output_4}
-```
+### 2. Identify End Symptoms
 
-### Step 2: Identify Error Symptoms
+List the concrete defects in the final output:
+- false facts
+- wrong file changes
+- missing required steps
+- invalid assumptions
 
-Spawn an error identification agent:
+### 3. Trace Backward
 
-```markdown
-<TASK>
-Analyze the final output and identify all errors, inconsistencies, or quality issues.
-</TASK>
+For each defect, ask:
+- where does this first appear?
+- which agent introduced it?
+- which later agents preserved or amplified it?
 
-<FINAL_OUTPUT>
-// ... (9 lines trimmed)
-ERROR_ID: E2
-...
-</OUTPUT_FORMAT>
-```
+### 4. Measure Propagation
 
-### Step 3: Trace Each Error Backward
+Useful questions:
+- how many errors were introduced vs merely repeated?
+- which stage catches errors vs passes them through?
+- where should verification be inserted next time?
 
-For each identified error, spawn a trace agent:
+### 5. Add Boundaries
 
-```markdown
-<TASK>
-Trace this error backward through the agent chain to find its origin.
-</TASK>
+After identifying the weak stage, add a verification checkpoint immediately
+after it:
+- targeted judge
+- schema or artifact validation
+- explicit claim verification
+- human review if the failure mode is subtle
 
-<ERROR>
-// ... (22 lines trimmed)
-ROOT_CAUSE: {explanation}
-CONTEXT_THAT_CAUSED_IT: {relevant context snippet if applicable}
-</OUTPUT_FORMAT>
-```
+## Output
 
-### Step 4: Calculate Propagation Metrics
+A useful analysis should end with:
+- root cause stage
+- propagated downstream effects
+- recommended new checkpoint or workflow change
 
-```
-For each agent in chain:
-  errors_introduced = count of errors this agent created
-  errors_propagated = count of errors this agent passed through
-  errors_caught = count of errors this agent fixed or flagged
-
-propagation_rate = errors_at_end / errors_introduced_total
-amplification_factor = errors_at_end / errors_at_start
-```
-
-### Step 5: Establish Error Boundaries
-
-Based on analysis, add verification checkpoints:
-
-```markdown
-<ERROR_BOUNDARY_TEMPLATE>
-After Agent {N} completes:
-
-1. Spawn verification agent to check for common error patterns:
-   - {error_pattern_1 that Agent N tends to introduce}
-   - {error_pattern_2 that Agent N tends to introduce}
-
-2. If errors detected:
-   - Log error for analysis
-   - Either: Fix inline and continue
-   - Or: Regenerate Agent N output with explicit guidance
-
-3. Only proceed to Agent {N+1} if verification passes
-</ERROR_BOUNDARY_TEMPLATE>
-```
+The goal is not only to explain the failure, but to make the same chain more
+resilient the next time it runs.

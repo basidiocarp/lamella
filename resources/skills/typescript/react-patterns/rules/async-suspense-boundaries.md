@@ -28,8 +28,6 @@ async function Page() {
 }
 ```
 
-The entire layout waits for data even though only the middle section needs it.
-
 **Correct (wrapper shows immediately, data streams in):**
 
 ```tsx
@@ -38,35 +36,40 @@ function Page() {
     <div>
       <div>Sidebar</div>
       <div>Header</div>
-// ... (11 lines trimmed)
-  const data = await fetchData(); // Only blocks this component
+      <Suspense fallback={<div>Loading...</div>}>
+        <DataDisplay />
+      </Suspense>
+      <div>Footer</div>
+    </div>
+  );
+}
+
+async function DataDisplay() {
+  const data = await fetchData();
   return <div>{data.content}</div>;
 }
 ```
-
-Sidebar, Header, and Footer render immediately. Only DataDisplay waits for data.
 
 **Alternative (share promise across components):**
 
 ```tsx
 function Page() {
-  // Start fetch immediately, but don't await
   const dataPromise = fetchData();
 
   return (
-// ... (18 lines trimmed)
-  const data = use(dataPromise); // Reuses the same promise
+    <div>
+      <Sidebar />
+      <Suspense fallback={<div>Loading summary...</div>}>
+        <Summary dataPromise={dataPromise} />
+      </Suspense>
+    </div>
+  );
+}
+
+function Summary({ dataPromise }: { dataPromise: Promise<{ summary: string }> }) {
+  const data = use(dataPromise);
   return <div>{data.summary}</div>;
 }
 ```
 
-Both components share the same promise, so only one fetch occurs. Layout renders immediately while both components wait together.
-
-**When NOT to use this pattern:**
-
-- Critical data needed for layout decisions (affects positioning)
-- SEO-critical content above the fold
-- Small, fast queries where suspense overhead isn't worth it
-- When you want to avoid layout shift (loading → content jump)
-
-**Trade-off:** Faster initial paint vs potential layout shift. Choose based on your UX priorities.
+Use this pattern when the wrapper layout can render independently of the slow data.

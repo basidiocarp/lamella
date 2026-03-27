@@ -5,300 +5,41 @@ description: Defines and implements Service Level Indicators (SLIs) and Service 
 
 # SLO Implementation
 
-
-## Contents
-
-- [Purpose](#purpose)
-- [When to Use](#when-to-use)
-- [SLI/SLO/SLA Hierarchy](#slislosla-hierarchy)
-- [Defining SLIs](#defining-slis)
-  - [Common SLI Types](#common-sli-types)
-- [Setting SLO Targets](#setting-slo-targets)
-  - [Availability SLO Examples](#availability-slo-examples)
-  - [Choose Appropriate SLOs](#choose-appropriate-slos)
-- [Error Budget Calculation](#error-budget-calculation)
-  - [Error Budget Formula](#error-budget-formula)
-  - [Error Budget Policy](#error-budget-policy)
-- [SLO Implementation](#slo-implementation)
-  - [Prometheus Recording Rules](#prometheus-recording-rules)
-  - [SLO Alerting Rules](#slo-alerting-rules)
-- [SLO Dashboard](#slo-dashboard)
-- [Multi-Window Burn Rate Alerts](#multi-window-burn-rate-alerts)
-- [SLO Review Process](#slo-review-process)
-  - [Weekly Review](#weekly-review)
-  - [Monthly Review](#monthly-review)
-  - [Quarterly Review](#quarterly-review)
-- [Best Practices](#best-practices)
-- [Reference Files](#reference-files)
-- [Related Skills](#related-skills)
-
-
-Framework for defining and implementing Service Level Indicators (SLIs), Service Level Objectives (SLOs), and error budgets.
-
-## Purpose
-
-Implement measurable reliability targets using SLIs, SLOs, and error budgets to balance reliability with innovation velocity.
+Use this skill when defining or operationalizing service-level objectives.
 
 ## When to Use
 
-- Define service reliability targets
-- Measure user-perceived reliability
-- Implement error budgets
-- Create SLO-based alerts
-- Track reliability goals
-- Generate an initial SLO framework from service metadata
+- establishing SLIs and SLOs for a service
+- turning reliability goals into alerting and dashboards
+- introducing error budgets into delivery planning
+- reviewing whether a target reflects real user experience
 
-## SLI/SLO/SLA Hierarchy
+## Core Model
 
-```
-SLA (Service Level Agreement)
-  ↓ Contract with customers
-SLO (Service Level Objective)
-  ↓ Internal reliability target
-SLI (Service Level Indicator)
-  ↓ Actual measurement
-```
+| Layer | Purpose |
+|------|---------|
+| SLI | actual measurement |
+| SLO | internal target |
+| Error budget | permitted miss rate tied to delivery policy |
 
-## Defining SLIs
+## Core Workflow
 
-### Common SLI Types
+1. Start with user-facing signals, not infrastructure vanity metrics.
+2. Define the SLI and measurement window.
+3. Set an SLO that the service can defend operationally.
+4. Convert the miss allowance into an error budget and burn-rate policy.
+5. Wire dashboards, alerts, and review cadence around that contract.
 
-#### 1. Availability SLI
+## Quick Start
 
-```promql
-# Successful requests / Total requests
-sum(rate(http_requests_total{status!~"5.."}[28d]))
-/
-sum(rate(http_requests_total[28d]))
-```
-
-#### 2. Latency SLI
-
-```promql
-# Requests below latency threshold / Total requests
-sum(rate(http_request_duration_seconds_bucket{le="0.5"}[28d]))
-/
-sum(rate(http_request_duration_seconds_count[28d]))
-```
-
-#### 3. Durability SLI
-
-```
-# Successful writes / Total writes
-sum(storage_writes_successful_total)
-/
-sum(storage_writes_total)
-```
-
-**Reference:** See `references/slo-definitions.md`
-
-## Setting SLO Targets
-
-### Availability SLO Examples
-
-| SLO %  | Downtime/Month | Downtime/Year |
-| ------ | -------------- | ------------- |
-| 99%    | 7.2 hours      | 3.65 days     |
-| 99.9%  | 43.2 minutes   | 8.76 hours    |
-| 99.95% | 21.6 minutes   | 4.38 hours    |
-| 99.99% | 4.32 minutes   | 52.56 minutes |
-
-### Choose Appropriate SLOs
-
-**Consider:**
-
-- User expectations
-- Business requirements
-- Current performance
-- Cost of reliability
-- Competitor benchmarks
-
-**Example SLOs:**
-
-```yaml
-slos:
-  - name: api_availability
-    target: 99.9
-    window: 28d
-    sli: |
-// ... (8 lines trimmed)
-      sum(rate(http_request_duration_seconds_bucket{le="0.5"}[28d]))
-      /
-      sum(rate(http_request_duration_seconds_count[28d]))
-```
-
-## Error Budget Calculation
-
-### Error Budget Formula
-
-```
-Error Budget = 1 - SLO Target
-```
-
-**Example:**
-
-- SLO: 99.9% availability
-- Error Budget: 0.1% = 43.2 minutes/month
-- Current Error: 0.05% = 21.6 minutes/month
-- Remaining Budget: 50%
-
-### Error Budget Policy
-
-```yaml
-error_budget_policy:
-  - remaining_budget: 100%
-    action: Normal development velocity
-  - remaining_budget: 50%
-    action: Consider postponing risky changes
-  - remaining_budget: 10%
-    action: Freeze non-critical changes
-  - remaining_budget: 0%
-    action: Feature freeze, focus on reliability
-```
-
-**Reference:** See `references/error-budget.md`
-
-## SLO Implementation
-
-Bootstrap a draft framework with the bundled script, then review it against
-real user journeys and current performance data.
-
-```bash
+```shell
 python3 scripts/slo_designer.py --input service-definition.json --output slo-framework.json
 ```
-
-PowerShell uses the same flow with `python`:
 
 ```powershell
 python scripts\slo_designer.py --input .\service-definition.json --output .\slo-framework.json
 ```
 
-### Prometheus Recording Rules
+## References
 
-```yaml
-# SLI Recording Rules
-groups:
-  - name: sli_rules
-    interval: 30s
-    rules:
-// ... (34 lines trimmed)
-            /
-            sum(rate(http_requests_total[5m]))
-          )) / (1 - 0.999)
-```
-
-### SLO Alerting Rules
-
-```yaml
-groups:
-  - name: slo_alerts
-    interval: 1m
-    rules:
-      # Fast burn: 14.4x rate, 1 hour window
-// ... (33 lines trimmed)
-        annotations:
-          summary: "SLO error budget exhausted"
-          description: "Error budget remaining: {{ $value }}%"
-```
-
-## SLO Dashboard
-
-**Grafana Dashboard Structure:**
-
-```
-┌────────────────────────────────────┐
-│ SLO Compliance (Current)           │
-│ ✓ 99.95% (Target: 99.9%)          │
-├────────────────────────────────────┤
-│ Error Budget Remaining: 65%        │
-│ ████████░░ 65%                     │
-├────────────────────────────────────┤
-│ SLI Trend (28 days)                │
-│ [Time series graph]                │
-├────────────────────────────────────┤
-│ Burn Rate Analysis                 │
-│ [Burn rate by time window]         │
-└────────────────────────────────────┘
-```
-
-**Example Queries:**
-
-```promql
-# Current SLO compliance
-sli:http_availability:ratio * 100
-
-# Error budget remaining
-slo:http_availability:error_budget_remaining
-
-# Days until error budget exhausted (at current burn rate)
-(slo:http_availability:error_budget_remaining / 100)
-*
-28
-/
-(1 - sli:http_availability:ratio) * (1 - 0.999)
-```
-
-## Multi-Window Burn Rate Alerts
-
-```yaml
-# Combination of short and long windows reduces false positives
-rules:
-  - alert: SLOBurnRateHigh
-    expr: |
-      (
-// ... (9 lines trimmed)
-      )
-    labels:
-      severity: critical
-```
-
-## SLO Review Process
-
-### Weekly Review
-
-- Current SLO compliance
-- Error budget status
-- Trend analysis
-- Incident impact
-
-### Monthly Review
-
-- SLO achievement
-- Error budget usage
-- Incident postmortems
-- SLO adjustments
-
-### Quarterly Review
-
-- SLO relevance
-- Target adjustments
-- Process improvements
-- Tooling enhancements
-
-## Best Practices
-
-1. **Start with user-facing services**
-2. **Use multiple SLIs** (availability, latency, etc.)
-3. **Set achievable SLOs** (don't aim for 100%)
-4. **Implement multi-window alerts** to reduce noise
-5. **Track error budget** consistently
-6. **Review SLOs regularly**
-7. **Document SLO decisions**
-8. **Align with business goals**
-9. **Automate SLO reporting**
-10. **Use SLOs for prioritization**
-
-## Reference Files
-
-- `assets/slo-template.md` - SLO definition template
-- `references/slo-definitions.md` - SLO definition patterns
-- `references/error-budget.md` - Error budget calculations
-
-## Related Skills
-
-- `grafana-dashboards` for the dashboard layer
-- `prometheus-configuration` for alert and rule wiring
-- `distributed-tracing` when tracing is part of the observability design
-
-- `prometheus-configuration` - For metric collection
-- `grafana-dashboards` - For SLO visualization
+- [references/slo-cookbook.md](references/slo-cookbook.md)

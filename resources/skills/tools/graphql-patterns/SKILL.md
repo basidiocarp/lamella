@@ -38,7 +38,7 @@ Load detailed guidance based on context:
 | Resolvers | `references/resolvers.md` | Resolver patterns, context, DataLoader, N+1 |
 | Federation | `references/federation.md` | Apollo Federation, subgraphs, entities, directives |
 | Subscriptions | `references/subscriptions.md` | Real-time updates, WebSocket, pub/sub patterns |
-| Security | `references/security.md` | Query depth, complexity analysis, authentication |
+| Security | `references/security.md` | Routing page for query guardrails, authz, validation, and transport hardening |
 | REST Migration | `references/migration-from-rest.md` | Migrating REST APIs to GraphQL |
 
 ## Constraints

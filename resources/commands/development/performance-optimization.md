@@ -109,7 +109,11 @@ Task:
   prompt: |
     Assess current observability setup for: $TARGET.
 
-# ... (13 lines trimmed)
+    Review whether the current stack can support performance work. Cover:
+    - metrics, logs, traces, and dashboard coverage
+    - gaps in latency, throughput, error-rate, and resource telemetry
+    - missing service-level or user-journey instrumentation
+    - whether the current tooling supports regression detection
 
     Write your complete assessment as a single markdown document.
 ```
@@ -131,7 +135,11 @@ Task:
   prompt: |
     Analyze user experience metrics for: $TARGET.
 
-# ... (12 lines trimmed)
+    Focus on the user-visible experience:
+    - Core Web Vitals or equivalent UX metrics
+    - slow journeys, loading delays, or interaction stalls
+    - mobile and low-bandwidth behavior if relevant
+    - the specific user pain created by the current bottlenecks
 
     Write your complete analysis as a single markdown document.
 ```
@@ -182,7 +190,12 @@ Task:
   prompt: |
     You are a database optimization expert. Optimize database performance for: $TARGET.
 
-# ... (16 lines trimmed)
+    Use the profiling and UX findings. Include:
+    - slow queries and indexing opportunities
+    - schema or access-pattern changes
+    - caching or batching options
+    - migration or rollout risks
+    - expected impact and validation approach
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -204,7 +217,12 @@ Task:
   prompt: |
     You are a backend performance architect. Optimize backend services for: $TARGET.
 
-# ... (17 lines trimmed)
+    Focus on:
+    - CPU, memory, and I/O bottlenecks
+    - request lifecycle inefficiencies
+    - caching, concurrency, and queueing improvements
+    - API contract or payload reductions where justified
+    - rollout order and validation
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -226,7 +244,11 @@ Task:
   prompt: |
     Optimize distributed system performance for: $TARGET.
 
-# ... (16 lines trimmed)
+    Review cross-service performance concerns:
+    - network hops, fan-out, and retry storms
+    - message queues, backpressure, and timeout policies
+    - service-to-service bottlenecks
+    - tracing or coordination gaps that obscure latency sources
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -271,7 +293,11 @@ Task:
   prompt: |
     Optimize frontend performance for: $TARGET targeting Core Web Vitals improvements.
 
-# ... (16 lines trimmed)
+    Focus on:
+    - bundle size, code splitting, and asset loading
+    - render waterfalls and hydration costs
+    - image, font, and caching opportunities
+    - user-journey improvements that directly affect perceived speed
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -293,7 +319,11 @@ Task:
   prompt: |
     You are a cloud infrastructure and CDN optimization expert. Optimize CDN and edge
     performance for: $TARGET.
-# ... (15 lines trimmed)
+    Review:
+    - cache keys, TTLs, and invalidation strategy
+    - origin load and edge offload opportunities
+    - compression, image transformation, and regional routing
+    - edge middleware or worker overhead
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -315,7 +345,11 @@ Task:
   prompt: |
     You are a mobile performance optimization expert. Optimize mobile experience for: $TARGET.
 
-# ... (17 lines trimmed)
+    Cover:
+    - mobile loading and interaction latency
+    - bandwidth, battery, and memory constraints
+    - offline or degraded-network behavior if relevant
+    - PWA or installability improvements where justified
 
     Write your complete optimization plan as a single markdown document.
 ```
@@ -360,7 +394,11 @@ Task:
   prompt: |
     Conduct comprehensive load testing for: $TARGET using k6/Gatling/Artillery.
 
-# ... (14 lines trimmed)
+    Build a plan that includes:
+    - baseline, stress, and soak scenarios
+    - success thresholds tied to the profiling baseline
+    - bottlenecks observed under load
+    - recommended next changes before production rollout
 
     Write your complete load test report as a single markdown document.
 ```
@@ -382,7 +420,11 @@ Task:
   prompt: |
     You are a test automation expert specializing in performance testing. Create automated
     performance regression tests for: $TARGET.
-# ... (18 lines trimmed)
+    Recommend:
+    - the most valuable regression checks to automate
+    - thresholds and guardrails for CI or scheduled jobs
+    - test data, environments, and artifacts to retain
+    - how to detect regressions before users do
 
     Write your complete regression testing plan as a single markdown document.
 ```
@@ -426,7 +468,11 @@ Task:
   prompt: |
     Implement production performance monitoring for: $TARGET.
 
-# ... (17 lines trimmed)
+    Define:
+    - production dashboards and key alerts
+    - SLOs, budgets, or thresholds tied to the optimized system
+    - alert routing and escalation expectations
+    - how to compare live metrics against the original baseline
 
     Write your complete monitoring plan as a single markdown document.
 ```
@@ -448,7 +494,11 @@ Task:
   prompt: |
     Establish continuous optimization process for: $TARGET.
 
-# ... (16 lines trimmed)
+    Produce an operating cadence that covers:
+    - recurring performance review checkpoints
+    - ownership and escalation
+    - budget or threshold review
+    - how profiling, regression tests, and monitoring stay aligned over time
 
     Write your complete continuous optimization plan as a single markdown document.
 ```
@@ -475,7 +525,14 @@ Performance optimization complete: $TARGET
 [List all .performance-optimization/ output files]
 
 ## Optimization Summary
-# ... (26 lines trimmed)
+- Baseline and profiling complete
+- Backend, distributed, frontend, and edge plans prepared
+- Load and regression testing defined
+- Monitoring and continuous optimization plans documented
+
+## Recommended Next Actions
+1. Implement the highest-impact quick wins first
+2. Re-measure against the original baseline after each major change
 3. Monitor production metrics against baselines
 4. Review performance budgets in weekly cycles
 ```

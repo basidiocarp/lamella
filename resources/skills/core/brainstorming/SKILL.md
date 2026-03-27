@@ -56,7 +56,16 @@ digraph brainstorming {
     "Ask clarifying questions" [shape=box];
     "Propose 2-3 approaches" [shape=box];
     "Present design sections" [shape=box];
-// ... (9 lines trimmed)
+    "User requests changes?" [shape=diamond];
+    "Revise approach" [shape=box];
+    "User approves design?" [shape=diamond];
+
+    "Explore project context" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Propose 2-3 approaches";
+    "Propose 2-3 approaches" -> "Present design sections";
+    "Present design sections" -> "User requests changes?";
+    "User requests changes?" -> "Revise approach" [label="yes"];
+    "Revise approach" -> "Present design sections";
     "User approves design?" -> "Write design doc" [label="yes"];
     "Write design doc" -> "Invoke writing-plans skill";
 }

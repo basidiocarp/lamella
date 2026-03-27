@@ -114,7 +114,14 @@ suspend fun longOperation() {
     while (true) {
         heavyComputation()  // Doesn't check cancellation
     }
-// ... (11 lines trimmed)
+}
+
+// DANGEROUS: Broad catch swallows cancellation
+suspend fun wrappedOperation() {
+    try {
+        longOperation()
+    } catch (e: Exception) {
+        println("failed: ${e.message}")
         // CancellationException caught! Breaks cancellation
     }
 }

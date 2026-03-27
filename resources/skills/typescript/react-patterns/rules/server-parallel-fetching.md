@@ -7,7 +7,7 @@ tags: server, rsc, parallel-fetching, composition
 
 ## Parallel Data Fetching with Component Composition
 
-React Server Components execute sequentially within a tree. Restructure with composition to parallelize data fetching.
+React Server Components execute sequentially within a tree. Restructure with composition so independent fetches start together.
 
 **Incorrect (Sidebar waits for Page's fetch to complete):**
 
@@ -36,13 +36,22 @@ async function Header() {
   return <div>{data}</div>;
 }
 
-// ... (10 lines trimmed)
+async function Sidebar() {
+  const items = await fetchSidebarItems();
+  return <nav>{items.map(renderItem)}</nav>;
+}
+
+export default function Page() {
+  return (
+    <div>
+      <Header />
+      <Sidebar />
     </div>
   );
 }
 ```
 
-**Alternative with children prop:**
+**Alternative with a layout boundary:**
 
 ```tsx
 async function Header() {
@@ -50,8 +59,16 @@ async function Header() {
   return <div>{data}</div>;
 }
 
-// ... (18 lines trimmed)
-    </Layout>
+function Layout({ sidebar }: { sidebar: React.ReactNode }) {
+  return (
+    <div>
+      <Header />
+      {sidebar}
+    </div>
   );
+}
+
+export default function Page() {
+  return <Layout sidebar={<Sidebar />} />;
 }
 ```

@@ -76,7 +76,21 @@ async void FireAndForget() {
     throw new Exception("Lost!");  // Crashes the process
 }
 
-// ... (11 lines trimmed)
+// DANGEROUS: Blocking on async can deadlock UI / ASP.NET request context
+string value = GetValueAsync().Result;
+
+// DANGEROUS: Forgetting to await loses exceptions and completion
+async Task HandleRequestAsync() {
+    DoWorkAsync();  // Not awaited - runs in background
+}
+
+async Task<string> GetValueAsync() {
+    await Task.Delay(100);
+    return "ok";
+}
+
+async Task DoWorkAsync() {
+    await Task.Delay(100);
     DoWorkAsync();  // Not awaited - runs in background
     // Exceptions lost, no completion guarantee
 }

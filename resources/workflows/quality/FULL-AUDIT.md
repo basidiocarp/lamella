@@ -4,14 +4,14 @@ Comprehensive audit of entire codebase. Run before major releases.
 
 ## Agents Used (9 Auditors in Parallel)
 1. `code-auditor` - Code quality
-2. `bug-auditor` - Security vulnerabilities
-4. `doc-auditor` - Documentation gaps
-5. `infra-auditor` - Infrastructure config
-6. `ui-auditor` - UI/UX and accessibility
-7. `db-auditor` - Database performance
-8. `perf-auditor` - Performance issues
-9. `dep-auditor` - Dependency health
-11. `api-tester` - API validation
+2. `bug-auditor` - Runtime defect and vulnerability sweep
+3. `doc-auditor` - Documentation gaps
+4. `infra-auditor` - Infrastructure config
+5. `ui-auditor` - UI/UX and accessibility
+6. `database-architect` - Database design and query review
+7. `perf-auditor` - Performance issues
+8. `dep-auditor` - Dependency health
+9. `api-tester` - API validation
 
 Then: `fix-planner` to consolidate findings
 
@@ -30,7 +30,7 @@ Phase 1 - Run ALL auditors in parallel:
 - doc-auditor on src/
 - infra-auditor on config files
 - ui-auditor on src/components/
-- db-auditor on database layer
+- database-architect on database layer
 - perf-auditor on entire app
 - dep-auditor on package.json
 - api-tester on API routes
@@ -52,7 +52,7 @@ Save all reports to .claude/audits/"
 │  AUDIT_CODE.md   AUDIT_SECURITY                      AUDIT_DOCS.md │
 │                  .md                                               │
 ├────────────────────────────────────────────────────────────────────┤
-│  infra-auditor   ui-auditor      db-auditor         perf-auditor  │
+│  infra-auditor   ui-auditor      database-architect perf-auditor  │
 │  ↓               ↓               ↓                  ↓              │
 │  AUDIT_INFRA.md  AUDIT_UI_UX.md  AUDIT_DB.md       AUDIT_PERF.md  │
 ├────────────────────────────────────────────────────────────────────┤
@@ -116,7 +116,7 @@ Save all reports to .claude/audits/"
 
 ## Time Estimate
 
-- **11 auditors in parallel:** ~2-5 minutes
+- **9 auditors in parallel:** ~2-5 minutes
 - **fix-planner consolidation:** ~1-2 minutes
 - **Total:** ~5-7 minutes
 

@@ -5,215 +5,64 @@ description: Applies React and Next.js component patterns for performance, acces
 
 # React Patterns
 
+Use this skill as the router for non-obvious React and Next.js guidance. Standard component syntax, hooks basics, and common JSX patterns are assumed.
 
-## Contents
+## When to Use
 
-- [Component Patterns](#component-patterns)
-  - [Compound Components](#compound-components)
-  - [Render Props for Flexible Data Loading](#render-props-for-flexible-data-loading)
-- [Performance](#performance)
-  - [Virtualization for Long Lists](#virtualization-for-long-lists)
-  - [Code Splitting](#code-splitting)
-- [Accessibility](#accessibility)
-  - [Focus Management in Modals](#focus-management-in-modals)
-  - [Keyboard Navigation in Dropdowns](#keyboard-navigation-in-dropdowns)
-- [Animation with Framer Motion](#animation-with-framer-motion)
-- [Next.js Performance Rules](#nextjs-performance-rules)
-  - [1. Eliminating Waterfalls (CRITICAL)](#1-eliminating-waterfalls-critical)
-  - [2. Bundle Size Optimization (CRITICAL)](#2-bundle-size-optimization-critical)
-  - [3. Server-Side Performance (HIGH)](#3-server-side-performance-high)
-  - [4. Client-Side Data Fetching (MEDIUM-HIGH)](#4-client-side-data-fetching-medium-high)
-  - [5. Re-render Optimization (MEDIUM)](#5-re-render-optimization-medium)
-  - [6. Rendering Performance (MEDIUM)](#6-rendering-performance-medium)
-  - [7. JavaScript Performance (LOW-MEDIUM)](#7-javascript-performance-low-medium)
-  - [8. Advanced Patterns (LOW)](#8-advanced-patterns-low)
+- component architecture and reuse
+- React or Next.js performance work
+- hydration, bundle, or waterfall issues
+- accessibility-sensitive UI patterns
+- animation choices that affect render cost
 
+## Load Order
 
-Standard React patterns are assumed knowledge. Only non-obvious patterns, performance rules, and project conventions here.
+1. Start with the nearest matching rule under `rules/`.
+2. If the problem spans many performance categories, consult [AGENTS.md](AGENTS.md) as the full compiled rulebook.
+3. Keep the `SKILL.md` layer short and use the rule files for detail.
 
-## Component Patterns
+## Quick Routing
+
+| Problem | Start Here |
+| --- | --- |
+| request waterfalls, early `await`, Suspense streaming | `rules/async-*.md` |
+| bundle size and client-load cost | `rules/bundle-*.md` |
+| client fetching, SWR, or browser listener issues | `rules/client-*.md` |
+| re-render churn, effect deps, stale state reads | `rules/rerender-*.md` |
+| render-path cost, hydration mismatch, SVG, visibility | `rules/rendering-*.md` |
+| low-level JavaScript hot-path cleanup | `rules/js-*.md` |
+| callback refs and advanced event patterns | `rules/advanced-*.md` |
+
+## Non-Obvious Defaults
+
+- eliminate waterfalls before micro-optimizing renders
+- prefer route or component restructuring over clever memoization
+- keep client bundles small before tuning event handlers
+- treat hydration mismatches and browser-only data as explicit design problems
+
+## Small Pattern Starters
 
 ### Compound Components
 
-Share implicit state between related components via context:
+Use compound components when related UI pieces need implicit shared state and a cohesive API.
 
-```typescript
-const TabsContext = createContext<TabsContextValue | undefined>(undefined)
+### Virtualization
 
-export function Tabs({ children, defaultTab }: {
-  children: React.ReactNode
-  defaultTab: string
-// ... (20 lines trimmed)
-    </button>
-  )
-}
-```
+Virtualize lists once item counts are large enough to affect mount or scroll cost.
 
-### Render Props for Flexible Data Loading
+### Accessibility
 
-```typescript
-interface DataLoaderProps<T> {
-  url: string
-  children: (data: T | null, loading: boolean, error: Error | null) => React.ReactNode
-}
+Focus trapping, keyboard navigation, and dialog return-focus behavior are first-class concerns, not polish items.
 
-// ... (12 lines trimmed)
+### Animation
 
-  return <>{children(data, loading, error)}</>
-}
-```
+Animate with explicit entry and exit states, but avoid introducing client-heavy animation libraries into flows that do not need them.
 
-## Performance
+## Reference Boundary
 
-### Virtualization for Long Lists
+This skill intentionally stays thin because the detailed rule set already lives in:
 
-Use `@tanstack/react-virtual` for lists over ~100 items:
+- [AGENTS.md](AGENTS.md)
+- the `rules/` directory
 
-```typescript
-import { useVirtualizer } from '@tanstack/react-virtual'
-
-export function VirtualList({ items }: { items: Item[] }) {
-  const parentRef = useRef<HTMLDivElement>(null)
-
-// ... (26 lines trimmed)
-    </div>
-  )
-}
-```
-
-### Code Splitting
-
-```typescript
-const HeavyChart = lazy(() => import('./HeavyChart'))
-
-export function Dashboard() {
-  return (
-    <Suspense fallback={<ChartSkeleton />}>
-      <HeavyChart data={data} />
-    </Suspense>
-  )
-}
-```
-
-## Accessibility
-
-### Focus Management in Modals
-
-```typescript
-export function Modal({ isOpen, onClose, children }: ModalProps) {
-  const modalRef = useRef<HTMLDivElement>(null)
-  const previousFocusRef = useRef<HTMLElement | null>(null)
-
-  useEffect(() => {
-// ... (17 lines trimmed)
-    </div>
-  ) : null
-}
-```
-
-### Keyboard Navigation in Dropdowns
-
-```typescript
-const handleKeyDown = (e: React.KeyboardEvent) => {
-  switch (e.key) {
-    case 'ArrowDown':
-      e.preventDefault()
-      setActiveIndex(i => Math.min(i + 1, options.length - 1))
-// ... (12 lines trimmed)
-      break
-  }
-}
-```
-
-## Animation with Framer Motion
-
-```typescript
-<AnimatePresence>
-  {items.map(item => (
-    <motion.div
-      key={item.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-    >
-      <ItemCard item={item} />
-    </motion.div>
-  ))}
-</AnimatePresence>
-```
-
----
-
-## Next.js Performance Rules
-
-45 rules across 8 categories, prioritized by impact. See `rules/` for detailed explanations and code examples per rule. Full compiled document: `AGENTS.md`.
-
-### 1. Eliminating Waterfalls (CRITICAL)
-
-- `async-defer-await` — Move await into branches where actually used
-- `async-parallel` — Use Promise.all() for independent operations
-- `async-dependencies` — Use better-all for partial dependencies
-- `async-api-routes` — Start promises early, await late in API routes
-- `async-suspense-boundaries` — Use Suspense to stream content
-
-### 2. Bundle Size Optimization (CRITICAL)
-
-- `bundle-barrel-imports` — Import directly, avoid barrel files
-- `bundle-dynamic-imports` — Use next/dynamic for heavy components
-- `bundle-defer-third-party` — Load analytics/logging after hydration
-- `bundle-conditional` — Load modules only when feature is activated
-- `bundle-preload` — Preload on hover/focus for perceived speed
-
-### 3. Server-Side Performance (HIGH)
-
-- `server-cache-react` — Use React.cache() for per-request deduplication
-- `server-cache-lru` — Use LRU cache for cross-request caching
-- `server-serialization` — Minimize data passed to client components
-- `server-parallel-fetching` — Restructure components to parallelize fetches
-- `server-after-nonblocking` — Use after() for non-blocking operations
-
-### 4. Client-Side Data Fetching (MEDIUM-HIGH)
-
-- `client-swr-dedup` — Use SWR for automatic request deduplication
-- `client-event-listeners` — Deduplicate global event listeners
-
-### 5. Re-render Optimization (MEDIUM)
-
-- `rerender-defer-reads` — Don't subscribe to state only used in callbacks
-- `rerender-memo` — Extract expensive work into memoized components
-- `rerender-dependencies` — Use primitive dependencies in effects
-- `rerender-derived-state` — Subscribe to derived booleans, not raw values
-- `rerender-functional-setstate` — Use functional setState for stable callbacks
-- `rerender-lazy-state-init` — Pass function to useState for expensive values
-- `rerender-transitions` — Use startTransition for non-urgent updates
-
-### 6. Rendering Performance (MEDIUM)
-
-- `rendering-animate-svg-wrapper` — Animate div wrapper, not SVG element
-- `rendering-content-visibility` — Use content-visibility for long lists
-- `rendering-hoist-jsx` — Extract static JSX outside components
-- `rendering-svg-precision` — Reduce SVG coordinate precision
-- `rendering-hydration-no-flicker` — Use inline script for client-only data
-- `rendering-activity` — Use Activity component for show/hide
-- `rendering-conditional-render` — Use ternary, not && for conditionals
-
-### 7. JavaScript Performance (LOW-MEDIUM)
-
-- `js-batch-dom-css` — Group CSS changes via classes or cssText
-- `js-index-maps` — Build Map for repeated lookups
-- `js-cache-property-access` — Cache object properties in loops
-- `js-cache-function-results` — Cache function results in module-level Map
-- `js-cache-storage` — Cache localStorage/sessionStorage reads
-- `js-combine-iterations` — Combine multiple filter/map into one loop
-- `js-length-check-first` — Check array length before expensive comparison
-- `js-early-exit` — Return early from functions
-- `js-hoist-regexp` — Hoist RegExp creation outside loops
-- `js-min-max-loop` — Use loop for min/max instead of sort
-- `js-set-map-lookups` — Use Set/Map for O(1) lookups
-- `js-tosorted-immutable` — Use toSorted() for immutability
-
-### 8. Advanced Patterns (LOW)
-
-- `advanced-event-handler-refs` — Store event handlers in refs
-- `advanced-use-latest` — useLatest for stable callback refs
+If you need the full 40+ rule compilation, read [AGENTS.md](AGENTS.md). If you need an actionable fix, open the matching rule file directly.

@@ -1,79 +1,16 @@
 # Artifact Templates
 
-Starter templates for each Conductor context artifact. Copy and fill in for new projects.
+Use this page as the entry point for Conductor starter artifacts.
 
-> Contributed by [@fernandezbaptiste](https://github.com/fernandezbaptiste) ([#437](https://github.com/wshobson/agents/pull/437))
+## Reference Map
 
-## product.md
+| Need | Load |
+|------|------|
+| `product.md` and `tech-stack.md` starters | [product-and-tech-stack-templates.md](product-and-tech-stack-templates.md) |
+| `workflow.md`, `tracks.md`, and `product-guidelines.md` starters | [workflow-and-tracks-templates.md](workflow-and-tracks-templates.md) |
 
-```markdown
-# [Product Name]
+## Use This Page When
 
-> One-line description of what this product does.
-
-## Problem
-// ... (27 lines trimmed)
-
-- **Phase 1**: scope
-- **Phase 2**: scope
-```
-
-## tech-stack.md
-
-```markdown
-# Tech Stack
-
-## Languages & Frameworks
-
-| Technology | Version | Purpose |
-// ... (22 lines trimmed)
-|---|---|---|
-| pytest | Testing (target: 80% coverage) | pyproject.toml |
-| ruff | Linting + formatting | ruff.toml |
-```
-
-## workflow.md
-
-```markdown
-# Workflow
-
-## Methodology
-
-TDD with trunk-based development.
-// ... (19 lines trimmed)
-2. CI runs tests + build
-3. Auto-deploy to staging
-4. Manual promotion to production
-```
-
-## tracks.md
-
-```markdown
-# Tracks
-
-## Active
-
-| ID | Title | Status | Priority | Assignee |
-|---|---|---|---|---|
-| TRACK-001 | Feature name | in-progress | high | @person |
-
-## Completed
-
-| ID | Title | Completed |
-|---|---|---|
-| TRACK-000 | Initial setup | 2024-01-15 |
-```
-
-## product-guidelines.md
-
-```markdown
-# Product Guidelines
-
-## Voice & Tone
-
-- Professional but approachable
-// ... (11 lines trimmed)
-
-Format: `[Component] What happened. What to do next.`
-Example: `[Auth] Session expired. Please sign in again.`
-```
+- Starting a new Conductor project
+- Rebuilding missing project artifacts
+- Explaining which artifact template to load next

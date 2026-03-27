@@ -105,7 +105,13 @@ VAR1 = $(shell date)
 # VAR1 changes every time it's used!
 
 # Simple (:=): Evaluated once
-// ... (8 lines trimmed)
+VAR2 := $(shell date)
+# VAR2 keeps the timestamp from definition time
+
+# Conditional (?=): Only if undefined
+VAR3 ?= default-value
+
+# Append (+=): Extend existing value
 VAR4 := first
 VAR4 += second
 # VAR4 = "first second"
@@ -123,7 +129,24 @@ CC ?= gcc
 
 # C++ Compiler
 CXX ?= g++
-// ... (27 lines trimmed)
+
+# Archiver and indexer
+AR ?= ar
+RANLIB ?= ranlib
+
+# Linker and shell
+LD ?= $(CC)
+SHELL ?= /bin/sh
+
+# Install and filesystem helpers
+INSTALL ?= install
+MKDIR_P ?= mkdir -p
+RM ?= rm -f
+
+# Documentation tools
+TAR ?= tar
+SED ?= sed
+AWK ?= awk
 
 # pkg-config
 PKG_CONFIG ?= pkg-config
@@ -137,7 +160,17 @@ CPPFLAGS ?=
 
 # C Compiler flags
 CFLAGS ?= -Wall -Wextra -O2
-// ... (12 lines trimmed)
+
+# C++ Compiler flags
+CXXFLAGS ?= -Wall -Wextra -O2
+
+# Linker flags and libraries
+LDFLAGS ?=
+LDLIBS ?=
+
+# Assembler and Yacc flags
+ASFLAGS ?=
+YFLAGS ?=
 
 # Lex/Flex flags
 LFLAGS ?=
@@ -165,7 +198,17 @@ PREFIX ?= /usr/local
 
 # Executable prefix (usually same as PREFIX)
 EXEC_PREFIX ?= $(PREFIX)
-// ... (33 lines trimmed)
+
+# Common install destinations
+BINDIR ?= $(EXEC_PREFIX)/bin
+SBINDIR ?= $(EXEC_PREFIX)/sbin
+LIBDIR ?= $(EXEC_PREFIX)/lib
+INCLUDEDIR ?= $(PREFIX)/include
+DATAROOTDIR ?= $(PREFIX)/share
+DATADIR ?= $(DATAROOTDIR)
+MANDIR ?= $(DATAROOTDIR)/man
+MAN1DIR ?= $(MANDIR)/man1
+DOCDIR ?= $(DATAROOTDIR)/doc/$(PROJECT)
 
 # DESTDIR for staged installations (package building)
 DESTDIR ?=
@@ -218,7 +261,15 @@ Automatic variables are set by make for each rule:
 hello: hello.o utils.o
 	$(CC) $(LDFLAGS) $^ -o $@
 	# Expands to: gcc -o hello hello.o utils.o
-// ... (9 lines trimmed)
+
+hello.o: hello.c common.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	# $< = hello.c
+
+changed:
+	@echo "Changed prerequisites: $?"
+
+$(OBJDIR)/main.o: src/main.c
 	$(CC) $(CFLAGS) -c $< -o $@
 	# $(@D) = "build"
 ```
@@ -260,7 +311,18 @@ SOURCES := $(wildcard src/*.c)
 
 # $(patsubst pattern,replacement,text)
 OBJECTS := $(patsubst %.c,%.o,$(SOURCES))
-// ... (24 lines trimmed)
+
+# $(sort list)
+UNIQUE_DIRS := $(sort $(dir $(SOURCES)))
+
+# $(filter pattern...,text)
+TEST_SRCS := $(filter %_test.c,$(SOURCES))
+
+# $(notdir names...)
+FILENAMES := $(notdir $(SOURCES))
+
+# $(addprefix prefix,names...)
+OBJ_PATHS := $(addprefix build/,$(FILENAMES))
 
 # $(addsuffix suffix,names...)
 OBJ_FILES := $(addsuffix .o,$(NAMES))
@@ -301,7 +363,13 @@ BUILD_TESTS := $(and $(ENABLE_TESTS),$(HAVE_CHECK))
 CC = gcc  # Overrides CC from environment
 
 # Use ?= to respect environment
-// ... (6 lines trimmed)
+CC ?= gcc
+CFLAGS ?= -O2
+
+# Export variables to sub-processes when needed
+export PKG_CONFIG_PATH
+export DESTDIR
+
 # Unexport variables
 unexport INTERNAL_VAR
 ```
@@ -344,7 +412,9 @@ tests/%: LDLIBS += -lcheck
 CC ?= gcc
 PREFIX ?= /usr/local
 
-// ... (5 lines trimmed)
+TARGET := app                  # Good
+BUILD_DIR := build             # Good
+
 SOURCES := $(wildcard src/*.c)  # Good
 S := $(wildcard src/*.c)         # Bad
 ```
@@ -356,7 +426,14 @@ S := $(wildcard src/*.c)         # Bad
 # ============================================
 # User Configuration
 # ============================================
-// ... (8 lines trimmed)
+CC ?= gcc
+CFLAGS ?= -Wall -Wextra -O2
+PREFIX ?= /usr/local
+
+# ============================================
+# Project Metadata
+# ============================================
+PROJECT := demo
 VERSION := 1.0.0
 SOURCES := $(wildcard src/*.c)
 ```
@@ -407,7 +484,32 @@ OBJECTS := $(SOURCES:.c=.o)
 # ============================================
 CC ?= gcc
 CFLAGS ?= -Wall -Wextra -O2
-// ... (52 lines trimmed)
+CPPFLAGS ?= -Iinclude
+LDFLAGS ?=
+LDLIBS ?=
+PREFIX ?= /usr/local
+
+# ============================================
+# Project Variables
+# ============================================
+TARGET := app
+SOURCES := $(wildcard src/*.c)
+OBJECTS := $(SOURCES:.c=.o)
+
+.PHONY: all clean debug release
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+%.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+clean:
+	$(RM) $(TARGET) $(OBJECTS)
+
+debug: CFLAGS += -g -O0 -DDEBUG
+debug: $(TARGET)
 
 release: CFLAGS += -O3 -DNDEBUG -s
 release: $(TARGET)

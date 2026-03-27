@@ -4,13 +4,28 @@
 
 ```typescript
 import jwt from 'jsonwebtoken'
+import { NextResponse } from 'next/server'
 
 interface JWTPayload {
   userId: string
   email: string
-// ... (27 lines trimmed)
+  role: 'admin' | 'moderator' | 'user'
+}
 
-  return NextResponse.json({ success: true, data })
+function verifyToken(authHeader: string | null): JWTPayload {
+  const token = authHeader?.replace(/^Bearer\s+/i, '')
+  if (!token) throw new Error('Missing token')
+  return jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload
+}
+
+export async function GET(request: Request) {
+  try {
+    const user = verifyToken(request.headers.get('authorization'))
+    const data = await getDataForUser(user.userId)
+    return NextResponse.json({ success: true, data })
+  } catch {
+    return NextResponse.json({ success: false }, { status: 401 })
+  }
 }
 ```
 
@@ -19,28 +34,34 @@ interface JWTPayload {
 ```typescript
 type Permission = 'read' | 'write' | 'delete' | 'admin'
 
-interface User {
-  id: string
-  role: 'admin' | 'moderator' | 'user'
-// ... (30 lines trimmed)
-    return new Response('Deleted', { status: 200 })
-  }
-)
-```
+const rolePermissions = {
+  admin: ['read', 'write', 'delete', 'admin'],
+  moderator: ['read', 'write'],
+  user: ['read'],
+} satisfies Record<string, Permission[]>
 
+function requirePermission(role: keyof typeof rolePermissions, permission: Permission) {
+  if (!rolePermissions[role].includes(permission)) {
+    throw new Error('Forbidden')
+  }
+}
+```
 
 ## Rate Limiting
 
-### Simple In-Memory Rate Limiter
-
 ```typescript
-class RateLimiter {
-  private requests = new Map<string, number[]>()
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
 
-  async checkLimit(
-    identifier: string,
-// ... (33 lines trimmed)
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.fixedWindow(60, '1 m'),
+})
 
-  // Continue with request
+export async function requireRateLimit(identifier: string) {
+  const result = await ratelimit.limit(identifier)
+  if (!result.success) {
+    throw new Error('Rate limit exceeded')
+  }
 }
 ```

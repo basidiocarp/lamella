@@ -61,7 +61,11 @@ import os
 
 # Example hosted embedding client
 embeddings = VoyageAIEmbeddings(
-// ... (10 lines trimmed)
+    model="voyage-3-large",
+    api_key=os.environ["VOYAGE_API_KEY"],
+    truncation=True,
+)
+
 # Provider-specific model choices
 code_embeddings = VoyageAIEmbeddings(model="voyage-code-3")
 finance_embeddings = VoyageAIEmbeddings(model="voyage-finance-2")

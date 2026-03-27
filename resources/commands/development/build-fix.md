@@ -1,10 +1,15 @@
+---
+description: Fix build, compile, and typecheck failures one issue at a time
+argument-hint: [optional error summary]
+---
+
 # Build and Fix
 
 Incrementally fix build and type errors with minimal, safe changes.
 
 ## Step 1: Detect Build System
 
-Identify the project's build tool and run the build:
+Identify the project's build or typecheck command and run the narrowest reliable check first:
 
 | Indicator | Build Command |
 |-----------|---------------|
@@ -16,47 +21,49 @@ Identify the project's build tool and run the build:
 | `go.mod` | `go build ./...` |
 | `pyproject.toml` | `python -m py_compile` or `mypy .` |
 
+If the user already provided a specific failing command, prefer that over autodetection.
+
 ## Step 2: Parse and Group Errors
 
-1. Run the build command and capture stderr
-2. Group errors by file path
-3. Sort by dependency order (fix imports/types before logic errors)
-4. Count total errors for progress tracking
+1. Run the chosen command and capture the current failures.
+2. Group errors by file path or subsystem.
+3. Fix prerequisite errors first: syntax, imports, generated types, and broken interfaces before downstream logic errors.
+4. Keep track of what is resolved and what still remains.
 
-## Step 3: Fix Loop (One Error at a Time)
+## Step 3: Fix Loop
 
 For each error:
 
-1. **Read the file** — Use Read tool to see error context (10 lines around the error)
-2. **Diagnose** — Identify root cause (missing import, wrong type, syntax error)
-3. **Fix minimally** — Use Edit tool for the smallest change that resolves the error
-4. **Re-run build** — Verify the error is gone and no new errors introduced
-5. **Move to next** — Continue with remaining errors
+1. **Read the file** to inspect the failure context.
+2. **Diagnose** the root cause.
+3. **Fix minimally** and avoid speculative refactors.
+4. **Re-run the same check** to confirm the current error is gone.
+5. **Move to the next failure** once the current one is resolved.
 
 ## Step 4: Guardrails
 
 Stop and ask the user if:
-- A fix introduces **more errors than it resolves**
-- The **same error persists after 3 attempts** (likely a deeper issue)
-- The fix requires **architectural changes** (not just a build fix)
-- Build errors stem from **missing dependencies** (need `npm install`, `cargo add`, etc.)
+- a fix introduces more errors than it resolves
+- the same error persists after 3 attempts
+- the fix requires architectural change rather than a narrow repair
+- the repo needs dependency installation, generated files, or external services the session cannot safely infer
 
 ## Step 5: Summary
 
-Show results:
-- Errors fixed (with file paths)
-- Errors remaining (if any)
-- New errors introduced (should be zero)
-- Suggested next steps for unresolved issues
+Show:
+- errors fixed
+- files changed
+- errors remaining
+- the next recommended action if the build still fails
 
 ## Recovery Strategies
 
 | Situation | Action |
 |-----------|--------|
-| Missing module/import | Check if package is installed; suggest install command |
-| Type mismatch | Read both type definitions; fix the narrower type |
-| Circular dependency | Identify cycle with import graph; suggest extraction |
-| Version conflict | Check `package.json` / `Cargo.toml` for version constraints |
-| Build tool misconfiguration | Read config file; compare with working defaults |
+| Missing module or import | Check whether the dependency or generated file exists before editing call sites |
+| Type mismatch | Read the surrounding types and fix the narrowest incompatible boundary |
+| Circular dependency | Identify the cycle and stop if resolving it requires design work |
+| Version conflict | Inspect the relevant manifest or lockfile before changing code |
+| Build tool misconfiguration | Read the config file and compare it with the repo's normal conventions |
 
-Fix one error at a time for safety. Prefer minimal diffs over refactoring.
+Prefer minimal diffs over refactoring. Switch to [`/smart-fix`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/development/smart-fix.md) if the issue turns into a broader incident or design failure.

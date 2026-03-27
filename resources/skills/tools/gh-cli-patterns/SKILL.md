@@ -61,7 +61,12 @@ gh repo view owner/repo
 
 # List and view PRs
 gh pr list --repo owner/repo
-// ... (8 lines trimmed)
+gh pr view 123 --repo owner/repo
+gh pr checkout 123 --repo owner/repo
+
+# Issues
+gh issue list --repo owner/repo
+gh issue view 456 --repo owner/repo
 
 # Call with pagination and jq filtering
 gh api repos/owner/repo/pulls --paginate --jq '.[].title'

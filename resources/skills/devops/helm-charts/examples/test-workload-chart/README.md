@@ -27,7 +27,11 @@ This chart exists to exercise and demonstrate the **mandatory Stage 9 Security B
 # Automated regression check (recommended)
 bash test/test_stage9_workload.sh
 
-// ... (38 lines trimmed)
+# Manual render of the default values
+helm template test-release test/test-workload-chart \
+  --output-dir /tmp/workload-rendered-default
+
+# Render pinned-tag scenario
 helm template test-release test/test-workload-chart \
   -f test/test-workload-chart/values-pinned-tag.yaml \
   --output-dir /tmp/workload-rendered-pinned

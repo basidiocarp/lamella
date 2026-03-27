@@ -45,9 +45,13 @@ function getLatestProject(projects: Project[]) {
 
   let latest = projects[0];
 
-// ... (19 lines trimmed)
+  for (const project of projects) {
+    if (project.updatedAt > latest.updatedAt) {
+      latest = project;
+    }
+  }
 
-  return { oldest, newest };
+  return latest;
 }
 ```
 

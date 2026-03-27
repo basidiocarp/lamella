@@ -1,162 +1,79 @@
 # Additional Django Patterns
 
-Service layer, caching, signals, middleware, and performance patterns.
+Use this reference for the common “beyond models and views” patterns that show
+up in production Django apps.
 
-## Service Layer Pattern
+## Service Layer
 
-```python
-# apps/orders/services.py
-from typing import Optional
-from django.db import transaction
-from .models import Order, OrderItem
+Use a service layer when business logic spans models, side effects, or
+transactions.
 
-// ... (45 lines trimmed)
-        """Send order confirmation email."""
-        # Email sending logic
-        pass
-```
+Good fits:
+- order placement or fulfillment
+- billing or subscription changes
+- multi-model write flows
+- logic that should not live in serializers or views
 
-## Caching Strategies
+Keep services:
+- transaction-aware
+- explicit about side effects
+- separate from transport concerns
 
-### View-Level Caching
+## Caching
 
-```python
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
+Choose the narrowest cache that solves the problem:
+- view-level caching for coarse public responses
+- template-fragment caching for repeated expensive blocks
+- low-level cache access for derived query results or computed data
 
-@method_decorator(cache_page(60 * 15), name='dispatch')  # 15 minutes
-class ProductListView(generic.ListView):
-    model = Product
-    template_name = 'products/list.html'
-    context_object_name = 'products'
-```
-
-### Template Fragment Caching
-
-```django
-{% load cache %}
-{% cache 500 sidebar %}
-    ... expensive sidebar content ...
-{% endcache %}
-```
-
-### Low-Level Caching
-
-```python
-from django.core.cache import cache
-
-def get_featured_products():
-    """Get featured products with caching."""
-    cache_key = 'featured_products'
-    products = cache.get(cache_key)
-
-    if products is None:
-        products = list(Product.objects.filter(is_featured=True))
-        cache.set(cache_key, products, timeout=60 * 15)  # 15 minutes
-
-    return products
-```
-
-### QuerySet Caching
-
-```python
-from django.core.cache import cache
-
-def get_popular_categories():
-    cache_key = 'popular_categories'
-    categories = cache.get(cache_key)
-
-    if categories is None:
-        categories = list(Category.objects.annotate(
-            product_count=Count('products')
-        ).filter(product_count__gt=10).order_by('-product_count')[:20])
-        cache.set(cache_key, categories, timeout=60 * 60)  # 1 hour
-
-    return categories
-```
+Rules:
+- cache stable, read-heavy data
+- name keys predictably
+- define invalidation strategy before adding the cache
 
 ## Signals
 
-```python
-# apps/users/signals.py
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.contrib.auth import get_user_model
-from .models import Profile
-// ... (21 lines trimmed)
-    def ready(self):
-        """Import signals when app is ready."""
-        import apps.users.signals
-```
+Signals are useful for loose coupling, but easy to overuse.
 
-## Custom Middleware
+Good fits:
+- profile creation after user creation
+- analytics or audit hooks
+- cross-app notifications that do not need synchronous return values
 
-```python
-# middleware/active_user_middleware.py
-import time
-from django.utils.deprecation import MiddlewareMixin
+Bad fits:
+- critical business logic
+- hidden write chains
+- behavior that must be obvious from the calling code
 
-class ActiveUserMiddleware(MiddlewareMixin):
-// ... (19 lines trimmed)
-            duration = time.time() - request.start_time
-            logger.info(f'{request.method} {request.path} - {response.status_code} - {duration:.3f}s')
-        return response
-```
+## Middleware
 
-## Performance Optimization
+Use middleware for request/response cross-cutting concerns:
+- request timing
+- auth or tenant context injection
+- correlation IDs
+- global access policy enforcement
 
-### N+1 Query Prevention
+Keep middleware small and observable. Heavy business logic belongs elsewhere.
 
-```python
-# Bad - N+1 queries
-products = Product.objects.all()
-for product in products:
-    print(product.category.name)  # Separate query for each product
+## Performance Defaults
 
-# Good - Single query with select_related
-products = Product.objects.select_related('category').all()
-for product in products:
-    print(product.category.name)
+Start with:
+- `select_related` for foreign keys
+- `prefetch_related` for many-to-many or reverse relations
+- indexes that match actual filter and ordering patterns
+- bulk operations for large batches
 
-# Good - Prefetch for many-to-many
-products = Product.objects.prefetch_related('tags').all()
-for product in products:
-    for tag in product.tags.all():
-        print(tag.name)
-```
+Do not add caching or middleware before fixing obvious query-shape problems.
 
-### Database Indexing
+## Selection Guide
 
-```python
-class Product(models.Model):
-    name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(unique=True)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+| Need | Better pattern |
+|---|---|
+| multi-model domain logic | service layer |
+| repeated read-heavy output | caching |
+| loose side-effect hook | signal |
+| request-wide cross-cutting concern | middleware |
+| slow ORM access | query optimization first |
 
-    class Meta:
-        indexes = [
-            models.Index(fields=['name']),
-            models.Index(fields=['-created_at']),
-            models.Index(fields=['category', 'created_at']),
-        ]
-```
-
-### Bulk Operations
-
-```python
-# Bulk create
-Product.objects.bulk_create([
-    Product(name=f'Product {i}', price=10.00)
-    for i in range(1000)
-])
-
-# Bulk update
-products = Product.objects.all()[:100]
-for product in products:
-    product.is_active = True
-Product.objects.bulk_update(products, ['is_active'])
-
-# Bulk delete
-Product.objects.filter(stock=0).delete()
-```
+Use these as routing patterns, then split deeper examples into dedicated refs if
+one area grows again.

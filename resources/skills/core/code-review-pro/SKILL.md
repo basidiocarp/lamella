@@ -127,7 +127,32 @@ db.query(query, [userEmail]);
 
 ## ⚠️ High Priority Issues
 ### 2. Performance: N+1 Query Problem (line Y)
-// ... (31 lines trimmed)
+**Issue**: The loop loads related orders one row at a time, which multiplies database round trips.
+
+**Why it matters**: Query count grows with result size and quickly degrades a healthy endpoint under normal traffic.
+
+**Recommended fix**:
+```javascript
+const users = await db('users')
+  .leftJoin('orders', 'orders.user_id', 'users.id')
+  .select('users.*', 'orders.total');
+```
+
+## ℹ️ Medium Priority Issues
+### 3. Error handling gaps (line Z)
+**Issue**: External API failures are logged but not surfaced to callers.
+
+**Recommendation**: Return a typed application error and capture retryability explicitly.
+
+## ✅ What looks good
+- Input validation happens before persistence.
+- The auth boundary is separated from data access.
+- Naming is consistent and the control flow is easy to follow.
+
+## Next Steps
+1. Fix high-severity security issues first.
+2. Eliminate N+1 and re-profile the endpoint.
+3. Add regression tests for the corrected paths.
 ## 📚 Resources
 - [OWASP SQL Injection Guide](https://...)
 - [Performance Best Practices](https://...)

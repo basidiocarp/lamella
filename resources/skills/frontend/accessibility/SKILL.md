@@ -172,8 +172,8 @@ For screen reader commands and testing checklists, see [references/screen-reader
 - [aria-patterns.md](references/aria-patterns.md) — Modal, live region, and tab patterns
 
 ### Mobile & Guidelines
-- [mobile-accessibility.md](references/mobile-accessibility.md) — iOS VoiceOver, Android TalkBack
-- [wcag-guidelines.md](references/wcag-guidelines.md) — Full WCAG 2.2 reference
+- [mobile-accessibility.md](references/mobile-accessibility.md) — Mobile accessibility guidance for iOS, Android, and React Native
+- [wcag-guidelines.md](references/wcag-guidelines.md) — WCAG 2.2 routing guide into the per-principle checklists
 ### Additional Resources
 
 - [Testing Checklists](references/testing-checklists.md)

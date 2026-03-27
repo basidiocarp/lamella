@@ -1,281 +1,141 @@
 # RAG Evaluation
 
----
+Compact evaluation patterns for measuring retrieval quality and grounded generation.
 
-## Evaluation Framework Overview
+## Evaluate Both Retrieval and Generation
 
-| Framework | Focus | Strengths | Use Case |
-|-----------|-------|-----------|----------|
-| **RAGAS** | RAG-specific metrics | Faithfulness, relevance | Production RAG evaluation |
-| **TruLens** | LLM app observability | Tracing, feedback functions | Debugging and monitoring |
-| **LangSmith** | LangChain ecosystem | Traces, datasets, testing | LangChain projects |
-| **Custom** | Specific requirements | Full control | Domain-specific needs |
+```text
+Retrieval answers:
+- did we fetch the right documents?
 
----
-
-## Core Metrics
-
-### Retrieval Metrics
-
-| Metric | Formula | What It Measures |
-|--------|---------|------------------|
-| **Precision@k** | Relevant in top-k / k | Are retrieved docs relevant? |
-| **Recall@k** | Relevant in top-k / Total relevant | Did we get all relevant docs? |
-| **MRR** | 1 / Rank of first relevant | How quickly do we find relevant? |
-| **NDCG@k** | DCG@k / IDCG@k | Is ranking order correct? |
-| **Hit Rate** | Queries with relevant in top-k / Total queries | Binary success rate |
-
-### Generation Metrics
-
-| Metric | What It Measures |
-|--------|------------------|
-| **Faithfulness** | Is answer grounded in retrieved context? |
-| **Answer Relevance** | Does answer address the question? |
-| **Context Relevance** | Is retrieved context relevant to question? |
-| **Context Utilization** | How much context was actually used? |
-
----
-
-## Implementing Core Metrics
-
-### Precision, Recall, and Hit Rate
-
-```python
-from dataclasses import dataclass
-from typing import Set
-
-@dataclass
-class RetrievalMetrics:
-// ... (43 lines trimmed)
-print(f"Precision@5: {metrics.precision_at_k:.2f}")  # 2/5 = 0.40
-print(f"Recall@5: {metrics.recall_at_k:.2f}")        # 2/3 = 0.67
-print(f"MRR: {metrics.mrr:.2f}")                     # 1/2 = 0.50
+Generation answers:
+- did the model use them correctly?
 ```
 
-### NDCG (Normalized Discounted Cumulative Gain)
+Do not treat a good answer as proof of good retrieval. The model can guess.
 
-```python
-import numpy as np
+## Core Retrieval Metrics
 
-def dcg_at_k(relevance_scores: list[float], k: int) -> float:
-    """Calculate Discounted Cumulative Gain."""
-    relevance_scores = np.array(relevance_scores[:k])
-// ... (40 lines trimmed)
+Use these first:
 
-ndcg = ndcg_at_k(retrieved, relevance, k=5)
-print(f"NDCG@5: {ndcg:.3f}")
+```text
+Precision@k  -> how many retrieved docs are relevant
+Recall@k     -> whether relevant docs were missed
+MRR          -> how quickly the first useful doc appears
+NDCG@k       -> whether ranking order is sensible
+Hit Rate     -> whether at least one useful doc appeared
 ```
 
----
-
-## RAGAS Framework
-
-### Installation and Setup
+Minimal sketch:
 
 ```python
-# pip install ragas
+def precision_at_k(retrieved, relevant, k):
+    top_k = retrieved[:k]
+    return len([doc for doc in top_k if doc in relevant]) / k
 
-from ragas import evaluate
-from ragas.metrics import (
-    faithfulness,
-// ... (40 lines trimmed)
-
-print(results)
-# {'faithfulness': 0.95, 'answer_relevancy': 0.88, ...}
+def recall_at_k(retrieved, relevant, k):
+    top_k = retrieved[:k]
+    return len([doc for doc in top_k if doc in relevant]) / len(relevant)
 ```
 
-### Custom RAGAS Evaluation
+## Core Generation Metrics
 
-```python
-from ragas.metrics import Metric
-from ragas.llms import LangchainLLM
-from langchain_openai import ChatOpenAI
+Track:
 
-# Use custom LLM
-// ... (11 lines trimmed)
-for i, row in enumerate(results.to_pandas().itertuples()):
-    print(f"Q{i+1}: Faithfulness={row.faithfulness:.2f}, "
-          f"Relevancy={row.answer_relevancy:.2f}")
+```text
+Faithfulness       -> answer stays grounded in context
+Answer relevance   -> answer addresses the question
+Context relevance  -> retrieved context matches the question
+Context utilization -> retrieved context is actually used
 ```
 
-### RAGAS Metrics Explained
+These can be scored with:
+- human review
+- LLM-as-judge
+- framework tools like RAGAS
 
-```python
-"""
-RAGAS Core Metrics:
+## RAGAS and Similar Tooling
 
-1. Faithfulness (0-1):
-   - Measures if answer is grounded in context
-// ... (38 lines trimmed)
-            })
+Frameworks are useful when you want:
+- repeatable offline evaluation
+- side-by-side system comparisons
+- a standard scoring vocabulary
 
-    return issues
+Use them as a measurement layer, not as your only truth source.
+
+## LLM-as-Judge
+
+Useful for:
+- faithfulness checks
+- citation or grounding checks
+- failure clustering at scale
+
+Pattern:
+
+```text
+Question
+Retrieved context
+Answer
+Judge prompt:
+- is the answer supported?
+- what claims are unsupported?
+- score 1-5 with a reason
 ```
 
----
+Keep judge prompts narrow. Broad “is this good?” prompts produce noisy signals.
 
-## TruLens Evaluation
+## Failure Analysis
 
-### Setup and Basic Usage
+When quality is poor, classify the failure first:
 
-```python
-# pip install trulens-eval
+```text
+retrieval failure:
+- relevant docs missing
+- ranking weak
+- metadata filter too strict or too loose
 
-from trulens_eval import Tru, TruChain, Feedback
-from trulens_eval.feedback import Groundedness
-from trulens_eval.feedback.provider import OpenAI as fOpenAI
-// ... (46 lines trimmed)
-tru.run_dashboard()  # Opens web UI
-# Or get programmatically
-records = tru.get_records_and_feedback(app_ids=["rag-v1"])
+generation failure:
+- hallucinated beyond context
+- ignored the best evidence
+- weak synthesis of retrieved docs
 ```
 
-### Custom Feedback Functions
+This prevents tuning the wrong layer.
 
-```python
-from trulens_eval import Feedback, Select
+## Build an Evaluation Set
 
-def custom_citation_check(response: str, context: str) -> float:
-    """Check if response cites sources from context."""
-    # Extract citations from response (e.g., [1], [Source: X])
-// ... (11 lines trimmed)
-    custom_citation_check,
-    name="Citation Accuracy"
-).on_output().on(Select.RecordCalls.retriever.get_relevant_documents.rets.page_content)
+A useful test set has:
+- representative user questions
+- known relevant documents
+- expected answer traits
+- a mix of easy, ambiguous, and adversarial cases
+
+Include:
+- factual lookups
+- comparison questions
+- follow-ups from conversation
+- edge cases with partial or conflicting sources
+
+## Production Monitoring
+
+Monitor over time:
+
+```text
+- retrieval hit rate
+- average judge score
+- unsupported-claim rate
+- empty or low-confidence retrievals
+- query classes that degrade after changes
 ```
 
----
+Alert on sustained degradation, not one-off misses.
 
-## Building Custom Evaluation Pipelines
+## Default Evaluation Loop
 
-### LLM-as-Judge Evaluation
-
-```python
-from openai import OpenAI
-from dataclasses import dataclass
-from typing import Literal
-
-client = OpenAI()
-// ... (77 lines trimmed)
-)
-print(f"Faithfulness: {eval_result.score:.2f}")
-print(f"Reasoning: {eval_result.reasoning}")
+```text
+1. measure retrieval metrics on a labeled set
+2. score groundedness on generated answers
+3. inspect failures by category
+4. fix retrieval before prompt-tuning the generator
+5. re-run the same benchmark after each change
 ```
-
-### Batch Evaluation Pipeline
-
-```python
-import asyncio
-from tqdm.asyncio import tqdm_asyncio
-
-async def evaluate_batch(
-    test_cases: list[dict],
-// ... (61 lines trimmed)
-            }
-
-    return results
-```
-
----
-
-## Debugging Poor Retrieval
-
-### Retrieval Diagnostics
-
-```python
-def diagnose_retrieval(
-    query: str,
-    retrieved_docs: list,
-    expected_docs: list,
-    embedding_model
-// ... (66 lines trimmed)
-for issue in diagnosis["issues"]:
-    print(f"Issue: {issue['type']}")
-    print(f"Details: {issue}")
-```
-
-### Query Analysis
-
-```python
-def analyze_query_performance(
-    query_logs: list[dict],
-    threshold_precision: float = 0.6
-) -> dict:
-    """Analyze query patterns to find systematic issues."""
-// ... (37 lines trimmed)
-        analysis["patterns"]["failing_question_types"] = dict(question_types)
-
-    return analysis
-```
-
----
-
-## Continuous Monitoring
-
-### Production Metrics Dashboard
-
-```python
-import time
-from dataclasses import dataclass, field
-from collections import deque
-from threading import Lock
-
-// ... (61 lines trimmed)
-
-# Periodically check
-print(metrics.get_summary())
-```
-
-### Alerting on Quality Degradation
-
-```python
-class RAGQualityMonitor:
-    """Monitor RAG quality and alert on degradation."""
-
-    def __init__(
-        self,
-// ... (34 lines trimmed)
-    alert = monitor.record_score(query_result["precision@5"])
-    if alert:
-        send_alert(alert)  # Slack, PagerDuty, etc.
-```
-
----
-
-## Evaluation Best Practices
-
-| Practice | Description |
-|----------|-------------|
-| **Golden test set** | Maintain 50-200 curated Q&A pairs with ground truth |
-| **Stratified sampling** | Include diverse query types in test set |
-| **Human baselines** | Compare LLM judges against human annotators |
-| **Version control** | Track evaluation results alongside model versions |
-| **Regular re-evaluation** | Re-run golden tests on every retrieval change |
-| **A/B testing** | Compare new retrieval strategies on live traffic |
-
----
-
-## Quick Reference
-
-| Goal | Metric | Target |
-|------|--------|--------|
-| Are docs relevant? | Precision@5 | > 0.7 |
-| Did we get all docs? | Recall@5 | > 0.8 |
-| Is ranking good? | NDCG@5 | > 0.7 |
-| Is answer grounded? | Faithfulness | > 0.9 |
-| Does answer fit question? | Answer Relevance | > 0.8 |
-| Is context useful? | Context Relevance | > 0.7 |
-
-| Framework | Best For |
-|-----------|----------|
-| RAGAS | Quick RAG-specific evaluation |
-| TruLens | Production monitoring and tracing |
-| Custom LLM-judge | Domain-specific criteria |
-| Manual annotation | Ground truth creation |
-
-## Related Skills
-
-- **RAG Architect** - System design
-- **ML Pipeline** - Evaluation automation
-- **Data Scientist** - Statistical analysis
-- **Monitoring Expert** - Production observability

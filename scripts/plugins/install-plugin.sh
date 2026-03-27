@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# install-plugin.sh - Install built Skill-Issue plugins
+# install-plugin.sh - Install built Lamella plugins
 #
 # Supports two install modes:
 #   1. Plugin mode (default): Registers plugins with Claude Code via --plugin-dir
@@ -52,7 +52,7 @@ PLUGINS=()
 
 usage() {
     cat <<EOF
-${BOLD}install-plugin.sh${NC} - Install Skill-Issue plugins
+${BOLD}install-plugin.sh${NC} - Install Lamella plugins
 
 ${BOLD}USAGE${NC}
     $0 [options] [plugin-names...]

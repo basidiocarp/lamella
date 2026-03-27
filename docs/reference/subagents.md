@@ -1,6 +1,7 @@
-> ## Documentation Index
-> Fetch the complete documentation index at: https://code.claude.com/docs/llms.txt
-> Use this file to discover all available pages before exploring further.
+> Imported Claude Code reference snapshot.
+> Examples may use generic Claude Code paths such as `.claude/` or standalone
+> plugin layouts. For Lamella-specific layout and packaging, see `../index.md`,
+> `../architecture.md`, and `../getting-started/categorizing-skills.md`.
 
 # Create custom subagents
 

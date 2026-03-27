@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# build-plugin.sh - Build a Skill-Issue manifest into an official Claude Code plugin
+# build-plugin.sh - Build a Lamella manifest into an official Claude Code plugin
 #
 # Reads a Claude manifest JSON file and generates a self-contained plugin
 # directory with .claude-plugin/plugin.json, flattened agents/, commands/,
@@ -36,7 +36,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 usage() {
     echo "Usage: $0 [--version <version>] <manifest.json> [output-dir]"
     echo ""
-    echo "Builds a Skill-Issue manifest into an official Claude Code plugin."
+    echo "Builds a Lamella manifest into an official Claude Code plugin."
     echo ""
     echo "Arguments:"
     echo "  --version       Override plugin.json version for this build"
@@ -56,7 +56,7 @@ usage() {
 
 check_deps() {
     if ! command -v jq &>/dev/null; then
-        log_error "jq is required. Install with: brew install jq"
+        log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
         exit 1
     fi
 }

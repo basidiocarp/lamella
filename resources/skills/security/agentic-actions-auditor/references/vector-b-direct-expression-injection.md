@@ -58,7 +58,17 @@ on:
     types: [opened]
 
 jobs:
-// ... (10 lines trimmed)
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - uses: openai/codex-action@v1
+        with:
+          prompt: |
+            New issue title: ${{ github.event.issue.title }}
+            New issue body:
             ${{ github.event.issue.body }}
             Analyze this issue and suggest appropriate labels.
             # Attacker content is embedded directly in the prompt at YAML eval time

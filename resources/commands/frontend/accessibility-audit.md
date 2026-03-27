@@ -19,7 +19,9 @@ const puppeteer = require("puppeteer");
 
 class AccessibilityAuditor {
   constructor(options = {}) {
-# ... (57 lines trimmed)
+    this.options = options;
+    this.results = [];
+    this.wcagLevel = options.wcagLevel || 'AA';
   });
 });
 ```
@@ -33,7 +35,8 @@ class ColorContrastAnalyzer {
         this.wcagLevels = {
             'AA': { normal: 4.5, large: 3 },
             'AAA': { normal: 7, large: 4.5 }
-# ... (64 lines trimmed)
+        };
+    body { outline-offset: 2px; }
     button, input { border: 2px solid var(--border-color) !important; }
 }
 ```
@@ -47,7 +50,8 @@ class KeyboardNavigationTester {
     const results = {
       focusableElements: [],
       missingFocusIndicators: [],
-# ... (56 lines trimmed)
+      contrastFailures: [],
+      missingLabels: [],
   }
 });
 ```
@@ -61,7 +65,8 @@ class ScreenReaderTester {
     return {
       landmarks: await this.testLandmarks(page),
       headings: await this.testHeadingStructure(page),
-# ... (87 lines trimmed)
+      forms: await this.testForms(page),
+      keyboard: await this.testKeyboardNavigation(page),
 <span id="name-error" role="alert" aria-live="polite"></span>`,
 };
 ```
@@ -75,7 +80,8 @@ class ScreenReaderTester {
 
 - [ ] All interactive elements accessible via Tab
 - [ ] Buttons activate with Enter/Space
-# ... (27 lines trimmed)
+- [ ] Focus order matches visual order
+- [ ] Errors are announced to assistive tech
 - [ ] Navigation consistent
 - [ ] Important actions reversible
 ```
@@ -89,7 +95,9 @@ document.querySelectorAll("img:not([alt])").forEach((img) => {
     img.role === "presentation" || img.closest('[role="presentation"]');
   img.setAttribute("alt", isDecorative ? "" : img.title || "Image");
 });
-# ... (25 lines trimmed)
+return (
+  <div>
+    <img src={src} alt={altText} />
   </div>
 );
 ```
@@ -103,7 +111,11 @@ name: Accessibility Tests
 on: [push, pull_request]
 
 jobs:
-# ... (31 lines trimmed)
+  a11y:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm test -- --a11y
           name: a11y-report
           path: a11y-report.html
 ```
@@ -117,7 +129,8 @@ class AccessibilityReportGenerator {
     return `
 <!DOCTYPE html>
 <html lang="en">
-# ... (36 lines trimmed)
+<head><meta charset="utf-8"><title>Accessibility Report</title></head>
+<body><main><h1>Accessibility Report</h1></main></body>
   }
 }
 ```

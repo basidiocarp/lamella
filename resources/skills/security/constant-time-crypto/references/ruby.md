@@ -76,7 +76,20 @@ if user_token == stored_token
   # ...
 end
 
-// ... (14 lines trimmed)
+# SAFE: Rack constant-time helper
+require 'rack/utils'
+if Rack::Utils.secure_compare(user_token, stored_token)
+  # ...
+end
+
+# SAFE: ActiveSupport helper
+require 'active_support/security_utils'
+if ActiveSupport::SecurityUtils.secure_compare(user_token, stored_token)
+  # ...
+end
+
+# SAFE: OpenSSL helper
+require 'openssl'
 if OpenSSL.secure_compare(user_token, stored_token)
   # ...
 end

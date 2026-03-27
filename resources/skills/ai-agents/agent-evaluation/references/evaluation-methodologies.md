@@ -1,161 +1,85 @@
 # Evaluation Methodologies
 
-This reference covers the primary methodologies for evaluating agent outputs: LLM-as-Judge, Human Evaluation, and End-State Evaluation.
+This reference covers the three main evaluation lenses for agent work:
+- LLM-as-judge
+- human evaluation
+- end-state validation
+
+Use them together when needed, not as substitutes for one another.
 
 ## LLM-as-Judge
 
-Using an LLM to evaluate agent outputs scales well and provides consistent judgments. The key is designing effective evaluation prompts that capture the dimensions of interest.
+Use an LLM judge when you need scale and consistent rubric application.
 
-### Evaluation Prompt Template
+Best for:
+- broad regression checks
+- comparing prompt variants
+- evaluating large test sets
+- triaging outputs before deeper review
 
-```markdown
-You are evaluating the output of a Claude Code agent.
+Prompt rule:
 
-## Original Task
-{task_description}
-
-// ... (17 lines trimmed)
-5. Response Coherence: Is the output well-structured?
-
-Provide your evaluation as a structured assessment with scores and justifications.
+```text
+Evidence -> justification -> score
 ```
 
-### Chain-of-Thought Requirement
-
-**ALWAYS require justification before the score.** Research shows this improves reliability by 15-25% compared to score-first approaches.
-
-**Good practice**:
-```
-Evidence: [specific observations]
-Justification: [explanation]
-Score: [number]
-```
-
-**Avoid**:
-```
-Score: [number]
-Reason: [post-hoc justification]
-```
+Require the judge to cite concrete observations before scoring. Score-first
+prompts are easier to game and harder to debug.
 
 ## Human Evaluation
 
-Human evaluation catches what automation misses:
+Use human review where automation is weak:
+- subtle context misunderstandings
+- edge-case safety failures
+- tone and stakeholder fit
+- confusing but technically passable outputs
 
-- Hallucinated answers on unusual queries
-- Subtle context misunderstandings
-- Edge cases that automated evaluation overlooks
-- Qualitative issues with tone or approach
+Humans are most useful when:
+- they review a sampled subset systematically
+- they focus on low-confidence or high-impact cases
+- their feedback feeds rubric or prompt updates
 
-### Human Evaluation Best Practices
+## End-State Validation
 
-1. **Review agent outputs manually for edge cases**: Focus human attention where it matters most
-2. **Sample systematically across complexity levels**: Don't just review failures
-3. **Track patterns in failures**: Inform prompt improvements with specific failure modes
-4. **Use structured evaluation forms**: Ensure consistent human assessments
+If the agent produces a runnable artifact, validate the artifact directly.
 
-### Human Evaluation Form Template
+Examples:
+- code -> tests, lint, type-check
+- config -> schema or deployment validation
+- docs -> link checks and manual readability review
+- generated data -> schema and constraint checks
 
-```markdown
-## Human Evaluation
+If the artifact fails objective validation, do not let a judge rubric override
+that failure.
 
-**Task**: [description]
-**Output**: [agent output]
+## Method Selection
 
-// ... (15 lines trimmed)
-
-### Specific Feedback
-[Free-form notes]
+```text
+artifact has objective executable checks?
+├─ yes -> end-state validation first
+└─ no
+   ├─ need broad scalable review -> LLM-as-judge
+   └─ subtle or high-impact judgment -> human evaluation
 ```
-
-## End-State Evaluation
-
-For commands that produce artifacts (files, configurations, code), evaluate the final output rather than the process.
-
-### End-State Evaluation Questions
-
-- Does the generated code work?
-- Is the configuration valid?
-- Does the output meet requirements?
-- Does the artifact integrate correctly?
-
-### End-State Evaluation Approaches
-
-| Artifact Type | Evaluation Method |
-|---------------|-------------------|
-| Code | Run tests, lint, type-check |
-| Configuration | Validate schema, deploy to test |
-| Documentation | Readability check, link validation |
-| Data | Schema validation, constraint checks |
 
 ## Test Set Design
 
-### Sample Selection
+Good evaluation sets include:
+- real tasks, not only synthetic prompts
+- known edge cases
+- varied complexity levels
+- enough repetition to compare prompt or workflow changes fairly
 
-Start with small samples during development. Early in agent development, changes have dramatic impacts because there is abundant low-hanging fruit. Small test sets reveal large effects.
+Small, well-chosen sets are usually enough for iteration. Expand only after the
+rubric and methodology are stable.
 
-**Guidelines**:
-- Sample from real usage patterns
-- Add known edge cases
-- Ensure coverage across complexity levels
-- 10-20 test cases is often sufficient for iteration
+## Combining the Methods
 
-### Complexity Stratification
+Typical layered flow:
 
-Test sets should span complexity levels:
+1. run objective end-state checks where possible
+2. use an LLM judge for scalable rubric-based review
+3. route uncertain or high-risk cases to humans
 
-| Level | Description | Example |
-|-------|-------------|---------|
-| Simple | Single tool call | Rename a variable |
-| Medium | Multiple tool calls | Extract a function |
-| Complex | Many tool calls, some ambiguity | Refactor to design pattern |
-| Very Complex | Extended interaction, deep reasoning | Restructure module dependencies |
-
-## Context Engineering Evaluation
-
-### Testing Prompt Variations
-
-When iterating on Claude Code prompts, evaluate systematically:
-
-1. **Baseline**: Run current prompt on test cases
-2. **Variation**: Run modified prompt on same cases
-3. **Compare**: Measure quality scores, token usage, efficiency
-4. **Analyze**: Identify which changes improved which dimensions
-
-### Testing Context Strategies
-
-Context engineering choices should be validated through systematic evaluation:
-
-```
-Strategy A vs Strategy B
-├── Run agents with different context strategies on same test set
-├── Compare quality scores
-├── Compare token usage
-└── Compare efficiency metrics
-```
-
-### Degradation Testing
-
-Test how context degradation affects performance:
-
-1. Run agents at different context sizes (25%, 50%, 75%, 100%)
-2. Identify performance cliffs where quality drops sharply
-3. Establish safe operating limits
-4. Document failure modes at context limits
-
-## Combining Methodologies
-
-For robust evaluation, combine methodologies:
-
-```
-┌─────────────────────────────────────────────────┐
-│           Comprehensive Evaluation               │
-├─────────────────────────────────────────────────┤
-│                                                   │
-│  ┌─────────────────┐                             │
-// ... (13 lines trimmed)
-│  └─────────────────┘                             │
-│                                                   │
-└─────────────────────────────────────────────────┘
-```
-
-Use LLM-as-Judge for broad coverage, Human Evaluation for edge cases and calibration, and End-State Validation for functional correctness.
+This is usually better than trying to make one judge prompt solve every
+evaluation problem.

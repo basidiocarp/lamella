@@ -34,9 +34,12 @@ const slugifyCache = new Map<string, string>()
 
 function cachedSlugify(text: string): string {
   if (slugifyCache.has(text)) {
-// ... (16 lines trimmed)
-    </div>
-  )
+    return slugifyCache.get(text)!
+  }
+
+  const value = slugify(text)
+  slugifyCache.set(text, value)
+  return value
 }
 ```
 

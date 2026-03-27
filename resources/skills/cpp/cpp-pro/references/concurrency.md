@@ -1,122 +1,27 @@
 # Concurrency and Parallel Programming
 
-## Atomics and Memory Ordering
+Use this page to pick the right concurrency slice. The implementation details are split so the caller can load only the part that matches the synchronization model in play.
 
-```cpp
-#include <atomic>
-#include <thread>
+## Reference Map
 
-// Basic atomics
-std::atomic<int> counter{0};
-// ... (24 lines trimmed)
-int increment_counter(std::atomic<int>& counter) {
-    return counter.fetch_add(1, std::memory_order_relaxed);
-}
-```
+| Need | Load |
+|------|------|
+| Atomics, memory ordering, and lock-free structures | [atomics-and-lock-free.md](atomics-and-lock-free.md) |
+| Thread pools, parallel STL, async, and futures | [thread-pools-and-futures.md](thread-pools-and-futures.md) |
+| Mutexes, condition variables, shared locks, and coroutine coordination | [synchronization-and-coroutines.md](synchronization-and-coroutines.md) |
 
-## Lock-Free Data Structures
+## Selection Guide
 
-```cpp
-#include <atomic>
-#include <memory>
+- Reach for atomics only when the shared state and ordering guarantees are narrow and well-understood.
+- Prefer task queues or thread pools over unmanaged thread-per-request patterns.
+- Use coroutines for async composition, not as a replacement for every background job.
 
-// Lock-free stack
-template<typename T>
-// ... (70 lines trimmed)
-        return true;
-    }
-};
-```
+## Memory Ordering Quick Reference
 
-## Thread Pool
-
-```cpp
-#include <thread>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
-#include <functional>
-// ... (68 lines trimmed)
-        return result;
-    }
-};
-```
-
-## Parallel STL Algorithms
-
-```cpp
-#include <algorithm>
-#include <execution>
-#include <vector>
-#include <numeric>
-
-// ... (25 lines trimmed)
-        [](int x) { return x * x; }
-    );
-}
-```
-
-## Synchronization Primitives
-
-```cpp
-#include <mutex>
-#include <shared_mutex>
-#include <condition_variable>
-
-// Mutex types
-// ... (65 lines trimmed)
-    from.balance -= amount;
-    to.balance += amount;
-}
-```
-
-## Async and Futures
-
-```cpp
-#include <future>
-
-// std::async
-auto future = std::async(std::launch::async, []() {
-    return expensive_computation();
-// ... (28 lines trimmed)
-
-int sum = task_future.get();  // 8
-task_thread.join();
-```
-
-## Coroutine-Based Concurrency
-
-```cpp
-#include <coroutine>
-#include <optional>
-
-// Async task coroutine
-template<typename T>
-// ... (42 lines trimmed)
-AsyncTask<int> async_compute() {
-    co_return 42;
-}
-```
-
-## Quick Reference
-
-| Primitive | Use Case | Performance |
-|-----------|----------|-------------|
-| std::atomic | Simple shared state | Lock-free |
-| std::mutex | Exclusive access | Kernel call |
-| std::shared_mutex | Read-heavy workload | Better than mutex |
-| Lock-free structures | High contention | Best throughput |
-| Thread pool | Task parallelism | Avoid thread overhead |
-| Parallel STL | Data parallelism | Automatic scaling |
-| std::async | Simple async tasks | Thread pool |
-| Coroutines | Async I/O | Minimal overhead |
-
-## Memory Ordering Guide
-
-| Ordering | Guarantees | Use Case |
-|----------|-----------|----------|
-| relaxed | No synchronization | Counters |
-| acquire | Load barrier | Consumer |
-| release | Store barrier | Producer |
-| acq_rel | Both | RMW operations |
-| seq_cst | Total order | Default |
+| Ordering | Guarantees | Typical Use |
+|----------|------------|-------------|
+| `relaxed` | No cross-thread synchronization | Counters, statistics |
+| `acquire` | Later reads/writes stay after the load | Consumer side |
+| `release` | Earlier reads/writes stay before the store | Producer side |
+| `acq_rel` | Combined acquire + release | Read-modify-write operations |
+| `seq_cst` | Global total order | Default until you can prove a weaker ordering |

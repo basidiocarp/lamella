@@ -189,7 +189,21 @@ type: [feat|fix|refactor]
 status: active
 date: YYYY-MM-DD
 origin: docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md  # if originated from brainstorm, otherwise omit
-# ... (17 lines trimmed)
+labels: [planning]
+summary: [one-paragraph statement of the change]
+---
+
+# Overview
+[What is changing and why]
+
+# Acceptance Criteria
+- [ ] [Measurable outcome]
+- [ ] [Measurable outcome]
+
+# Notes
+- Constraints: [key constraints]
+- Risks: [main implementation risk]
+
 ### test.rb
 
 ```ruby
@@ -228,7 +242,30 @@ type: [feat|fix|refactor]
 status: active
 date: YYYY-MM-DD
 origin: docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md  # if originated from brainstorm, otherwise omit
-# ... (48 lines trimmed)
+labels: [planning]
+summary: [one-paragraph statement of the change]
+---
+
+# Background
+[Why this work matters and what triggered it]
+
+# Scope
+- In scope: [what is included]
+- Out of scope: [what is intentionally excluded]
+
+# Acceptance Criteria
+- [ ] [Measurable outcome]
+- [ ] [Measurable outcome]
+
+# Technical Considerations
+- Existing patterns to follow
+- Dependencies or interfaces involved
+- Main risks and mitigations
+
+# Validation
+- Tests to add or update
+- Manual verification steps
+
 - Best practices: [documentation_url]
 - Related PRs: #[pr_number]
 ```
@@ -256,7 +293,44 @@ type: [feat|fix|refactor]
 status: active
 date: YYYY-MM-DD
 origin: docs/brainstorms/YYYY-MM-DD-<topic>-brainstorm.md  # if originated from brainstorm, otherwise omit
-# ... (131 lines trimmed)
+labels: [planning]
+summary: [one-paragraph statement of the change]
+---
+
+# Background
+[Why the work exists, user problem, and business context]
+
+# Scope
+- In scope: [included work]
+- Out of scope: [excluded work]
+
+# Requirements
+- Functional: [required behaviors]
+- Non-functional: [performance, security, reliability, or compliance needs]
+
+# Acceptance Criteria
+- [ ] [Measurable outcome]
+- [ ] [Measurable outcome]
+- [ ] [Edge case or rollback criterion]
+
+# Proposed Approach
+- Architecture or implementation outline
+- Existing patterns and files to follow
+- Alternatives considered with brief rationale
+
+# Implementation Plan
+1. Phase 1: [setup or research]
+2. Phase 2: [core implementation]
+3. Phase 3: [validation, rollout, or docs]
+
+# Risks and Mitigations
+- Risk: [description] → Mitigation: [response]
+
+# Validation
+- Tests to add or update
+- Manual checks
+- Release or migration considerations
+
 - Related issues: #[issue_numbers]
 - Design documents: [links]
 ```

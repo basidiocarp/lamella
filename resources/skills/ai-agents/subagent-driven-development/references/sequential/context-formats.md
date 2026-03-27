@@ -1,22 +1,33 @@
 # Context Format Reference
 
-> Output formats for implementation agents and judges
+Use these output formats to keep sequential implementation and judge passes
+machine-readable and easy to hand off.
 
-## Implementation Agent Output Format
+## Implementation Agent Output
 
 ```markdown
 ## Context for Next Steps
 
 ### Files Modified
-- `src/dto/UserDTO.ts` (new file)
-- `src/services/UserService.ts` (modified)
-// ... (15 lines trimmed)
-- TypeScript compiles without errors
-- UserDTO.fromUser() correctly maps all User properties
-- Existing service tests still pass
+- `path/to/file`
+
+### Key Changes
+- What changed
+- Why it changed
+
+### Validation
+- Commands run
+- Outcomes
+
+### Risks or Follow-up
+- Remaining uncertainty
 ```
 
-## Judge Verdict Format (PASS)
+The implementation output should optimize for continuity, not narration.
+
+## Judge Verdict Output
+
+### Pass
 
 ```markdown
 ---
@@ -24,48 +35,52 @@ VERDICT: PASS
 SCORE: 4.2/5.0
 ISSUES:
   - None
-// ... (15 lines trimmed)
-
-### Quality (15%) - Score: 4.0/5.0
-[Evidence and analysis...]
+IMPROVEMENTS:
+  - Optional follow-up
+---
 ```
 
-## Judge Verdict Format (FAIL)
+### Fail
 
 ```markdown
 ---
 VERDICT: FAIL
 SCORE: 2.8/5.0
 ISSUES:
-  - Missing User->UserDTO mapping logic in getUser() method
-  - Return type annotation changed but actual return value still returns User object
-  - No null handling for optional User fields
+  - Concrete problem
 IMPROVEMENTS:
-  - Add static fromUser() factory method to UserDTO
-  - Implement toDTO() as instance method on User class
+  - Specific fix or retry guidance
 ---
 ```
 
-## Final Summary Report Format
+Judge output should stay concrete:
+- cite real defects
+- separate defects from optional improvements
+- make retry guidance actionable
+
+## Final Summary Format
 
 ```markdown
 ## Sequential Execution Summary
 
-**Overall Task:** {original task description}
-**Total Steps:** {count}
-**Total Agents:** {implementation_agents + judge_agents}
-// ... (30 lines trimmed)
+**Overall Task:** ...
+**Total Steps:** ...
+**Outcome:** ...
 
-### Follow-up Recommendations
-{Any improvements suggested by judges, tests to run, or manual verification needed}
+### Step Results
+- Step 1: pass
+- Step 2: pass
+- Step 3: fail
+
+### Follow-up
+- What should happen next
 ```
 
-## Quality Assurance Checklist
+## Quality Rules
 
-- **Two-layer verification:** Self-critique (internal) + Judge (external)
-- **Self-critique first:** Implementation agents verify own work before submission
-- **External judge second:** Independent judge catches blind spots self-critique misses
-- **Iteration loop:** Retry with feedback until passing or max retries
-- **Chain validation:** Judges check integration with previous steps
-- **Escalation:** Don't proceed past failed steps - get user input
-- **Final integration test:** After all steps, verify the complete change works together
+- self-critique first, external judge second
+- do not proceed past a failed step without an explicit decision
+- include integration concerns, not only local file quality
+- keep the summary concise enough for the next operator to scan quickly
+
+These formats exist to preserve chain state, not to produce polished prose.

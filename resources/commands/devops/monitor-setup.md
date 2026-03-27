@@ -21,7 +21,11 @@ global:
   evaluation_interval: 15s
   external_labels:
     cluster: "production"
-# ... (25 lines trimmed)
+    environment: "prod"
+scrape_configs:
+  - job_name: "app"
+    static_configs:
+      - targets: ["app:9090"]
         action: keep
         regex: true
 ```
@@ -35,7 +39,11 @@ import { Counter, Histogram, Gauge, Registry } from "prom-client";
 export class MetricsCollector {
   private registry: Registry;
   private httpRequestDuration: Histogram<string>;
-# ... (48 lines trimmed)
+  private requestCounter: Counter<string>;
+
+  constructor() {
+    this.registry = new Registry();
+  }
   }
 }
 ```
@@ -51,7 +59,11 @@ export const createServiceDashboard = (serviceName: string) => {
     title: `${serviceName} Service Dashboard`,
     uid: `${serviceName}-overview`,
     tags: ["service", serviceName],
-# ... (47 lines trimmed)
+    panels: [
+      { title: "Request Rate" },
+      { title: "Error Rate" },
+      { title: "Latency P95" }
+    ]
   };
 };
 ```
@@ -67,7 +79,10 @@ import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentation
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 import { JaegerExporter } from "@opentelemetry/exporter-jaeger";
-# ... (39 lines trimmed)
+const exporter = new JaegerExporter({ endpoint: process.env.JAEGER_ENDPOINT });
+const resource = new Resource({
+  [SemanticResourceAttributes.SERVICE_NAME]: "app",
+});
   }
 }
 ```
@@ -83,7 +98,10 @@ import { JaegerExporter } from "@opentelemetry/exporter-jaeger";
 path /var/log/containers/*.log
 pos_file /var/log/fluentd-containers.log.pos
 tag kubernetes.*
-# ... (31 lines trimmed)
+<match kubernetes.**>
+  @type elasticsearch
+  host elasticsearch
+  port 9200
 </buffer>
 </match>
 ```
@@ -97,7 +115,11 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-# ... (38 lines trimmed)
+class StructuredLogger:
+    def __init__(self, logger):
+        self.logger = logger
+
+    def error(self, message: str, context: Optional[Dict[str, Any]] = None):
         log_msg = self._format_log('ERROR', message, context)
         self.logger.error(log_msg)
 ```
@@ -113,7 +135,8 @@ groups:
     interval: 30s
     rules:
       - alert: HighErrorRate
-# ... (33 lines trimmed)
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 10m
         labels:
           severity: critical
 ```
@@ -127,7 +150,11 @@ global:
   slack_api_url: "$SLACK_API_URL"
 
 route:
-# ... (26 lines trimmed)
+  receiver: default
+  routes:
+    - matchers:
+        - severity="critical"
+      receiver: pagerduty
       - service_key: "$PAGERDUTY_SERVICE_KEY"
         description: "{{ .GroupLabels.alertname }}: {{ .Annotations.summary }}"
 ```
@@ -143,7 +170,8 @@ interface SLO {
   target: number; // e.g., 99.9
   window: string; // e.g., '30d'
   burnRates: BurnRate[];
-# ... (32 lines trimmed)
+  sloName: string;
+  alertThreshold: number;
   }
 }
 ```
@@ -159,7 +187,8 @@ module "prometheus" {
 
   namespace = "monitoring"
   storage_size = "100Gi"
-# ... (31 lines trimmed)
+  enable_grafana = true
+  enable_alertmanager = true
   })
 }
 ```

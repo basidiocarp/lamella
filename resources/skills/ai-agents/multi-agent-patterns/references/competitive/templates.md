@@ -1,87 +1,85 @@
-# Competitive Multi-Agent Prompt Templates
-
-Templates for each phase of the Generate-Critique-Synthesize pattern.
+# Competitive Multi-Agent Templates
 
 ## Phase 1: Generator Prompt Template
 
 ```markdown
-<task>
-{task_description}
-</task>
+You are one competing agent in a multi-agent workflow.
 
-<constraints>
-// ... (22 lines trimmed)
-7. Revise solution:
-   - Fix identified issues
-8. Explain what was changed and why
+Task:
+- Solve the problem independently.
+- Do not assume the other agents are correct.
+- Produce your best answer with explicit reasoning and tradeoffs.
+
+Output:
+1. Proposed solution
+2. Key assumptions
+3. Risks or weaknesses
 ```
 
 ## Phase 2: Judge Prompt Template
 
 ```markdown
-You are evaluating {number} solutions to this task:
+You are the judge for a competitive multi-agent workflow.
 
-<task>
-{task_description}
-</task>
-// ... (54 lines trimmed)
-- [ ] Checked for known biases (length, verbosity, confidence)
-- [ ] Confident in revised evaluation
-- [ ] Structured header with VOTE and SCORES at top of report
+Evaluate each candidate on:
+1. Correctness
+2. Completeness
+3. Alignment with constraints
+4. Risk awareness
+
+Return:
+- Winner
+- Why it won
+- What the other candidates still contributed
 ```
 
-## Strategy 1: SELECT_AND_POLISH Prompt Template
+## Strategy 1: SELECT_AND_POLISH
+
+Use when one candidate is mostly correct and only needs refinement.
 
 ```markdown
-You are polishing the winning solution based on judge feedback.
-
-<task>
-{task_description}
-</task>
-// ... (31 lines trimmed)
-   - What was added from other solutions
-
-CRITICAL: Preserve the winning solution's core approach. Make targeted improvements only.
+Pick the strongest candidate.
+Keep its structure.
+Patch the missing parts using evidence from the weaker candidates.
+Return a single improved answer.
 ```
 
-## Strategy 2: REDESIGN Prompt Template
+## Strategy 2: REDESIGN
+
+Use when every candidate has real flaws.
 
 ```markdown
-You are analyzing why all solutions failed to meet quality standards. And implement new solution based on it.
-
-<task>
-{task_description}
-</task>
-// ... (43 lines trimmed)
-11. Revise solution:
-   - Fix identified issues
-12. Explain what was changed and why
+Discard the candidate structures.
+Extract the strongest insights from each.
+Design a new answer from scratch that resolves the observed weaknesses.
 ```
 
-## Strategy 3: FULL_SYNTHESIS Prompt Template
+## Strategy 3: FULL_SYNTHESIS
+
+Use when the candidates each cover a different part of the problem well.
 
 ```markdown
-You are synthesizing the best solution from competitive implementations and evaluations.
-
-<task>
-{task_description}
-</task>
-// ... (31 lines trimmed)
-   - How you addressed identified weaknesses
-
-CRITICAL: Do not create something entirely new. Synthesize the best from what exists.
+Merge the complementary strengths of the candidates.
+Keep the final structure coherent.
+Remove duplication and conflicting assumptions.
 ```
 
 ## Orchestrator Reply Template
 
 ```markdown
+## Competitive Review Result
+
+- Strategy used: [select-and-polish | redesign | full-synthesis]
+- Winning or base candidate: [name]
+- Key improvement made: [short summary]
+```
+
 ## Execution Summary
 
-Original Task: {task_description}
-
-Strategy Used: {strategy} ({reason})
-// ... (20 lines trimmed)
-| Element              | Source           | Rationale   |
-|----------------------|------------------|-------------|
-| [element]            | Solution [B/A/C] | [rationale] |
+```markdown
+| Agent | Main strength | Main weakness |
+|-------|---------------|---------------|
+| A     |               |               |
+| B     |               |               |
+| C     |               |               |
 ```

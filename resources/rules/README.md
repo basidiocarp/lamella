@@ -1,101 +1,86 @@
 # Rules
+
+Lamella stores rules under `resources/rules/` and lets Claude plugin manifests
+decide which rule sets are bundled into build output.
+
 ## Structure
 
-Rules are organized into a **common** layer plus **language-specific** directories:
+Rules are organized into a common layer plus language-specific directories:
 
-```
-rules/
-├── common/          # Language-agnostic principles (always install)
-│   ├── coding-style.md
-│   ├── git-workflow.md
-│   ├── testing.md
-│   ├── performance.md
-│   ├── patterns.md
-│   ├── hooks.md
-│   ├── agents.md
-│   └── security.md
-├── typescript/      # TypeScript/JavaScript specific
-├── python/          # Python specific
-├── golang/          # Go specific
-└── swift/           # Swift specific
+```text
+resources/rules/
+├── common/          # Language-agnostic principles and session standards
+├── golang/          # Go-specific extensions to the common layer
+├── python/          # Python-specific extensions to the common layer
+├── rust/            # Rust-specific rule corpus
+└── typescript/      # TypeScript/JavaScript-specific extensions
 ```
 
-- **common/** contains universal principles — no language-specific code examples.
-- **Language directories** extend the common rules with framework-specific patterns, tools, and code examples. Each file references its common counterpart.
+- `common/` contains broad project and session rules.
+- `golang/`, `python/`, and `typescript/` extend the common files with
+  language-specific guidance and link back to `../common/...` where needed.
+- `rust/` is a larger standalone corpus bundled with the Rust plugin.
 
-## Installation
+## Packaging
 
-### Option 1: Install Script (Recommended)
+Rules are source assets, not a standalone install target inside this repo.
+Lamella packages them through Claude plugin manifests:
+
+- `manifests/claude/core.json` bundles the common rule set.
+- `manifests/claude/rust.json` bundles the Rust rule corpus.
+- Other language directories currently remain source-side support content until
+  a plugin manifest explicitly includes them.
+
+Build the current plugin outputs with:
 
 ```bash
-# Install common + one or more language-specific rule sets
-./install.sh typescript
-./install.sh python
-./install.sh golang
-
-# Install multiple languages at once
-./install.sh typescript python
+./lamella build-marketplace
 ```
 
-### Option 2: Manual Installation
+Then inspect the bundled rules under:
 
-> **Important:** Copy entire directories — do NOT flatten with `/*`.
-> Common and language-specific directories contain files with the same names.
-> Flattening them into one directory causes language-specific files to overwrite
-> common rules, and breaks the relative `../common/` references used by
-> language-specific files.
-
-```bash
-# Install common rules (required for all projects)
-cp -r rules/common ~/.claude/rules/common
-
-# Install language-specific rules based on your project's tech stack
-cp -r rules/typescript ~/.claude/rules/typescript
-cp -r rules/python ~/.claude/rules/python
-cp -r rules/golang ~/.claude/rules/golang
-
-# Attention ! ! ! Configure according to your actual project requirements; the configuration here is for reference only.
+```text
+dist/claude/plugins/core/rules/
+dist/claude/plugins/rust/rules/
 ```
+
+If you need to copy built rules into a local Claude setup manually, copy them
+from the built plugin output rather than from `resources/rules/`.
 
 ## Rules vs Skills
 
-- **Rules** define standards, conventions, and checklists that apply broadly (e.g., "80% test coverage", "no hardcoded secrets").
-- **Skills** (`skills/` directory) provide deep, actionable reference material for specific tasks (e.g., `python-patterns`, `golang-testing`).
+- Rules define short, broadly applicable standards and checklists.
+- Skills provide deeper, task-specific reference material and workflows.
 
-Language-specific rule files reference relevant skills where appropriate. Rules tell you *what* to do; skills tell you *how* to do it.
+Rules tell Claude what should broadly hold. Skills tell Claude how to execute a
+specific task well.
 
-## Adding a New Language
+## Adding or Updating Rule Sets
 
-To add support for a new language (e.g., `rust/`):
+When adding a new rule set:
 
-1. Create a `rules/rust/` directory
-2. Add files that extend the common rules:
-   - `coding-style.md` — formatting tools, idioms, error handling patterns
-   - `testing.md` — test framework, coverage tools, test organization
-   - `patterns.md` — language-specific design patterns
-   - `hooks.md` — PostToolUse hooks for formatters, linters, type checkers
-   - `security.md` — secret management, security scanning tools
-3. Each file should start with:
+1. Put source files under `resources/rules/<category>/`.
+2. Keep common guidance in `common/` and language-specific overrides in their
+   own directories.
+3. For extension-style rule files, start with a short note linking to the
+   matching common rule, for example:
+
+   ```md
+   > This file extends [common/coding-style.md](../common/coding-style.md)
+   > with Python-specific content.
    ```
-   > This file extends [common/xxx.md](../common/xxx.md) with <Language> specific content.
-   ```
-4. Reference existing skills if available, or create new ones under `skills/`.
 
-## Rule Priority
+4. Reference existing skills where deeper implementation guidance already
+   exists.
+5. Add the rule paths to the relevant Claude plugin manifest if they should be
+   shipped in built output.
 
-When language-specific rules and common rules conflict, **language-specific rules take precedence** (specific overrides general). This follows the standard layered configuration pattern (similar to CSS specificity or `.gitignore` precedence).
+## Priority
 
-- `rules/common/` defines universal defaults applicable to all projects.
-- `rules/golang/`, `rules/python/`, `rules/typescript/`, etc. override those defaults where language idioms differ.
+When a language-specific rule and a common rule disagree, the
+language-specific rule takes precedence.
 
-### Example
-
-`common/coding-style.md` recommends immutability as a default principle. A language-specific `golang/coding-style.md` can override this:
-
-> Idiomatic Go uses pointer receivers for struct mutation — see [common/coding-style.md](../common/coding-style.md) for the general principle, but Go-idiomatic mutation is preferred here.
-
-### Common rules with override notes
-
-Rules in `rules/common/` that may be overridden by language-specific files are marked with:
-
-> **Language note**: This rule may be overridden by language-specific rules for languages where this pattern is not idiomatic.
+- `resources/rules/common/` defines the default baseline.
+- `resources/rules/golang/`, `resources/rules/python/`,
+  `resources/rules/typescript/`, and `resources/rules/rust/` narrow or extend
+  that baseline for their language.

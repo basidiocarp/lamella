@@ -2,6 +2,10 @@
 
 Workflows for ensuring code quality.
 
+The `core` plugin currently ships `VERIFICATION.md`, `CRITIQUE.md`, and
+`DO-AND-JUDGE.md`. `FULL-AUDIT.md` remains a source-side playbook for deeper,
+manual audit passes.
+
 ## Workflows
 
 | File | Description |

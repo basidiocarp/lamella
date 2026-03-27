@@ -51,7 +51,31 @@ Let me analyze this task step by step to determine the optimal configuration:
 1. **Task Type Identification**
    "What type of work is being requested?"
    - Code implementation / feature development
-// ... (23 lines trimmed)
+   - Bug fixing / debugging
+   - Testing / verification
+   - Documentation: document, README, guide, explain, tutorial
+   - Architecture: design, system, structure, scalability
+   - Research / comparison / recommendation
+   - Exploration / pattern discovery
+
+2. **Complexity Assessment**
+   - Is the task novel, risky, or ambiguous?
+   - Does it require tradeoff analysis or architecture judgment?
+   - Does it affect multiple files, services, or user-facing behavior?
+
+3. **Output Expectations**
+   - Is the deliverable code, prose, plan, or analysis?
+   - Is there a required file path, structure, or response format?
+   - Does the user need a concise answer or a detailed artifact?
+
+4. **Context Requirements**
+   - Which files or references are essential?
+   - What can be summarized instead of pasted?
+   - What should stay out to preserve context isolation?
+
+5. **Risk Check**
+   - Could this affect production behavior, security, data, or releases?
+   - If yes, bias toward stronger models and stricter verification.
    - Documentation: document, README, guide, explain, tutorial
    - Architecture: design, system, structure, scalability
    - Exploration: understand, navigate, find, codebase patterns
@@ -77,7 +101,16 @@ Is task COMPLEX (architecture, design, novel problem, critical decision)?
 +-- YES --> Use Opus (highest capability)
 |           |
 |           +-- Does it match a specialized domain?
-// ... (9 lines trimmed)
+|                 |
+|                 +-- YES --> Use Opus + specialized agent
+|                 |
+|                 +-- NO --> Use Opus only
+|
++-- NO --> Is task simple and short?
+            |
+            +-- YES --> Use Haiku
+            |
+            +-- NO --> Does it match a specialized domain?
                       +-- YES --> Use Sonnet (balanced)
                       |
                       +-- NO --> Use Opus (default)
@@ -115,7 +148,19 @@ Build the sub-agent prompt with these mandatory components:
 Before taking any action, think through the problem systematically.
 
 Let's approach this step by step:
-// ... (19 lines trimmed)
+1. Clarify the task objective and the exact deliverable.
+2. Identify the files, systems, or documents that matter.
+3. Check for constraints, risks, and validation requirements.
+4. Decide whether a specialized agent will materially improve quality.
+5. Choose the lightest model that still fits the task's risk and complexity.
+6. Pass only the minimum context needed for the task.
+7. Define success before acting:
+   - What must change?
+   - What evidence will prove it worked?
+   - What should the final output contain?
+8. Sanity check:
+   - Am I solving the user's actual request?
+   - Am I preserving context isolation?
    - Am I following existing patterns?
 
 Work through each step explicitly before implementing.
@@ -128,7 +173,11 @@ Work through each step explicitly before implementing.
 {Task description from $ARGUMENTS}
 </task>
 
-// ... (9 lines trimmed)
+<context>
+{Essential files, summaries, constraints, and known risks only}
+</context>
+
+<output>
 {Expected deliverable: format, location, structure}
 </output>
 ```
@@ -141,8 +190,34 @@ Work through each step explicitly before implementing.
 Before completing, verify your work. Submitting unverified work is UNACCEPTABLE.
 
 ### 1. Generate 5 Verification Questions
-// ... (43 lines trimmed)
-4. **DOCUMENT** - Note what was changed and why
+Create five task-specific questions that test correctness, completeness, and risk.
+Cover:
+1. Did I solve the requested task rather than a nearby one?
+2. Did I use the right files, patterns, and constraints?
+3. Is the output technically correct and internally consistent?
+4. What could still fail in integration, testing, or handoff?
+5. Does the final response include the evidence the orchestrator needs?
+
+### 2. Answer Each Question with Evidence
+
+For each question:
+- Answer `Yes`, `No`, or `Partially`
+- Cite concrete evidence: file paths, commands run, outputs observed, or reasoning
+- Treat weak evidence as a failure, not a pass
+
+### 3. Revise If Needed
+
+If any answer is `No` or `Partially`:
+- Fix the issue
+- Re-run the relevant checks
+- Update the output before completing
+
+### 4. Final Submission Checklist
+
+- **VERIFY** - The task is complete and aligned with the brief
+- **CITE** - Include files, commands, or evidence that matter
+- **FLAG** - Note any remaining uncertainty or follow-up work
+- **DOCUMENT** - Note what was changed and why
 
 CRITICAL: Do not submit until ALL verification questions have satisfactory answers with evidence.
 ```

@@ -2,6 +2,16 @@
 
 Reusable templates organized by purpose.
 
+Lamella keeps template source files under `resources/templates/`. The `core`
+plugin currently bundles:
+
+- `claude/CLAUDE-MD-TEMPLATE.md`
+- `docs/SKILL-MD-TEMPLATE.md`
+- `session/SESSION-HANDOFF-TEMPLATE.md`
+
+The other templates remain source-side references until they are promoted into
+plugin manifests.
+
 ## Categories
 
 | Directory | Description |
@@ -27,5 +37,5 @@ Reusable templates organized by purpose.
 ## Usage
 
 ```bash
-cp templates/claude/CLAUDE-MD-TEMPLATE.md .claude/CLAUDE.md
+cp resources/templates/claude/CLAUDE-MD-TEMPLATE.md .claude/CLAUDE.md
 ```

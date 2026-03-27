@@ -1,108 +1,72 @@
 # Screen Reader Commands Reference
 
+Use this reference for basic manual testing across the common screen readers.
+It is a quick operator cheat sheet, not a full product manual.
+
 ## NVDA (Windows)
 
-### Setup
+Setup:
+- start: `Ctrl + Alt + N`
+- quit: `Insert + Q`
+- modifier key: `Insert`
 
-```
-Download: nvaccess.org
-Start: Ctrl + Alt + N
-Stop: Insert + Q
-```
-
-### Essential Commands
-
-```
-Navigation:
-Insert = NVDA modifier
-
-Down Arrow         Next line
-Up Arrow           Previous line
-// ... (32 lines trimmed)
-
-Elements List (NVDA + F7):
-Shows all links, headings, form fields, landmarks
-```
-
-### Browse vs Focus Mode
-
-```
-NVDA automatically switches modes:
-- Browse Mode: Arrow keys navigate content
-- Focus Mode: Arrow keys control interactive elements
-
-Manual switch: NVDA + Space
-
-Watch for:
-- "Browse mode" announcement when navigating
-- "Focus mode" when entering form fields
-- Application role forces forms mode
-```
+Useful commands:
+- `Down Arrow` / `Up Arrow` to read next or previous line
+- `H` / `Shift + H` to move by heading
+- `K` / `Shift + K` to move by link
+- `D` / `Shift + D` to move by landmark
+- `F` / `Shift + F` to move by form field
+- `NVDA + F7` for elements list
+- `NVDA + Space` to switch browse and focus mode
 
 ## JAWS (Windows)
 
-### Essential Commands
+Setup:
+- start via shortcut or `Ctrl + Alt + J`
 
-```
-Start: Desktop shortcut or Ctrl + Alt + J
-Virtual Cursor: Auto-enabled in browsers
-
-Navigation:
-Arrow keys         Navigate content
-// ... (22 lines trimmed)
-
-Tables:
-Ctrl + Alt + Arrows Table navigation
-```
+Useful commands:
+- arrow keys for reading and navigation
+- `H` for headings
+- `Tab` / `Shift + Tab` for form controls and links
+- `Insert + F7` for links list
+- `Insert + F6` for headings list
+- table navigation with `Ctrl + Alt + Arrow`
 
 ## TalkBack (Android)
 
-### Setup
+Setup:
+- enable in Android accessibility settings
+- common toggle: hold both volume buttons for 3 seconds
 
-```
-Enable: Settings → Accessibility → TalkBack
-Toggle: Hold both volume buttons 3 seconds
-```
+Useful gestures:
+- swipe right / left for next or previous item
+- double tap to activate
+- drag finger to explore
+- two-finger swipe to scroll
+- rotor-style reading controls for headings, links, controls, words, and lines
 
-### Gestures
+## VoiceOver (macOS)
 
-```
-Explore: Drag finger across screen
-Next: Swipe right
-Previous: Swipe left
-Activate: Double tap
-Scroll: Two finger swipe
+Setup:
+- toggle: `Cmd + F5`
+- modifier: `Ctrl + Option`
 
-Reading Controls (swipe up then right):
-- Headings
-- Links
-- Controls
-- Characters
-- Words
-- Lines
-- Paragraphs
-```
+Useful commands:
+- `VO + Right Arrow` / `VO + Left Arrow` for next or previous item
+- `VO + U` for rotor
+- `VO + Cmd + H` next heading
+- `VO + Cmd + L` next link
+- `VO + Cmd + J` next form control
+- `VO + Space` activate current item
 
-## VoiceOver (macOS) - Full Reference
+## What to Check
 
-### Setup
+Use the commands above to verify:
+- heading order makes sense
+- landmarks are present and useful
+- controls have usable names
+- form errors and status updates are announced
+- tables and complex widgets are navigable
 
-```
-Enable: System Preferences → Accessibility → VoiceOver
-Toggle: Cmd + F5
-Quick Toggle: Triple-press Touch ID
-```
-
-### Essential Commands
-
-```
-Navigation:
-VO = Ctrl + Option (VoiceOver modifier)
-
-VO + Right Arrow   Next element
-VO + Left Arrow    Previous element
-// ... (22 lines trimmed)
-VO + Cmd + J       Next form control
-VO + Cmd + L       Next link
-VO + Cmd + T       Next table
-```
+If navigation is tedious or confusing with these basic commands, the UI probably
+needs structural accessibility fixes.

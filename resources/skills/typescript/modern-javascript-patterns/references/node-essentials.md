@@ -1,140 +1,121 @@
 # Node.js Essentials
 
-## File System (fs/promises)
+## File System
 
 ```javascript
-import { readFile, writeFile, appendFile, mkdir, rm, readdir, stat } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join, dirname } from 'path';
+import { mkdir, readFile, readdir, rm, stat, writeFile } from 'fs/promises'
+import { existsSync } from 'fs'
+import { join } from 'path'
 
-// Read file
-// ... (44 lines trimmed)
-if (existsSync('./path')) {
-  // Path exists
+await mkdir('./output', { recursive: true })
+await writeFile('./output/result.json', JSON.stringify({ ok: true }, null, 2))
+
+const text = await readFile('./output/result.json', 'utf8')
+const files = await readdir('./output')
+const metadata = await stat('./output/result.json')
+
+if (existsSync('./output/old.json')) {
+  await rm('./output/old.json')
 }
 ```
 
 ## Path Module
 
 ```javascript
-import { join, resolve, dirname, basename, extname, parse, format } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, extname, join, resolve } from 'path'
+import { fileURLToPath } from 'url'
 
-// Get current file and directory in ESM
-const __filename = fileURLToPath(import.meta.url);
-// ... (27 lines trimmed)
-  dir: '/home/user',
-  base: 'file.txt'
-}); // '/home/user/file.txt'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const fullPath = join(__dirname, 'fixtures', 'config.json')
+const absolute = resolve('./src/index.js')
+const base = basename(fullPath)
+const ext = extname(fullPath)
 ```
 
 ## Streams
 
 ```javascript
-import { createReadStream, createWriteStream } from 'fs';
-import { pipeline } from 'stream/promises';
-import { Transform } from 'stream';
+import { createReadStream, createWriteStream } from 'fs'
+import { Transform } from 'stream'
+import { pipeline } from 'stream/promises'
 
-// Read large file efficiently
-// ... (47 lines trimmed)
-    processChunk(chunk);
-  }
-};
+const uppercase = new Transform({
+  transform(chunk, _encoding, callback) {
+    callback(null, chunk.toString().toUpperCase())
+  },
+})
+
+await pipeline(
+  createReadStream('./input.txt'),
+  uppercase,
+  createWriteStream('./output.txt')
+)
 ```
 
 ## EventEmitter
 
 ```javascript
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 
 class DataProcessor extends EventEmitter {
-  async process(data) {
-    this.emit('start', { itemCount: data.length });
-// ... (42 lines trimmed)
-const handler = () => console.log('Event fired');
-processor.on('event', handler);
-processor.off('event', handler);
+  async process(items) {
+    this.emit('start', { itemCount: items.length })
+    for (const item of items) {
+      this.emit('item', item)
+    }
+    this.emit('done')
+  }
+}
 ```
 
 ## Child Processes
 
 ```javascript
-import { spawn, exec, execFile } from 'child_process';
-import { promisify } from 'util';
+import { execFile } from 'child_process'
+import { promisify } from 'util'
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile)
 
-// ... (21 lines trimmed)
-  cwd: './scripts',
-  env: { ...process.env, CUSTOM_VAR: 'value' }
-});
+const { stdout } = await execFileAsync('node', ['--version'], {
+  cwd: process.cwd(),
+  env: process.env,
+})
 ```
 
 ## Worker Threads
 
 ```javascript
-import { Worker, isMainThread, parentPort, workerData } from 'worker_threads';
+import { Worker, isMainThread, parentPort, workerData } from 'worker_threads'
 
 if (isMainThread) {
-  // Main thread
-  const worker = new Worker(new URL(import.meta.url), {
-// ... (65 lines trimmed)
-    availableWorker.worker.postMessage(task.data);
-  }
+  const worker = new Worker(new URL(import.meta.url), { workerData: [1, 2, 3] })
+  worker.on('message', (value) => console.log(value))
+} else {
+  const result = workerData.map((n) => n * 2)
+  parentPort?.postMessage(result)
 }
 ```
 
-## Process & Environment
+## Process and Environment
 
 ```javascript
-// Environment variables
-const port = process.env.PORT || 3000;
-const isDev = process.env.NODE_ENV === 'development';
+const port = process.env.PORT ?? '3000'
+const args = process.argv.slice(2)
 
-// Command-line arguments
-// ... (34 lines trimmed)
-console.log('Node version:', process.version);
-console.log('Memory usage:', process.memoryUsage());
-console.log('Uptime:', process.uptime());
+console.log({ port, args, node: process.version, pid: process.pid })
 ```
 
-## HTTP/HTTPS Server
+## HTTP Server
 
 ```javascript
-import { createServer } from 'http';
-import { readFile } from 'fs/promises';
+import { createServer } from 'http'
 
-const server = createServer(async (req, res) => {
-  // Parse URL and method
-// ... (40 lines trimmed)
+const server = createServer((req, res) => {
+  res.writeHead(200, { 'content-type': 'application/json' })
+  res.end(JSON.stringify({ method: req.method, url: req.url }))
+})
 
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+server.listen(3000)
 ```
-
-## Cluster for Multi-Core
-
-```javascript
-import cluster from 'cluster';
-import { cpus } from 'os';
-import { createServer } from 'http';
-
-const numCPUs = cpus().length;
-// ... (20 lines trimmed)
-  server.listen(3000);
-  console.log(`Worker ${process.pid} started`);
-}
-```
-
-## Quick Reference
-
-| Module | Use Case | Import |
-|--------|----------|--------|
-| `fs/promises` | Async file operations | `import { readFile } from 'fs/promises'` |
-| `path` | Path manipulation | `import { join } from 'path'` |
-| `stream` | Stream processing | `import { pipeline } from 'stream/promises'` |
-| `events` | Event emitters | `import { EventEmitter } from 'events'` |
-| `child_process` | Spawn processes | `import { spawn } from 'child_process'` |
-| `worker_threads` | Multi-threading | `import { Worker } from 'worker_threads'` |
-| `http` | HTTP server | `import { createServer } from 'http'` |
-| `cluster` | Multi-core scaling | `import cluster from 'cluster'` |

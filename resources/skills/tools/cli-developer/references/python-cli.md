@@ -1,123 +1,163 @@
 # Python CLI Development
 
-## Typer (Recommended - Modern)
-
-FastAPI-style CLI framework with automatic help generation.
+## Typer (Recommended)
 
 ```python
 #!/usr/bin/env python3
-import typer
-from typing import Optional
 from enum import Enum
+from pathlib import Path
 
-// ... (44 lines trimmed)
+import typer
+
+app = typer.Typer(help="Example Python CLI")
+
+
+class Format(str, Enum):
+    json = "json"
+    text = "text"
+
+
+@app.command()
+def greet(
+    name: str,
+    config: Path | None = typer.Option(None, "--config"),
+    output: Format = typer.Option(Format.text, "--output"),
+) -> None:
+    if config and not config.exists():
+        raise typer.BadParameter(f"config not found: {config}")
+
+    if output is Format.json:
+        typer.echo({"message": f"hello {name}"})
+    else:
+        typer.echo(f"hello {name}")
+
 
 if __name__ == "__main__":
     app()
 ```
 
-## Click (Widely Used)
-
-Powerful, composable CLI framework.
+## Click
 
 ```python
 import click
 
+
 @click.group()
 @click.version_option()
-def cli():
-// ... (40 lines trimmed)
+def cli() -> None:
+    """Example Click CLI."""
 
-if __name__ == '__main__':
+
+@cli.command()
+@click.argument("name")
+@click.option("--verbose", is_flag=True)
+def greet(name: str, verbose: bool) -> None:
+    if verbose:
+        click.echo(f"greeting user={name}", err=True)
+    click.echo(f"hello {name}")
+
+
+if __name__ == "__main__":
     cli()
 ```
 
 ## Rich Terminal Output
 
-Beautiful terminal formatting and progress indicators.
-
 ```python
 from rich.console import Console
-from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.panel import Panel
-from rich.syntax import Syntax
-// ... (45 lines trimmed)
-) as progress:
-    task = progress.add_task("Installing dependencies...")
-    install_dependencies()
+from rich.table import Table
+
+console = Console()
+
+table = Table(title="Tasks")
+table.add_column("Name")
+table.add_column("Status")
+table.add_row("build", "ready")
+table.add_row("test", "pending")
+console.print(table)
+
+with Progress(SpinnerColumn(), TextColumn("{task.description}")) as progress:
+    task = progress.add_task("Installing dependencies...", total=None)
+    console.log("running install")
+    progress.remove_task(task)
 ```
 
-## Interactive Prompts (questionary)
+## Interactive Prompts
 
 ```python
 import questionary
 
-# Text input
-name = questionary.text(
-    "Project name:",
-// ... (30 lines trimmed)
-
-# Password
-password = questionary.password("Enter password:").ask()
+name = questionary.text("Project name:").ask()
+framework = questionary.select(
+    "Framework:",
+    choices=["typer", "click", "argparse"],
+).ask()
+confirmed = questionary.confirm("Create files now?").ask()
 ```
 
-## Argparse (Standard Library)
-
-Built-in argument parsing (verbose but no dependencies).
+## Argparse
 
 ```python
 import argparse
-import sys
 
-def main():
-    parser = argparse.ArgumentParser(
-// ... (29 lines trimmed)
+parser = argparse.ArgumentParser(description="Example argparse CLI")
+parser.add_argument("name")
+parser.add_argument("--verbose", action="store_true")
+args = parser.parse_args()
 
-if __name__ == '__main__':
-    main()
+if args.verbose:
+    print(f"greeting user={args.name}")
+print(f"hello {args.name}")
 ```
 
 ## Error Handling
 
 ```python
-import typer
-import sys
 from pathlib import Path
 
-app = typer.Typer()
-// ... (26 lines trimmed)
+import typer
 
-if __name__ == "__main__":
-    main()
+app = typer.Typer()
+
+
+@app.command()
+def read_config(path: Path) -> None:
+    try:
+        typer.echo(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        typer.echo(f"config not found: {path}", err=True)
+        raise typer.Exit(code=1)
 ```
 
 ## Configuration Management
 
 ```python
 from pathlib import Path
-from typing import Any
 import json
 import os
 
-// ... (28 lines trimmed)
-            "verbose": False,
-            "timeout": 30,
-        }
+
+def load_config() -> dict[str, object]:
+    config_path = Path(os.environ.get("MYCLI_CONFIG", "config.json"))
+    if config_path.exists():
+        return json.loads(config_path.read_text(encoding="utf-8"))
+    return {"verbose": False, "timeout": 30}
 ```
 
-## Setup.py / pyproject.toml
+## `pyproject.toml`
 
 ```toml
-# pyproject.toml
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[project]
+name = "mycli"
+version = "0.1.0"
+dependencies = ["typer>=0.12", "rich>=13.0"]
 
-// ... (16 lines trimmed)
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-]
+[project.scripts]
+mycli = "mycli.cli:app"
+
+[tool.pytest.ini_options]
+addopts = "-q"
 ```
 
 ## Testing CLIs
@@ -128,22 +168,19 @@ from mycli.cli import app
 
 runner = CliRunner()
 
-// ... (15 lines trimmed)
-def test_invalid_command():
-    result = runner.invoke(app, ["invalid"])
-    assert result.exit_code != 0
+
+def test_greet() -> None:
+    result = runner.invoke(app, ["greet", "alice"])
+    assert result.exit_code == 0
+    assert "hello alice" in result.stdout
 ```
 
-## Progress Bars (tqdm)
+## Progress Bars
 
 ```python
 from tqdm import tqdm
 import time
 
-# Simple progress bar
-for i in tqdm(range(100), desc="Processing"):
-// ... (10 lines trimmed)
-for epoch in trange(10, desc="Epochs"):
-    for batch in trange(100, desc="Batches", leave=False):
-        train_batch(batch)
+for _ in tqdm(range(5), desc="Processing"):
+    time.sleep(0.05)
 ```

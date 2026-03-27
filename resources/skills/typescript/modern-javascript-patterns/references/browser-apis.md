@@ -3,139 +3,97 @@
 ## Fetch API
 
 ```javascript
-// Basic GET request
-const response = await fetch('/api/users');
-const data = await response.json();
+const response = await fetch('/api/users')
+const users = await response.json()
 
-// POST with JSON
-// ... (41 lines trimmed)
-    body: formData,
-  });
-};
+await fetch('/api/users', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ name: 'Alice' }),
+})
+
+const formData = new FormData()
+formData.append('file', fileInput.files[0])
+await fetch('/upload', { method: 'POST', body: formData })
 ```
 
 ## Web Workers
 
 ```javascript
-// main.js - Create and communicate with worker
-const worker = new Worker('/worker.js');
+const worker = new Worker('/worker.js')
 
-worker.postMessage({ command: 'process', data: largeArray });
-
-// ... (31 lines trimmed)
-};
-
-sharedWorker.port.postMessage({ type: 'init' });
+worker.postMessage({ command: 'process', data: largeArray })
+worker.onmessage = (event) => {
+  console.log('Worker result:', event.data)
+}
 ```
 
-## Service Workers & PWA
+## Service Workers
 
 ```javascript
-// Register Service Worker
 if ('serviceWorker' in navigator) {
-  const registration = await navigator.serviceWorker.register('/sw.js');
-  console.log('SW registered:', registration);
-
-// ... (54 lines trimmed)
-    event.waitUntil(syncMessages());
-  }
-});
+  const registration = await navigator.serviceWorker.register('/sw.js')
+  console.log('Registered service worker', registration.scope)
+}
 ```
 
-## Local Storage & IndexedDB
+## Local Storage and IndexedDB
 
 ```javascript
-// LocalStorage (synchronous, max 5-10MB)
-localStorage.setItem('theme', 'dark');
-const theme = localStorage.getItem('theme');
-localStorage.removeItem('theme');
-localStorage.clear();
-// ... (40 lines trimmed)
-    request.onerror = () => reject(request.error);
-  });
-};
+localStorage.setItem('theme', 'dark')
+const theme = localStorage.getItem('theme')
+
+const openDb = indexedDB.open('app-db', 1)
+openDb.onupgradeneeded = () => {
+  openDb.result.createObjectStore('users', { keyPath: 'id' })
+}
 ```
 
 ## Intersection Observer
 
 ```javascript
-// Lazy loading images
-const imageObserver = new IntersectionObserver(
-  (entries, observer) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-// ... (28 lines trimmed)
+const observer = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.isIntersecting) {
+      entry.target.src = entry.target.dataset.src
+      observer.unobserve(entry.target)
+    }
+  }
+})
 
-const sentinel = document.querySelector('#load-more-sentinel');
-loadMoreObserver.observe(sentinel);
+document.querySelectorAll('img[data-src]').forEach((img) => observer.observe(img))
 ```
 
 ## Mutation Observer
 
 ```javascript
-// Watch DOM changes
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
+  for (const mutation of mutations) {
     if (mutation.type === 'childList') {
-      console.log('Nodes added/removed:', mutation.addedNodes, mutation.removedNodes);
-// ... (12 lines trimmed)
+      console.log('DOM changed')
+    }
+  }
+})
 
-// Disconnect when done
-observer.disconnect();
+observer.observe(document.body, { childList: true, subtree: true })
 ```
 
-## Web Notifications
+## Notifications
 
 ```javascript
-// Request permission
-const permission = await Notification.requestPermission();
-
+const permission = await Notification.requestPermission()
 if (permission === 'granted') {
-  new Notification('Hello!', {
-// ... (25 lines trimmed)
-    clients.openWindow(event.notification.data)
-  );
-});
-```
-
-## Canvas & WebGL
-
-```javascript
-// Canvas 2D
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-
-// Draw rectangle
-// ... (21 lines trimmed)
-// Clear canvas
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT);
+  new Notification('Build complete', { body: 'Your export is ready.' })
+}
 ```
 
 ## Performance APIs
 
 ```javascript
-// Performance timing
-const timing = performance.timing;
-const loadTime = timing.loadEventEnd - timing.navigationStart;
-console.log('Page load time:', loadTime);
+performance.mark('search-start')
+await runSearch()
+performance.mark('search-end')
+performance.measure('search', 'search-start', 'search-end')
 
-// ... (14 lines trimmed)
-
-const measures = performance.getEntriesByType('measure');
-console.log(measures);
+console.log(performance.getEntriesByName('search'))
 ```
-
-## Quick Reference
-
-| API | Use Case | Browser Support |
-|-----|----------|----------------|
-| Fetch | HTTP requests | Modern browsers |
-| Web Workers | CPU-intensive tasks | Modern browsers |
-| Service Workers | Offline, caching | Modern browsers |
-| IndexedDB | Large client storage | Modern browsers |
-| IntersectionObserver | Lazy loading, infinite scroll | Modern browsers |
-| MutationObserver | DOM change detection | Modern browsers |
-| Notifications | User alerts | Modern browsers (permission) |
-| Canvas | 2D graphics | All browsers |
-| WebGL | 3D graphics | Modern browsers |

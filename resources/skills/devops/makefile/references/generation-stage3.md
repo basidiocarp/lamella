@@ -27,8 +27,14 @@ CC ?= gcc
 CFLAGS ?= -Wall -Wextra -O2
 PREFIX ?= /usr/local
 DESTDIR ?=
-// ... (10 lines trimmed)
+PROJECT ?= myapp
+VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo 0.1.0)
+
+# Internal defaults (use :=)
+TARGET := $(PROJECT)
+SRCDIR := src
 BUILDDIR := build
+BINDIR := $(DESTDIR)$(PREFIX)/bin
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
 ```
@@ -79,7 +85,26 @@ $(BUILDDIR)/%.class: $(SRCDIR)/%.java
 ## Build all targets
 all: $(TARGET)
 
-// ... (15 lines trimmed)
+## Remove build artifacts
+clean:
+	rm -rf $(BUILDDIR) $(TARGET)
+
+## Install binaries
+install: $(TARGET)
+	install -d $(BINDIR)
+	install -m 755 $(TARGET) $(BINDIR)/$(TARGET)
+
+## Remove installed binaries
+uninstall:
+	rm -f $(BINDIR)/$(TARGET)
+
+## Run project tests
+test:
+	@echo "Define the project-specific test command"
+	@false
+
+## Print help
+help:
 	@echo "$(PROJECT) v$(VERSION)"
 	@echo "Targets: all, install, clean, test, help"
 	@echo "Override: make CC=clang PREFIX=/opt"

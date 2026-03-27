@@ -1,234 +1,134 @@
 # Java Sharp Edges
 
-## Equality Confusion
+Use this reference when scanning Java for APIs and language behaviors that look
+safe at the call site but hide runtime failure, security exposure, or
+concurrency surprises.
+
+## Equality and Boxing
+
+Reference equality and boxed-value caching cause subtle bugs.
 
 ```java
-// DANGEROUS: == compares references, not values
 String a = new String("hello");
 String b = new String("hello");
-a == b  // FALSE - different objects
+boolean same = (a == b);
 
-// ... (10 lines trimmed)
 Integer p = 128;
 Integer q = 128;
-p == q  // FALSE - outside cache range!
+boolean boxedSame = (p == q);
 ```
 
-**Fix**: Always use `.equals()` for object comparison:
-```java
-a.equals(b)  // TRUE
-p.equals(q)  // TRUE
-Objects.equals(a, b)  // Null-safe
-```
+Prefer `.equals()` or `Objects.equals()` for value checks.
 
-## Type Erasure
+## Deserialization and Reflection
+
+These APIs deserve direct review whenever untrusted input is involved.
 
 ```java
-// DANGEROUS: Generic types erased at runtime
-List<String> strings = new ArrayList<>();
-List<Integer> ints = new ArrayList<>();
-
-// At runtime, both are just "ArrayList"
-strings.getClass() == ints.getClass()  // TRUE
-
-// Can't do runtime type checks:
-if (obj instanceof List<String>) { }  // Compile error!
-
-// Can cast incorrectly:
-List<?> raw = strings;
-List<Integer> wrongType = (List<Integer>) raw;  // No runtime error!
-wrongType.get(0);  // ClassCastException here, not at cast
-```
-
-## Serialization RCE
-
-```java
-// DANGEROUS: Like pickle, deserializes arbitrary objects
 ObjectInputStream ois = new ObjectInputStream(untrustedInput);
 Object obj = ois.readObject();
 
-// Even without reading, deserialization triggers:
-// - readObject() methods
-// - readResolve() methods
-// - finalize() (deprecated but still works)
-
-// "Gadget chains" in libraries enable RCE:
-// - Commons Collections
-// - Spring Framework
-// - Apache libraries
-// ysoserial tool generates payloads
+Field field = target.getClass().getDeclaredField("secret");
+field.setAccessible(true);
+field.set(target, value);
 ```
 
-**Fix**: Use JSON or implement `ObjectInputFilter` (Java 9+):
-```java
-ObjectInputFilter filter = ObjectInputFilter.Config.createFilter(
-    "!*"  // Reject all classes
-);
-```
+Flag:
+- `ObjectInputStream.readObject()`
+- broad reflective access with `setAccessible(true)`
+- framework hooks that deserialize or instantiate classes from data
 
-## Null Pointer Exceptions
+## Nullability and Optional Misuse
+
+Java still makes it easy to move null failure to runtime.
 
 ```java
-// DANGEROUS: Unboxing null throws NPE
 Integer value = null;
-int primitive = value;  // NPE!
+int primitive = value;
 
-// DANGEROUS: Chained calls
 String name = user.getProfile().getSettings().getName();
-// NPE if any intermediate is null
-
-// Optional doesn't help if misused:
-Optional.of(null);  // NPE!
-optional.get();     // NoSuchElementException if empty
+Optional.of(null);
+optional.get();
 ```
 
-**Fix**: Use Optional correctly:
-```java
-Optional.ofNullable(value);
-optional.orElse(default);
-optional.map(x -> x.transform()).orElse(null);
-```
+Prefer `Optional.ofNullable`, narrow chaining, and explicit null boundaries
+around external data or framework return values.
 
-## Checked Exception Swallowing
+## Exception and Resource Handling
+
+Two common footguns:
 
 ```java
-// DANGEROUS: Empty catch blocks
 try {
     sensitiveOperation();
 } catch (Exception e) {
-    // Silently swallowed - failure masked!
-// ... (13 lines trimmed)
-} catch (Exception e) {  // Catches everything including bugs
     return defaultValue;
 }
+
+FileInputStream fis = new FileInputStream(file);
+process(fis);
+fis.close();
 ```
 
-## String Operations
+- wide catches hide programmer bugs and security failures
+- manual resource management leaks or masks earlier exceptions
+
+Prefer targeted catches and try-with-resources.
+
+## Strings, Regex, and Precision
+
+Small syntax choices change behavior sharply.
 
 ```java
-// DANGEROUS: String concatenation in loops
-String result = "";
-for (String s : items) {
-    result += s;  // Creates new String each iteration
-}
-// O(n²) time complexity, memory churn
-
-// DANGEROUS: split() with regex
-"a.b.c".split(".");  // Empty array! "." is regex for "any char"
-
-// DANGEROUS: substring() memory (pre-Java 7u6)
-String huge = loadGigabyteFile();
-String small = huge.substring(0, 10);
-// small holds reference to entire huge char[]
+"a.b.c".split(".");
+new BigDecimal(0.1);
 ```
 
-**Fix**: Use `StringBuilder`, `Pattern.quote(".")`, modern Java.
+Flag:
+- `split(".")` and similar unescaped regex delimiters
+- `String +=` in loops
+- `new BigDecimal(double)`
+- floating point in money or policy logic
 
 ## Thread Safety
 
+Shared mutable objects still show up in otherwise ordinary code.
+
 ```java
-// DANGEROUS: SimpleDateFormat is not thread-safe
 static SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-
-// Multiple threads calling fmt.parse() = corrupted results
-
-// ... (9 lines trimmed)
-        }
-    }
-}
+Map<String, String> cache = new HashMap<>();
 ```
 
-**Fix**: Use `DateTimeFormatter` (immutable), `ConcurrentHashMap`, volatile.
+Treat these as review triggers:
+- `SimpleDateFormat` or other mutable formatters shared across threads
+- `HashMap` or collections mutated from concurrent code without protection
+- static mutable caches without clear synchronization
 
-## Resource Leaks
+## XML and Parser Defaults
 
-```java
-// DANGEROUS: Resources not closed on exception
-FileInputStream fis = new FileInputStream(file);
-// Exception here = fis never closed
-process(fis);
-fis.close();
-
-// DANGEROUS: Close in finally can mask exception
-FileInputStream fis = null;
-try {
-    fis = new FileInputStream(file);
-    throw new RuntimeException("oops");
-} finally {
-    fis.close();  // May throw, masking original exception
-}
-```
-
-**Fix**: Use try-with-resources:
-```java
-try (FileInputStream fis = new FileInputStream(file)) {
-    process(fis);
-}  // Automatically closed, exceptions properly handled
-```
-
-## Floating Point
+Parser defaults can expose XXE or entity-expansion problems.
 
 ```java
-// DANGEROUS: Float/double for money
-double price = 0.1 + 0.2;  // 0.30000000000000004
-if (price == 0.3) { }  // FALSE!
-
-// DANGEROUS: BigDecimal from double
-new BigDecimal(0.1);  // 0.1000000000000000055511151231257827...
-```
-
-**Fix**: Use `BigDecimal` with String constructor:
-```java
-new BigDecimal("0.1");  // Exactly 0.1
-```
-
-## Reflection
-
-```java
-// DANGEROUS: Bypasses access controls
-Field field = obj.getClass().getDeclaredField("privateField");
-field.setAccessible(true);  // Bypass private!
-field.set(obj, maliciousValue);
-
-// Can modify "final" fields (with caveats)
-// Can invoke private methods
-// Can break encapsulation entirely
-```
-
-## XML Processing (XXE)
-
-```java
-// DANGEROUS: Default XML parsers allow XXE
 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-// Default allows: <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-
-// DANGEROUS: Even with DTD disabled
-factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-// Still vulnerable to billion laughs without entity limits
 ```
 
-**Fix**: Disable all external entities:
-```java
-factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-factory.setXIncludeAware(false);
-factory.setExpandEntityReferences(false);
-```
+Review the surrounding configuration. Safe XML parsing usually needs explicit
+external-entity disabling and conservative parser settings.
 
-## Detection Patterns
+## Detection Checklist
 
 | Pattern | Risk |
-|---------|------|
-| `==` with objects | Reference comparison |
-| `Integer/Long` comparison with `==` | Cache boundary |
+|---|---|
+| `==` with objects | Reference comparison bug |
+| boxed numeric comparison with `==` | Cache-boundary confusion |
 | `ObjectInputStream.readObject()` | Deserialization RCE |
-| Empty `catch` block | Swallowed exception |
-| `catch (Exception e)` | Over-broad catch |
-| `String +=` in loop | Performance, memory |
-| `split(".")` | Regex interpretation |
-| `static SimpleDateFormat` | Thread safety |
-| `HashMap` shared across threads | Race condition |
-| Resources without try-with-resources | Resource leak |
+| empty catch or `catch (Exception e)` | Hidden failure |
+| `String +=` in loops | Performance and memory churn |
+| `split(".")` | Regex interpretation bug |
+| shared `SimpleDateFormat` | Thread-unsafety |
+| resources outside try-with-resources | Leak or masked exception |
 | `new BigDecimal(double)` | Precision loss |
-| `DocumentBuilderFactory.newInstance()` | XXE vulnerability |
+| default XML parser factory use | XXE and parser risk |
+
+Keep the analysis centered on misuse-resistant API choices, not general Java
+reference material.

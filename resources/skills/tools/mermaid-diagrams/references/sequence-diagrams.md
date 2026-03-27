@@ -1,296 +1,46 @@
 # Sequence Diagrams
 
-Sequence diagrams show interactions between participants over time. They're ideal for API flows, authentication sequences, and system component interactions.
+Use sequence diagrams to show request flow, timing, and branching between
+participants.
 
-## Basic Syntax
-
-```mermaid
-sequenceDiagram
-    participant A
-    participant B
-    A->>B: Message
-```
-
-## Participants and Actors
+## Basic Shape
 
 ```mermaid
 sequenceDiagram
     actor User
     participant Frontend
     participant API
-    participant Database
-    
     User->>Frontend: Click button
-    Frontend->>API: POST /data
+    Frontend->>API: POST /orders
+    API-->>Frontend: 201 Created
 ```
 
-**Difference:**
-- `participant` - System components (services, classes, databases)
-- `actor` - External entities (users, external systems)
+## Core Constructs
 
-## Message Types
+- `->>` request
+- `-->>` response
+- `-)` async send
+- `+` activate participant
+- `-` deactivate participant
 
-### Solid Arrow (Synchronous)
-```mermaid
-sequenceDiagram
-    Client->>Server: Request
-    Server-->>Client: Response
-```
+## Control Blocks
 
-- `->>`  Solid arrow (request)
-- `-->>`  Dotted arrow (response/return)
+Use:
 
-### Open Arrow (Asynchronous)
-```mermaid
-sequenceDiagram
-    Client-)Server: Async message
-    Server--)Client: Async response
-```
+- `alt` / `else` for branching
+- `opt` for optional side paths
+- `loop` for repeated actions
+- `par` for concurrent work
+- `break` for early exit
 
-- `-)` Solid open arrow
-- `--)` Dotted open arrow
+## Good Uses
 
-### Cross/X (Delete)
-```mermaid
-sequenceDiagram
-    Client-xServer: Delete
-```
+- login and auth flows
+- API request lifecycles
+- distributed workflows with retries or branches
+- async event publication and consumption
 
-## Activations
+## Practical Rule
 
-Show when a participant is actively processing:
-
-```mermaid
-sequenceDiagram
-    Client->>+Server: Request
-    Server->>+Database: Query
-    Database-->>-Server: Data
-    Server-->>-Client: Response
-```
-
-- `+` after arrow activates
-- `-` before arrow deactivates
-
-## Alt/Else (Conditional Logic)
-
-```mermaid
-sequenceDiagram
-    User->>API: POST /login
-    API->>Database: Query user
-    Database-->>API: User data
-    
-    alt Valid credentials
-        API-->>User: 200 OK + Token
-    else Invalid credentials
-        API-->>User: 401 Unauthorized
-    else Account locked
-        API-->>User: 403 Forbidden
-    end
-```
-
-## Opt (Optional)
-
-```mermaid
-sequenceDiagram
-    User->>API: POST /order
-    API->>PaymentService: Process payment
-    
-    opt Payment successful
-        API->>EmailService: Send confirmation
-    end
-    
-    API-->>User: Order result
-```
-
-## Par (Parallel)
-
-Show concurrent operations:
-
-```mermaid
-sequenceDiagram
-    API->>Service: Process order
-    
-    par Send email
-        Service->>EmailService: Send confirmation
-    and Update inventory
-        Service->>InventoryService: Reduce stock
-    and Log event
-        Service->>LogService: Log order
-    end
-    
-    Service-->>API: Complete
-```
-
-## Loop
-
-```mermaid
-sequenceDiagram
-    Client->>Server: Request batch
-    
-    loop For each item
-        Server->>Database: Process item
-        Database-->>Server: Result
-    end
-    
-    Server-->>Client: All results
-```
-
-**Loop with condition:**
-```mermaid
-sequenceDiagram
-    loop Every 5 seconds
-        Monitor->>API: Health check
-        API-->>Monitor: Status
-    end
-```
-
-## Break (Early Exit)
-
-```mermaid
-sequenceDiagram
-    User->>API: Submit form
-    API->>Validator: Validate input
-    
-    break Input invalid
-        API-->>User: 400 Bad Request
-    end
-    
-    API->>Database: Save data
-    Database-->>API: Success
-    API-->>User: 200 OK
-```
-
-## Notes
-
-### Note over single participant
-```mermaid
-sequenceDiagram
-    User->>API: Request
-    Note over API: Validates JWT token
-    API-->>User: Response
-```
-
-### Note spanning participants
-```mermaid
-sequenceDiagram
-    Frontend->>API: Request
-    Note over Frontend,API: HTTPS encrypted
-    API-->>Frontend: Response
-```
-
-### Right/Left notes
-```mermaid
-sequenceDiagram
-    User->>System: Action
-    Note right of System: Logs to database
-    System-->>User: Response
-    Note left of User: Updates UI
-```
-
-## Sequence Numbers
-
-Automatically number messages:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    
-    User->>Frontend: Login
-    Frontend->>API: Authenticate
-    API->>Database: Verify credentials
-    Database-->>API: User data
-    API-->>Frontend: JWT token
-    Frontend-->>User: Success
-```
-
-## Links and Tooltips
-
-Add clickable links:
-
-```mermaid
-sequenceDiagram
-    participant A as Service A
-    link A: Dashboard @ https://dashboard.example.com
-    link A: API Docs @ https://docs.example.com
-    
-    A->>B: Message
-```
-
-## Comprehensive Example: User Authentication Flow
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant Frontend
-    participant AuthAPI
-// ... (43 lines trimmed)
-            end
-        end
-    end
-```
-
-## API Request/Response Example
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Client
-    participant Gateway
-    participant AuthService
-// ... (24 lines trimmed)
-            Gateway-->>-Client: 200 OK + User data
-        end
-    end
-```
-
-## Microservices Communication
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant Gateway
-    participant OrderService
-    participant PaymentService
-// ... (34 lines trimmed)
-        OrderService-->>Gateway: 402 Payment Required
-        Gateway-->>User: Payment failed
-    end
-```
-
-## Best Practices
-
-1. **Order participants logically** - Typically: User → Frontend → Backend → Database
-2. **Use activations** - Shows when components are actively processing
-3. **Group related logic** - Use alt/opt/par to organize conditional flows
-4. **Add descriptive notes** - Explain complex logic or important details
-5. **Keep diagrams focused** - One scenario per diagram
-6. **Number messages** - Use autonumber for complex flows
-7. **Show error paths** - Document failure scenarios with alt/else
-8. **Indicate async operations** - Use open arrows for fire-and-forget messages
-
-## Common Use Cases
-
-### Authentication
-- Login flows
-- OAuth/SSO flows
-- Token refresh
-- Password reset
-
-### API Operations
-- CRUD operations
-- Search and filtering
-- Batch processing
-- Webhook handling
-
-### System Integration
-- Microservice communication
-- Third-party API calls
-- Message queue processing
-- Event-driven architecture
-
-### Business Processes
-- Order fulfillment
-- Payment processing
-- Approval workflows
-- Notification chains
+Keep the participant count low and the messages concrete. A sequence diagram
+should explain a flow, not document the entire system.

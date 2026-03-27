@@ -88,9 +88,12 @@ Use this skill when:
 // ❌ BAD - Explicit naming prevents reusability and parallel deployments
 new lambda.Function(this, 'MyFunction', {
   functionName: 'my-lambda',  // Avoid this
-  // ...
-// ... (5 lines trimmed)
-  // ...
+  runtime: lambda.Runtime.NODEJS_20_X,
+  handler: 'index.handler',
+  code: lambda.Code.fromAsset('dist'),
+  environment: {
+    STAGE: props.stage,
+  },
 });
 ```
 

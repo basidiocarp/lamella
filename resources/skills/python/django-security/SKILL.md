@@ -56,7 +56,12 @@ DEBUG = False  # CRITICAL
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-// ... (14 lines trimmed)
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+ALLOWED_HOSTS = ["example.com"]
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured('DJANGO_SECRET_KEY required')

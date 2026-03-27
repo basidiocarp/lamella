@@ -1,171 +1,107 @@
 # YARA Rule Authoring Decision Trees
 
+Use these decision trees to decide whether to keep refining a rule, tighten it,
+or abandon the current approach.
+
 ## Is This String Good Enough?
 
-```
-Is this string good enough?
-├─ Less than 4 bytes?
-│  └─ NO — find longer string
-├─ Contains repeated bytes (0000, 9090)?
-│  └─ NO — add surrounding context
-├─ Is an API name (VirtualAlloc, CreateRemoteThread)?
-│  └─ NO — use hex pattern of call site instead
-├─ Appears in Windows system files?
-│  └─ NO — too generic, find something unique
-├─ Is it a common path (C:\Windows\, cmd.exe)?
-│  └─ NO — find malware-specific paths
-├─ Unique to this malware family?
-│  └─ YES — use it
-└─ Appears in other malware too?
-   └─ MAYBE — combine with family-specific marker
-```
+Choose strings that survive family variation but do not appear broadly in
+goodware.
 
----
-
-## When to Use "all of" vs "any of"
-
-```
-Should I require all strings or allow any?
-├─ Strings are individually unique to malware?
-│  └─ any of them (each alone is suspicious)
-├─ Strings are common but combination is suspicious?
-│  └─ all of them (require the full pattern)
-├─ Strings have different confidence levels?
-│  └─ Group: all of ($core_*) and any of ($variant_*)
-└─ Seeing many false positives?
-   └─ Tighten: switch any → all, add more required strings
+```text
+candidate string
+├─ too short or repetitive?
+│  └─ reject it
+├─ generic API, path, or command?
+│  └─ add surrounding context or drop it
+├─ common in system files or benign apps?
+│  └─ reject it
+├─ specific to this family or cluster?
+│  └─ keep it
+└─ only useful in combination?
+   └─ group it with stronger indicators
 ```
 
-**Lesson from production:** Rules using `any of ($network_*)` where strings included "fetch", "axios", "http" matched virtually all web applications. Switching to require credential path AND network call AND exfil destination eliminated FPs.
+## `all of` vs `any of`
 
----
-
-## When to Abandon a Rule Approach
-
-Stop and pivot when:
-
-- **yarGen returns only API names and paths** → See [When Strings Fail, Pivot to Structure](#when-strings-fail-pivot-to-structure)
-
-- **Can't find 3 unique strings** → Probably packed. Target the unpacked version or detect the packer.
-
-- **Rule matches goodware files** → Strings aren't unique enough. 1-2 matches = investigate and tighten; 3-5 matches = find different indicators; 6+ matches = start over.
-
-- **Performance is terrible even after optimization** → Architecture problem. Split into multiple focused rules or add strict pre-filters.
-
-- **Description is hard to write** → The rule is too vague. If you can't explain what it catches, it catches too much.
-
----
-
-## Debugging False Positives
-
-```
-FP Investigation Flow:
-│
-├─ 1. Which string matched?
-│     Run: yr scan -s rule.yar false_positive.exe
-│
-// ... (8 lines trimmed)
-│
-└─ 5. Is the malware using common techniques?
-      └─ Target malware-specific implementation details, not the technique
+```text
+are strings individually strong?
+├─ yes
+│  └─ `any of` can work
+├─ no, but the combination is distinctive
+│  └─ use `all of` or grouped requirements
+└─ mixed confidence
+   └─ require all core strings and any of the variant strings
 ```
 
----
+If false positives rise, tighten from `any` to grouped or `all` conditions.
 
-## Hex vs Text vs Regex
+## When to Stop Refining the Same Rule
 
-```
-What string type should I use?
-│
-├─ Exact ASCII/Unicode text?
-│  └─ TEXT: $s = "MutexName" ascii wide
-│
-// ... (8 lines trimmed)
-│
-└─ Unknown encoding (XOR, base64)?
-   └─ TEXT with modifier: $s = "config" xor(0x00-0xFF)
-```
+Pivot when:
+- you cannot find multiple distinctive indicators
+- the rule keeps matching benign software after tightening
+- only generic API names or paths are available
+- performance stays poor after basic prefilters
+- you cannot describe clearly what the rule is meant to catch
 
----
+At that point, switch to structure, metadata, or packer-focused detection.
 
-## Is the Sample Packed? (Check First)
+## False-Positive Triage
 
-Before writing any string-based rule:
-
-```
-Is the sample packed?
-├─ Entropy > 7.0?
-│  └─ Likely packed — find unpacked layer first
-├─ Few/no readable strings?
-│  └─ Likely packed — use entropy, PE structure, or packer signatures
-├─ UPX/MPRESS/custom packer detected?
-│  └─ Target the unpacked payload OR detect the packer itself
-└─ Readable strings available?
-   └─ Proceed with string-based detection
+```text
+false positive found
+├─ identify which string or condition matched
+├─ ask whether the indicator is generic
+├─ ask whether the combination is still too broad
+├─ add a family-specific marker or structural check
+└─ if the rule still needs broad generic strings, redesign it
 ```
 
-**Expert guidance:** Don't write rules against packed layers. The packing changes; the payload doesn't.
+Use `yr scan -s` or equivalent matched-string output early. It shortens the
+tightening loop.
 
----
+## Text vs Hex vs Regex
 
-## When Strings Fail, Pivot to Structure
+| Use this | When |
+|---|---|
+| text strings | stable ASCII or UTF-16 content exists |
+| hex patterns | call-site structure or byte adjacency matters |
+| regex | variable separators or bounded text variation matters |
+| xor/base64 modifiers | encoding varies but the payload string is still useful |
 
-If yarGen returns only API names and generic paths:
+Default to the simplest readable representation that still captures the signal.
 
-```
-String extraction failed — what now?
-├─ High entropy sections?
-│  └─ Use math.entropy() on specific sections
-├─ Unusual imports pattern?
-│  └─ Use pe.imphash() for import hash clustering
-├─ Consistent PE structure anomalies?
-│  └─ Target section names, sizes, characteristics
-├─ Metadata present?
-│  └─ Target version info, timestamps, resources
-└─ Nothing unique?
-   └─ This sample may not be detectable with YARA alone
-```
+## Packed Sample Check
 
-**Expert guidance:** "One can try to use other file properties, such as metadata, entropy, import hashes or other data which stays constant." — Kaspersky Applied YARA Training
+Do this before investing in a string-heavy rule.
 
----
-
-## When to Use Modules vs. Byte Checks
-
-```
-Should I use a module or raw bytes?
-├─ Need imphash/rich header/authenticode?
-│  └─ Use PE module — too complex to replicate
-├─ Just checking magic bytes or simple offsets?
-│  └─ Use uint16/uint32 — faster, no module overhead
-├─ Checking section names/sizes?
-│  └─ PE module is cleaner, but add magic bytes filter FIRST
-├─ Checking Chrome extension permissions?
-│  └─ Use crx module — string parsing is fragile
-└─ Checking LNK target paths?
-   └─ Use lnk module — LNK format is complex
+```text
+sample packed?
+├─ high entropy and few readable strings
+│  └─ detect the packer or unpack first
+├─ stable payload strings are visible
+│  └─ continue with string and structure checks
+└─ metadata or layout is the only stable signal
+   └─ pivot to structural detection
 ```
 
-**Expert guidance:** "Avoid the magic module — use explicit hex checks instead" — Neo23x0. Apply this principle: if do it with uint32(), don't load a module.
+## Structure Pivot
 
----
+When strings fail, ask what stays stable:
+- import patterns or hashes
+- section layout and entropy
+- embedded resources
+- archive or extension metadata
+- family-specific byte patterns around loaders or decryptors
 
-## JavaScript Detection Decision Tree
+## Module vs Raw Checks
 
-```
-Writing a JavaScript rule?
-├─ npm package?
-│  ├─ Check package.json patterns
-│  ├─ Look for postinstall/preinstall hooks
-│  └─ Target exfil patterns: fetch + env access + credential paths
-├─ Browser extension?
-│  ├─ Chrome: Use crx module
-│  └─ Others: Target manifest patterns, background script behaviors
-├─ Standalone JS file?
-│  ├─ Look for obfuscation markers: eval+atob, fromCharCode chains
-│  ├─ Target unique function/variable names (often survive minification)
-│  └─ Check for packed/encoded payloads
-└─ Minified/webpack bundle?
-   ├─ Target unique strings that survive bundling (URLs, magic values)
-   └─ Avoid function names (will be mangled)
-```
+Use a module when the file format is complex or the feature is expensive to
+reimplement. Use raw offset and magic-byte checks when the property is simple
+and hot-path performance matters.
+
+## Authoring Rule
+
+If the decision tree keeps telling you the signal is generic, believe it. A
+shorter, narrower rule is usually better than a clever broad one.

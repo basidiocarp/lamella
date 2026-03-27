@@ -96,7 +96,13 @@ If browsing tools are unavailable, say that the answer may be stale and fall bac
 
 **Release Date:** {date}
 
-// ... (7 lines trimmed)
+### Headline Changes
+- [language feature or tooling change]
+- [ecosystem or compiler improvement]
+
+### Migration Notes
+- [breaking or edition-related note]
+
 ### Stabilized APIs
 - `api_name`: description
 ```

@@ -22,9 +22,43 @@ use libafl_bolts::prelude::*;
 use libafl_targets::{libfuzzer_test_one_input, std_edges_map_observer};
 
 #[no_mangle]
-// ... (81 lines trimmed)
-        .launch()
+pub extern "C" fn libafl_main() {
+    let mut edges = std_edges_map_observer("edges");
+    let feedback = MaxMapFeedback::new(&mut edges);
+    let objective = CrashFeedback::new();
+    let mut mgr = SimpleEventManager::printing();
+    let mut state = StdState::new(
+        StdRand::with_seed(current_nanos()),
+        InMemoryCorpus::new(),
+        OnDiskCorpus::new("crashes").unwrap(),
+        &feedback,
+        &objective,
+    )
+    .unwrap();
+
+    let mut scheduler = QueueScheduler::new();
+    let mut fuzzer = StdFuzzer::new(scheduler, feedback, objective);
+    let mut executor = InProcessExecutor::new(
+        &mut |input: &BytesInput| {
+            libfuzzer_test_one_input(input.target_bytes().as_slice());
+            ExitKind::Ok
+        },
+        tuple_list!(edges),
+        &mut fuzzer,
+        &mut state,
+        &mut mgr,
+    )
+    .unwrap();
+
+    state
+        .load_initial_inputs(&mut fuzzer, &mut executor, &mut mgr, &["seeds"])
         .unwrap();
+
+    let mut stages = tuple_list!(StdMutationalStage::new(
+        StdScheduledMutator::new(havoc_mutations())
+    ));
+
+    fuzzer.fuzz_loop(&mut stages, &mut executor, &mut state, &mut mgr).unwrap();
 }
 ```
 

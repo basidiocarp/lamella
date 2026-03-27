@@ -50,7 +50,13 @@ flowchart TB
     start([User requests devcontainer])
     recon[1. Project Reconnaissance]
     detect[2. Detect Languages]
-// ... (7 lines trimmed)
+    base[3. Select Base Image]
+    tools[4. Add Tooling]
+    generate[5. Generate Files]
+    write[6. Write devcontainer.json and Dockerfile]
+    done([Ready])
+
+    start --> recon --> detect --> base --> tools --> generate
     generate --> write
     write --> done
 ```

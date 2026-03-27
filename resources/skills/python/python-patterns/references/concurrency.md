@@ -1,97 +1,48 @@
 # Concurrency Patterns
 
-Python offers multiple approaches for concurrent execution depending on the workload type.
+Use the concurrency model that matches the workload, not the one that seems most
+modern.
 
-## Threading for I/O-Bound Tasks
+## Threading
 
-Best for: network requests, file I/O, database queries.
+Best for:
+- network I/O
+- file I/O
+- blocking database clients
 
-```python
-import concurrent.futures
-import threading
+Threads are usually the simplest way to overlap blocking work.
 
-def fetch_url(url: str) -> str:
-    """Fetch a URL (I/O-bound operation)."""
-// ... (13 lines trimmed)
-            except Exception as e:
-                results[url] = f"Error: {e}"
-    return results
-```
+## Multiprocessing
 
-## Multiprocessing for CPU-Bound Tasks
+Best for:
+- CPU-heavy transforms
+- numerical or media processing
+- work that benefits from bypassing the GIL
 
-Best for: math computations, image processing, data transformation.
+The tradeoff is higher startup and serialization overhead.
 
-```python
-from concurrent.futures import ProcessPoolExecutor
+## Asyncio
 
-def process_data(data: list[int]) -> int:
-    """CPU-intensive computation."""
-    return sum(x ** 2 for x in data)
+Best for:
+- high-concurrency I/O
+- async web services
+- many simultaneous network or queue operations
 
-def process_all(datasets: list[list[int]]) -> list[int]:
-    """Process multiple datasets using multiple processes."""
-    with ProcessPoolExecutor() as executor:
-        results = list(executor.map(process_data, datasets))
-    return results
-```
+Asyncio works best when the full call path is async-aware.
 
-## Async/Await for Concurrent I/O
+## Selection Guide
 
-Best for: high-concurrency I/O, web servers, many simultaneous connections.
+| Approach | Better for |
+|---|---|
+| threading | blocking I/O |
+| multiprocessing | CPU-bound work |
+| asyncio | high-concurrency async I/O |
 
-```python
-import asyncio
+## Safety Rules
 
-async def fetch_async(url: str) -> str:
-    """Fetch a URL asynchronously."""
-    import aiohttp
-// ... (9 lines trimmed)
+- guard shared mutable state with locks or explicit coordination
+- keep async boundaries clean
+- do not mix concurrency models casually inside one flow
+- choose the simplest model that meets the load profile
 
-# Run async code
-asyncio.run(fetch_all(["https://example.com"]))
-```
-
-## When to Use Which
-
-| Approach | Best For | GIL Impact | Overhead |
-|----------|----------|------------|----------|
-| Threading | I/O-bound | Limited by GIL | Low |
-| Multiprocessing | CPU-bound | Bypasses GIL | High (serialization) |
-| Asyncio | High-concurrency I/O | Single thread | Low |
-
-## Thread Safety
-
-```python
-import threading
-
-class Counter:
-    def __init__(self):
-        self._value = 0
-        self._lock = threading.Lock()
-
-    def increment(self):
-        with self._lock:
-            self._value += 1
-
-    @property
-    def value(self):
-        with self._lock:
-            return self._value
-```
-
-## Async Context Managers
-
-```python
-class AsyncDatabaseConnection:
-    async def __aenter__(self):
-        self.conn = await create_connection()
-        return self.conn
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.conn.close()
-
-async def query():
-    async with AsyncDatabaseConnection() as conn:
-        return await conn.execute("SELECT * FROM users")
-```
+Concurrency helps only when the workload and execution model actually match.

@@ -10,7 +10,22 @@ uv run {baseDir}/ct_analyzer/analyzer.py crypto.c
 
 # Go
 uv run {baseDir}/ct_analyzer/analyzer.py crypto.go
-// ... (17 lines trimmed)
+
+# Rust
+uv run {baseDir}/ct_analyzer/analyzer.py src/lib.rs
+
+# Cross-compile for a deployment target
+uv run {baseDir}/ct_analyzer/analyzer.py --arch arm64 crypto.c
+
+# Include branch warnings
+uv run {baseDir}/ct_analyzer/analyzer.py --warnings crypto.c
+
+# Filter to specific functions
+uv run {baseDir}/ct_analyzer/analyzer.py --func 'sign|verify' crypto.c
+
+# Compare optimization levels
+uv run {baseDir}/ct_analyzer/analyzer.py --opt-level 0 crypto.c
+uv run {baseDir}/ct_analyzer/analyzer.py --opt-level 3 crypto.c
 
 # CI-friendly JSON output
 uv run {baseDir}/ct_analyzer/analyzer.py --json crypto.c

@@ -4,8 +4,8 @@
 
 When using 2+ evaluations, follow these manual computation steps:
 
-- Think in steps, output each step result separately!
-- Do not skip steps!
+- Think in steps, output each step result separately.
+- Do not skip steps.
 
 ### Step 1: Collect Scores per Criterion
 
@@ -20,19 +20,19 @@ Create a table with each criterion and scores from all evaluations:
 
 For 2 evaluations: **Median = (Score1 + Score2) / 2**
 
-For 3+ evaluations: Sort scores, take middle value (or average of two middle values if even count)
+For 3+ evaluations: sort scores, then take the middle value, or average the two middle values if the count is even.
 
 ### Step 3: Check for High Variance
 
 **High variance** = evaluators disagree significantly (difference > 2.0 points)
 
-Formula: `|Eval1 - Eval2| > 2.0` → Flag as high variance
+Formula: `|Eval1 - Eval2| > 2.0` → flag as high variance
 
 ### Step 4: Calculate Weighted Overall Score
 
 Multiply each criterion's median by its weight and sum:
 
-```
+```text
 Overall = (Criterion1_Median × Weight1) + (Criterion2_Median × Weight2) + ...
 ```
 
@@ -49,11 +49,11 @@ Compare overall score to threshold:
 
 If evaluations significantly disagree (difference > 2.0 on any criterion):
 
-1. Flag the criterion
-2. Present both evaluators' reasoning
-3. Ask user: "Evaluators disagree on [criterion]. Review manually?"
-4. If yes: present evidence, get user decision
-5. If no: use median (conservative approach)
+1. Flag the criterion.
+2. Present both evaluators' reasoning.
+3. Ask the user whether to review manually.
+4. If yes, present evidence and capture the user decision.
+5. If no, use the median as the conservative path.
 
 ---
 
@@ -67,24 +67,41 @@ After all steps complete and DoD verification passes:
 ### Task Status
 - Task Status: `done` ✅
 - All Definition of Done items: X/X PASS (100%)
-// ... (68 lines trimmed)
+- Final verdict: PASS | FAIL
 
-1. [Any follow-up actions]
-2. [Suggested improvements]
+### Evaluation Summary
+| Criterion | Median | Weight | Weighted Score | Variance |
+|-----------|--------|--------|----------------|----------|
+| [Criterion] | X.X | 0.X | X.XX | Low/High |
+
+### Evidence
+- Code changes: [files or commits]
+- Tests run: [list]
+- Verification artifacts: [reports, logs, screenshots]
+
+### Open Risks
+- [Residual issue 1]
+- [Residual issue 2]
+
+### Recommendation
+1. [Ship, rework, or request manual review]
+2. [Any follow-up actions]
 ```
 
 ---
 
 ## Execution Flow Diagram
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                IMPLEMENT TASK WITH VERIFICATION               │
-├──────────────────────────────────────────────────────────────┤
-│                                                               │
-│  Phase 0: Select Task                                         │
-// ... (63 lines trimmed)
-│  └─────────────────────────────────────────────────────────┘  │
-│                                                               │
-└──────────────────────────────────────────────────────────────┘
+```text
+Phase 0: Select task
+  ↓
+Phase 1: Implement change
+  ↓
+Phase 2: Verify against Definition of Done
+  ↓
+Phase 3: Run judge evaluations
+  ↓
+Phase 4: Aggregate scores and flag disagreement
+  ↓
+Phase 5: Produce final report and recommendation
 ```

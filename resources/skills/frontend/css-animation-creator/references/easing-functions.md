@@ -1,56 +1,52 @@
 # Easing Functions & Tailwind Transitions
 
-Detailed reference for CSS easing functions and Tailwind transition utilities.
+Use easing to control how motion feels, not just how long it lasts.
 
-## CSS Easing Functions
+## Practical Easing Choices
+
+| Easing | Best for |
+|---|---|
+| `linear` | progress indicators, constant motion |
+| `ease` | generic UI transitions |
+| `ease-in` | exits or builds of momentum |
+| `ease-out` | entrances and hover responses |
+| `ease-in-out` | symmetric state changes |
+
+For most UI work, `ease-out` is the safest default for elements entering or
+responding to hover and press.
+
+## Custom Curves
+
+Use a custom cubic-bezier curve only when the motion needs a distinct feel.
 
 ```css
-/* Built-in */
-transition-timing-function: linear;
-transition-timing-function: ease;        /* Default - slow start, fast middle, slow end */
-transition-timing-function: ease-in;     /* Slow start */
-transition-timing-function: ease-out;    /* Slow end */
-// ... (14 lines trimmed)
-
-/* Elastic */
-transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 ```
 
-## Common Easing Presets
+Common patterns:
+- standard UI motion: `0.4, 0, 0.2, 1`
+- faster exit: `0.4, 0, 1, 1`
+- softer entrance: `0, 0, 0.2, 1`
 
-| Name | cubic-bezier | Use Case |
-|------|-------------|----------|
-| Material Standard | `0.4, 0, 0.2, 1` | General UI transitions |
-| Material Decelerate | `0, 0, 0.2, 1` | Elements entering screen |
-| Material Accelerate | `0.4, 0, 1, 1` | Elements leaving screen |
-| Bounce | `0.68, -0.55, 0.265, 1.55` | Playful interactions |
-| Elastic | `0.175, 0.885, 0.32, 1.275` | Springy feedback |
-| Smooth | `0.25, 0.1, 0.25, 1` | Subtle transitions |
+Avoid novelty curves unless the product language supports them.
 
-## Tailwind Transitions
+## Tailwind Usage
 
 ```tsx
-// Duration
-<div className="transition duration-150" />  // 150ms
-<div className="transition duration-300" />  // 300ms
-<div className="transition duration-500" />  // 500ms
-
-// ... (14 lines trimmed)
-<button className="transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg">
+<button className="transition-all duration-200 ease-out hover:scale-105">
   Hover me
 </button>
 ```
 
-## Custom Tailwind Easing
+You can extend Tailwind with named easing tokens if the system reuses them
+often.
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      transitionTimingFunction: {
-// ... (10 lines trimmed)
-// Usage
-<div className="transition ease-material duration-300" />
-<div className="transition ease-bounce duration-500" />
-```
+## Design Rules
+
+- pair easing with duration deliberately
+- use one motion language across similar components
+- do not use bouncy or elastic curves for routine interactions
+- prioritize readability over personality in dense product UI
+
+If an animation feels like it lingers, the problem is often easing, not only
+duration.

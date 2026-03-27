@@ -44,7 +44,15 @@ AFL++ supports multiple harness styles. For best performance, use persistent mod
 int main(int argc, char **argv) {
     #ifdef __AFL_HAVE_MANUAL_CONTROL
         __AFL_INIT();
-// ... (12 lines trimmed)
+    #endif
+
+    __AFL_FUZZ_INIT();
+    unsigned char *buf = __AFL_FUZZ_TESTCASE_BUF;
+
+    while (__AFL_LOOP(1000)) {
+        int len = __AFL_FUZZ_TESTCASE_LEN;
+        target(buf, len);
+    }
 
     return 0;
 }

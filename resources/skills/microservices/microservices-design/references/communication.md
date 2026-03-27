@@ -1,282 +1,156 @@
 # Inter-Service Communication Patterns
 
-Comprehensive guide for designing communication between microservices.
+Concise guide for choosing communication styles between microservices.
 
-## Communication Styles
+## Synchronous Options
 
-### Synchronous Communication
+### REST
 
-**REST APIs:**
+```text
+Use when:
+- request/response latency matters
+- the API is public or browser-facing
+- resource-oriented CRUD is a good fit
+
+Example:
+GET    /api/v1/orders/{order_id}
+POST   /api/v1/orders
+PATCH  /api/v1/orders/{order_id}/status
 ```
-When to Use:
-- Request/response pattern needed
-- Client needs immediate result
-- Simple CRUD operations
-- Public-facing APIs
-// ... (11 lines trimmed)
-PUT    /api/v1/orders/{orderId}
-DELETE /api/v1/orders/{orderId}
-PATCH  /api/v1/orders/{orderId}/status
-```
 
-**gRPC:**
-```
-When to Use:
-- Low-latency requirements
-- Strong typing needed
-- Streaming data
-- Internal service-to-service calls
-// ... (22 lines trimmed)
+### gRPC
+
+```proto
+service OrderService {
+  rpc GetOrder(GetOrderRequest) returns (OrderResponse);
+  rpc StreamOrderEvents(OrderRequest) returns (stream OrderEvent);
+}
+
+message OrderResponse {
+  string id = 1;
   string status = 2;
   repeated OrderItem items = 3;
 }
 ```
 
-**GraphQL:**
-```
-When to Use:
-- Frontend-driven data requirements
-- Aggregating data from multiple services
-- Flexible query requirements
-- Reducing over-fetching/under-fetching
-// ... (17 lines trimmed)
-  id: ID! @external
-  orders: [Order!]!
+Use gRPC when:
+- services are internal
+- strict contracts and code generation help
+- streaming or low overhead matters
+
+### GraphQL
+
+```graphql
+type Query {
+  order(id: ID!): Order
+}
+
+type Order {
+  id: ID!
+  status: String!
+  customer: Customer!
 }
 ```
 
-### Asynchronous Communication
+Use GraphQL when:
+- consumers need flexible field selection
+- one client call must aggregate multiple services
+- over-fetching is a repeated problem
 
-**Message Queues (Point-to-Point):**
-```
-When to Use:
-- Task distribution
-- Load leveling
-- Guaranteed delivery needed
-- Single consumer per message
-// ... (14 lines trimmed)
-- Email/SMS sending
-- Image processing
-- Report generation
-```
+## Asynchronous Options
 
-**Event Streaming (Pub/Sub):**
-```
-When to Use:
-- Multiple consumers need same event
-- Event sourcing
-- Real-time data pipelines
-- Audit logging
-// ... (15 lines trimmed)
-- WarehouseService (prepare shipment)
+### Message Queue
 
-Each consumer processes independently
+```text
+Producer -> queue -> single consumer
+
+Best for:
+- background jobs
+- guaranteed processing
+- load leveling
 ```
 
-**Event-Driven Architecture:**
-```
-Event Types:
+Typical examples:
+- email sending
+- image processing
+- report generation
 
-1. Domain Events:
-   - order.placed
-   - payment.completed
-// ... (31 lines trimmed)
-    "currency": "USD"
-  }
-}
+### Event Stream
+
+```text
+Producer -> topic -> many consumers
+
+Best for:
+- domain events
+- analytics pipelines
+- audit streams
 ```
+
+Typical examples:
+- order placed -> payment, inventory, warehouse each react
+- account updated -> search index and analytics refresh
 
 ## Communication Patterns
 
-### Request/Response
+### Request / Response
 
-**Synchronous Request/Response:**
-```
-Pattern:
-Client → Service A → Service B → Response
-
-Pros:
-- Simple to implement
-// ... (11 lines trimmed)
-- Small number of hops (max 2-3)
-- Low latency requirements
-- Failure of dependency should fail request
+```text
+Client -> Service A -> Service B -> response
 ```
 
-**Asynchronous Request/Response:**
-```
-Pattern:
-1. Client sends request to Service A
-2. Service A returns request ID immediately
-3. Service A processes asynchronously
+Choose this when:
+- the caller must know the outcome immediately
+- failures should fail the request visibly
+- the number of hops stays small
+
+### Async Request / Response
+
+```text
+1. Client submits work
+2. Service returns request ID
+3. Work continues asynchronously
 4. Client polls or receives webhook when complete
-// ... (14 lines trimmed)
-}
-
-Alternative: WebSocket notification when ready
 ```
 
-### Fire and Forget
-
-**Pattern:**
-```
-Client → Message Queue → Consumer
-
-Characteristics:
-- Client doesn't wait for response
-- Eventual consistency
-// ... (19 lines trimmed)
-- No immediate feedback
-- Requires status tracking
-- Complex error handling
-```
+Choose this when:
+- work is too slow for an interactive request
+- progress tracking matters
+- eventual completion is acceptable
 
 ### Event Choreography
 
-**Pattern:**
-```
-Distributed workflow via events (no central orchestrator)
-
-Example: Order Placement
-1. OrderService publishes: order.created
-2. PaymentService listens, processes payment, publishes: payment.completed
-// ... (11 lines trimmed)
-- Hard to debug
-- No central monitoring
-- Eventual consistency challenges
+```text
+OrderService -> order.created
+PaymentService -> payment.completed
+InventoryService -> inventory.reserved
+NotificationService -> order.confirmed
 ```
 
-### Saga Orchestration
+Choose this when:
+- teams own separate reactions cleanly
+- no central coordinator is needed
+- eventual consistency is acceptable
 
-**Pattern:**
-```
-Central orchestrator manages distributed transaction
+Risk:
+- debugging gets harder without strong tracing and event contracts
 
-Example: Order Saga
-Orchestrator: OrderSagaService
+## Selection Guide
 
-// ... (22 lines trimmed)
-- Orchestrator can become bottleneck
-- Single point of failure (mitigate with HA)
-- More complex implementation
-```
+```text
+Choose synchronous when:
+- a user is waiting
+- strong consistency is required
+- the workflow is short and easy to reason about
 
-## Protocol Selection Guide
-
-### Decision Matrix
-
-**REST vs gRPC:**
-```
-Use REST when:
-- Public API (external clients)
-- Browser-based clients
-- Human-readable debugging needed
-// ... (7 lines trimmed)
-- Bi-directional streaming
-- Polyglot teams (code generation)
+Choose asynchronous when:
+- throughput matters more than immediacy
+- work can be retried or buffered
+- downstream systems should be decoupled
 ```
 
-**Synchronous vs Asynchronous:**
-```
-Use Synchronous when:
-- User waiting for response
-- Strong consistency required
-- Simple request/response
-// ... (7 lines trimmed)
-- High throughput required
-- Eventual consistency acceptable
-```
-
-**Message Queue vs Event Stream:**
-```
-Use Message Queue (RabbitMQ, SQS) when:
-- Single consumer per message
-- Task distribution
-- Guaranteed processing
-// ... (6 lines trimmed)
-- Event sourcing
-- Long retention required
-```
-
-## API Design Best Practices
-
-### RESTful API Design
-
-**URL Structure:**
-```
-Good:
-GET    /api/v1/customers/{customerId}/orders
-POST   /api/v1/orders
-GET    /api/v1/orders/{orderId}/items
-
-Avoid:
-GET    /api/v1/getCustomerOrders?customerId=123
-POST   /api/v1/createOrder
-```
-
-**Versioning Strategies:**
-```
-1. URL Versioning:
-   /api/v1/orders
-   /api/v2/orders
-   Pros: Clear, easy to route
-   Cons: URL pollution
-// ... (9 lines trimmed)
-   Cons: Easy to miss
-
-Recommendation: URL versioning for simplicity
-```
-
-**Pagination:**
-```
-Cursor-Based (Recommended):
-GET /api/v1/orders?cursor=abc123&limit=20
-Response:
-{
-// ... (6 lines trimmed)
-GET /api/v1/orders?page=2&pageSize=20
-Problem: Results change if data inserted
-```
-
-### gRPC Best Practices
-
-**Error Handling:**
-```
-Use standard gRPC status codes:
-- OK (0)
-- INVALID_ARGUMENT (3)
-- NOT_FOUND (5)
-- ALREADY_EXISTS (6)
-// ... (8 lines trimmed)
-}
-
-Error details in metadata for rich context
-```
-
-**Streaming Patterns:**
-```
-1. Server Streaming:
-   rpc ListOrders(ListRequest) returns (stream Order);
-   Use: Large result sets
-
-// ... (5 lines trimmed)
-   rpc Chat(stream Message) returns (stream Message);
-   Use: Real-time communication
-```
-
-## Summary
-
-Choose communication patterns based on:
-- Consistency requirements (strong vs eventual)
-- Latency tolerance
-- Coupling tolerance
-- Complexity budget
-- Team expertise
-
-**Rule of Thumb:**
-- Synchronous for reads and simple writes
-- Asynchronous for complex workflows
-- Events for cross-aggregate updates
-- Sagas for distributed transactions
-
-Always implement timeouts, retries, and circuit breakers regardless of pattern chosen.
+Protocol rule of thumb:
+- REST for external APIs
+- gRPC for internal service contracts
+- GraphQL for consumer-shaped aggregation
+- queues for background work
+- streams for many independent consumers

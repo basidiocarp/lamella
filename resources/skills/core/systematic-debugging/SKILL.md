@@ -112,7 +112,13 @@ complete each phase before proceeding to the next.
    echo "=== Secrets available in workflow: ==="
    echo "IDENTITY: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
 
-// ... (9 lines trimmed)
+   # Layer 2: Build environment
+   xcodebuild -showBuildSettings | rg "CODE_SIGN|PROVISIONING"
+
+   # Layer 3: Built artifact
+   codesign --display --verbose=4 "$APP" || true
+   security find-identity -p codesigning -v
+
    # Layer 4: Actual signing
    codesign --sign "$IDENTITY" --verbose=4 "$APP"
    ```

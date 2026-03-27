@@ -89,7 +89,20 @@ name: skill-name-with-hyphens
 description: Use when [specific triggers and symptoms] - [what the skill does, third person]
 ---
 
-// ... (16 lines trimmed)
+## Purpose
+State what the skill helps Claude do and what it should not try to cover.
+
+## When to Use
+- Trigger 1
+- Trigger 2
+
+## Workflow
+1. Triage the task.
+2. Read the minimum supporting references.
+3. Execute or explain the task in the intended order.
+
+## References
+- Point to adjacent `references/`, `assets/`, or `scripts/` only when needed.
 
 ## Common Mistakes
 What goes wrong + fixes.

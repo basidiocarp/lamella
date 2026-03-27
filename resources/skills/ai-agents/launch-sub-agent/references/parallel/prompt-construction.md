@@ -1,51 +1,88 @@
 # Prompt Construction (Phase 4)
 
-Build identical prompt structure for each target, customized only with target-specific details.
+Build one consistent prompt shape for every parallel target. Only the target
+details should vary.
 
-## Structure
+## Required Structure
 
-1. **Zero-shot CoT Prefix** (REQUIRED - MUST BE FIRST)
-2. **Task Body** (Customized per target)
-3. **Self-Critique Suffix** (REQUIRED - MUST BE LAST)
+1. reasoning/setup prefix
+2. task body with target-specific context
+3. self-check and delivery instructions
 
-## 1. Zero-shot Chain-of-Thought Prefix
+Keep the prompt stable across targets so results are comparable.
+
+## Prefix
+
+Open with a short reasoning frame, not a long essay. The purpose is to slow the
+worker into checking scope before acting.
 
 ```markdown
 ## Reasoning Approach
 
-Let's think step by step.
-
-Before taking any action, think through the problem systematically:
-// ... (14 lines trimmed)
-   - Is there a simpler approach?
-
-Work through each step explicitly before implementing.
+Work through the task before editing.
+- Identify the target scope.
+- Check likely failure modes.
+- Prefer the simplest correct approach.
 ```
 
-## 2. Task Body
+Do not let the prefix become a generic chain-of-thought dump. It should shape
+behavior, not add noise.
+
+## Task Body
+
+The body should include the exact inputs the worker needs and no more.
 
 ```markdown
 <task>
-{Task description from arguments}
+Implement the requested change for this target.
 </task>
 
 <target>
-// ... (10 lines trimmed)
+File or slice: ...
+Goal: ...
+Constraints: ...
+</target>
+
 <output>
-{Expected deliverable location and format}
+Expected deliverable and any validation notes.
 </output>
 ```
 
-## 3. Self-Critique Suffix
+Good target blocks answer:
+- what this worker owns
+- what files or scope are in bounds
+- what outcome counts as done
+
+## Self-Check Suffix
+
+Close with a short mandatory verification block.
 
 ```markdown
-## Self-Critique Verification (MANDATORY)
+## Self-Check
 
-Before completing, verify your work for this target.
-
-### Verification Questions
-// ... (23 lines trimmed)
-3. **DOCUMENT** - Note what changed
-
-CRITICAL: Do not submit until ALL verification questions pass.
+Before you finish:
+1. Confirm the change stays within target scope.
+2. Check for obvious regressions or missing edge cases.
+3. Summarize what changed and any validation performed.
 ```
+
+Make the worker verify scope, correctness, and reporting. Avoid giant checklists
+unless the task is truly high risk.
+
+## Construction Rules
+
+- keep the prefix and suffix identical across siblings
+- vary only the task body and target block
+- be explicit about ownership boundaries
+- state expected output format up front
+- do not bury critical constraints inside prose
+
+## Failure Pattern
+
+If workers return inconsistent outputs, the prompt is usually drifting in one of
+three ways:
+- different scope descriptions per target
+- vague ownership boundaries
+- mismatched output expectations
+
+Fix the prompt shape before adding more instructions.

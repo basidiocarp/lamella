@@ -1,15 +1,7 @@
 # Elasticsearch Hybrid Search
 
-Hybrid search with Elasticsearch dense vectors and BM25.
+Use this reference when dense-vector retrieval and BM25 both live in Elasticsearch.
 
-```python
-from elasticsearch import Elasticsearch
-from typing import List, Dict, Optional
-
-class ElasticsearchHybridSearch:
-    """Hybrid search with Elasticsearch and dense vectors."""
-// ... (138 lines trimmed)
-            }
-            for hit in response["hits"]["hits"]
-        ]
-```
+- treat lexical and dense retrieval as separate signals
+- keep mapping design and query logic aligned
+- benchmark recall and latency together

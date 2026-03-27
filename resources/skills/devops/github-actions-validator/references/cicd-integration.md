@@ -1,67 +1,39 @@
 # CI/CD Integration
 
-Integration patterns for GitHub Actions validation in CI/CD pipelines.
+Use this reference to decide where workflow validation belongs in the delivery
+pipeline.
 
-## Pre-commit Hook
+## Pre-Commit
 
-```bash
-#!/bin/bash
-# .git/hooks/pre-commit
+Good for:
+- fast checks on changed workflow files
+- catching typos before CI
+- enforcing local hygiene for frequent workflow edits
 
-# Run quick audit on changed agent/skill/command files
-changed_files=$(git diff --cached --name-only | grep -E "^\.github/workflows/")
-// ... (10 lines trimmed)
-        fi
-    done
-fi
-```
+Keep pre-commit validation lightweight and scoped to staged workflow files.
 
-## GitHub Actions Workflow
+## CI Workflow Validation
 
-```yaml
-name: Validate Workflows
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-// ... (12 lines trimmed)
-      - name: Validate workflows
-        run: |
-          actionlint -verbose .github/workflows/
-```
+The default pattern is a dedicated workflow-validation job that runs on:
+- pull requests touching `.github/workflows/**`
+- optional pushes to protected branches
 
-## GitLab CI Integration
+Typical tools:
+- `actionlint`
+- shell validation for `run:` steps
+- any repo-specific policy or security checks
 
-```yaml
-validate-workflows:
-  stage: lint
-  image: rhysd/actionlint:latest
-  script:
-    - actionlint .github/workflows/
-  only:
-    changes:
-      - .github/workflows/**
-```
+## Local Dry Runs
 
-## Advanced: Validation with act
+Use local dry-run tools such as `act` when you need a behavioral check in
+addition to static linting. Keep expectations realistic: not every hosted-runner
+behavior reproduces locally.
 
-```yaml
-name: Test Workflows Locally
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-// ... (15 lines trimmed)
-      - name: Dry-run workflows
-        run: |
-          act -n push --container-architecture linux/amd64
-```
+## Done Criteria
 
-## Done Criteria for CI/CD
+Validation is useful only if it answers:
+- which files were checked
+- which tool produced the finding
+- whether the issue was re-run after the fix
 
-Validation work is complete when all are true:
-- Trigger matched and correct validation mode selected
-- Each mapped error includes source reference and minimal quote
-- Each unmapped error is labeled `UNMAPPED` with exact output captured
-- Public action versions are verified, or marked `UNVERIFIED-OFFLINE`
-- Post-fix rerun executed and result reported
+Treat workflow validation as a standard CI gate, not an occasional manual audit.

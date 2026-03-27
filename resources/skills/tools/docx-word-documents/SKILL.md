@@ -146,6 +146,7 @@ python scripts/office/pack.py unpacked/ output.docx --original document.docx
 - `references/docx-js-guide.md` - Complete docx-js examples: page size, styles, lists, tables, images, hyperlinks, headers/footers
 - `references/xml-reference.md` - Schema compliance, tracked changes, comments, images
 - `references/editing-workflow.md` - Detailed unpack/edit/pack workflow
+- `references/ooxml.md` - Routing page for schema patterns, relationships, document helper usage, and tracked changes
 
 ---
 

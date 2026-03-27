@@ -2,9 +2,7 @@
 
 ## 1. Few-Shot Learning
 
-Teach the model by showing examples instead of explaining rules. Include 2-5 input-output pairs that demonstrate the desired behavior.
-
-**Example:**
+Teach the model by showing examples instead of only stating rules.
 
 ```markdown
 Extract key information from support tickets:
@@ -20,9 +18,7 @@ Now process: "Can't upload files larger than 10MB, getting timeout"
 
 ## 2. Chain-of-Thought Prompting
 
-Request step-by-step reasoning before the final answer.
-
-**Example:**
+Request structured reasoning before the final answer.
 
 ```markdown
 Analyze this bug report and determine root cause.
@@ -33,40 +29,36 @@ Think step by step:
 3. What changed recently that could cause this?
 4. What components are involved?
 5. What is the most likely root cause?
-
-Bug: "Users can't save drafts after the cache update deployed yesterday"
 ```
 
 ## 3. Prompt Optimization
 
-Systematically improve prompts through testing and refinement.
-
-**Example:**
+Improve prompts through measured revisions.
 
 ```markdown
-Version 1 (Simple): "Summarize this article"
-→ Result: Inconsistent length, misses key points
-
-Version 2 (Add constraints): "Summarize in 3 bullet points"
-→ Result: Better structure, but still misses nuance
-
-Version 3 (Add reasoning): "Identify the 3 main findings, then summarize each"
-→ Result: Consistent, accurate, captures key information
+Version 1: "Summarize this article"
+Version 2: "Summarize in 3 bullet points"
+Version 3: "Identify the 3 main findings, then summarize each"
 ```
 
 ## 4. Template Systems
 
-Build reusable prompt structures with variables and modular components.
-
-**Example:**
+Build reusable prompt structures with variables.
 
 ```python
-# Reusable code review template
 template = """
 Review this {language} code for {focus_area}.
 
 Code:
-// ... (10 lines trimmed)
+{code_block}
+
+Checklist:
+{checklist}
+"""
+
+prompt = template.format(
+    language="Python",
+    focus_area="security issues",
     code_block=user_code,
     checklist="1. SQL injection\n2. XSS risks\n3. Authentication"
 )
@@ -74,19 +66,15 @@ Code:
 
 ## 5. System Prompt Design
 
-Set global behavior and constraints that persist across the conversation.
-
-**Example:**
+Set persistent behavior and output expectations.
 
 ```markdown
 System: You are a senior backend engineer specializing in API design.
 
 Rules:
 - Always consider scalability and performance
-- Suggest RESTful patterns by default
 - Flag security concerns immediately
 - Provide code examples in Python
-- Use early return pattern
 
 Format responses as:
 1. Analysis
@@ -94,50 +82,3 @@ Format responses as:
 3. Code example
 4. Trade-offs
 ```
-
-## Integration Patterns
-
-### With RAG Systems
-
-```python
-# Combine retrieved context with prompt engineering
-prompt = f"""Given the following context:
-{retrieved_context}
-
-{few_shot_examples}
-
-Question: {user_question}
-
-Provide a detailed answer based solely on the context above. If the context doesn't contain enough information, explicitly state what's missing."""
-```
-
-### With Validation
-
-```python
-# Add self-verification step
-prompt = f"""{main_task_prompt}
-
-After generating your response, verify it meets these criteria:
-1. Answers the question directly
-2. Uses only information from provided context
-3. Cites specific sources
-4. Acknowledges any uncertainty
-
-If verification fails, revise your response."""
-```
-
-## Performance Optimization
-
-### Token Efficiency
-
-- Remove redundant words and phrases
-- Use abbreviations consistently after first definition
-- Consolidate similar instructions
-- Move stable content to system prompts
-
-### Latency Reduction
-
-- Minimize prompt length without sacrificing quality
-- Use streaming for long-form outputs
-- Cache common prompt prefixes
-- Batch similar requests when possible

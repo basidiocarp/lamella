@@ -1,81 +1,51 @@
 # Hallucination Detection Workflow
 
-Hallucinations in agent output can poison downstream context and propagate errors through multi-step workflows. This workflow detects hallucinations before they compound.
+Use this workflow before agent output becomes trusted context for later steps.
 
 ## When to Use
 
-- After any agent completes a task that produces factual claims
-- Before committing agent-generated code or documentation
-- When output will be used as input for subsequent agents
-- During review of long-running agent sessions
+- the output contains factual claims
+- another agent will consume the output next
+- the artifact will guide implementation, review, or documentation
 
-## Multi-Agent Verification Pattern
+## Workflow
 
-### Step 1: Generate Output
+### 1. Extract Claims
 
-Have the primary agent complete its task normally.
+Pull out factual or evidence-bearing claims from the output. Keep them atomic
+enough to verify one by one.
 
-### Step 2: Extract Claims
+### 2. Verify Claims
 
-Spawn a verification sub-agent with this prompt:
+For each claim, classify it as:
+- verified
+- false
+- unverifiable with current evidence
 
-```markdown
-<TASK>
-Extract all factual claims from the following output. List each claim on a separate line.
-</TASK>
+Use code, docs, tool outputs, or explicit sources. Do not rely on the original
+model’s confidence.
 
-<FOCUS_AREAS>
-// ... (15 lines trimmed)
-[FACT] JWT tokens expire after 24 hours by default
-[METRIC] The function has O(n) complexity
-</OUTPUT_FORMAT>
-```
+### 3. Assess Poisoning Risk
 
-### Step 3: Verify Claims
+Risk rises when:
+- false claims are numerous
+- unverifiable claims dominate
+- the output is about to feed another agent or workflow stage
 
-For groups of extracted claims, spawn a verification agent:
+### 4. Decide the Next Step
 
-```markdown
-<TASK>
-Verify this claim by checking the actual codebase and context.
-</TASK>
+- low risk: proceed
+- medium risk: review flagged claims manually
+- high risk: regenerate the output with stricter grounding requirements
 
-<CLAIM>
-// ... (12 lines trimmed)
-EVIDENCE: [What you found]
-CONFIDENCE: [HIGH | MEDIUM | LOW]
-</RESPONSE_FORMAT>
-```
+## Regeneration Rule
 
-### Step 4: Calculate Poisoning Risk
+If you regenerate, instruct the agent to:
+- verify claims before stating them
+- admit uncertainty instead of asserting
+- cite the supporting source or file location where possible
 
-Aggregate verification results:
+## Why It Matters
 
-```
-total_claims = number of claims extracted
-verified_count = claims marked VERIFIED
-false_count = claims marked FALSE
-unverifiable_count = claims marked UNVERIFIABLE
-
-poisoning_risk = (false_count * 2 + unverifiable_count) / total_claims
-```
-
-### Step 5: Decision Threshold
-
-- **Risk < 0.1**: Output is reliable, proceed normally
-- **Risk 0.1-0.3**: Review flagged claims manually before proceeding
-- **Risk > 0.3**: Regenerate output with more explicit grounding instructions:
-
-```markdown
-<REGENERATION_PROMPT>
-Previous output contained {false_count} false claims and {unverifiable_count} unverifiable claims.
-
-Specific issues:
-{list of FALSE and UNVERIFIABLE claims with evidence}
-
-Please regenerate your response. For each factual claim:
-1. Explicitly verify it using tools before stating it
-2. If you cannot verify, state "I cannot verify..." instead of asserting
-3. Cite the specific file/line/source for verifiable facts
-</REGENERATION_PROMPT>
-```
+Hallucinations become much more expensive once they enter shared context. The
+right time to catch them is before downstream agents treat them as facts.

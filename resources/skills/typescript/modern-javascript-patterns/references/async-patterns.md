@@ -3,137 +3,108 @@
 ## Promise Patterns
 
 ```javascript
-// Promise creation
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-const fetchWithTimeout = (url, timeout = 5000) => {
-  return Promise.race([
-// ... (8 lines trimmed)
-  const posts = await fetch(`/api/users/${userId}/posts`).then(r => r.json());
-  return { user, posts };
-};
+const fetchWithTimeout = async (url, timeout = 5000) => {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeout)
+
+  try {
+    const response = await fetch(url, { signal: controller.signal })
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    return await response.json()
+  } finally {
+    clearTimeout(timer)
+  }
+}
 ```
 
-## Async/Await Best Practices
+## Async / Await Best Practices
 
 ```javascript
-// Parallel execution with Promise.all
 const fetchAllData = async () => {
   const [users, posts, comments] = await Promise.all([
-    fetch('/api/users').then(r => r.json()),
-    fetch('/api/posts').then(r => r.json()),
-// ... (23 lines trimmed)
-  const [user, settings, history] = await Promise.all(promises);
-  return { user, settings, history };
-};
+    fetch('/api/users').then((r) => r.json()),
+    fetch('/api/posts').then((r) => r.json()),
+    fetch('/api/comments').then((r) => r.json()),
+  ])
+
+  return { users, posts, comments }
+}
 ```
 
-## Error Handling Strategies
+## Error Handling
 
 ```javascript
-// Try-catch with specific error handling
 const safeApiCall = async (url) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url)
     if (!response.ok) {
-// ... (41 lines trimmed)
+      return { ok: false, status: response.status, data: null }
     }
+
+    return { ok: true, status: response.status, data: await response.json() }
+  } catch (error) {
+    return { ok: false, status: 0, data: null, error }
   }
-};
+}
 ```
 
 ## Promise Combinators
 
 ```javascript
-// Promise.allSettled - wait for all, regardless of rejection
 const results = await Promise.allSettled([
   fetch('/api/users'),
   fetch('/api/posts'),
-  fetch('/api/invalid')
-// ... (19 lines trimmed)
+  fetch('/api/invalid'),
+])
+
+const firstAvailable = await Promise.any([
   fetchFromCache(),
-  fetchFromNetwork()
-]);
+  fetchFromNetwork(),
+])
 ```
 
 ## Async Generators
 
 ```javascript
-// Async generator for pagination
 async function* fetchPaginatedData(baseUrl) {
-  let page = 1;
-  let hasMore = true;
+  let page = 1
 
-// ... (30 lines trimmed)
-    }
+  while (true) {
+    const response = await fetch(`${baseUrl}?page=${page}`)
+    const { items, hasMore } = await response.json()
+    yield items
+    if (!hasMore) break
+    page += 1
   }
 }
 ```
 
-## Concurrent Queue Management
+## Concurrency Control
 
 ```javascript
-// Limit concurrent operations
 class AsyncQueue {
-  #queue = [];
-  #running = 0;
-  #maxConcurrent;
-// ... (23 lines trimmed)
-const results = await Promise.all(
-  urls.map(url => queue.run(() => fetch(url)))
-);
-```
+  #running = 0
+  #maxConcurrent
+  #queue = []
 
-## Event Loop Understanding
-
-```javascript
-// Microtasks vs Macrotasks
-console.log('1: Synchronous');
-
-setTimeout(() => console.log('2: Macrotask (setTimeout)'), 0);
-
-// ... (20 lines trimmed)
-
-  return results;
-};
-```
-
-## AbortController for Cancellation
-
-```javascript
-// Abort fetch requests
-const controller = new AbortController();
-const { signal } = controller;
-
-setTimeout(() => controller.abort(), 5000);
-// ... (21 lines trimmed)
-    throw error;
+  constructor(maxConcurrent = 4) {
+    this.#maxConcurrent = maxConcurrent
   }
-};
+
+  async run(task) {
+    if (this.#running >= this.#maxConcurrent) {
+      await new Promise((resolve) => this.#queue.push(resolve))
+    }
+
+    this.#running += 1
+    try {
+      return await task()
+    } finally {
+      this.#running -= 1
+      this.#queue.shift()?.()
+    }
+  }
+}
 ```
-
-## Stream Processing
-
-```javascript
-// Process ReadableStream
-const processStream = async (url) => {
-  const response = await fetch(url);
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-// ... (19 lines trimmed)
-
-const response = await fetch('/data');
-const transformed = response.body.pipeThrough(transformStream);
-```
-
-## Quick Reference
-
-| Pattern | Use Case | Example |
-|---------|----------|---------|
-| `Promise.all()` | Parallel, fail-fast | `await Promise.all([p1, p2])` |
-| `Promise.allSettled()` | Parallel, all results | `await Promise.allSettled([p1, p2])` |
-| `Promise.race()` | First to complete | `await Promise.race([p1, p2])` |
-| `Promise.any()` | First to succeed | `await Promise.any([p1, p2])` |
-| `async function*` | Async iteration | `for await (const x of gen())` |
-| `AbortController` | Cancellation | `fetch(url, { signal })` |
-| `queueMicrotask()` | Priority microtask | `queueMicrotask(fn)` |

@@ -1,128 +1,97 @@
 # Node.js CLI Development
 
-## Commander.js (Recommended)
-
-Modern, elegant CLI framework with TypeScript support.
+## Commander.js
 
 ```javascript
 #!/usr/bin/env node
-import { Command } from 'commander';
-import { version } from './package.json';
+import { Command } from 'commander'
 
-const program = new Command();
-// ... (40 lines trimmed)
-  .action((key, value) => setConfig(key, value));
-
-program.parse();
-```
-
-## Yargs (Alternative)
-
-Powerful argument parsing with middleware support.
-
-```javascript
-#!/usr/bin/env node
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-
-yargs(hideBin(process.argv))
-// ... (25 lines trimmed)
-  .demandCommand()
-  .help()
-  .parse();
-```
-
-## Interactive Prompts (Inquirer)
-
-Beautiful interactive prompts for user input.
-
-```javascript
-import inquirer from 'inquirer';
-
-// Text input
-const { name } = await inquirer.prompt([
-  {
-// ... (50 lines trimmed)
-    mask: '*',
-  },
-]);
-```
-
-## Terminal Output (Chalk)
-
-Colorful terminal output with proper TTY detection.
-
-```javascript
-import chalk from 'chalk';
-
-// Basic colors
-console.log(chalk.blue('Info: ') + 'Starting deployment...');
-console.log(chalk.green('Success: ') + 'Deployment complete');
-// ... (19 lines trimmed)
-};
-
-// Auto-detects TTY and CI environments
-```
-
-## Progress Indicators (Ora)
-
-Elegant terminal spinners and progress indicators.
-
-```javascript
-import ora from 'ora';
-
-// Simple spinner
-const spinner = ora('Loading...').start();
-await doWork();
-// ... (30 lines trimmed)
-  deployWeb().then(() => spinners.web.succeed()),
-  runMigrations().then(() => spinners.db.succeed()),
-]);
-```
-
-## Progress Bars (cli-progress)
-
-```javascript
-import cliProgress from 'cli-progress';
-
-// Single progress bar
-const bar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-bar.start(100, 0);
-// ... (20 lines trimmed)
-]);
-
-multibar.stop();
-```
-
-## File System Helpers
-
-```javascript
-import fs from 'fs-extra';
-import { globby } from 'globby';
-import path from 'path';
-
-// Copy with template
-// ... (10 lines trimmed)
-
-// Find files
-const files = await globby(['src/**/*.ts', '!src/**/*.test.ts']);
-```
-
-## Error Handling
-
-```javascript
-import { Command } from 'commander';
+const program = new Command()
 
 program
-  .command('deploy')
-  .action(async () => {
-// ... (22 lines trimmed)
-  console.log('\nOperation cancelled');
-  process.exit(130);
-});
+  .name('mycli')
+  .description('Project automation CLI')
+  .version('1.0.0')
+
+program
+  .command('config:set')
+  .argument('<key>')
+  .argument('<value>')
+  .action((key, value) => {
+    console.log(`Set ${key}=${value}`)
+  })
+
+program.parse()
 ```
 
-## Package.json Setup
+## Yargs
+
+```javascript
+#!/usr/bin/env node
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+
+yargs(hideBin(process.argv))
+  .command(
+    'deploy <env>',
+    'Deploy the application',
+    (command) => command.positional('env', { type: 'string', demandOption: true }),
+    async (argv) => {
+      console.log(`Deploying to ${argv.env}`)
+    }
+  )
+  .demandCommand()
+  .help()
+  .parse()
+```
+
+## Interactive Prompts
+
+```javascript
+import inquirer from 'inquirer'
+
+const answers = await inquirer.prompt([
+  {
+    type: 'input',
+    name: 'projectName',
+    message: 'Project name:',
+  },
+  {
+    type: 'confirm',
+    name: 'useTypeScript',
+    message: 'Use TypeScript?',
+    default: true,
+  },
+])
+```
+
+## Terminal Output
+
+```javascript
+import chalk from 'chalk'
+
+console.log(chalk.blue('Info:') + ' Starting deployment...')
+console.log(chalk.green('Success:') + ' Deployment complete')
+console.error(chalk.red('Error:') + ' Missing credentials')
+```
+
+## Progress Indicators
+
+```javascript
+import ora from 'ora'
+
+const spinner = ora('Running migrations...').start()
+
+try {
+  await runMigrations()
+  spinner.succeed('Migrations complete')
+} catch (error) {
+  spinner.fail('Migration failed')
+  throw error
+}
+```
+
+## Package Setup
 
 ```json
 {
@@ -130,22 +99,27 @@ program
   "version": "1.0.0",
   "type": "module",
   "bin": {
-// ... (14 lines trimmed)
-    "ora": "^7.0.0"
+    "mycli": "./bin/cli.js"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^12.1.0",
+    "inquirer": "^12.0.0",
+    "ora": "^8.1.0"
   }
 }
 ```
 
-## Testing CLIs
+## Testing
 
 ```javascript
-import { execaCommand } from 'execa';
-import { describe, it, expect } from 'vitest';
+import { execaCommand } from 'execa'
+import { describe, expect, it } from 'vitest'
 
 describe('mycli', () => {
   it('shows version', async () => {
-// ... (12 lines trimmed)
-    ).rejects.toThrow();
-  });
-});
+    const { stdout } = await execaCommand('node ./bin/cli.js --version')
+    expect(stdout).toContain('1.0.0')
+  })
+})
 ```

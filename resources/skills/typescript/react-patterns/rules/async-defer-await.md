@@ -48,7 +48,13 @@ async function updateResource(resourceId: string, userId: string) {
   const permissions = await fetchPermissions(userId);
   const resource = await getResource(resourceId);
 
-// ... (24 lines trimmed)
+  if (!resource.requiresPermissionCheck) {
+    return updateResourceData(resource, null);
+  }
+
+  if (!permissions.canEdit) {
+    throw new Error("Forbidden");
+  }
 
   return await updateResourceData(resource, permissions);
 }

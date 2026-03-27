@@ -4,17 +4,30 @@
 
 ## Analysis Process
 
-Analyze the task systematically using Zero-shot Chain-of-Thought reasoning:
+Analyze the task systematically using zero-shot chain-of-thought reasoning:
 
-```
+```text
 Let me analyze this task step by step to decompose it into sequential subtasks:
 
-1. **Task Understanding**
-   "What is the overall objective?"
-   - What is being asked?
-// ... (22 lines trimmed)
-   - Action: What transformation/change does it make?
-   - Output: What does this step produce?
+1. Task Understanding
+   - What is the overall objective?
+   - What is being asked to change?
+   - What counts as success?
+
+2. Dependency Mapping
+   - Which parts of the system must change first?
+   - Which later steps rely on earlier outputs?
+   - Where could sequencing mistakes create rework?
+
+3. Boundary Definition
+   - What files, services, or modules are in scope?
+   - What should stay untouched?
+   - Which risks require explicit verification?
+
+4. Step Design
+   - Input: What does this step need?
+   - Action: What transformation does it make?
+   - Output: What should exist after the step?
    - Verification: How do we know it succeeded?
 ```
 
@@ -24,7 +37,7 @@ Let me analyze this task step by step to decompose it into sequential subtasks:
 |---------|------------------------|---------|
 | Interface change | 1. Update interface, 2. Update implementations, 3. Update consumers | "Change return type of getUser" |
 | Feature addition | 1. Add core logic, 2. Add integration points, 3. Add API layer | "Add caching to UserService" |
-| Refactoring | 1. Extract/modify core, 2. Update internal references, 3. Update external references | "Extract helper class from Service" |
+| Refactoring | 1. Extract or modify core, 2. Update internal references, 3. Update external references | "Extract helper class from Service" |
 | Bug fix with impact | 1. Fix root cause, 2. Fix dependent issues, 3. Update tests | "Fix calculation error affecting reports" |
 | Multi-layer change | 1. Data layer, 2. Business layer, 3. API layer, 4. Client layer | "Add new field to User entity" |
 
@@ -36,7 +49,18 @@ Let me analyze this task step by step to decompose it into sequential subtasks:
 ### Original Task
 {task_description}
 
-// ... (8 lines trimmed)
+### Sequential Steps
+1. **Step 1: {name}**
+   - Input: {required context}
+   - Action: {change to make}
+   - Output: {expected artifact}
+   - Verification: {how to check}
+
+2. **Step 2: {name}**
+   - Input: {depends on step 1}
+   - Action: {change to make}
+   - Output: {expected artifact}
+   - Verification: {how to check}
 
 ### Dependency Graph
 Step 1 ─→ Step 2 ─→ Step 3 ─→ ...
@@ -44,8 +68,8 @@ Step 1 ─→ Step 2 ─→ Step 3 ─→ ...
 
 ## Decomposition Guidelines
 
-- **Be explicit:** Each subtask should have a clear, verifiable outcome
-- **Define verification points:** What should the judge check for each step?
-- **Minimize steps:** Combine related work; don't over-decompose
-- **Validate dependencies:** Ensure each step has what it needs from previous steps
-- **Plan context:** Identify what context needs to pass between steps
+- **Be explicit:** Each subtask should have a clear, verifiable outcome.
+- **Define verification points:** State what the judge should check for each step.
+- **Minimize steps:** Combine related work; do not over-decompose.
+- **Validate dependencies:** Ensure each step has what it needs from previous steps.
+- **Plan context:** Identify what context must pass between steps.

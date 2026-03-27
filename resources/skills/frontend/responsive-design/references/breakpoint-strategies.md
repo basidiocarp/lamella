@@ -1,210 +1,124 @@
 # Breakpoint Strategies
 
-## Overview
+Responsive breakpoints should follow content pressure, not device marketing names.
 
-Effective breakpoint strategies focus on content needs rather than device sizes. Modern responsive design uses fewer, content-driven breakpoints combined with fluid techniques.
-
-## Mobile-First Approach
-
-### Core Philosophy
-
-Start with the smallest screen, then progressively enhance for larger screens.
+## Mobile-First Baseline
 
 ```css
-/* Base styles (mobile first) */
 .component {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   padding: 1rem;
-// ... (12 lines trimmed)
-    padding: 2rem;
+}
+
+@media (min-width: 48rem) {
+  .component {
+    flex-direction: row;
+    padding: 1.5rem;
   }
 }
 ```
 
-### Benefits
+Why mobile-first works:
+- smaller screens get the default rules
+- larger layouts progressively enhance
+- the cascade stays easier to reason about
 
-1. **Performance**: Mobile devices load only necessary CSS
-2. **Progressive Enhancement**: Features add rather than subtract
-3. **Content Priority**: Forces focus on essential content first
-4. **Simplicity**: Easier to reason about cascading styles
+## Keep the Scale Small
 
-## Common Breakpoint Scales
-
-### Tailwind CSS Default
+Typical practical scale:
 
 ```css
-/* Tailwind breakpoints */
-/* sm: 640px  - Landscape phones */
-/* md: 768px  - Tablets */
-/* lg: 1024px - Laptops */
-/* xl: 1280px - Desktops */
-// ... (14 lines trimmed)
-@media (min-width: 1536px) {
-  /* 2xl */
-}
+@media (min-width: 40rem) { /* small layout shift */ }
+@media (min-width: 64rem) { /* major desktop layout */ }
+@media (min-width: 80rem) { /* wide-screen refinement */ }
 ```
 
-### Bootstrap 5
+You usually do not need a dozen breakpoints. Add one only when content actually breaks.
+
+## Content-Driven Breakpoints
+
+Use breakpoints when:
+- a line length becomes unreadable
+- cards no longer fit comfortably
+- navigation wraps badly
+- a dense layout needs an extra column
+
+Bad pattern:
 
 ```css
-/* Bootstrap breakpoints */
-/* sm: 576px */
-/* md: 768px */
-/* lg: 992px */
-/* xl: 1200px */
-// ... (14 lines trimmed)
-@media (min-width: 1400px) {
-  /* xxl */
-}
+/* "tablet breakpoint" because a framework said so */
+@media (min-width: 768px) { ... }
 ```
 
-### Minimalist Scale
+Better pattern:
 
 ```css
-/* Simplified 3-breakpoint system */
-/* Base: Mobile (< 600px) */
-/* Medium: Tablets and small laptops (600px - 1024px) */
-/* Large: Desktops (> 1024px) */
-
-// ... (8 lines trimmed)
-@media (min-width: 1024px) {
-  /* Large */
-}
-```
-
-## Content-Based Breakpoints
-
-### Finding Natural Breakpoints
-
-Instead of using device-based breakpoints, identify where your content naturally needs to change.
-
-```css
-/* Bad: Device-based thinking */
-@media (min-width: 768px) {
-  /* iPad breakpoint */
-}
-
-// ... (12 lines trimmed)
+/* add a column when the card rail has room */
+@media (min-width: 52rem) {
+  .cards {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 ```
 
-### Testing Content Breakpoints
-
-```javascript
-// Find where content breaks
-function findBreakpoints(selector) {
-  const element = document.querySelector(selector);
-  const breakpoints = [];
-
-// ... (8 lines trimmed)
-
-  return breakpoints;
-}
-```
-
 ## Design Token Integration
-
-### Breakpoint Tokens
 
 ```css
 :root {
-  /* Breakpoint values */
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-// ... (14 lines trimmed)
-  margin-inline: auto;
-  padding-inline: var(--space-4);
+  --bp-sm: 40rem;
+  --bp-lg: 64rem;
+  --bp-xl: 80rem;
 }
-```
 
-### JavaScript Integration
-
-```typescript
-// Breakpoint constants
-export const breakpoints = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-// ... (39 lines trimmed)
-            : "base",
-  };
-}
-```
-
-## Feature Queries
-
-### @supports for Progressive Enhancement
-
-```css
-/* Feature detection instead of browser detection */
-@supports (display: grid) {
-  .layout {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-// ... (24 lines trimmed)
-    margin-left: 1rem;
+@media (min-width: 64rem) {
+  .shell {
+    max-width: 72rem;
+    margin-inline: auto;
   }
 }
 ```
 
-### Combining Feature and Size Queries
+Keep tokens centralized so components and docs speak the same layout language.
 
-```css
-/* Only apply grid layout if supported and screen is large enough */
-@supports (display: grid) {
-  @media (min-width: 768px) {
-    .layout {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-    }
-  }
-}
-```
-
-## Responsive Patterns by Component
+## Common Component Patterns
 
 ### Navigation
 
 ```css
 .nav {
-  /* Mobile: vertical stack */
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
-// ... (16 lines trimmed)
+
+@media (min-width: 48rem) {
+  .nav {
     flex-direction: row;
+    align-items: center;
   }
 }
 ```
 
-### Cards Grid
+### Card Grid
 
 ```css
 .cards {
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   grid-template-columns: 1fr;
 }
-// ... (22 lines trimmed)
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-}
-```
 
-### Hero Section
-
-```css
-.hero {
-  min-height: 50vh;
-  padding: var(--space-lg) var(--space-md);
-  text-align: center;
+@media (min-width: 48rem) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-// ... (28 lines trimmed)
-    max-width: 50%;
+
+@media (min-width: 72rem) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 ```
@@ -212,62 +126,18 @@ export const breakpoints = {
 ### Tables
 
 ```css
-/* Mobile: cards or horizontal scroll */
-.table-container {
+.table-wrap {
   overflow-x: auto;
 }
-
-// ... (31 lines trimmed)
-    font-weight: 600;
-  }
-}
 ```
 
-## Print Styles
+On narrow screens, scrolling is often more honest than collapsing a real table into a fake card layout.
 
-```css
-@media print {
-  /* Remove non-essential elements */
-  .nav,
-  .sidebar,
-  .footer,
-// ... (32 lines trimmed)
-    font-size: 0.8em;
-  }
-}
+## Default Rule
+
+```text
+Start fluid
+Add as few breakpoints as possible
+Name them by layout intent, not device type
+Use a breakpoint only when the content proves it is needed
 ```
-
-## Preference Queries
-
-```css
-/* Dark mode preference */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1a1a;
-    --text: #f0f0f0;
-// ... (34 lines trimmed)
-    display: block;
-  }
-}
-```
-
-## Testing Breakpoints
-
-```javascript
-// Automated breakpoint testing
-async function testBreakpoints(page, breakpoints) {
-  const results = [];
-
-  for (const [name, width] of Object.entries(breakpoints)) {
-// ... (26 lines trimmed)
-
-  return results;
-}
-```
-
-## Resources
-
-- [Tailwind CSS Breakpoints](https://tailwindcss.com/docs/responsive-design)
-- [The 100% Correct Way to Do CSS Breakpoints](https://www.freecodecamp.org/news/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862/)
-- [Modern CSS Solutions](https://moderncss.dev/)
-- [Defensive CSS](https://defensivecss.dev/)

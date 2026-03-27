@@ -20,7 +20,17 @@ description: Configures Turborepo for efficient monorepo builds with local and r
   "globalDependencies": [".env", ".env.local"],
   "globalEnv": ["NODE_ENV"],
   "pipeline": {
-// ... (11 lines trimmed)
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**", "build/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
     "dev": { "cache": false, "persistent": true }
   }
 }

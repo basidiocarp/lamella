@@ -1,329 +1,94 @@
 # REST API Best Practices
 
-## URL Structure
+Use this as the quick REST checklist when designing or reviewing an API.
 
-### Resource Naming
+## URL Design
 
+Prefer nouns and shallow hierarchies.
+
+```text
+GET  /api/users
+GET  /api/users/{id}
+GET  /api/users/{id}/orders
+GET  /api/orders/{id}
 ```
-# Good - Plural nouns
-GET /api/users
-GET /api/orders
-GET /api/products
 
-# Bad - Verbs or mixed conventions
-GET /api/getUser
-GET /api/user  (inconsistent singular)
+Avoid verbs and deep nesting:
+
+```text
+GET  /api/getUser
 POST /api/createOrder
+GET  /api/users/{id}/orders/{orderId}/items/{itemId}/reviews
 ```
 
-### Nested Resources
+## Methods and Status Codes
 
-```
-# Shallow nesting (preferred)
-GET /api/users/{id}/orders
-GET /api/orders/{id}
+Use method semantics consistently:
 
-# Deep nesting (avoid)
-GET /api/users/{id}/orders/{orderId}/items/{itemId}/reviews
-# Better:
-GET /api/order-items/{id}/reviews
-```
-
-## HTTP Methods and Status Codes
-
-### GET - Retrieve Resources
-
-```
-GET /api/users              → 200 OK (with list)
-GET /api/users/{id}         → 200 OK or 404 Not Found
-GET /api/users?page=2       → 200 OK (paginated)
+```text
+GET    /api/users/{id}   -> 200 or 404
+POST   /api/users        -> 201 with Location header
+PUT    /api/users/{id}   -> 200 for full replacement
+PATCH  /api/users/{id}   -> 200 for partial update
+DELETE /api/users/{id}   -> 204 when deleted
 ```
 
-### POST - Create Resources
+Use `422` for validation failures and `409` for state conflicts.
 
-```
-POST /api/users
-  Body: {"name": "John", "email": "john@example.com"}
-  → 201 Created
-  Location: /api/users/123
-  Body: {"id": "123", "name": "John", ...}
+## Query Parameters
 
-POST /api/users (validation error)
-  → 422 Unprocessable Entity
-  Body: {"errors": [...]}
-```
+Put filters, sorting, and pagination in query parameters:
 
-### PUT - Replace Resources
-
-```
-PUT /api/users/{id}
-  Body: {complete user object}
-  → 200 OK (updated)
-  → 404 Not Found (doesn't exist)
-
-# Must include ALL fields
-```
-
-### PATCH - Partial Update
-
-```
-PATCH /api/users/{id}
-  Body: {"name": "Jane"}  (only changed fields)
-  → 200 OK
-  → 404 Not Found
-```
-
-### DELETE - Remove Resources
-
-```
-DELETE /api/users/{id}
-  → 204 No Content (deleted)
-  → 404 Not Found
-  → 409 Conflict (can't delete due to references)
-```
-
-## Filtering, Sorting, and Searching
-
-### Query Parameters
-
-```
-# Filtering
-GET /api/users?status=active
-GET /api/users?role=admin&status=active
-
-// ... (9 lines trimmed)
-# Field selection (sparse fieldsets)
+```text
+GET /api/users?status=active&role=admin
+GET /api/users?sort=-created_at
 GET /api/users?fields=id,name,email
-```
-
-## Pagination Patterns
-
-### Offset-Based Pagination
-
-```python
 GET /api/users?page=2&page_size=20
-
-Response:
-{
-  "items": [...],
-  "page": 2,
-  "page_size": 20,
-  "total": 150,
-  "pages": 8
-}
 ```
 
-### Cursor-Based Pagination (for large datasets)
+Use cursor pagination for large or append-heavy datasets:
 
-```python
-GET /api/users?limit=20&cursor=eyJpZCI6MTIzfQ
-
-Response:
+```json
 {
-  "items": [...],
+  "items": [],
   "next_cursor": "eyJpZCI6MTQzfQ",
   "has_more": true
 }
 ```
 
-### Link Header Pagination (RESTful)
+## Versioning
 
-```
-GET /api/users?page=2
+Pick one versioning strategy and stick to it. URL versioning is usually the
+least surprising:
 
-Response Headers:
-Link: <https://api.example.com/users?page=3>; rel="next",
-      <https://api.example.com/users?page=1>; rel="prev",
-      <https://api.example.com/users?page=1>; rel="first",
-      <https://api.example.com/users?page=8>; rel="last"
-```
-
-## Versioning Strategies
-
-### URL Versioning (Recommended)
-
-```
+```text
 /api/v1/users
 /api/v2/users
-
-Pros: Clear, easy to route
-Cons: Multiple URLs for same resource
 ```
 
-### Header Versioning
+## Rate Limits and Auth
 
-```
-GET /api/users
-Accept: application/vnd.api+json; version=2
+Expose rate-limit headers and return `429` with `Retry-After` when necessary.
+Use `401` for missing or invalid credentials and `403` for valid credentials
+without permission.
 
-Pros: Clean URLs
-Cons: Less visible, harder to test
-```
+## Error Shape
 
-### Query Parameter
-
-```
-GET /api/users?version=2
-
-Pros: Easy to test
-Cons: Optional parameter can be forgotten
-```
-
-## Rate Limiting
-
-### Headers
-
-```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 742
-X-RateLimit-Reset: 1640000000
-
-Response when limited:
-429 Too Many Requests
-Retry-After: 3600
-```
-
-### Implementation Pattern
-
-```python
-from fastapi import HTTPException, Request
-from datetime import datetime, timedelta
-
-class RateLimiter:
-    def __init__(self, calls: int, period: int):
-// ... (28 lines trimmed)
-            headers={"Retry-After": "60"}
-        )
-    return {"users": [...]}
-```
-
-## Authentication and Authorization
-
-### Bearer Token
-
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
-
-401 Unauthorized - Missing/invalid token
-403 Forbidden - Valid token, insufficient permissions
-```
-
-### API Keys
-
-```
-X-API-Key: your-api-key-here
-```
-
-## Error Response Format
-
-### Consistent Structure
+Keep one consistent error contract:
 
 ```json
 {
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Request validation failed",
-// ... (9 lines trimmed)
+  "error": "ValidationError",
+  "message": "Email is required",
+  "details": {
+    "field": "email"
   }
 }
 ```
 
-### Status Code Guidelines
+## Practical Rules
 
-- `200 OK`: Successful GET, PATCH, PUT
-- `201 Created`: Successful POST
-- `204 No Content`: Successful DELETE
-- `400 Bad Request`: Malformed request
-- `401 Unauthorized`: Authentication required
-- `403 Forbidden`: Authenticated but not authorized
-- `404 Not Found`: Resource doesn't exist
-- `409 Conflict`: State conflict (duplicate email, etc.)
-- `422 Unprocessable Entity`: Validation errors
-- `429 Too Many Requests`: Rate limited
-- `500 Internal Server Error`: Server error
-- `503 Service Unavailable`: Temporary downtime
-
-## Caching
-
-### Cache Headers
-
-```
-# Client caching
-Cache-Control: public, max-age=3600
-
-# No caching
-Cache-Control: no-cache, no-store, must-revalidate
-
-# Conditional requests
-ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"
-If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"
-→ 304 Not Modified
-```
-
-## Bulk Operations
-
-### Batch Endpoints
-
-```python
-POST /api/users/batch
-{
-  "items": [
-    {"name": "User1", "email": "user1@example.com"},
-// ... (9 lines trimmed)
-  ]
-}
-```
-
-## Idempotency
-
-### Idempotency Keys
-
-```
-POST /api/orders
-Idempotency-Key: unique-key-123
-
-If duplicate request:
-→ 200 OK (return cached response)
-```
-
-## CORS Configuration
-
-```python
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://example.com"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-
-## Documentation with OpenAPI
-
-```python
-from fastapi import FastAPI
-
-app = FastAPI(
-    title="My API",
-    description="API for managing users",
-// ... (20 lines trimmed)
-    - Account status
-    """
-    pass
-```
-
-## Health and Monitoring Endpoints
-
-```python
-@app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy",
-        "version": "1.0.0",
-// ... (10 lines trimmed)
-            "external_api": await check_external_api()
-        }
-    }
-```
+- Design endpoints around resources, not controller methods.
+- Always document pagination, filtering, and sort behavior.
+- Do not use one-off error formats per endpoint.
+- Version before you need it, not after a breaking change ships.

@@ -1,83 +1,56 @@
-## Database Patterns
+# Data Layer Patterns
 
-### Query Optimization
+Use this page for repository boundaries, query shape, transactions, and cache
+placement.
 
-```typescript
-// ✅ GOOD: Select only needed columns
-const { data } = await supabase
-  .from('markets')
-  .select('id, name, status, volume')
-  .eq('status', 'active')
-  .order('volume', { ascending: false })
-  .limit(10)
+## Query Shape
 
-// ❌ BAD: Select everything
-const { data } = await supabase
-  .from('markets')
-  .select('*')
-```
-
-### N+1 Query Prevention
+- select only the columns needed for the response or next service step
+- batch related lookups to avoid N+1 access patterns
+- keep query builders close to repositories, not controllers
 
 ```typescript
-// ❌ BAD: N+1 query problem
-const markets = await getMarkets()
-for (const market of markets) {
-  market.creator = await getUser(market.creator_id)  // N queries
-}
-
-// ✅ GOOD: Batch fetch
-const markets = await getMarkets()
-const creatorIds = markets.map(m => m.creator_id)
-const creators = await getUsers(creatorIds)  // 1 query
-const creatorMap = new Map(creators.map(c => [c.id, c]))
-
-markets.forEach(market => {
-  market.creator = creatorMap.get(market.creator_id)
+const markets = await db.market.findMany({
+  select: { id: true, name: true, status: true, volume: true },
+  where: { status: 'active' },
+  orderBy: { volume: 'desc' },
+  take: 10,
 })
 ```
 
-### Transaction Pattern
+## Transactions
+
+- open the transaction at the service boundary that owns the full write flow
+- keep external side effects outside the transaction unless you have an outbox
+- always release pooled clients in `finally`
 
 ```typescript
-async function createMarketWithPosition(
-  marketData: CreateMarketDto,
-  positionData: CreatePositionDto
-) {
-  // Use Supabase transaction
-// ... (25 lines trimmed)
-    RETURN jsonb_build_object('success', false, 'error', SQLERRM);
-END;
-$$;
+await db.$transaction(async (tx) => {
+  const market = await tx.market.create({ data: marketData })
+  await tx.position.create({
+    data: { ...positionData, marketId: market.id },
+  })
+})
 ```
 
+## Caching
 
-## Caching Strategies
-
-### Redis Caching Layer
+- cache reads with stable keys and short TTLs
+- invalidate by business entity, not by broad wildcards
+- prefer repository decorators or read services for cache ownership
 
 ```typescript
-class CachedMarketRepository implements MarketRepository {
-  constructor(
-    private baseRepo: MarketRepository,
-    private redis: RedisClient
-  ) {}
-// ... (21 lines trimmed)
-    await this.redis.del(`market:${id}`)
-  }
-}
+const cacheKey = `market:${id}`
+const cached = await redis.get(cacheKey)
+if (cached) return JSON.parse(cached) as MarketView
+
+const market = await repo.findById(id)
+await redis.set(cacheKey, JSON.stringify(market), 'EX', 60)
+return market
 ```
 
-### Cache-Aside Pattern
+## Practical Boundaries
 
-```typescript
-async function getMarketWithCache(id: string): Promise<Market> {
-  const cacheKey = `market:${id}`
-
-  // Try cache
-  const cached = await redis.get(cacheKey)
-// ... (9 lines trimmed)
-
-  return market
-}
-```
+- repositories should hide persistence details, not business decisions
+- service code may combine repositories, cache, and transactions
+- keep SQL-heavy optimizations documented beside the repository that needs them

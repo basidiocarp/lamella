@@ -216,7 +216,26 @@ examples:
 
 - [mistake 1]: [why it's problematic]
 - [mistake 2]: [specific issues caused]
-// ... (64 lines trimmed)
+
+**Output format**
+- Add short, durable bullets to `CLAUDE.md`
+- Prefer principles and repeatable workflows over one-off anecdotes
+- Cite the trigger or failure mode that justified the update
+
+**Keep**
+- Things the agent should reliably do next time
+- Constraints, guardrails, and repo-specific conventions
+- Concise examples only when they clarify a rule
+
+**Do not keep**
+- Temporary debugging notes
+- User-specific preferences that conflict with established docs
+- Redundant restatements of existing guidance
+
+**Update discipline**
+1. Deduplicate against existing bullets first.
+2. Merge related lessons instead of appending noise.
+3. Prefer rewriting a stale bullet over adding a near-duplicate.
 
 ## Usage
 

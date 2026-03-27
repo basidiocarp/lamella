@@ -1,46 +1,36 @@
 # Summary Template
 
-Standardize SUMMARY.md format for phase completion:
+Use this structure for `SUMMARY.md` when a phase completes.
 
 ```markdown
 # Phase [X]: [Name] Summary
 
-**[Substantive one-liner describing outcome - NOT "phase complete" or "implementation finished"]**
+**[One sentence describing what shipped]**
 
 ## Accomplishments
-// ... (49 lines trimmed)
+- [completed outcome]
+- [completed outcome]
+
+## Verification
+- [test or validation run]
+- [manual check if relevant]
+
+## Notes
+- [key implementation or migration note]
+
 ---
 *Phase: XX-name*
-*Completed: [date]*
+*Completed: YYYY-MM-DD*
 ```
 
-<one_liner_rules>
-The one-liner MUST be substantive:
+## One-Liner Rule
 
-**Good:**
-- "JWT auth with refresh rotation using jose library"
-- "Prisma schema with User, Session, and Product models"
-- "Dashboard with real-time metrics via Server-Sent Events"
+The opening sentence must describe what shipped, not just that work is done.
 
-**Bad:**
-- "Phase complete"
-- "Authentication implemented"
-- "Foundation finished"
-- "All tasks done"
+Good:
+- `JWT auth with refresh rotation and protected API middleware`
+- `Realtime dashboard backed by server-sent events`
 
-The one-liner should tell someone what actually shipped.
-</one_liner_rules>
-
-<example>
-```markdown
-# Phase 1: Foundation Summary
-
-**JWT auth with refresh rotation using jose library, Prisma User model, and protected API middleware**
-
-## Accomplishments
-// ... (55 lines trimmed)
----
-*Phase: 01-foundation*
-*Completed: 2025-01-15*
-```
-</example>
+Bad:
+- `Phase complete`
+- `Implementation finished`

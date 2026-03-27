@@ -1,52 +1,49 @@
 # Page Transitions
 
-CSS-only transitions, Framer Motion patterns, and staggered animations for page/route changes.
+Use page transitions to preserve continuity between screens, not to show off the
+animation system.
 
-## CSS-only Transitions
+## Transition Approaches
 
-```css
-/* View Transitions API (Chrome 111+) */
-@view-transition {
-  navigation: auto;
-}
+### CSS or Native View Transitions
 
-// ... (14 lines trimmed)
-::view-transition-new(hero) {
-  animation-duration: 0.5s;
-}
-```
+Good for:
+- simple fades
+- shared-element continuity
+- low-overhead route changes
 
-## Framer Motion
+Use when the app needs lightweight transitions with minimal runtime logic.
 
-```tsx
-import { motion, AnimatePresence } from 'framer-motion';
+### Framer Motion
 
-// Fade transition
-const pageVariants = {
-  initial: { opacity: 0 },
-// ... (52 lines trimmed)
-    </>
-  );
-}
-```
+Good for:
+- route-level enter and exit states
+- shared layout choreography
+- staggered page sections
 
-## Staggered Animations
+Use it when the app already depends on motion primitives and the transition needs
+more control than CSS alone.
 
-```tsx
-// Framer Motion stagger
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-// ... (36 lines trimmed)
-    </li>
-  ))}
-</ul>
-```
+## Good Transition Patterns
 
-```css
-.stagger-list li {
-  animation: fadeInUp 0.5s ease forwards;
-  animation-delay: calc(var(--i) * 0.1s);
-}
-```
+- fade plus slight vertical movement for route entry
+- shared hero or image continuity between list and detail
+- staggered reveal for a small set of page sections
+
+Keep the pattern consistent across the product.
+
+## Timing Rules
+
+- route transitions should feel faster than modals or onboarding sequences
+- the outgoing page should not linger longer than necessary
+- staggered entry is helpful only for a few meaningful children
+
+## Anti-Patterns
+
+- transitions that block interaction for too long
+- route animations that change direction or style on every screen
+- large staggered sequences for utility pages
+- motion with no reduced-motion fallback
+
+The best page transition makes navigation feel continuous without drawing more
+attention than the content.

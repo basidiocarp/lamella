@@ -16,9 +16,9 @@ Use session handoff template when:
 - Preserving important context before compaction
 
 ```bash
-cp templates/session/SESSION-HANDOFF-TEMPLATE.md .claude/HANDOFF.md
+cp resources/templates/session/SESSION-HANDOFF-TEMPLATE.md .claude/HANDOFF.md
 ```
 
 ## See Also
 
-- [Session scripts](../../scripts/session/)
+- [Context handoff skill](../../skills/workflow/context-handoff/SKILL.md)

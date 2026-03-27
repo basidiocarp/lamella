@@ -4,14 +4,14 @@ Step-by-step guide for creating production-quality agents.
 
 ## Step 1: Gather Requirements
 
-Ask user (if not provided):
+Ask the user, if it is not already clear:
 
-1. **Agent name**: What should the agent be called? (kebab-case)
+1. **Agent name**: What should the agent be called? Use kebab-case.
 2. **Purpose**: What problem does this agent solve?
 3. **Triggers**: When should Claude use this agent?
 4. **Responsibilities**: What are the core tasks?
-5. **Tools needed**: Read-only? Can modify files?
-6. **Model**: Need maximum capability (opus) or balanced (sonnet/inherit)?
+5. **Tools needed**: Read-only, editing, or shell access?
+6. **Model**: Need maximum capability or balanced cost?
 
 ## Step 2: Create Agent File
 
@@ -27,11 +27,11 @@ touch ${CLAUDE_PLUGIN_ROOT}/agents/<agent-name>.md
 
 Generate frontmatter with:
 
-- Unique, descriptive name
-- Description with triggering conditions and examples
-- Appropriate model setting
-- Distinct color
-- Minimal required tools
+- unique, descriptive name
+- description with triggering conditions and examples
+- appropriate model setting
+- distinct color
+- minimal required tools
 
 ### Model Selection Guide
 
@@ -57,14 +57,14 @@ tools: ["Read", "Bash", "Grep"]
 
 ## Step 4: Write System Prompt
 
-Create system prompt following the template:
+Create the system prompt with these sections:
 
-1. Role statement with specialization
-2. Core responsibilities (numbered list)
-3. Analysis/work process (step-by-step)
-4. Quality standards (measurable criteria)
-5. Output format (specific structure)
-6. Edge cases (how to handle special situations)
+1. role statement with specialization
+2. core responsibilities
+3. workflow
+4. boundaries
+5. output format
+6. quality bar
 
 ### System Prompt Template
 
@@ -72,9 +72,29 @@ Create system prompt following the template:
 You are [role] specializing in [domain].
 
 **Your Core Responsibilities:**
-1. [Primary responsibility - what the agent MUST do]
+1. [Primary responsibility]
 2. [Secondary responsibility]
-// ... (22 lines trimmed)
+3. [Tertiary responsibility]
+
+**Scope**
+- [What the agent should handle]
+- [What it should not handle]
+
+**Workflow**
+1. [How the agent starts analysis]
+2. [How it gathers evidence]
+3. [How it decides what matters]
+4. [How it presents results]
+
+**Output Format**
+- [Section 1]
+- [Section 2]
+- [Section 3]
+
+**Quality Bar**
+- [Verification rule 1]
+- [Verification rule 2]
+
 **What NOT to Do:**
 - [Anti-pattern 1]
 - [Anti-pattern 2]
@@ -91,18 +111,18 @@ scripts/validate-agent.sh agents/<agent-name>.md
 Check:
 
 - [ ] Frontmatter parses correctly
-- [ ] All required fields present
+- [ ] All required fields are present
 - [ ] Examples are complete
-- [ ] System prompt is comprehensive
+- [ ] System prompt is explicit and scoped
 
 ## Step 6: Test Triggering
 
-Test with various scenarios:
+Test with:
 
-1. Explicit requests matching examples
-2. Implicit needs where agent should activate
-3. Scenarios where agent should NOT activate
-4. Edge cases and variations
+1. explicit requests matching examples
+2. implicit needs where the agent should activate
+3. scenarios where the agent should not activate
+4. edge cases and close neighbors
 
 ## AI-Assisted Agent Generation
 
@@ -112,9 +132,15 @@ Use this prompt to generate agent configurations automatically:
 Create an agent configuration based on this request: "[YOUR DESCRIPTION]"
 
 Requirements:
-1. Extract core intent and responsibilities
-2. Design expert persona for the domain
-// ... (12 lines trimmed)
+1. Extract core intent and responsibilities.
+2. Design expert persona for the domain.
+3. Define when the agent should and should not activate.
+4. Produce realistic trigger examples.
+5. Write a complete system prompt with scope, workflow, boundaries, and output format.
+6. Return valid JSON only using this schema:
+
+{
+  "identifier": "kebab-case-name",
   "whenToUse": "Use this agent when... Examples: <example>...</example>",
   "systemPrompt": "You are..."
 }
@@ -124,26 +150,25 @@ Requirements:
 
 When creating agents, follow this 6-step process:
 
-1. **Extract Core Intent**: Identify fundamental purpose, key responsibilities, success criteria
-2. **Design Expert Persona**: Create compelling expert identity with domain knowledge
-3. **Architect Comprehensive Instructions**: Behavioral boundaries, methodologies, edge cases, output formats
-4. **Optimize for Performance**: Decision frameworks, quality control, workflow patterns, fallback strategies
-5. **Create Identifier**: Concise, descriptive, 2-4 words with hyphens
-6. **Generate Examples**: Triggering scenarios with context, user/assistant dialogue, commentary
+1. **Extract Core Intent**: Identify fundamental purpose, key responsibilities, and success criteria.
+2. **Design Expert Persona**: Create a clear expert identity with the right domain knowledge.
+3. **Architect Comprehensive Instructions**: Define behavior, workflow, boundaries, and edge cases.
+4. **Optimize for Performance**: Add decision rules, quality controls, and fallback strategies.
+5. **Create Identifier**: Keep it concise, descriptive, and kebab-case.
+6. **Generate Examples**: Show realistic trigger scenarios with context and commentary.
 
 ## Quality Checklist
 
 Before deployment:
 
-- [ ] Name follows conventions (lowercase, hyphens, 3-50 chars)
-- [ ] Description starts with "Use this agent when..."
+- [ ] Name follows conventions: lowercase, hyphens, 3-50 chars
+- [ ] Description starts with `Use this agent when...`
 - [ ] Description includes 2-4 `<example>` blocks
-- [ ] Each example has context, user, assistant, commentary
+- [ ] Each example has context, user, assistant, and commentary
 - [ ] Model is appropriate for task complexity
 - [ ] Color is unique among related agents
-- [ ] Tools restricted to what's needed (least privilege)
+- [ ] Tools are restricted to what is needed
 - [ ] System prompt has clear structure
 - [ ] Responsibilities are specific and actionable
-- [ ] Process steps are concrete
 - [ ] Output format is defined
-- [ ] Edge cases are addressed
+- [ ] Boundaries and edge cases are addressed

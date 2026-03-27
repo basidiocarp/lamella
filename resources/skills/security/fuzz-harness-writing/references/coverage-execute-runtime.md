@@ -1,43 +1,29 @@
 # Execute Runtime for Coverage
 
-C++ runtime to execute corpus files for coverage measurement.
+Use a small execute-runtime binary when you need to replay a corpus and collect
+coverage from real harness inputs.
 
-## Full Implementation
+## Purpose
 
-```cpp
-// execute-rt.cc
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
-#include <stdint.h>
-// ... (56 lines trimmed)
-    closedir(dir);
-    return 0;
-}
-```
+The runtime should:
+- iterate over corpus files
+- feed them into the target or harness entrypoint
+- optionally isolate crashes with fork-based execution
+- emit coverage artifacts for later reporting
 
-## With Fork Isolation (Handles Crashing Inputs)
+## When to Use It
 
-```cpp
-#include <sys/wait.h>
+Good fits:
+- measuring corpus quality
+- validating whether new seeds exercise more code
+- replaying crashing or interesting inputs outside the fuzz loop
 
-int main(int argc, char **argv) {
-    // ... directory opening code ...
+## Design Rule
 
-// ... (13 lines trimmed)
-        }
-    }
-}
-```
+Keep the runtime minimal. It exists to execute corpus inputs and gather
+coverage, not to become another full fuzz harness.
 
-## Usage
+## Isolation
 
-```bash
-# Build with coverage instrumentation
-clang++ -fprofile-instr-generate -fcoverage-mapping \
-  -O2 -DNO_MAIN \
-  main.cc harness.cc execute-rt.cc -o fuzz_exec
-
-# Execute corpus
-LLVM_PROFILE_FILE=fuzz.profraw ./fuzz_exec corpus/
-```
+Use fork isolation when crashing inputs should not stop the whole replay run.
+This is especially useful when evaluating mixed-quality corpora.

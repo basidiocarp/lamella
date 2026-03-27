@@ -1,136 +1,99 @@
 ---
 name: changelog
-description: Create engaging changelogs for recent merges to main branch
-argument-hint: "[optional: daily|weekly, or time period in days]"
-disable-model-invocation: true
+description: Generate a short daily, weekly, or custom-window changelog from recent merged work
+argument-hint: "[daily|weekly|N-days] [--audience dev|product|leadership] [--channel discord|slack|docs]"
 ---
 
-## Time Period
+# Changelog
 
-- For daily changelogs: Look at PRs merged in the last 24 hours
-- For weekly summaries: Look at PRs merged in the last 7 days
-- Always specify the time period in the title (e.g., "Daily" vs "Weekly")
-- Default: Get the latest changes from the last day from the main branch of the repository
+Generate a concise changelog for recent merged work. Use this for team updates, internal release summaries, or lightweight status posts.
+
+Use [`/release-notes`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/documentation/release-notes.md) for formal versioned release artifacts.
+
+## Time Window
+
+- For daily changelogs: look at PRs merged in the last 24 hours
+- For weekly summaries: look at PRs merged in the last 7 days
+- For custom windows: interpret a numeric argument as the number of days
+- Default to the last day if no window is provided
+
+Always label the output with the actual window you used.
 
 ## PR Analysis
 
-Analyze the provided GitHub changes and related issues. Look for:
+Analyze recent merged work and gather:
 
-1. New features that have been added
-2. Bug fixes that have been implemented
-3. Any other significant changes or improvements
-4. References to specific issues and their details
-5. Names of contributors who made the changes
-6. Use gh cli to lookup the PRs as well and the description of the PRs
-7. Check PR labels to identify feature type (feature, bug, chore, etc.)
-8. Look for breaking changes and highlight them prominently
-9. Include PR numbers for traceability
-10. Check if PRs are linked to issues and include issue context
+1. User-facing changes
+2. Important bug fixes
+3. Operational or developer-facing improvements worth sharing
+4. Breaking changes or rollout notes
+5. PR numbers and contributor names when available
 
-## Content Priorities
+Use `gh` to enrich PR titles, labels, descriptions, and linked issues when it is available. If it is not available, continue from local git history.
 
-1. Breaking changes (if any) - MUST be at the top
+## Priorities
+
+1. Breaking changes
 2. User-facing features
 3. Critical bug fixes
 4. Performance improvements
 5. Developer experience improvements
 6. Documentation updates
 
-## Formatting Guidelines
+## Formatting
 
-Now, create a change log summary with the following guidelines:
+When writing the changelog:
 
-1. Keep it concise and to the point
-2. Highlight the most important changes first
-3. Group similar changes together (e.g., all new features, all bug fixes)
-4. Include issue references where applicable
-5. Mention the names of contributors, giving them credit for their work
-6. Add a touch of humor or playfulness to make it engaging
-7. Use emojis sparingly to add visual interest
-8. Keep total message under 2000 characters for Discord
-9. Use consistent emoji for each section
-10. Format code/technical terms in backticks
-11. Include PR numbers in parentheses (e.g., "Fixed login bug (#123)")
+1. Keep it concise and readable.
+2. Lead with the most important changes.
+3. Group related items.
+4. Include PR numbers when you have them.
+5. Credit contributors naturally, not as filler.
+6. Match the audience:
+   - `dev`: more implementation detail
+   - `product`: emphasize user and roadmap impact
+   - `leadership`: emphasize outcomes, risk, and momentum
+7. Match the channel:
+   - `discord` or `slack`: keep it short and post-ready
+   - `docs`: a slightly fuller summary is acceptable
+
+If the user does not specify a target channel, produce a concise Markdown changelog that can be pasted into chat or docs.
 
 ## Deployment Notes
 
 When relevant, include:
+- database migrations
+- environment variable updates
+- manual rollout steps
+- dependency or infrastructure changes that operators should know about
 
-- Database migrations required
-- Environment variable updates needed
-- Manual intervention steps post-deploy
-- Dependencies that need updating
+## Output Shape
 
-Your final output should be formatted as follows:
+Use this structure:
 
-<change_log>
+```markdown
+# [Daily|Weekly|Custom] Changelog — YYYY-MM-DD
 
-# 🚀 [Daily/Weekly] Change Log: [Current Date]
+## Breaking Changes
+- ...
 
-## 🚨 Breaking Changes (if any)
+## Highlights
+- ...
 
-[List any breaking changes that require immediate attention]
+## Fixes
+- ...
 
-## 🌟 New Features
+## Other Improvements
+- ...
 
-[List new features here with PR numbers]
-
-## 🐛 Bug Fixes
-
-[List bug fixes here with PR numbers]
-
-## 🛠️ Other Improvements
-
-[List other significant changes or improvements]
-
-## 🙌 Shoutouts
-
-[Mention contributors and their contributions]
-
-## 🎉 Fun Fact of the Day
-
-[Include a brief, work-related fun fact or joke]
-
-</change_log>
-
-## Style Guide Review
-
-Now review the changelog using the EVERY_WRITE_STYLE.md file and go one by one to make sure you are following the style guide. Use multiple agents, run in parallel to make it faster.
-
-Remember, your final output should only include the content within the <change_log> tags. Do not include any of your thought process or the original data in the output.
-
-## Discord Posting (Optional)
-
-You can post changelogs to Discord by adding your own webhook URL:
-
-```
-# Set your Discord webhook URL
-DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
-
-# Post using curl
-curl -H "Content-Type: application/json" \
-  -d "{\"content\": \"{{CHANGELOG}}\"}" \
-  $DISCORD_WEBHOOK_URL
+## Shoutouts
+- ...
 ```
 
-To get a webhook URL, go to your Discord server → Server Settings → Integrations → Webhooks → New Webhook.
+Omit empty sections.
 
-## Error Handling
+## Edge Cases
 
-- If no changes in the time period, post a "quiet day" message: "🌤️ Quiet day! No new changes merged."
-- If unable to fetch PR details, list the PR numbers for manual review
-- Always validate message length before posting to Discord (max 2000 chars)
-
-## Schedule Recommendations
-
-- Run daily at 6 AM NY time for previous day's changes
-- Run weekly summary on Mondays for the previous week
-- Special runs after major releases or deployments
-
-## Audience Considerations
-
-Adjust the tone and detail level based on the channel:
-
-- **Dev team channels**: Include technical details, performance metrics, code snippets
-- **Product team channels**: Focus on user-facing changes and business impact
-- **Leadership channels**: Highlight progress on key initiatives and blockers
+- If no changes landed in the selected window, return a short quiet-period note.
+- If PR metadata is incomplete, use the best available local information and note assumptions briefly.
+- Keep chat-post versions under the target channel limit.

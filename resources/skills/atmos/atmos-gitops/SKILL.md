@@ -5,320 +5,36 @@ description: "Implements Atmos CI/CD workflows with GitHub Actions, Spacelift, A
 
 # Atmos GitOps and CI/CD Integrations
 
+Use this skill when wiring Atmos stacks into CI/CD platforms. Keep the main skill focused on change detection, plan/apply flow, and platform choice; use the references for implementation details.
 
-## Contents
+## When to Use
 
-- [Overview](#overview)
-- [Change Detection with `atmos describe affected`](#change-detection-with-atmos-describe-affected)
-  - [How It Works](#how-it-works)
-  - [Command Usage](#command-usage)
-  - [Output Format](#output-format)
-  - [Filtering and Grouping for CI/CD Matrices](#filtering-and-grouping-for-cicd-matrices)
-- [GitHub Actions Integration](#github-actions-integration)
-  - [Required Infrastructure](#required-infrastructure)
-  - [atmos.yaml Configuration for GitHub Actions](#atmosyaml-configuration-for-github-actions)
-  - [Core GitHub Actions](#core-github-actions)
-  - [GitOps Workflow Pattern](#gitops-workflow-pattern)
-  - [Drift Detection and Remediation](#drift-detection-and-remediation)
-  - [256 Matrix Limitation](#256-matrix-limitation)
-- [Spacelift Integration](#spacelift-integration)
-  - [Stack Configuration for Spacelift](#stack-configuration-for-spacelift)
-  - [Spacelift Stack Dependencies](#spacelift-stack-dependencies)
-  - [OpenTofu Support](#opentofu-support)
-- [Atlantis Integration](#atlantis-integration)
-  - [Atlantis Configuration in atmos.yaml](#atlantis-configuration-in-atmosyaml)
-  - [Generating the Atlantis Configuration](#generating-the-atlantis-configuration)
-  - [Stack-Level Atlantis Configuration](#stack-level-atlantis-configuration)
-- [Environment Promotion Patterns](#environment-promotion-patterns)
-- [Best Practices for CI/CD with Atmos](#best-practices-for-cicd-with-atmos)
-- [Compatibility Notes](#compatibility-notes)
-- [Additional Resources](#additional-resources)
+- Building GitHub Actions workflows around `atmos describe affected`
+- Mapping Atmos stacks into Spacelift
+- Deciding whether a stack should be driven by GitHub Actions, Atlantis, or Spacelift
+- Reviewing promotion, drift detection, or matrix fan-out patterns
 
+## Core Workflow
 
-## Overview
+1. Start with `atmos describe affected` and confirm the output shape your CI system needs.
+2. Decide where plan and apply run, and how credentials are injected.
+3. Keep PR-time work read-only where possible and move apply to merge or explicit approval.
+4. Add grouping or reusable workflows before the matrix becomes too large to manage.
+5. Validate promotion, drift handling, and rollback paths separately from the happy path.
 
-Atmos integrates with three CI/CD platforms: GitHub Actions, Spacelift, and Atlantis. All three use Atmos stack configurations and `atmos describe affected` to detect changes between commits, then run PR-based plans and merge-based applies.
-
-All integrations follow a common GitOps pattern:
-1. Detect which stacks and components changed using `atmos describe affected`
-2. Run `atmos terraform plan` for each affected component/stack pair
-3. Review plan output in the PR or CI/CD UI
-4. Apply changes on merge (or via manual trigger / label)
-
-## Change Detection with `atmos describe affected`
-
-The `atmos describe affected` command is the foundation of all CI/CD integrations. It compares two Git
-commits to produce a list of affected Atmos components and stacks.
-
-### How It Works
-
-The command performs these steps:
-1. Clone or reference the target branch/commit (the comparison baseline)
-2. Deep-merge all stack configurations for both the current working branch and the target branch
-3. Identify changes in component directories (file-level diffs)
-4. Compare each section of the stack configuration to detect differences
-5. Output a list of affected components and stacks
-
-When component source directories have changed, all related stacks are marked affected and Atmos skips
-further configuration comparison for those stacks, streamlining the process.
-
-### Command Usage
+## Quick Commands
 
 ```shell
-# Compare current branch against the default branch (main)
-atmos describe affected
-
-# Compare against a specific branch
-// ... (8 lines trimmed)
-# Output as JSON for CI/CD consumption
 atmos describe affected --format json
+atmos describe affected --repo-path . --sha-from main --sha-to HEAD --format json
 ```
 
-### Output Format
-
-The command outputs a JSON array of affected items. Each item contains:
-
-```json
-[
-  {
-    "component": "vpc",
-    "component_type": "terraform",
-    "stack": "plat-ue2-dev",
-// ... (8 lines trimmed)
-    "affected": "component"
-  }
-]
+```powershell
+atmos describe affected --format json
+atmos describe affected --repo-path . --sha-from main --sha-to HEAD --format json
 ```
 
-Fields:
-- `component` -- The Atmos component name
-- `component_type` -- Always `terraform` for Terraform components
-- `stack` -- The Atmos stack name
-- `stack_slug` -- A slug combining stack and component (used for matrix grouping)
-- `affected` -- What changed: `component` (source files), `stack.vars`, `stack.env`, `stack.settings`, etc.
+## References
 
-### Filtering and Grouping for CI/CD Matrices
-
-The output can be filtered and grouped for GitHub Actions matrix strategies using jq expressions
-configured in `atmos.yaml`:
-
-```yaml
-# atmos.yaml
-integrations:
-  github:
-    gitops:
-      matrix:
-        sort-by: .stack_slug
-        group-by: .stack_slug | split("-") | [.[0], .[2]] | join("-")
-```
-
-The `group-by` expression creates groups for parallel execution, which helps work around the
-GitHub Actions 256-job matrix limit.
-
-## GitHub Actions Integration
-
-Cloud Posse provides a set of GitHub Actions designed for Atmos-native GitOps workflows. These actions
-are open source (Apache 2.0 license), require no subscriptions, and use GitHub OIDC for authentication
-(no hardcoded credentials).
-
-### Required Infrastructure
-
-GitHub Actions that manage planfiles require:
-- **S3 bucket** for storing Terraform planfiles
-- **DynamoDB table** for planfile metadata (hash key: `id`, GSI: `pr-createdAt-index`)
-- **Two IAM roles**: one for plan/apply operations, one for accessing the S3/DynamoDB state storage
-- **atmos.yaml** configuration with the `integrations.github.gitops` section
-
-### atmos.yaml Configuration for GitHub Actions
-
-```yaml
-# atmos.yaml
-integrations:
-  github:
-    gitops:
-      terraform-version: 1.5.2
-// ... (9 lines trimmed)
-      matrix:
-        sort-by: .stack_slug
-        group-by: .stack_slug | split("-") | [.[0], .[2]] | join("-")
-```
-
-### Core GitHub Actions
-
-1. **setup-atmos** -- Installs Atmos in the workflow runner
-2. **atmos-terraform-plan** -- Runs `atmos terraform plan`, stores planfiles in S3, posts Job Summaries
-3. **atmos-terraform-apply** -- Retrieves planfiles from S3, runs `atmos terraform apply`
-4. **affected-stacks** -- Runs `atmos describe affected` and outputs a matrix for parallel jobs
-5. **atmos-terraform-drift-detection** -- Scheduled workflow to detect drift and create GitHub Issues
-6. **atmos-terraform-drift-remediation** -- Applies fixes for drifted components via IssueOps
-
-### GitOps Workflow Pattern
-
-The standard PR-based workflow:
-
-1. Developer opens a PR with infrastructure changes
-2. The plan workflow triggers:
-   a. `affected-stacks` action identifies changed components/stacks
-   b. Output feeds into a matrix strategy
-   c. `atmos-terraform-plan` runs for each affected component/stack pair
-   d. Plan summaries appear as GitHub Job Summaries
-3. Team reviews plan output in the PR
-4. On merge to main, the apply workflow triggers:
-   a. `atmos-terraform-apply` retrieves stored planfiles from S3
-   b. Applies each affected component/stack pair
-   c. Apply summaries appear as Job Summaries
-
-### Drift Detection and Remediation
-
-Drift detection runs on a schedule (cron):
-
-1. The drift detection workflow gathers all components and stacks
-2. Runs `atmos terraform plan` for each component/stack pair
-3. If drift is detected, creates a GitHub Issue with plan details
-4. To remediate, add the `apply` label to the Issue
-5. The drift remediation workflow detects the label, runs `atmos terraform apply`, and closes the Issue
-
-The `max-opened-issues` input (default: 10) limits how many drift Issues are created per run.
-
-### 256 Matrix Limitation
-
-GitHub Actions supports at most 256 matrix jobs per workflow. For large environments, use a two-level
-workflow pattern:
-- Top-level workflow groups affected stacks using the `group-by` jq expression
-- Each group is dispatched to a reusable workflow
-- The reusable workflow runs the actual plan/apply matrix for its group
-
-## Spacelift Integration
-
-Atmos natively supports Spacelift through stack configuration settings and a Terraform module
-that reads YAML stack configs to provision Spacelift resources.
-
-### Stack Configuration for Spacelift
-
-Configure Spacelift behavior in the `settings.spacelift` section of component configurations:
-
-```yaml
-components:
-  terraform:
-    my-component:
-      settings:
-        spacelift:
-// ... (10 lines trimmed)
-          policies_by_id_enabled:
-            - my-custom-policy
-          terraform_workflow_tool: TERRAFORM  # or OPEN_TOFU
-```
-
-Key settings:
-- `workspace_enabled` -- Whether this component/stack is managed in Spacelift
-- `administrative` -- Whether this is an admin stack that manages other stacks
-- `autodeploy` -- Automatically apply on merge without manual confirmation
-- `component_root` -- Path to the Terraform component directory
-- `policies_by_id_enabled` -- List of Spacelift policy IDs to attach
-- `terraform_workflow_tool` -- Use `TERRAFORM` or `OPEN_TOFU`
-
-### Spacelift Stack Dependencies
-
-Define component dependencies using `settings.depends_on`:
-
-```yaml
-components:
-  terraform:
-    my-component:
-      settings:
-// ... (6 lines trimmed)
-            environment: "ue2"
-            stage: "prod"
-```
-
-Each dependency specifies a `component` (required) and optional context variables
-(`namespace`, `tenant`, `environment`, `stage`) to reference components in other stacks.
-
-### OpenTofu Support
-
-To make OpenTofu the default for all Spacelift stacks:
-
-```yaml
-settings:
-  spacelift:
-    terraform_workflow_tool: OPEN_TOFU
-```
-
-Or configure per-component to override the global setting.
-
-## Atlantis Integration
-
-Atmos supports Atlantis for Terraform Pull Request Automation through three commands:
-
-1. `atmos atlantis generate repo-config` -- Generate `atlantis.yaml` repo-level configuration
-2. `atmos terraform generate backends` -- Generate backend configuration for all components
-3. `atmos terraform generate varfiles` -- Generate deep-merged varfiles for all stacks
-
-### Atlantis Configuration in atmos.yaml
-
-```yaml
-integrations:
-  atlantis:
-    path: "atlantis.yaml"
-    config_templates:
-      config-1:
-// ... (30 lines trimmed)
-        apply:
-          steps:
-            - run: terraform apply $PLANFILE
-```
-
-### Generating the Atlantis Configuration
-
-```shell
-atmos atlantis generate repo-config --config-template config-1 --project-template project-1
-```
-
-This generates an `atlantis.yaml` file with a project entry for each Atmos component in every stack,
-using the specified config and project templates.
-
-### Stack-Level Atlantis Configuration
-
-Atlantis settings can also be overridden in stack manifests using `settings.atlantis`, which deep-merges
-with the `integrations.atlantis` section in `atmos.yaml`.
-
-## Environment Promotion Patterns
-
-Atmos supports environment promotion through its stack inheritance model:
-
-1. **Catalog-based defaults** -- Define common configuration in `stacks/catalog/`
-2. **Environment overrides** -- Override values per environment in stack manifests
-3. **PR-based promotion** -- Use Git branches and PRs to promote changes through environments
-4. **Sequential apply** -- Use CI/CD dependencies to apply to dev first, then staging, then prod
-
-Example promotion workflow:
-- Changes merged to `main` auto-apply to `dev`
-- Manual approval (or separate PR) promotes to `staging`
-- Another manual approval promotes to `prod`
-
-## Best Practices for CI/CD with Atmos
-
-1. **Use `atmos describe affected`** to minimize CI/CD runtime by only planning/applying changed stacks
-2. **Store planfiles securely** -- Use encrypted S3 buckets with DynamoDB locking for GitHub Actions
-3. **Use GitHub OIDC** -- Never hardcode AWS credentials in workflows
-4. **Group matrix jobs** -- Use the `group-by` setting to work around the 256-job GitHub Actions limit
-5. **Limit drift detection Issues** -- Set `max-opened-issues` to keep drift manageable
-6. **Use separate IAM roles** for plan and apply operations (least privilege)
-7. **Pin Atmos and Terraform versions** in CI/CD to ensure reproducibility
-8. **Run `atmos validate stacks`** early in CI/CD pipelines to catch configuration errors
-9. **Use Job Summaries** instead of PR comments to avoid noisy pull requests
-10. **Test infrastructure changes** in lower environments before promoting to production
-
-## Compatibility Notes
-
-GitHub Actions versions must match the Atmos version:
-- Atmos >= 1.63.0: Use v2+ of plan, apply, drift-remediation; v1+ of drift-detection and affected-stacks
-- Atmos < 1.63.0: Use older action versions (v1 plan/apply, v0 drift-detection, v2 affected-stacks)
-
-The `integrations.github.gitops` configuration in `atmos.yaml` is supported in Atmos >= 1.63.0. Earlier
-versions pass the settings directly as GitHub Action inputs.
-
-## Additional Resources
-
-- For complete GitHub Actions inputs/outputs, see [references/github-actions.md](references/github-actions.md)
-- For Spacelift stack configuration details, see [references/spacelift.md](references/spacelift.md)
+- [references/github-actions.md](references/github-actions.md)
+- [references/spacelift.md](references/spacelift.md)

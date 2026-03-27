@@ -76,7 +76,14 @@ Task:
   description: "URGENT: Classify incident: $INCIDENT"
   prompt: |
     URGENT: Detect and classify incident: $INCIDENT
-# ... (10 lines trimmed)
+
+    Focus on first-response triage:
+    - classify severity with justification
+    - identify affected services and likely blast radius
+    - estimate user and business impact
+    - note whether an incident commander should be assigned immediately
+    - flag any immediate unknowns that block mitigation
+
     Provide structured output with: SEVERITY, AFFECTED_SERVICES, USER_IMPACT,
     BUSINESS_RISK, INCIDENT_COMMAND, SLO_STATUS.
 ```
@@ -95,7 +102,14 @@ Task:
   description: "Observability sweep for incident: $INCIDENT"
   prompt: |
     You are an observability engineer. Perform rapid observability sweep for this incident.
-# ... (12 lines trimmed)
+
+    Use the classification as context. Summarize:
+    - metrics anomalies and alert correlations
+    - error-rate, latency, saturation, or throughput shifts
+    - log signatures and likely failure windows
+    - trace or dependency hotspots
+    - current health of the affected services
+
     Provide structured output with: TRACE_ANALYSIS, METRICS_ANOMALIES, LOG_PATTERNS,
     APM_FINDINGS, RUM_IMPACT, SERVICE_HEALTH_MATRIX.
 ```
@@ -115,7 +129,13 @@ Task:
   prompt: |
     Implement immediate mitigation for this incident.
 
-# ... (12 lines trimmed)
+    Work from the classification and observability findings. Recommend:
+    - fastest safe containment action
+    - temporary mitigations and guardrails
+    - rollback or traffic-shaping options
+    - risks of each mitigation path
+    - expected user impact reduction after mitigation
+
     Provide structured output with: MITIGATION_ACTIONS, TEMPORARY_FIXES,
     ROLLBACK_DECISIONS, SERVICE_STATUS_AFTER, USER_IMPACT_REDUCTION.
 ```
@@ -162,7 +182,13 @@ Task:
   prompt: |
     Conduct deep debugging for this incident using observability data.
 
-# ... (12 lines trimmed)
+    Trace the likely failure chain. Include:
+    - most probable root cause
+    - contributing factors and missing safeguards
+    - dependency or upstream/downstream interactions
+    - a concise five-whys analysis
+    - confidence level for the current root-cause hypothesis
+
     Provide structured output with: ROOT_CAUSE, CONTRIBUTING_FACTORS,
     DEPENDENCY_IMPACT_MAP, FIVE_WHYS_ANALYSIS.
 ```
@@ -181,7 +207,13 @@ Task:
   description: "Security assessment for: $INCIDENT"
   prompt: |
     You are a security auditor. Assess security implications of this incident.
-# ... (12 lines trimmed)
+
+    Determine whether the incident suggests:
+    - compromise, abuse, or policy failure
+    - data exposure or privacy impact
+    - authentication, authorization, or secret-management issues
+    - immediate containment or notification obligations
+
     Provide structured output with: SECURITY_ASSESSMENT, BREACH_ANALYSIS,
     VULNERABILITY_IDENTIFICATION, DATA_EXPOSURE_RISK, REMEDIATION_STEPS.
 ```
@@ -199,7 +231,12 @@ Task:
   prompt: |
     You are a performance engineer. Analyze performance aspects of this incident.
 
-# ... (12 lines trimmed)
+    Focus on:
+    - bottlenecks or resource exhaustion
+    - queueing, concurrency, and capacity issues
+    - performance side effects of mitigation options
+    - opportunities to stabilize the system while a permanent fix is prepared
+
     Provide structured output with: PERFORMANCE_BOTTLENECKS, RESOURCE_RECOMMENDATIONS,
     OPTIMIZATION_OPPORTUNITIES, CAPACITY_ISSUES.
 ```
@@ -212,7 +249,14 @@ After both complete, consolidate into `.incident-response/05-investigation.md`:
 ## Root Cause (from debugging)
 
 [From Step 4]
-# ... (10 lines trimmed)
+
+## Security Review
+[Summary from Step 5]
+
+## Performance Review
+[Summary from Step 6]
+
+## Synthesis
 
 [Synthesis of all investigation results]
 ```
@@ -253,7 +297,14 @@ Task:
   description: "Implement production fix for: $INCIDENT"
   prompt: |
     You are a senior backend architect. Design and implement a production fix for this incident.
-# ... (10 lines trimmed)
+
+    Work from the approved investigation. Produce:
+    - the fix strategy and scope
+    - deployment sequencing
+    - validation steps
+    - rollback criteria
+    - the long-term corrective action, separate from the immediate fix
+
     Provide structured output with: FIX_IMPLEMENTATION, DEPLOYMENT_STRATEGY,
     VALIDATION_PLAN, ROLLBACK_PROCEDURES, LONG_TERM_SOLUTION.
 ```
@@ -272,7 +323,14 @@ Task:
   description: "Deploy and validate fix for: $INCIDENT"
   prompt: |
     Execute emergency deployment for incident fix.
-# ... (10 lines trimmed)
+
+    Use the fix plan as the source of truth. Summarize:
+    - deployment steps and outcome
+    - validation checks performed
+    - current service health
+    - rollback readiness and triggers
+    - any remaining elevated monitoring requirements
+
     Provide structured output with: DEPLOYMENT_STATUS, VALIDATION_RESULTS,
     MONITORING_DASHBOARD, ROLLBACK_READINESS, SERVICE_HEALTH_POST_DEPLOY.
 ```
@@ -315,7 +373,14 @@ Task:
   description: "Manage incident communication for: $INCIDENT"
   prompt: |
     You are a communications specialist. Manage incident communication for this incident.
-# ... (12 lines trimmed)
+
+    Prepare audience-specific communication for:
+    - public or customer-facing status updates
+    - engineering/internal incident updates
+    - executive summary
+    - support-team briefing
+    - timeline of major milestones
+
     Provide structured output with: STATUS_PAGE_UPDATE, ENGINEERING_UPDATE,
     EXECUTIVE_SUMMARY, SUPPORT_BRIEFING, INCIDENT_TIMELINE.
 ```
@@ -334,7 +399,13 @@ Task:
   description: "Assess customer impact for: $INCIDENT"
   prompt: |
     Assess and document customer impact for this incident.
-# ... (12 lines trimmed)
+
+    Estimate:
+    - who was affected and for how long
+    - SLA or contractual impact
+    - revenue or operational impact
+    - whether proactive customer outreach is warranted
+
     Provide structured output with: CUSTOMER_IMPACT_REPORT, SLA_ANALYSIS,
     REVENUE_IMPACT, OUTREACH_RECOMMENDATIONS.
 ```
@@ -358,7 +429,13 @@ Task:
   prompt: |
     You are an SRE documentation specialist. Conduct a blameless postmortem for this incident.
 
-# ... (12 lines trimmed)
+    Use all prior reports. Capture:
+    - timeline and trigger
+    - root cause summary
+    - what went well
+    - what failed or was missing
+    - concrete action items with owners or roles
+
     Provide structured output with: INCIDENT_TIMELINE, ROOT_CAUSE_SUMMARY,
     WHAT_WENT_WELL, IMPROVEMENTS, ACTION_ITEMS, LESSONS_LEARNED.
 ```
@@ -378,7 +455,12 @@ Task:
   prompt: |
     You are an observability engineer. Enhance monitoring to prevent recurrence of this incident.
 
-# ... (12 lines trimmed)
+    Recommend:
+    - new alerts and thresholds
+    - SLO or dashboard updates
+    - runbook automation opportunities
+    - chaos or game-day scenarios that would catch this failure earlier
+
     Provide structured output with: NEW_ALERTS, SLO_ADJUSTMENTS, DASHBOARD_UPDATES,
     RUNBOOK_AUTOMATION, CHAOS_SCENARIOS.
 ```
@@ -397,7 +479,14 @@ Task:
   description: "System hardening for: $INCIDENT prevention"
   prompt: |
     You are a senior backend architect. Design system improvements to prevent recurrence.
-# ... (12 lines trimmed)
+
+    Focus on durable prevention:
+    - architecture or workflow changes
+    - resilience patterns to adopt
+    - capacity or scaling work
+    - technical debt to retire
+    - implementation roadmap in sensible phases
+
     Provide structured output with: ARCHITECTURE_IMPROVEMENTS, RESILIENCE_PATTERNS,
     CAPACITY_PLAN, TECH_DEBT_ITEMS, IMPLEMENTATION_ROADMAP.
 ```
@@ -424,7 +513,14 @@ Incident response complete: $INCIDENT
 [List all .incident-response/ output files]
 
 ## Response Summary
-# ... (24 lines trimmed)
+- Severity and scope confirmed
+- Mitigation executed and checkpointed
+- Root cause investigated and documented
+- Fix implemented, deployed, and validated
+- Stakeholder communication and customer impact completed
+- Postmortem, monitoring, and hardening follow-up prepared
+
+## Success Metrics
 - Monitoring improvements deployed within 1 week
 - No recurrence of the same root cause
 ```

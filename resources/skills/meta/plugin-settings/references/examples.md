@@ -1,206 +1,61 @@
 # Plugin Settings Examples
 
-Real-world examples of plugin settings usage patterns.
+Use `.claude/*.local.md` files for small, project-local plugin state that
+commands and hooks can read safely.
 
 ## Common Patterns
 
-### Pattern 1: Temporarily Active Hooks
+### Temporary Hook Activation
 
-Use settings file to control hook activation:
+Use a local settings file to turn a hook on or off without editing the plugin
+itself.
 
-```bash
-#!/bin/bash
-STATE_FILE=".claude/security-scan.local.md"
+Typical fields:
+- `enabled`
+- mode or validation level
+- small project-specific options
 
-# Quick exit if not configured
-if [[ ! -f "$STATE_FILE" ]]; then
-// ... (10 lines trimmed)
+### Agent or Workflow State
 
-# Run hook logic
-# ...
-```
+Use a local file for:
+- worker identity
+- task number
+- coordinator session
+- loop counters or completion conditions
 
-**Use case:** Enable/disable hooks without editing hooks.json (requires restart).
+This works well when hooks and commands need to share a small amount of
+human-readable state.
 
-### Pattern 2: Agent State Management
+### Configuration-Driven Behavior
 
-Store agent-specific state and configuration:
+Store bounded settings such as:
+- strict vs lenient mode
+- allowed file extensions
+- local size or timeout limits
 
-**.claude/multi-agent-swarm.local.md:**
-```markdown
----
-agent_name: auth-agent
-task_number: 3.5
-pr_number: 1234
-coordinator_session: team-leader
-// ... (9 lines trimmed)
-- Authentication endpoints created
-- Tests passing
-- PR created and CI green
-```
+Keep the settings narrow enough that the file stays understandable at a glance.
 
-Read from hooks to coordinate agents:
+## Good Practices
 
-```bash
-AGENT_NAME=$(echo "$FRONTMATTER" | grep '^agent_name:' | sed 's/agent_name: *//')
-COORDINATOR=$(echo "$FRONTMATTER" | grep '^coordinator_session:' | sed 's/coordinator_session: *//')
+- exit quickly if the settings file is absent
+- use an explicit `enabled` flag when the behavior is optional
+- update files atomically when hooks may write them
+- keep frontmatter machine-readable and the body human-readable
 
-# Send notification to coordinator
-tmux send-keys -t "$COORDINATOR" "Agent $AGENT_NAME completed task" Enter
-```
+## Bad Uses
 
-### Pattern 3: Configuration-Driven Behavior
+- storing large outputs
+- storing secrets casually
+- turning the file into a general-purpose database
+- hiding critical required plugin config in an undocumented local file
 
-**.claude/my-plugin.local.md:**
-```markdown
----
-validation_level: strict
-max_file_size: 1000000
-allowed_extensions: [".js", ".ts", ".tsx"]
-enable_logging: true
----
+## Design Rule
 
-# Validation Configuration
+A plugin settings file should be:
+- local
+- optional when appropriate
+- easy to inspect
+- easy for hooks and commands to parse
 
-Strict mode enabled for this project.
-All writes validated against security policies.
-```
-
-Use in hooks or commands:
-
-```bash
-LEVEL=$(echo "$FRONTMATTER" | grep '^validation_level:' | sed 's/validation_level: *//')
-
-case "$LEVEL" in
-  strict)
-    # Apply strict validation
-    ;;
-  standard)
-    # Apply standard validation
-    ;;
-  lenient)
-    # Apply lenient validation
-    ;;
-esac
-```
-
-## Real-World Examples
-
-### multi-agent-swarm Plugin
-
-**.claude/multi-agent-swarm.local.md:**
-```markdown
----
-agent_name: auth-implementation
-task_number: 3.5
-pr_number: 1234
-coordinator_session: team-leader
-enabled: true
-dependencies: ["Task 3.4"]
-additional_instructions: Use JWT tokens, not sessions
----
-
-# Task: Implement Authentication
-
-Build JWT-based authentication for the REST API.
-Coordinate with auth-agent on shared types.
-```
-
-**Hook usage (agent-stop-notification.sh):**
-- Checks if file exists (line 15-18: quick exit if not)
-- Parses frontmatter to get coordinator_session, agent_name, enabled
-- Sends notifications to coordinator if enabled
-- Allows quick activation/deactivation via `enabled: true/false`
-
-### ralph-wiggum Plugin
-
-**.claude/ralph-loop.local.md:**
-```markdown
----
-iteration: 1
-max_iterations: 10
-completion_promise: "All tests passing and build successful"
----
-
-Fix all the linting errors in the project.
-Tests pass after each fix.
-```
-
-**Hook usage (stop-hook.sh):**
-- Checks if file exists (line 15-18: quick exit if not active)
-- Reads iteration count and max_iterations
-- Extracts completion_promise for loop termination
-- Reads body as the prompt to feed back
-- Updates iteration count on each loop
-
-## Security Considerations
-
-### Sanitize User Input
-
-When writing settings files from user input:
-
-```bash
-# Escape quotes in user input
-SAFE_VALUE=$(echo "$USER_INPUT" | sed 's/"/\\"/g')
-
-# Write to file
-cat > "$STATE_FILE" <<EOF
----
-user_setting: "$SAFE_VALUE"
----
-EOF
-```
-
-### Validate File Paths
-
-If settings contain file paths:
-
-```bash
-FILE_PATH=$(echo "$FRONTMATTER" | grep '^data_file:' | sed 's/data_file: *//')
-
-# Check for path traversal
-if [[ "$FILE_PATH" == *".."* ]]; then
-  echo "⚠️  Invalid path in settings (path traversal)" >&2
-  exit 2
-fi
-```
-
-### Permissions
-
-Settings files should be:
-- Readable by user only (`chmod 600`)
-- Not committed to git
-- Not shared between users
-
-## Creating Settings Files
-
-### From Commands
-
-Commands can create settings files:
-
-```markdown
-# Setup Command
-
-Steps:
-1. Ask user for configuration preferences
-2. Create `.claude/my-plugin.local.md` with YAML frontmatter
-3. Set appropriate values based on user input
-4. Inform user that settings are saved
-5. Remind user to restart Claude Code for hooks to recognize changes
-```
-
-### Template Generation
-
-Provide template in plugin README:
-
-```markdown
-## Configuration
-
-Create `.claude/my-plugin.local.md` in your project:
-
-\`\`\`markdown
-// ... (9 lines trimmed)
-\`\`\`
-
-After creating or editing, restart Claude Code for changes to take effect.
-```
+If the state is too large or too relational for markdown frontmatter, move it to
+a better storage layer.

@@ -1,78 +1,36 @@
 # Request Mocking
 
-Intercept, mock, modify, and block network requests.
+Use request mocking when a Playwright flow depends on network behavior you need
+to control.
 
 ## CLI Route Commands
 
 ```bash
-# Mock with custom status
 playwright-cli route "**/*.jpg" --status=404
-
-# Mock with JSON body
 playwright-cli route "**/api/users" --body='[{"id":1,"name":"Alice"}]' --content-type=application/json
-// ... (10 lines trimmed)
-# Remove a route or all routes
 playwright-cli unroute "**/*.jpg"
 playwright-cli unroute
 ```
 
-## URL Patterns
+## Pattern Matching
 
-```
-**/api/users           - Exact path match
-**/api/*/details       - Wildcard in path
-**/*.{png,jpg,jpeg}    - Match file extensions
-**/search?q=*          - Match query parameters
-```
-
-## Advanced Mocking with run-code
-
-For conditional responses, request body inspection, response modification, or delays:
-
-### Conditional Response Based on Request
-
-```bash
-playwright-cli run-code "async page => {
-  await page.route('**/api/login', route => {
-    const body = route.request().postDataJSON();
-    if (body.username === 'admin') {
-      route.fulfill({ body: JSON.stringify({ token: 'mock-token' }) });
-    } else {
-      route.fulfill({ status: 401, body: JSON.stringify({ error: 'Invalid' }) });
-    }
-  });
-}"
+```text
+**/api/users
+**/api/*/details
+**/*.{png,jpg,jpeg}
+**/search?q=*
 ```
 
-### Modify Real Response
+## Use `run-code` for Advanced Cases
 
-```bash
-playwright-cli run-code "async page => {
-  await page.route('**/api/user', async route => {
-    const response = await route.fetch();
-    const json = await response.json();
-    json.isPremium = true;
-    await route.fulfill({ response, json });
-  });
-}"
-```
+Reach for `run-code` when you need:
 
-### Simulate Network Failures
+- conditional responses based on request body
+- response modification after `route.fetch()`
+- aborted requests or simulated offline states
+- delayed responses for loading-state testing
 
-```bash
-playwright-cli run-code "async page => {
-  await page.route('**/api/offline', route => route.abort('internetdisconnected'));
-}"
-# Options: connectionrefused, timedout, connectionreset, internetdisconnected
-```
+## Practical Rule
 
-### Delayed Response
-
-```bash
-playwright-cli run-code "async page => {
-  await page.route('**/api/slow', async route => {
-    await new Promise(r => setTimeout(r, 3000));
-    route.fulfill({ body: JSON.stringify({ data: 'loaded' }) });
-  });
-}"
-```
+Keep mocks narrowly scoped to the endpoint and behavior under test. Broad route
+patterns make tests harder to trust and debug.

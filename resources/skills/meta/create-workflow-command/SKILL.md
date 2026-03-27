@@ -87,11 +87,18 @@ Ask user (if not provided):
 
 ```bash
 # Create tasks directory (if it doesn't exist)
+mkdir -p ${CLAUDE_PLUGIN_ROOT}/tasks
 
-## Contents
+# Create the orchestrator command directory
+mkdir -p ${CLAUDE_PLUGIN_ROOT}/commands
 
-- [User Input](#user-input)
-// ... (59 lines trimmed)
+# Optional shared context file for facts reused across multiple steps
+touch ${CLAUDE_PLUGIN_ROOT}/tasks/common-context.md
+
+# Example task files
+touch ${CLAUDE_PLUGIN_ROOT}/tasks/step-1-<workflow>-research.md
+touch ${CLAUDE_PLUGIN_ROOT}/tasks/step-2-<workflow>-plan.md
+touch ${CLAUDE_PLUGIN_ROOT}/tasks/step-3-<workflow>-execute.md
 
 # Optional: Create agents directory (if using custom agents)
 mkdir -p ${CLAUDE_PLUGIN_ROOT}/agents
@@ -109,7 +116,25 @@ For each step, create a task file with this structure:
 ## Context
 You are executing step N of the <workflow-name> workflow.
 
-// ... (18 lines trimmed)
+Read `${CLAUDE_PLUGIN_ROOT}/tasks/common-context.md` first if it exists.
+
+## Goal
+<What this step must accomplish>
+
+## Inputs
+- Prior step outputs: `<paths if any>`
+- Files to inspect: `<repo files or docs>`
+
+## Instructions
+1. Read the required files.
+2. Produce only the work for this step.
+3. Do not perform later workflow steps.
+4. Call out blockers or missing context explicitly.
+
+## Output
+- Format: `<markdown report | code changes | checklist>`
+- Destination: `<path or inline response>`
+
 ## Success Criteria
 - [ ] <Measurable outcome>
 - [ ] <Measurable outcome>
@@ -125,7 +150,25 @@ description: <Workflow description>
 argument-hint: <Required arguments>
 allowed-tools: Task, Read
 model: sonnet
-// ... (46 lines trimmed)
+---
+
+# <Workflow Title>
+
+## Inputs
+- User request: `$ARGUMENTS`
+
+## Execution
+
+### Step 1: <Step Name>
+- Launch the appropriate sub-agent
+- Instruct it to read `${CLAUDE_PLUGIN_ROOT}/tasks/step-1-<workflow>-<name>.md`
+- Save or summarize its result for the next step
+
+### Step 2: <Step Name>
+- Pass only the minimum context from Step 1
+- Launch the next sub-agent or resume the same one if stateful
+
+## Final Response
 1. <What was accomplished>
 2. <Key outputs>
 3. <Next steps if any>
@@ -204,7 +247,26 @@ description: Execute feature implementation through research, planning, and codi
 argument-hint: [feature-description]
 allowed-tools: Task, Read, TodoWrite
 model: sonnet
-// ... (52 lines trimmed)
+---
+
+# Feature Implementation Workflow
+
+## Step 1: Research
+- Launch a research-focused sub-agent
+- Have it read `${CLAUDE_PLUGIN_ROOT}/tasks/step-1-feature-impl-research.md`
+- Save the result to `.workflow/feature-impl-step-1.md`
+
+## Step 2: Architecture
+- Launch an architecture-focused sub-agent
+- Pass only the Step 1 summary and required file paths
+- Save the result to `.workflow/feature-impl-step-2.md`
+
+## Step 3: Implementation
+- Launch an implementation-focused sub-agent
+- Provide the approved architecture summary and target files
+- Save the result to `.workflow/feature-impl-step-3.md`
+
+## Final Summary
 1. Files created/modified
 2. Tests added
 3. Remaining work
@@ -218,7 +280,23 @@ model: sonnet
 ## Context
 You are the research phase of a feature implementation workflow.
 
-// ... (58 lines trimmed)
+Do not implement code. Your job is to gather context and produce a handoff.
+
+## Goal
+Understand existing patterns, constraints, and likely implementation touchpoints.
+
+## Instructions
+1. Inspect the relevant project files and architecture docs.
+2. Identify existing patterns to follow.
+3. Flag risks, dependencies, and open questions.
+4. Produce a short handoff for the architecture step.
+
+## Output
+- Existing patterns
+- Candidate files to change
+- Risks and unknowns
+
+## Success Criteria
 - [ ] Relevant existing code identified
 - [ ] No implementation attempted
 - [ ] Clear handoff to architecture phase

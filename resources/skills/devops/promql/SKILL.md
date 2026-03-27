@@ -36,7 +36,7 @@ Gather requirements (ask if not provided):
 2. **Metric type:** Counter (`_total`), Gauge (no suffix), Histogram (`_bucket`), Summary
 3. **Labels:** job, instance, environment, endpoint, status_code
 
-See [references/metric_types.md](references/metric_types.md) for detailed guidance.
+See [references/metric_types.md](references/metric_types.md) for metric-shape guidance.
 
 ### Stage 3: Present Query Plan
 
@@ -54,7 +54,7 @@ Consult relevant references before writing:
 - Histogram queries → [references/metric_types.md](references/metric_types.md)
 - RED/USE patterns → [references/promql_patterns.md](references/promql_patterns.md)
 - Optimization → [references/best_practices.md](references/best_practices.md)
-- Functions → [references/promql_functions.md](references/promql_functions.md)
+- Functions → [references/aggregation-and-rate-functions.md](references/aggregation-and-rate-functions.md) or [references/time-and-experimental-functions.md](references/time-and-experimental-functions.md)
 - SLO/burn rate → [references/slo-burn-rate.md](references/slo-burn-rate.md)
 - Native histograms → [references/native-histograms.md](references/native-histograms.md)
 
@@ -186,7 +186,9 @@ labels:
 ### Core References
 | File | Purpose |
 |------|---------|
-| [references/promql_functions.md](references/promql_functions.md) | All functions with examples |
+| [references/promql_functions.md](references/promql_functions.md) | Function routing guide |
+| [references/aggregation-and-rate-functions.md](references/aggregation-and-rate-functions.md) | Aggregation, rate, and range-vector helpers |
+| [references/time-and-experimental-functions.md](references/time-and-experimental-functions.md) | Time, histogram, label, and experimental functions |
 | [references/promql_patterns.md](references/promql_patterns.md) | RED, USE, alerting patterns |
 | [references/best_practices.md](references/best_practices.md) | Optimization, anti-patterns |
 | [references/metric_types.md](references/metric_types.md) | Counter, Gauge, Histogram, Summary |
@@ -201,8 +203,6 @@ labels:
 ### Validation Docs
 | File | Purpose |
 |------|---------|
-### Additional Resources
-
-- [Anti Patterns](references/anti_patterns.md)
-- [Best Practices From Promql Validator](references/best_practices-from-promql-validator.md)
-- [Test Validators](scripts/test_validators.py)
+| [references/anti_patterns.md](references/anti_patterns.md) | Specific PromQL mistakes and unsafe patterns |
+| [references/best_practices-from-promql-validator.md](references/best_practices-from-promql-validator.md) | Validator-driven appendix and findings |
+| [scripts/test_validators.py](scripts/test_validators.py) | Validator test runner |

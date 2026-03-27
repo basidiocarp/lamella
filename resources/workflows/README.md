@@ -2,6 +2,11 @@
 
 Structured workflows for development activities.
 
+Lamella keeps workflow source files under `resources/workflows/`. The `core`
+plugin currently bundles the six day-to-day workflows in `development/` and
+`quality/`, while `FULL-AUDIT.md` and `release/RELEASE-PREP.md` remain
+source-side playbooks until they are promoted into a shipped plugin surface.
+
 ## Categories
 
 | Directory | Description |
@@ -24,5 +29,5 @@ Structured workflows for development activities.
 
 ## See Also
 
-- [Audit scripts](../scripts/audit/)
-- [GitHub automation](../scripts/github/)
+- [Audit scripts](../../scripts/audit/)
+- [Release automation](../../scripts/release/)

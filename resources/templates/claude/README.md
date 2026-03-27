@@ -16,7 +16,7 @@ Templates for configuring Claude Code projects.
 Copy templates to your project and customize:
 
 ```bash
-cp templates/claude/CLAUDE-MD-TEMPLATE.md .claude/CLAUDE.md
+cp resources/templates/claude/CLAUDE-MD-TEMPLATE.md .claude/CLAUDE.md
 ```
 
 ## See Also

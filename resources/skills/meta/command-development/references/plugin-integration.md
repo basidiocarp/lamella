@@ -7,10 +7,10 @@ Reference for plugin-specific command features and component integration.
 Plugin commands have access to `${CLAUDE_PLUGIN_ROOT}`, an environment variable that resolves to the plugin's absolute path.
 
 **Purpose:**
-- Reference plugin files portably
-- Execute plugin scripts
-- Load plugin configuration
-- Access plugin templates
+- reference plugin files portably
+- execute plugin scripts
+- load plugin configuration
+- access plugin templates
 
 **Basic usage:**
 
@@ -42,40 +42,34 @@ Review results and report findings.
 ```
 
 **Why use it:**
-- Works across all installations
-- Portable between systems
-- No hardcoded paths needed
-- Essential for multi-file plugins
+- works across installations
+- portable between systems
+- avoids hardcoded paths
+- essential for multi-file plugins
 
 ## Plugin Command Organization
 
-Plugin commands discovered automatically from `commands/` directory:
+Plugin commands are discovered automatically from `commands/`:
 
-```
+```text
 plugin-name/
 ├── commands/
-│   ├── foo.md              # /foo (plugin:plugin-name)
-│   ├── bar.md              # /bar (plugin:plugin-name)
+│   ├── foo.md
+│   ├── bar.md
 │   └── utils/
-│       └── helper.md       # /helper (plugin:plugin-name:utils)
+│       └── helper.md
 └── plugin.json
 ```
 
-**Namespace benefits:**
-- Logical command grouping
-- Shown in `/help` output
-- Avoid name conflicts
-- Organize related commands
-
-**Naming conventions:**
-- Use descriptive action names
-- Avoid generic names (test, run)
-- Consider plugin-specific prefix
-- Use hyphens for multi-word names
+**Naming guidance:**
+- use descriptive action names
+- avoid generic names like `test` or `run`
+- consider a plugin-specific prefix where collisions are likely
+- use hyphens for multi-word names
 
 ## Plugin Command Patterns
 
-### Configuration-Based Pattern
+### Configuration-based pattern
 
 ```markdown
 ---
@@ -90,7 +84,7 @@ Deploy to $1 using configuration settings.
 Monitor deployment and report status.
 ```
 
-### Template-Based Pattern
+### Template-based pattern
 
 ```markdown
 ---
@@ -103,7 +97,7 @@ Template: @${CLAUDE_PLUGIN_ROOT}/templates/docs.md
 Generate documentation for $1 following template structure.
 ```
 
-### Multi-Script Pattern
+### Multi-script pattern
 
 ```markdown
 ---
@@ -120,9 +114,7 @@ Review outputs and report workflow status.
 
 ## Integration with Plugin Components
 
-Commands can integrate with other plugin components for powerful workflows.
-
-### Agent Integration
+### Agent integration
 
 Launch plugin agents for complex tasks:
 
@@ -132,19 +124,19 @@ description: Deep code review
 argument-hint: [file-path]
 ---
 
-// ... (8 lines trimmed)
+Review @$1 using the plugin's `reviewer` agent.
+
 Agent uses plugin resources:
 - ${CLAUDE_PLUGIN_ROOT}/config/rules.json
 - ${CLAUDE_PLUGIN_ROOT}/checklists/review.md
 ```
 
 **Key points:**
-- Agent must exist in `plugin/agents/` directory
-- Claude uses Task tool to launch agent
-- Document agent capabilities
-- Reference plugin resources agent uses
+- the agent must exist in `agents/`
+- the command should make the trigger obvious
+- document any plugin resources the agent depends on
 
-### Skill Integration
+### Skill integration
 
 Leverage plugin skills for specialized knowledge:
 
@@ -157,29 +149,20 @@ argument-hint: [api-file]
 Document API in @$1 following plugin standards.
 
 Use the api-docs-standards skill to ensure:
-- Complete endpoint documentation
-- Consistent formatting
-- Example quality
-- Error documentation
-
-Generate production-ready API docs.
+- complete endpoint documentation
+- consistent formatting
+- useful examples
+- error coverage
 ```
 
-**Key points:**
-- Skill must exist in `plugin/skills/` directory
-- Mention skill name to trigger invocation
-- Document skill purpose
-- Explain what skill provides
-
-### Hook Coordination
+### Hook coordination
 
 Design commands that work with plugin hooks:
-- Commands can prepare state for hooks to process
-- Hooks execute automatically on tool events
-- Commands should document expected hook behavior
-- Guide Claude on interpreting hook output
+- commands can prepare state for hooks to process
+- hooks execute automatically on tool events
+- commands should explain any expected hook side effects
 
-### Multi-Component Workflows
+### Multi-component workflows
 
 Combine agents, skills, and scripts:
 
@@ -189,23 +172,20 @@ description: Comprehensive review workflow
 argument-hint: [file]
 allowed-tools: Bash(node:*), Read
 ---
-// ... (13 lines trimmed)
+
+Run checks: !`node ${CLAUDE_PLUGIN_ROOT}/scripts/analyze.js $1`
+Use reviewer agent for deeper inspection.
+Apply review skill guidance for output quality.
 Template: @${CLAUDE_PLUGIN_ROOT}/templates/review.md
 
-Compile findings into report following template.
+Compile findings into the report template.
 ```
-
-**When to use:**
-- Complex multi-step workflows
-- Leverage multiple plugin capabilities
-- Require specialized analysis
-- Need structured outputs
 
 ## Validation Patterns
 
 Commands should validate inputs and resources before processing.
 
-### Argument Validation
+### Argument validation
 
 ```markdown
 ---
@@ -222,7 +202,7 @@ Otherwise:
   Show usage: /deploy [environment]
 ```
 
-### File Existence Checks
+### File existence checks
 
 ```markdown
 ---
@@ -239,43 +219,3 @@ Otherwise:
   Show expected format
   Provide example configuration
 ```
-
-### Plugin Resource Validation
-
-```markdown
----
-description: Run plugin analyzer
-allowed-tools: Bash(test:*)
----
-
-Validate plugin setup:
-- Script: !`test -x ${CLAUDE_PLUGIN_ROOT}/bin/analyze && echo "✓" || echo "✗"`
-- Config: !`test -f ${CLAUDE_PLUGIN_ROOT}/config.json && echo "✓" || echo "✗"`
-
-If all checks pass, run analysis.
-Otherwise, report missing components.
-```
-
-### Error Handling
-
-```markdown
----
-description: Build with error handling
-allowed-tools: Bash(*)
----
-
-Execute build: !`bash ${CLAUDE_PLUGIN_ROOT}/scripts/build.sh 2>&1 || echo "BUILD_FAILED"`
-
-If build succeeded:
-  Report success and output location
-If build failed:
-  Analyze error output
-  Suggest likely causes
-  Provide troubleshooting steps
-```
-
-**Best practices:**
-- Validate early in command
-- Provide helpful error messages
-- Suggest corrective actions
-- Handle edge cases gracefully

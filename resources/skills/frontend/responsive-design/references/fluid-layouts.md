@@ -1,267 +1,116 @@
 # Fluid Layouts and Typography
 
-## Overview
+Fluid design reduces breakpoint pressure by letting layout and type scale smoothly.
 
-Fluid design creates smooth scaling experiences by using relative units and mathematical functions instead of fixed breakpoints. This approach reduces the need for media queries and creates more natural-feeling interfaces.
-
-## Fluid Typography
-
-### The clamp() Function
+## Fluid Type with `clamp()`
 
 ```css
-/* clamp(minimum, preferred, maximum) */
 .heading {
-  /* Never smaller than 1.5rem, never larger than 3rem */
-  /* Scales at 5vw between those values */
-  font-size: clamp(1.5rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 1.1rem + 2vw, 3rem);
+}
+
+.body {
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
 }
 ```
 
-### Calculating Fluid Values
-
-The preferred value in `clamp()` typically combines a base size with a viewport-relative portion:
-
-```css
-/* Formula: clamp(min, base + scale * vw, max) */
-
-/* For text that scales from 16px (320px viewport) to 24px (1200px viewport): */
-/* slope = (24 - 16) / (1200 - 320) = 8 / 880 = 0.00909 */
-/* y-intercept = 16 - 0.00909 * 320 = 13.09px = 0.818rem */
-
-.text {
-  font-size: clamp(1rem, 0.818rem + 0.909vw, 1.5rem);
-}
-```
-
-### Type Scale Generator
-
-```javascript
-// Generate a fluid type scale
-function fluidType({
-  minFontSize,
-  maxFontSize,
-  minViewport = 320,
-// ... (21 lines trimmed)
-  "3xl": fluidType({ minFontSize: 30, maxFontSize: 48 }),
-  "4xl": fluidType({ minFontSize: 36, maxFontSize: 60 }),
-};
-```
-
-### Complete Type Scale
-
-```css
-:root {
-  /* Base: 16-18px */
-  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-
-  /* Smaller sizes */
-// ... (48 lines trimmed)
-small {
-  font-size: var(--text-sm);
-}
-```
+Use `clamp(min, preferred, max)` to keep text:
+- readable at the low end
+- flexible in the middle
+- capped on very large screens
 
 ## Fluid Spacing
 
-### Spacing Scale
-
 ```css
 :root {
-  /* Spacing tokens that scale with viewport */
-  --space-3xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.375rem);
-  --space-2xs: clamp(0.375rem, 0.3rem + 0.375vw, 0.5rem);
   --space-xs: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
-// ... (25 lines trimmed)
-.stack > * + * {
-  margin-top: var(--space-md);
+  --space-sm: clamp(0.75rem, 0.6rem + 0.6vw, 1rem);
+  --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 1.1rem + 1.5vw, 2.5rem);
 }
 ```
 
-### Container Widths
+Use fluid spacing tokens for:
+- section padding
+- stack gaps
+- card interiors
+
+## Fluid Containers
 
 ```css
-:root {
-  /* Fluid max-widths */
-  --container-xs: min(100% - 2rem, 20rem);
-  --container-sm: min(100% - 2rem, 30rem);
-  --container-md: min(100% - 2rem, 45rem);
-// ... (15 lines trimmed)
-  width: 100vw;
-  margin-inline: calc(-50vw + 50%);
+.container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
 }
 ```
 
-## CSS Grid Fluid Layouts
+This handles:
+- narrow-screen breathing room
+- wide-screen line-length control
 
-### Auto-fit Grid
+## Auto-Fit Grids
 
 ```css
-/* Grid that fills available space */
 .auto-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
   gap: var(--space-md);
-// ... (8 lines trimmed)
-  );
-  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
 }
 ```
 
-### Responsive Grid Areas
+This is a strong default for:
+- card grids
+- feature lists
+- dashboard tiles
+
+## Flexible Sidebars
 
 ```css
-.page-grid {
-  display: grid;
-  grid-template-columns:
-    1fr
-    min(var(--container-lg), 100%)
-// ... (21 lines trimmed)
-    grid-template-columns: 1fr min(300px, 30%);
-  }
-}
-```
-
-### Fluid Aspect Ratios
-
-```css
-/* Maintain aspect ratio fluidly */
-.aspect-video {
-  aspect-ratio: 16 / 9;
-}
-
-// ... (17 lines trimmed)
-    aspect-ratio: 16 / 9;
-  }
-}
-```
-
-## Flexbox Fluid Patterns
-
-### Flexible Sidebar
-
-```css
-/* Sidebar that collapses when too narrow */
 .with-sidebar {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-lg);
-// ... (9 lines trimmed)
-  flex-grow: 999;
-  min-width: 60%;
+}
+
+.sidebar {
+  flex: 1 1 16rem;
+}
+
+.content {
+  flex: 999 1 30rem;
 }
 ```
 
-### Cluster Layout
-
-```css
-/* Items cluster and wrap naturally */
-.cluster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-// ... (18 lines trimmed)
-  justify-content: space-between;
-  align-items: center;
-}
-```
-
-### Switcher Layout
-
-```css
-/* Switches from horizontal to vertical based on container */
-.switcher {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-// ... (10 lines trimmed)
-.switcher > :nth-last-child(n + 4) ~ * {
-  flex-basis: 100%;
-}
-```
+This lets the sidebar collapse naturally without a hard breakpoint.
 
 ## Intrinsic Sizing
 
-### Content-Based Widths
-
 ```css
-/* Size based on content */
+.modal {
+  width: min(90vw, 40rem);
+  max-height: min(90dvh, 50rem);
+}
+
 .fit-content {
   width: fit-content;
   max-width: 100%;
 }
-// ... (24 lines trimmed)
-  width: min(90vw, 600px);
-  max-height: min(90vh, 800px);
-}
 ```
 
-### min() and max() Functions
+Use intrinsic sizing when the content should drive the element width instead of the viewport.
 
-```css
-/* Responsive sizing without media queries */
-.container {
-  /* 90% of viewport or 1200px, whichever is smaller */
-  width: min(90%, 1200px);
-  margin-inline: auto;
-// ... (13 lines trimmed)
-  /* Each card at least 200px, fill available space */
-  grid-template-columns: repeat(auto-fit, minmax(max(200px, 100%/4), 1fr));
-}
+## When You Still Need Breakpoints
+
+Fluid patterns do not replace every breakpoint. Add one when:
+- navigation structure changes completely
+- a multi-column layout needs an extra rail
+- content order or interaction model changes
+
+## Default Recipe
+
+```text
+Use clamp() for type and spacing
+Use min()/max() for container widths
+Use auto-fit grids and flexible flexbox layouts
+Add breakpoints only for real structural changes
 ```
-
-## Viewport Units
-
-### Modern Viewport Units
-
-```css
-/* Dynamic viewport height - accounts for mobile browser UI */
-.full-height {
-  min-height: 100dvh;
-}
-
-// ... (22 lines trimmed)
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-}
-```
-
-### Combining Viewport and Container Units
-
-```css
-/* Responsive based on both viewport and container */
-.component {
-  container-type: inline-size;
-}
-
-.component-text {
-  /* Uses viewport when small, container when in container */
-  font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
-}
-
-@container (min-width: 400px) {
-  .component-text {
-    font-size: clamp(1rem, 4cqi, 1.5rem);
-  }
-}
-```
-
-## Utility Classes
-
-```css
-/* Tailwind-style fluid utilities */
-.text-fluid-sm {
-  font-size: var(--text-sm);
-}
-.text-fluid-base {
-// ... (34 lines trimmed)
-.gap-fluid-lg {
-  gap: var(--space-lg);
-}
-```
-
-## Resources
-
-- [Utopia Fluid Type Calculator](https://utopia.fyi/)
-- [Modern Fluid Typography](https://www.smashingmagazine.com/2022/01/modern-fluid-typography-css-clamp/)
-- [Every Layout](https://every-layout.dev/)
-- [CSS min(), max(), and clamp()](https://web.dev/min-max-clamp/)

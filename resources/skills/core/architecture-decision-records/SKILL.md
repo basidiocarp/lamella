@@ -57,7 +57,16 @@ Proposed → Accepted → Deprecated → Superseded
 **Status**: [Proposed | Accepted | Deprecated | Superseded]
 **Date**: YYYY-MM-DD
 **Deciders**: @person1, @person2
-// ... (8 lines trimmed)
+
+## Context
+[What changed, what constraints exist, and why a decision is needed now]
+
+## Decision
+[What is being adopted or rejected]
+
+## Alternatives Considered
+- [Option A]: [why not chosen]
+- [Option B]: [why not chosen]
 **Good**: [Benefits]
 **Bad**: [Drawbacks]
 **Mitigations**: [How to address drawbacks]

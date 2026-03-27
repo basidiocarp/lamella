@@ -31,7 +31,12 @@ steps:
   - id: research
     skill: market-research
     input: "{{user_topic}}"
-// ... (13 lines trimmed)
+  - id: analyze
+    skill: synthesize-findings
+    input: "{{steps.research.output}}"
+  - id: draft
+    skill: content-writer
+    input: "{{steps.analyze.output}}"
 on_failure:
   - step: analyze
     action: retry_with_broader_scope

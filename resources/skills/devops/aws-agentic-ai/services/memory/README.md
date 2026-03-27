@@ -105,7 +105,19 @@ from bedrock_agentcore.memory import MemoryClient
 # Initialize memory client
 memory = MemoryClient(memory_id="my-agent-memory")
 
-// ... (13 lines trimmed)
+memory.store(
+    namespace="preferences",
+    key="seat",
+    value={"type": "aisle", "updated_at": "2026-03-27"}
+)
+
+memory.store(
+    namespace="preferences",
+    key="airline",
+    value={"name": "Delta"}
+)
+
+matches = memory.search(
     query="user flight preferences",
     limit=5
 )

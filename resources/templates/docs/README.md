@@ -17,10 +17,10 @@ Templates for creating documentation and reports.
 
 ```bash
 # Create a decision record
-cp templates/docs/DECISION.md docs/decisions/001-architecture.md
+cp resources/templates/docs/DECISION.md docs/decisions/001-architecture.md
 
 # Document findings
-cp templates/docs/FINDINGS.md docs/audits/security-findings.md
+cp resources/templates/docs/FINDINGS.md docs/audits/security-findings.md
 ```
 
 ## Best Practices

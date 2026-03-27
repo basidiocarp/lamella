@@ -1,103 +1,59 @@
 # Endpoints & Routing
 
-## Router Setup
+Use this reference for the basic FastAPI routing patterns: routers, dependency
+aliases, validation, and response models.
 
-```python
-from fastapi import APIRouter, Depends, HTTPException, status, Query, Path
-from typing import Annotated
+## Router Structure
 
-router = APIRouter(prefix="/users", tags=["users"])
+Use `APIRouter` to group related endpoints by feature or resource.
 
-# Type aliases for common dependencies
-DB = Annotated[AsyncSession, Depends(get_db)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
-Pagination = Annotated[int, Query(ge=1, le=100)]
-```
+Typical pieces:
+- prefix
+- tags
+- shared dependencies
+- feature-local route definitions
 
-## CRUD Endpoints
+Keep router modules small enough that the resource boundary is still obvious.
 
-```python
-@router.post("/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
-async def create_user(db: DB, user_in: UserCreate) -> User:
-    if await get_user_by_email(db, user_in.email):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Email already registered")
-    return await create_user_db(db, user_in)
-// ... (32 lines trimmed)
-async def delete_user(db: DB, user_id: int, current_user: CurrentUser) -> None:
-    if not await delete_user_db(db, user_id):
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
-```
+## Dependency Aliases
 
-## Custom Dependencies
+Annotated aliases help keep endpoint signatures readable for:
+- database session access
+- current user or auth checks
+- common query and path validation patterns
 
-```python
-from fastapi import Depends
+Use them when the same dependency shape appears repeatedly.
 
-async def get_current_active_user(
-    current_user: CurrentUser,
-) -> User:
-// ... (9 lines trimmed)
-    return current_user
+## Endpoint Design
 
-AdminUser = Annotated[User, Depends(require_admin)]
-```
+Common API concerns belong in the route layer:
+- request validation
+- auth and authorization checks
+- status codes
+- response models
+- HTTP exception mapping
 
-## Query Parameters
+Push persistence and domain logic below the router so handlers stay thin.
 
-```python
-@router.get("/search")
-async def search_users(
-    db: DB,
-    q: str = Query(min_length=1, max_length=100),
-    is_active: bool | None = None,
-    role: UserRole | None = None,
-    created_after: datetime | None = None,
-    sort_by: Annotated[str, Query(pattern="^(name|email|created_at)$")] = "created_at",
-    order: Annotated[str, Query(pattern="^(asc|desc)$")] = "desc",
-) -> list[User]:
-    return await search_users_db(db, q, is_active, role, created_after, sort_by, order)
-```
+## Query and Path Validation
 
-## Include Router
+Use `Query(...)` and `Path(...)` constraints when:
+- values have bounded ranges
+- enums or regex patterns matter
+- the endpoint surface should fail fast on bad input
 
-```python
-# main.py
-from fastapi import FastAPI
-from app.api.v1 import users, auth, posts
+## Router Inclusion
 
-app = FastAPI()
+Register feature routers in one place and keep the version prefix consistent.
 
-app.include_router(users.router, prefix="/api/v1")
-app.include_router(auth.router, prefix="/api/v1")
-app.include_router(posts.router, prefix="/api/v1")
-```
+This makes the API layout predictable and easier to audit.
 
 ## Response Models
 
-```python
-from fastapi import Response
+Use response models to:
+- control public output shape
+- hide internal fields
+- generate accurate API docs
 
-@router.get("/", response_model=list[UserOut], response_model_exclude_unset=True)
-async def list_users(...) -> list[User]:
-    ...
-
-@router.get("/{id}", responses={
-    200: {"model": UserOut},
-    404: {"description": "User not found"},
-})
-async def get_user(...) -> User:
-    ...
-```
-
-## Quick Reference
-
-| Decorator | Purpose |
-|-----------|---------|
-| `@router.get("/")` | GET endpoint |
-| `@router.post("/", status_code=201)` | POST with status |
-| `Query(ge=0)` | Query param validation |
-| `Path(gt=0)` | Path param validation |
-| `Depends(func)` | Dependency injection |
-| `Annotated[T, Depends()]` | Type alias pattern |
-| `response_model=Model` | Response schema |
-| `HTTPException(status, detail)` | Error response |
+If the response model is doing too much transformation, move that shaping logic
+into serializers or mapping helpers.

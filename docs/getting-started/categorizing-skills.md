@@ -79,26 +79,20 @@ Skills provide deep domain knowledge with specialized techniques:
 
 ## Organization
 
-```
-rules/
-├── common/           # Language-agnostic (always install)
-│   ├── coding-style.md
-│   ├── verification.md
+```text
+resources/
+├── rules/
+│   ├── common/           # Language-agnostic baselines
+│   ├── python/           # Language-specific rule extensions
 │   └── ...
-├── typescript/       # TypeScript-specific
-├── python/           # Python-specific
-└── rust/             # Rust-specific
-
-workflows/
-├── development/      # Bug fixes, new features, commits
-├── quality/          # Verification, review, audit
-├── release/          # Release preparation
-└── integration/      # Tool and service integrations
-
-skills/
-├── design-patterns/  # Domain-specific deep knowledge
-├── playwright/       # Specialized techniques
-└── ...               # "How to" guidance
+├── workflows/
+│   ├── development/      # Bug fixes, new features, commits
+│   ├── quality/          # Verification, review, audit
+│   └── ...
+└── skills/
+    ├── design-patterns/  # Domain-specific deep knowledge
+    ├── playwright/       # Specialized techniques
+    └── ...
 ```
 
 ## Migration Checklist
@@ -108,5 +102,5 @@ When auditing content location:
 1. **Check scope**: Does it apply always or situationally?
 2. **Check structure**: Is it sequential with phases?
 3. **Check depth**: Is it deep knowledge or a standard?
-4. **Move accordingly**: Rules → `rules/`, Workflows → `workflows/`, Skills → `skills/`
+4. **Move accordingly**: Rules → `resources/rules/`, Workflows → `resources/workflows/`, Skills → `resources/skills/`
 5. **Update references**: Update any READMEs that reference moved content

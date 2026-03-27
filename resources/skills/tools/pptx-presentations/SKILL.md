@@ -79,6 +79,9 @@ Use the **html2pptx** workflow.
 3. Create JavaScript using `html2pptx.js` library
 4. **Visual validation**: Generate thumbnails and inspect
 
+For deeper HTML conversion details, use the focused references linked from
+`references/html2pptx.md`.
+
 ```bash
 python scripts/thumbnail.py output.pptx workspace/thumbnails --cols 4
 ```
@@ -138,6 +141,7 @@ python scripts/thumbnail.py template.pptx [output_prefix]
 - `references/creation-workflow.md` - Design principles, color palettes, visual details, html2pptx workflow
 - `references/editing-workflow.md` - OOXML editing, file structures, typography extraction
 - `references/template-workflow.md` - Template-based creation, inventory, replacement process
+- `references/html2pptx.md` - Routing page for HTML authoring, raster assets, converter API, and PptxGenJS post-processing
 
 ---
 

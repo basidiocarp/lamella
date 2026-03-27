@@ -157,7 +157,11 @@ from bedrock_agentcore.runtime import BedrockAgentCoreApp
 app = BedrockAgentCoreApp()
 
 @app.handler()
-// ... (8 lines trimmed)
+async def handler(event, context):
+    task_id = context.start_async_task(
+        operation="generate-report",
+        payload={"report_id": event["report_id"]}
+    )
     context.complete_async_task(task_id)
 
     return {"status": "Task started", "task_id": task_id}

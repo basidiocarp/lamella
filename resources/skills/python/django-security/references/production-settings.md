@@ -1,60 +1,45 @@
 # Django Production Settings
 
-## Full Production Configuration
+Use this reference as a production-hardening checklist, not a drop-in settings
+file.
 
-```python
-# settings/production.py
-import os
-from django.core.exceptions import ImproperlyConfigured
+## Core Rules
 
-DEBUG = False  # CRITICAL: Never use True in production
-// ... (40 lines trimmed)
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-```
+- `DEBUG` must be `False`
+- secrets come from environment or a secret manager
+- `ALLOWED_HOSTS` is explicit
+- secure cookie, header, and CSRF settings are enabled
+- TLS assumptions are configured correctly behind the real proxy chain
 
----
+## Environment Management
 
-## Environment Variables Management
+Use typed environment loading for:
+- secret key
+- database URL
+- allowed hosts
+- email and cache backends
 
-```python
-# Use python-decouple or django-environ
-import environ
+Never commit real production secrets or example `.env` values that look usable.
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+## Logging
 
-# reading .env file
-environ.Env.read_env()
+Production logging should support:
+- application error visibility
+- security-relevant events
+- enough context for incident response
 
-SECRET_KEY = env('DJANGO_SECRET_KEY')
-DATABASE_URL = env('DATABASE_URL')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-```
+Do not rely only on console defaults once the app is deployed behind real
+traffic.
 
-Example `.env` file (never commit this):
-```
-DEBUG=False
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-ALLOWED_HOSTS=example.com,www.example.com
-```
+## Password and Auth Hardening
 
----
+Keep:
+- password validators
+- strong session and CSRF settings
+- secure cookie flags
+- explicit proxy and HTTPS handling
 
-## Security Logging
+## Design Rule
 
-```python
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-// ... (19 lines trimmed)
-        },
-    },
-}
-```
+Production settings should make the insecure path hard to reach. If the app can
+quietly start in a weak configuration, the settings layer is not strict enough.

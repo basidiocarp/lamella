@@ -66,7 +66,9 @@ tests:
     B201,
     B301,
     B302,
-# ... (13 lines trimmed)
+    B303,
+    B304,
+    B305,
   ]
 skips: [B101]
 ```
@@ -113,7 +115,9 @@ rules:
     message: SQL injection via string formatting
     severity: ERROR
     languages: [python]
-# ... (46 lines trimmed)
+    patterns:
+      - pattern: cursor.execute(f"...{...}...")
+      - pattern: cursor.execute("...%s..." % ...)
     severity: ERROR
     languages: [python]
 ```
@@ -288,7 +292,14 @@ from pathlib import Path
 from typing import Dict, List, Any
 from dataclasses import dataclass
 from datetime import datetime
-# ... (105 lines trimmed)
+@dataclass
+class ScanSummary:
+    bandit_findings: int
+    semgrep_findings: int
+    codeql_findings: int
+
+def severity_score(severity_counts):
+    weights = {"critical": 5, "high": 3, "medium": 2, "low": 1}
         total = sum(weights[s] * c for s, c in severity_counts.items())
         return min(100, int((total / 50) * 100))
 ```
@@ -304,7 +315,12 @@ on:
     branches: [main]
 
 jobs:
-# ... (23 lines trimmed)
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bandit -r . -f json -o bandit.json
+      - run: semgrep scan --config auto --json --output semgrep.json
             bandit.json
             semgrep.json
 ```

@@ -30,7 +30,9 @@ name: hello
 description: Prints a friendly greeting message
 ---
 
-// ... (10 lines trimmed)
+echo "Hello from the plugin."
+echo "Current time: $(date '+%Y-%m-%d %H:%M:%S')"
+
 > Use this as a starting point for building more complex plugins.
 
 Include the current timestamp in the greeting to show the command executed successfully.

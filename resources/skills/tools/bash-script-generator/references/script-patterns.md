@@ -1,311 +1,203 @@
 # Bash Script Patterns
 
-Common patterns and templates for bash script generation.
+Compact bash patterns for common script shapes.
 
-## Table of Contents
+## Argument Parsing
 
-1. [Argument Parsing Patterns](#argument-parsing-patterns)
-2. [Configuration File Handling](#configuration-file-handling)
-3. [Logging Frameworks](#logging-frameworks)
-4. [Parallel Processing](#parallel-processing)
-5. [Lock Files](#lock-files)
-6. [Signal Handling](#signal-handling)
-7. [Retry Logic](#retry-logic)
-
-## Argument Parsing Patterns
-
-### Simple getopts Pattern
+### `getopts` for Short Flags
 
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 
 usage() {
-    cat << EOF
-// ... (32 lines trimmed)
+  cat <<'EOF'
+Usage: script.sh [-f file] [-v]
+EOF
 }
 
-main "$@"
+file=""
+verbose=false
+
+while getopts ":f:vh" opt; do
+  case "${opt}" in
+    f) file="${OPTARG}" ;;
+    v) verbose=true ;;
+    h) usage; exit 0 ;;
+    :) echo "Missing value for -${OPTARG}" >&2; exit 1 ;;
+    \?) echo "Unknown option: -${OPTARG}" >&2; exit 1 ;;
+  esac
+done
+shift $((OPTIND - 1))
 ```
 
-### Long Options Pattern
+Use `getopts` when:
+- only short options are needed
+- portability matters
+- the script should stay dependency-free
+
+### Manual Long Options
 
 ```bash
-# Parse both short and long options
 parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            -h|--help)
-// ... (29 lines trimmed)
-    # Remaining arguments
-    REMAINING_ARGS=("$@")
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --config) config="$2"; shift 2 ;;
+      --verbose) verbose=true; shift ;;
+      --help) usage; exit 0 ;;
+      --) shift; break ;;
+      *) break ;;
+    esac
+  done
+  remaining_args=("$@")
 }
 ```
 
-### Subcommand Pattern
+Use manual parsing when long flags improve usability and the option set is still small.
+
+### Subcommands
 
 ```bash
-#!/usr/bin/env bash
-set -euo pipefail
+cmd_start() { echo "Starting"; }
+cmd_stop() { echo "Stopping"; }
 
-cmd_start() {
-    echo "Starting service..."
-// ... (37 lines trimmed)
+main() {
+  case "${1:-}" in
+    start) shift; cmd_start "$@" ;;
+    stop) shift; cmd_stop "$@" ;;
+    *) echo "Expected subcommand: start|stop" >&2; exit 1 ;;
+  esac
 }
-
-main "$@"
 ```
 
-## Configuration File Handling
+Use subcommands when the script acts like a small CLI, not a single operation.
 
-### Source-based Configuration
+## Configuration Loading
 
-```bash
-# config.conf file
-CONFIG_VALUE="something"
-MAX_RETRIES=3
-API_URL="https://api.example.com"
-
-// ... (10 lines trimmed)
-}
-
-load_config "/etc/myapp/config.conf"
-```
-
-### Key-Value Configuration Parser
+### Source-Based Config
 
 ```bash
-# config.conf format:
-# key=value
-# # comments
-
 load_config() {
-// ... (11 lines trimmed)
-        declare -g "${key}=${value}"
-    done < "${config_file}"
+  local config_file="$1"
+  [[ -f "${config_file}" ]] || return 0
+  # shellcheck source=/dev/null
+  source "${config_file}"
 }
 ```
 
-### INI-style Configuration Parser
+Only source config you trust. This executes shell code.
+
+### Key-Value Parser
 
 ```bash
-# Parse INI format [section] key=value
-parse_ini() {
-    local file="$1"
-    local section=""
-
-// ... (19 lines trimmed)
-        fi
-    done < "${file}"
+load_kv_config() {
+  local config_file="$1"
+  while IFS='=' read -r key value; do
+    [[ -z "${key}" || "${key}" == \#* ]] && continue
+    declare -g "${key}=${value}"
+  done < "${config_file}"
 }
 ```
 
-## Logging Frameworks
+Use this for simple `key=value` files when you do not want executable config.
 
-### Simple Logging with Levels
-
-```bash
-# LOG_LEVEL: 0=DEBUG, 1=INFO (default), 2=WARN, 3=ERROR
-LOG_LEVEL=${LOG_LEVEL:-1}
-
-# Use if-form guards — the && short-circuit form returns 1 when the
-# level check fails, which triggers set -e at the call site.
-log_debug() { if [[ ${LOG_LEVEL} -le 0 ]]; then echo "[DEBUG] $(date '+%Y-%m-%d %H:%M:%S') $*" >&2; fi; }
-log_info()  { if [[ ${LOG_LEVEL} -le 1 ]]; then echo "[INFO]  $(date '+%Y-%m-%d %H:%M:%S') $*" >&2; fi; }
-log_warn()  { if [[ ${LOG_LEVEL} -le 2 ]]; then echo "[WARN]  $(date '+%Y-%m-%d %H:%M:%S') $*" >&2; fi; }
-log_error() { echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') $*" >&2; }
-```
-
-### File-based Logging
+## Logging
 
 ```bash
-readonly LOG_FILE="${LOG_FILE:-/var/log/myscript.log}"
-
-log_to_file() {
-    local level="$1"
-// ... (7 lines trimmed)
-    log_to_file "INFO" "${msg}"
+log() {
+  local level="$1"; shift
+  printf '[%s] %s\n' "${level}" "$*" >&2
 }
+
+log_info()  { log INFO "$@"; }
+log_warn()  { log WARN "$@"; }
+log_error() { log ERROR "$@"; }
 ```
 
-### Structured JSON Logging
+For machine-readable logs:
 
 ```bash
 log_json() {
-    local level="$1"
-    local message="$2"
-    local timestamp=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
-// ... (7 lines trimmed)
-    log_json "INFO" "$*" >&2
+  printf '{"level":"%s","message":"%s"}\n' "$1" "$2" >&2
 }
 ```
 
-## Parallel Processing
+## Parallel Work
 
-### Using xargs for Parallel Execution
+### `xargs -P`
 
 ```bash
-# Process files in parallel
-find . -name "*.txt" -print0 | xargs -0 -P 4 -I {} process_file {}
-
-# With function export
-// ... (5 lines trimmed)
-
-find . -name "*.txt" | xargs -P 4 -I {} bash -c 'process_file "$@"' _ {}
+find . -name '*.txt' -print0 | xargs -0 -P 4 -I {} bash -c 'process_file "$@"' _ {}
 ```
 
-### Using GNU Parallel
+Good for simple parallel file processing.
+
+### Background Jobs
 
 ```bash
-# Requires: apt-get install parallel
-
-# Simple parallel execution
-parallel process_file ::: file1.txt file2.txt file3.txt
-// ... (7 lines trimmed)
-# Control number of jobs
-parallel -j 4 process_file ::: *.txt
-```
-
-### Background Jobs Pattern
-
-```bash
-# Track background jobs
 pids=()
-
-# Start jobs
 for file in *.txt; do
-// ... (9 lines trimmed)
-        echo "Job ${pid} failed" >&2
-    fi
+  process_file "${file}" &
+  pids+=("$!")
+done
+
+for pid in "${pids[@]}"; do
+  wait "${pid}"
 done
 ```
 
-## Lock Files
+Use this when you need explicit job tracking or per-job error handling.
 
-### Simple Lock File
+## Locking
 
-```bash
-readonly LOCK_FILE="/var/lock/myscript.lock"
-
-acquire_lock() {
-    if [[ -f "${LOCK_FILE}" ]]; then
-// ... (7 lines trimmed)
-
-acquire_lock
-```
-
-### PID-based Lock with Stale Lock Detection
+### `flock`
 
 ```bash
-acquire_lock() {
-    local lock_file="/var/lock/myscript.lock"
-
-    if [[ -f "${lock_file}" ]]; then
-        local old_pid=$(cat "${lock_file}")
-// ... (11 lines trimmed)
-    echo $$ > "${lock_file}"
-    trap 'rm -f "${lock_file}"' EXIT
-}
-```
-
-### Using flock for Atomic Locking
-
-```bash
-# Requires flock command
-
 exec 200>/var/lock/myscript.lock
 flock -n 200 || { echo "Another instance is running" >&2; exit 1; }
-
-# Script runs exclusively
-# Lock is released when script exits
 ```
 
-## Signal Handling
+Prefer `flock` when available because it is atomic and cleaner than hand-rolled lock files.
 
-### Cleanup on Exit
+### PID Lock File
+
+```bash
+lock_file=/var/lock/myscript.lock
+echo "$$" > "${lock_file}"
+trap 'rm -f "${lock_file}"' EXIT
+```
+
+Use only if `flock` is unavailable and add stale-lock detection.
+
+## Cleanup and Signals
 
 ```bash
 cleanup() {
-    local exit_code=$?
-    echo "Cleaning up..." >&2
-
-// ... (8 lines trimmed)
+  local exit_code=$?
+  rm -f "${tmp_file:-}"
+  exit "${exit_code}"
+}
 
 trap cleanup EXIT
-```
-
-### Handling Multiple Signals
-
-```bash
-handle_sigint() {
-    echo "Received SIGINT, cleaning up..." >&2
-    cleanup
-    exit 130  # Standard exit code for SIGINT
-// ... (9 lines trimmed)
-trap handle_sigterm TERM
-trap cleanup EXIT ERR
-```
-
-### Graceful Shutdown
-
-```bash
-SHUTDOWN=false
-
-handle_signal() {
-    echo "Shutdown signal received, finishing current work..." >&2
-// ... (9 lines trimmed)
-
-echo "Graceful shutdown complete" >&2
+trap 'echo "Interrupted" >&2; exit 130' INT TERM
 ```
 
 ## Retry Logic
 
-### Simple Retry with Backoff
-
 ```bash
 retry() {
-    local max_attempts=3
-    local delay=1
-    local attempt=1
+  local attempts="$1"; shift
+  local delay="$1"; shift
 
-// ... (14 lines trimmed)
-
-# Usage
-retry curl -f https://api.example.com/data
-```
-
-### Advanced Retry with Custom Parameters
-
-```bash
-retry_with_backoff() {
-    local max_attempts="${1}"
-    local delay="${2}"
-    local max_delay="${3:-60}"
-    shift 3
-// ... (23 lines trimmed)
-
-# Usage: retry_with_backoff MAX_ATTEMPTS INITIAL_DELAY MAX_DELAY command args...
-retry_with_backoff 5 1 30 curl -f https://api.example.com/data
-```
-
-### Retry with Jitter
-
-```bash
-retry_with_jitter() {
-    local max_attempts="$1"
-    local base_delay="$2"
-    shift 2
-    local attempt=1
-// ... (20 lines trimmed)
-
-    return 1
+  local n=1
+  until "$@"; do
+    if (( n >= attempts )); then
+      return 1
+    fi
+    sleep "${delay}"
+    ((n++))
+  done
 }
 ```
 
----
-
-## References
-
-- [Advanced Bash-Scripting Guide](https://tldp.org/LDP/abs/html/)
-- [Bash Hackers Wiki](https://wiki.bash-hackers.org/)
-- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
+Use retries only for transient failures, not deterministic validation errors.

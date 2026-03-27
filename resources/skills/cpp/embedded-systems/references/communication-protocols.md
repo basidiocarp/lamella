@@ -1,69 +1,88 @@
 # Communication Protocols
 
-## I2C Master Implementation
+Use this reference to choose the right communication pattern for embedded
+systems. It is a routing guide, not a full peripheral-driver implementation.
 
-```c
-#include "stm32f4xx.h"
+## I2C
 
-// I2C1 on PB6 (SCL) and PB7 (SDA)
-void I2C_Init(void) {
-    // Enable clocks
-// ... (113 lines trimmed)
-    if (!I2C_Write(addr, &reg, 1)) return false;
-    return I2C_Read(addr, data, len);
-}
-```
+Best for:
+- low-pin-count peripheral buses
+- configuration registers
+- small sensor payloads
 
-## SPI Master Implementation
+Review points:
+- open-drain pins and pull-ups
+- address size and register addressing
+- timeout handling for stuck buses
+- recovery path for arbitration loss or a held-low line
 
-```c
-// SPI1 on PA5 (SCK), PA6 (MISO), PA7 (MOSI)
-void SPI_Init(void) {
-    // Enable clocks
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
-    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-// ... (77 lines trimmed)
+Use DMA or interrupt-driven transfers only when bus load justifies the added
+complexity.
 
-    return timeout > 0;
-}
-```
+## SPI
 
-## UART with Interrupt and Circular Buffer
+Best for:
+- higher-throughput peripheral traffic
+- displays, flash, ADCs, DACs, radios
+- deterministic master-driven transfers
 
-```c
-#define UART_RX_BUFFER_SIZE 256
+Review points:
+- clock polarity and phase
+- chip-select timing
+- full-duplex vs half-duplex assumptions
+- buffer ownership during DMA transfers
 
-typedef struct {
-    uint8_t buffer[UART_RX_BUFFER_SIZE];
-    uint16_t head;
-// ... (63 lines trimmed)
+SPI is usually simpler than I2C electrically, but easier to misconfigure at the
+timing and framing layer.
 
-    return count;
-}
-```
+## UART
 
-## CAN Bus Implementation
+Best for:
+- console access
+- simple point-to-point links
+- bootloader, telemetry, and debugging channels
 
-```c
-// CAN on PB8 (RX) and PB9 (TX)
-void CAN_Init(void) {
-    // Enable clocks
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
-    RCC->APB1ENR |= RCC_APB1ENR_CAN1EN;
-// ... (93 lines trimmed)
+Review points:
+- baud-rate error tolerance
+- framing and parity configuration
+- interrupt or DMA receive path
+- circular-buffer overflow behavior
 
-    return true;
-}
-```
+Always define how receive buffers recover from burst traffic and framing errors.
 
-## Best Practices
+## CAN
 
-- Always use timeouts to prevent infinite loops
-- Implement error handling and recovery
-- Use DMA for high-speed transfers
-- Use interrupts to avoid polling
-- Protect shared buffers with critical sections
-- Validate received data (CRC, checksums)
-- Implement protocol state machines properly
-- Configure GPIO alternate functions correctly
-- Calculate baud rates/timings accurately
+Best for:
+- multi-node industrial or automotive networks
+- high-reliability bus arbitration
+- systems that need message IDs and hardware filtering
+
+Review points:
+- bit timing and bus speed
+- identifier allocation
+- acceptance filters
+- error passive / bus-off recovery
+
+Treat CAN configuration as a network-design problem, not only a peripheral setup
+task.
+
+## Cross-Protocol Guidance
+
+Regardless of protocol:
+- use explicit timeouts
+- validate message framing and checksums where applicable
+- keep ISR work minimal
+- protect shared buffers and state transitions
+- define recovery behavior for bus or peripheral faults
+
+## Selection Guide
+
+| Protocol | Better for |
+|---|---|
+| I2C | simple multi-device control and sensor buses |
+| SPI | higher-throughput local peripherals |
+| UART | point-to-point links and console/debugging |
+| CAN | robust multi-node message networks |
+
+If you need a full driver example, split that into a protocol-specific reference
+instead of overloading this guide.

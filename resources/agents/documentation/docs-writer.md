@@ -1,6 +1,6 @@
 ---
 name: docs-writer
-description: Specialized documentation writer and reviewer with code-to-docs generation and drift detection
+description: Generates and updates technical documentation from code and architectural context. Use when creating code-aligned docs, codemaps, or drift fixes after implementation changes.
 model: sonnet
 color: magenta
 ---

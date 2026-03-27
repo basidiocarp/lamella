@@ -271,7 +271,8 @@ except Exception as e:
 {
 'pattern': r'def._\(\s_\):.\*global',
 'issue': 'Global variable usage',
-# ... (14 lines trimmed)
+'explanation': 'Global state makes behavior harder to reason about and test.',
+'safer_pattern': 'Pass state explicitly or wrap it in an object with clear ownership.'
 **Example refactor**:
 
 ```python

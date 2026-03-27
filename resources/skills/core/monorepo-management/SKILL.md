@@ -49,7 +49,16 @@ python3 scripts/monorepo_analyzer.py /path/to/monorepo --json
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-// ... (8 lines trimmed)
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "build/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": ["coverage/**"]
+    },
     "dev": { "cache": false, "persistent": true }
   }
 }

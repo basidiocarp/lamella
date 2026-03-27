@@ -135,7 +135,11 @@ Task:
   prompt: |
     You are a business analyst specializing in technology transformation and risk assessment.
 
-# ... (13 lines trimmed)
+    Cover:
+    - business capability affected by the legacy system
+    - operational and revenue risks of change
+    - migration timing constraints
+    - success and rollback criteria
 
     Write your complete business impact analysis as a single markdown document.
 ```
@@ -182,7 +186,11 @@ Task:
   prompt: |
     You are a test automation engineer specializing in legacy system characterization testing.
 
-# ... (13 lines trimmed)
+    Cover:
+    - current behavior that must be preserved
+    - seams for safe characterization tests
+    - missing fixtures or test data
+    - coverage expectations before refactoring
 
     Write all test files and report what was created. Provide a coverage summary.
 ```
@@ -204,7 +212,11 @@ Task:
   prompt: |
     You are a test automation engineer specializing in contract testing and API verification.
 
-# ... (13 lines trimmed)
+    Cover:
+    - public contracts that cannot drift
+    - provider and consumer expectations
+    - backward-compatibility assertions
+    - test scope needed before migration steps continue
 
     Write all test files and report what was created.
 ```
@@ -226,7 +238,11 @@ Task:
   prompt: |
     You are a data engineer specializing in test data management and data pipeline design.
 
-# ... (13 lines trimmed)
+    Cover:
+    - representative datasets and masking rules
+    - refresh and seeding strategy
+    - data quality assumptions required for migration testing
+    - safe storage and cleanup of generated fixtures
 
     Write all configuration and script files. Report what was created.
 ```
@@ -271,7 +287,11 @@ Task:
   prompt: |
     You are a backend architect specializing in distributed systems and migration infrastructure.
 
-# ... (15 lines trimmed)
+    Cover:
+    - cutover boundaries and strangler seams
+    - routing, messaging, or sync paths between old and new systems
+    - failure handling and rollback mechanics
+    - observability required during migration
 
     Write all configuration files. Report what was created/modified.
 ```
@@ -293,7 +313,11 @@ Task:
   prompt: |
     You are an expert [DETECTED LANGUAGE] developer specializing in legacy code modernization
     and migration to modern frameworks and patterns.
-# ... (23 lines trimmed)
+    Cover:
+    - incremental modernization steps
+    - how to preserve external behavior while reducing legacy coupling
+    - tests to keep green throughout the rewrite
+    - files changed and what each change unlocked
 
     Write all code files. Report what files were created/modified.
 ```
@@ -317,7 +341,11 @@ Task:
   prompt: |
     You are a security engineer specializing in application security auditing,
     OWASP compliance, and secure coding practices.
-# ... (15 lines trimmed)
+    Cover:
+    - legacy-era security assumptions that are unsafe now
+    - migration-introduced auth, secret, or input-handling risks
+    - concrete code and config hardening work
+    - findings ordered by severity with specific fixes
     Provide a security audit report with findings by severity (Critical/High/Medium/Low)
     and list all hardening changes made. Write all code changes.
 ```
@@ -364,7 +392,11 @@ Task:
   prompt: |
     You are a performance engineer specializing in load testing, benchmarking,
     and application performance optimization.
-# ... (14 lines trimmed)
+    Cover:
+    - baseline versus modernized path
+    - throughput, latency, and resource usage
+    - highest-leverage optimizations
+    - verification that performance does not regress after cutover
 
     Provide performance test results with comparison tables and optimization recommendations.
 ```
@@ -386,7 +418,11 @@ Task:
   prompt: |
     You are a deployment engineer specializing in progressive delivery,
     feature flag management, and production rollout strategies.
-# ... (15 lines trimmed)
+    Cover:
+    - rollout sequence and environment gates
+    - canary or parallel-run strategy
+    - rollback triggers and ownership
+    - runbook details for on-call use
 
     Write all configuration files and the rollout runbook.
 ```
@@ -432,7 +468,11 @@ Task:
   prompt: |
     Plan safe decommissioning of replaced legacy components.
 
-# ... (15 lines trimmed)
+    Cover:
+    - dependency and traffic verification before shutdown
+    - archival or retention obligations
+    - monitoring window after cutover
+    - irreversible steps that must wait until the observation period ends
 
     Provide a decommissioning checklist and timeline.
 ```
@@ -454,7 +494,11 @@ Task:
   prompt: |
     You are a technical writer specializing in system migration documentation
     and developer knowledge transfer materials.
-# ... (14 lines trimmed)
+    Cover:
+    - new architecture overview
+    - operational runbooks and troubleshooting notes
+    - developer onboarding notes for the modernized stack
+    - any deprecated workflows that should be removed from docs
 
     Write all documentation files. Report what was created.
 ```
@@ -481,7 +525,14 @@ Legacy modernization complete: $TARGET
 - .legacy-modernize/01-legacy-assessment.md — Legacy system analysis
 - .legacy-modernize/02-dependency-map.md — Dependency and integration mapping
 - .legacy-modernize/03-business-impact.md — Business impact and risk assessment
-# ... (21 lines trimmed)
+- .legacy-modernize/04-characterization-tests.md — Baseline behavior tests
+- .legacy-modernize/05-contract-tests.md — API and integration contracts
+- .legacy-modernize/06-migration-infrastructure.md — Cutover and routing setup
+- .legacy-modernize/07-modernized-implementation.md — Code changes
+- .legacy-modernize/08-security-review.md — Hardening and findings
+- .legacy-modernize/09-performance-validation.md — Benchmark and optimization results
+- .legacy-modernize/10-rollout-runbook.md — Deployment sequence
+- .legacy-modernize/11-documentation-handoff.md — Updated docs and operator guidance
 3. Monitor for 30 days post-migration per .legacy-modernize/12-decommission.md
 4. Complete decommissioning after observation period
 ```

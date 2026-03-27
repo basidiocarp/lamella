@@ -1,60 +1,57 @@
 # Custom Hooks Patterns
 
-## State Management Hook
+Use custom hooks to extract reusable state or effect logic without hiding too
+much component behavior.
 
-```typescript
-export function useToggle(initialValue = false): [boolean, () => void] {
-  const [value, setValue] = useState(initialValue)
+## Good Hook Shapes
 
-  const toggle = useCallback(() => {
-    setValue(v => !v)
-  }, [])
+Good fits:
+- simple state helpers such as toggles
+- async data or mutation wrappers
+- debounce or throttling helpers
+- context-backed access hooks
 
-  return [value, toggle]
-}
+Keep hooks:
+- narrowly scoped
+- explicit about inputs and outputs
+- easy to test in isolation
 
-// Usage
-const [isOpen, toggleOpen] = useToggle()
-```
+## State Helpers
 
-## Async Data Fetching Hook
+Small state hooks should return a predictable tuple or object and avoid hiding
+unnecessary side effects.
 
-```typescript
-interface UseQueryOptions<T> {
-  onSuccess?: (data: T) => void
-  onError?: (error: Error) => void
-  enabled?: boolean
-}
-// ... (42 lines trimmed)
-    onError: err => console.error('Failed:', err)
-  }
-)
-```
+## Async Hooks
 
-## Debounce Hook
+Async hooks should make:
+- loading state
+- success data
+- error state
+- cancellation or cleanup
 
-```typescript
-export function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+clear at the call site. If the hook becomes a full data layer, move that logic
+to a dedicated query library or state module.
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-// ... (15 lines trimmed)
-    performSearch(debouncedQuery)
-  }
-}, [debouncedQuery])
-```
+## Debounce and Timing Hooks
 
-## State Management: Context + Reducer Pattern
+Use hooks for:
+- debounced search
+- delayed UI reactions
+- timer-driven state transitions
 
-```typescript
-interface State {
-  markets: Market[]
-  selectedMarket: Market | null
-  loading: boolean
-}
-// ... (40 lines trimmed)
-  if (!context) throw new Error('useMarkets must be used within MarketProvider')
-  return context
-}
-```
+Always handle cleanup so stale timers do not leak or update unmounted
+components.
+
+## Context + Reducer Hooks
+
+Context-backed hooks work well when:
+- state is shared across a feature boundary
+- updates need a small command surface
+- the provider boundary is obvious
+
+Do not use context reducers for every local component state problem.
+
+## Authoring Rule
+
+If a hook makes the component easier to read and reuse, it is helping. If it
+makes simple state feel hidden or indirect, keep the logic inline.

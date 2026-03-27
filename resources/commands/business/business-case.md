@@ -392,7 +392,8 @@ Total Raise: $5.0M
   • Engineering team expansion
   • Infrastructure and tools
   • Product roadmap execution
-# ... (10 lines trimmed)
+- Risk Reserve: $0.5M (10%)
+- Hiring Buffer: $0.3M (6%)
 - Working Capital: $0.5M (10%)
   • 6-month buffer
 ```

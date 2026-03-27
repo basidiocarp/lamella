@@ -1,213 +1,61 @@
 # Advanced Hooks
 
-Prompt-based hooks, agent-based hooks, async hooks, and security considerations.
+Use these patterns when hooks need more than a simple deterministic command.
 
-## Prompt-based hooks
+## Prompt Hooks
 
-For decisions requiring judgment rather than deterministic rules, use `type: "prompt"` hooks. Claude Code sends your prompt and the hook's input to a Claude model (Haiku by default) for a yes/no decision.
+Use prompt hooks when the decision depends on judgment rather than a fixed shell
+rule.
 
-### Configuration
+Good fit:
+- should Claude stop or continue?
+- does the current state satisfy a checklist?
+- is a summary complete enough to allow exit?
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Check if all tasks are complete. If not, respond with {\"ok\": false, \"reason\": \"what remains\"}."
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Prompt hooks should return a simple allow/block result with a reason when they
+block.
 
-| Field | Required | Description |
-|:------|:---------|:------------|
-| `type` | yes | Must be `"prompt"` |
-| `prompt` | yes | Prompt text. Use `$ARGUMENTS` for hook input JSON |
-| `model` | no | Model to use (defaults to fast model) |
-| `timeout` | no | Timeout in seconds (default: 30) |
+## Agent Hooks
 
-### Response schema
+Use agent hooks when the hook needs to inspect files, run tools, or verify the
+actual repo state.
 
-The LLM must respond with:
+Good fit:
+- check whether tests passed
+- inspect generated files
+- verify conditions that cannot be derived from hook input alone
 
-```json
-{
-  "ok": true | false,
-  "reason": "Explanation for the decision"
-}
-```
+Use them sparingly. They are heavier than prompt hooks.
 
-- `"ok": true` — allows the action
-- `"ok": false` — blocks the action; `reason` is fed back to Claude
+## Async Hooks
 
-### Multi-criteria example
+Use async hooks for long-running side work that should not block the main flow.
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Evaluate whether Claude should stop. Context: $ARGUMENTS\n\nCheck if:\n1. All tasks are complete\n2. No errors need addressing\n3. No follow-up work needed\n\nRespond with {\"ok\": true} to allow stopping, or {\"ok\": false, \"reason\": \"explanation\"} to continue.",
-            "timeout": 30
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Typical examples:
+- background test runs
+- indexing or reporting
+- post-write analysis
 
----
+Async hooks should report useful context later, but they cannot block an action
+that already happened.
 
-## Agent-based hooks
+## Security Rules
 
-When verification requires inspecting files or running commands, use `type: "agent"` hooks. Unlike prompt hooks, agent hooks spawn a subagent that can use tools (Read, Grep, Glob, etc.) to verify conditions.
+Hooks run with user permissions, so treat them like local automation scripts.
 
-### Configuration
-
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "agent",
-            "prompt": "Verify that all unit tests pass. Run the test suite and check results. $ARGUMENTS",
-            "timeout": 120
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-| Field | Required | Description |
-|:------|:---------|:------------|
-| `type` | yes | Must be `"agent"` |
-| `prompt` | yes | Prompt describing what to verify |
-| `model` | no | Model to use (defaults to fast model) |
-| `timeout` | no | Timeout in seconds (default: 60) |
-
-Agent hooks use the same `{ "ok": true/false }` response schema as prompt hooks but allow up to 50 tool-use turns.
-
-### When to use each
-
-- **Prompt hooks:** When hook input data alone is enough to decide
-- **Agent hooks:** When you need to verify against actual codebase state
-
----
-
-## Async hooks
-
-For long-running tasks, set `"async": true` to run in the background while Claude continues working.
-
-### Configuration
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-// ... (9 lines trimmed)
-    ]
-  }
-}
-```
-
-### How async hooks work
-
-1. Claude Code starts the hook process and continues immediately
-2. The hook receives the same JSON input via stdin
-3. After the process exits, `systemMessage` or `additionalContext` is delivered on the next turn
-
-### Limitations
-
-- Only `type: "command"` hooks support async
-- Cannot block or return decisions (action already proceeded)
-- Output delivered on next conversation turn
-- No deduplication across multiple firings
-
-### Example: async test runner
-
-```bash
-#!/bin/bash
-# run-tests-async.sh
-INPUT=$(cat)
-FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
-
-// ... (10 lines trimmed)
-else
-  echo "{\"systemMessage\": \"Tests failed: $RESULT\"}"
-fi
-```
-
----
-
-## Security considerations
-
-**Warning:** Hooks run with your full user permissions. They can modify, delete, or access any files your account can access.
-
-### Best practices
-
-- **Validate inputs:** Never trust input data blindly
-- **Quote shell variables:** Use `"$VAR"` not `$VAR`
-- **Block path traversal:** Check for `..` in file paths
-- **Use absolute paths:** Specify full paths using `"$CLAUDE_PROJECT_DIR"`
-- **Skip sensitive files:** Avoid `.env`, `.git/`, keys, etc.
-
-### Example: safe command validation
-
-```bash
-#!/bin/bash
-INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command')
-
-# Block dangerous patterns
-// ... (9 lines trimmed)
-fi
-
-exit 0
-```
-
----
+Minimum safety rules:
+- validate all inputs
+- quote shell variables
+- block path traversal
+- avoid sensitive file access unless explicitly intended
+- prefer project-root-relative paths over ad hoc shell assumptions
 
 ## Debugging
 
-### Enable debug mode
+Useful techniques:
+- run Claude in debug mode
+- inspect matcher behavior and exit codes
+- keep hook output terse and actionable
 
-```bash
-claude --debug
-```
-
-Shows hook execution details: which hooks matched, exit codes, and output.
-
-### Verbose mode
-
-Press `Ctrl+O` to toggle verbose mode and see hook output in the transcript.
-
-### Debug output example
-
-```
-[DEBUG] Executing hooks for PostToolUse:Write
-[DEBUG] Found 1 hook matchers in settings
-[DEBUG] Matched 1 hooks for query "Write"
-[DEBUG] Hook command completed with status 0: <output>
-```
-
-## See also
-
-- [troubleshooting.md](troubleshooting.md) — Common issues and fixes
-- [examples.md](examples.md) — Common patterns
-- [hook-events.md](hook-events.md) — Event schemas
+The advanced pattern is still the same rule: use the lightest hook type that can
+make the decision safely.

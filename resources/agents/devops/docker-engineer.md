@@ -1,6 +1,6 @@
 ---
 name: docker-engineer
-description: Ultra-specialized agent for Docker and Docker Compose development. Use for creating Dockerfiles, compose configurations, managing containers, networking, volumes, SSL setup, troubleshooting, and optimizing Docker environments. This agent has access to complete Docker documentation.
+description: Designs and troubleshoots Dockerfiles, Compose stacks, and container runtime configuration. Use when building containerized development or deployment workflows, or when a Docker setup needs debugging.
 model: sonnet
 color: blue
 ---

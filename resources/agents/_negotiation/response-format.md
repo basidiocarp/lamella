@@ -17,7 +17,18 @@ For standard (non-negotiation) queries, use the agent's default output format.
 
 ### Findings
 [Primary query results]
-# ... (14 lines trimmed)
+### Confidence
+- **Level**: [HIGH | MEDIUM | LOW | UNCERTAIN]
+- **Reason**: [Why this confidence level fits the available evidence]
+
+### Gaps Identified
+- [ ] [Unverified fact or missing source]
+- [ ] [Open question that affects answer quality]
+
+### Context Needed
+- [Question for orchestrator, if additional context is needed]
+
+### Metadata
 - **Source**: [Data source]
 - **Coverage**: [Coverage assessment]
 ```
@@ -150,7 +161,23 @@ Source attribution and coverage assessment.
 ### Findings
 **Crate:** serde
 **Version:** 1.0.219
-# ... (22 lines trimmed)
+**Description:** Serialization framework for Rust data structures
+
+**Key Features:**
+- Derive-based serialization and deserialization
+- Broad ecosystem support for JSON, YAML, and other formats
+- Strong compatibility with typed Rust APIs
+
+### Confidence
+- **Level**: HIGH
+- **Reason**: Primary sources covered the crate metadata and current usage guidance.
+
+### Gaps Identified
+- [ ] Benchmarks against alternative serialization crates
+
+### Context Needed
+- None
+
 ### Metadata
 - **Source**: lib.rs, docs.rs/serde/1.0.219
 - **Coverage**: 95% - comprehensive for typical use
@@ -164,7 +191,25 @@ Source attribution and coverage assessment.
 ### Findings
 **Crate:** obscure-crate
 **Version:** 0.1.2 (last updated 2023)
-# ... (18 lines trimmed)
+**Description:** Minimal registry metadata found, but no maintained documentation surfaced.
+
+**Observed Signals:**
+- Low update frequency
+- Sparse ecosystem references
+- Production readiness is unclear
+
+### Confidence
+- **Level**: LOW
+- **Reason**: Only partial metadata was available and supporting documentation was weak.
+
+### Gaps Identified
+- [ ] Maintainer activity and release cadence
+- [ ] Feature documentation
+- [ ] Security or compatibility notes
+
+### Context Needed
+- Q1: Is this crate mandatory for compatibility, or are alternatives acceptable?
+
 ### Metadata
 - **Source**: crates.io (lib.rs had no additional info)
 - **Coverage**: 30% - minimal data available
@@ -178,7 +223,30 @@ Source attribution and coverage assessment.
 ### Findings
 **Comparison:** tokio vs async-std (runtime focus)
 
-# ... (28 lines trimmed)
+**tokio**
+- Larger ecosystem and broader production adoption
+- Strong tooling around tracing, networking, and task orchestration
+
+**async-std**
+- Simpler standard-library-like API shape
+- Smaller ecosystem and fewer production-oriented integrations
+
+**Tradeoff Summary**
+- Choose `tokio` for ecosystem depth, operations tooling, and production scale
+- Choose `async-std` when API simplicity matters more than ecosystem breadth
+
+### Confidence
+- **Level**: MEDIUM
+- **Reason**: Runtime characteristics are well known, but workload-specific benchmarks depend on context.
+
+### Gaps Identified
+- [ ] Latency benchmarks for the target workload
+- [ ] Team constraints around existing runtime integrations
+
+### Context Needed
+- Q1: Is the target workload server-side, CLI, or embedded?
+- Q2: Do you need integrations that already assume Tokio?
+
 ### Metadata
 - **Source**: lib.rs for both, official docs
 - **Coverage**: 60% - characteristics known, specifics missing

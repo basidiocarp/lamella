@@ -43,7 +43,7 @@ EOF
 
 check_deps() {
     if ! command -v jq >/dev/null 2>&1; then
-        log_error "jq is required. Install with: brew install jq"
+        log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
         exit 1
     fi
 }
@@ -168,7 +168,7 @@ create_script_wrapper() {
     local source_rel="$1"
     local profile_skills_dir="$2"
     local all_skills_dir="$3"
-    local src="$BASE_DIR/resources/scripts/$source_rel"
+    local src="$BASE_DIR/scripts/$source_rel"
     local skill_name="script-$(slugify "$source_rel")"
     local file_name
     file_name=$(basename "$source_rel")

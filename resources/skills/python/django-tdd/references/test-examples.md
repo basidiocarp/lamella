@@ -5,55 +5,122 @@ Model, view, serializer, and API testing examples.
 ## Model Testing
 
 ```python
-# tests/test_models.py
 import pytest
 from django.core.exceptions import ValidationError
-from tests.factories import UserFactory, ProductFactory
 
-// ... (61 lines trimmed)
+from tests.factories import ProductFactory
 
-        with pytest.raises(ValueError):
-            product.reduce_stock(10)  # Not enough stock
+
+@pytest.mark.django_db
+def test_product_full_clean_rejects_negative_price():
+    product = ProductFactory.build(price=-1)
+
+    with pytest.raises(ValidationError):
+        product.full_clean()
+
+
+@pytest.mark.django_db
+def test_reduce_stock_rejects_overdraw():
+    product = ProductFactory(stock=4)
+
+    with pytest.raises(ValueError):
+        product.reduce_stock(10)
 ```
 
 ## View Testing
 
 ```python
-# tests/test_views.py
 import pytest
 from django.urls import reverse
+
+from apps.products.models import Product
 from tests.factories import ProductFactory, UserFactory
 
-// ... (45 lines trimmed)
 
-        assert response.status_code == 302
-        assert Product.objects.filter(name='Test Product').exists()
+@pytest.mark.django_db
+def test_product_create_view_redirects_on_success(client):
+    user = UserFactory()
+    client.force_login(user)
+
+    response = client.post(
+        reverse("products:create"),
+        {"name": "Test Product", "price": "19.99", "stock": 8},
+    )
+
+    assert response.status_code == 302
+    assert Product.objects.filter(name="Test Product").exists()
+
+
+@pytest.mark.django_db
+def test_product_list_view_renders_existing_products(client):
+    ProductFactory(name="Widget")
+
+    response = client.get(reverse("products:list"))
+
+    assert response.status_code == 200
+    assert "Widget" in response.content.decode()
 ```
 
 ## Serializer Testing
 
 ```python
-# tests/test_serializers.py
 import pytest
-from rest_framework.exceptions import ValidationError
-from apps.products.serializers import ProductSerializer
-from tests.factories import ProductFactory
-// ... (55 lines trimmed)
 
-        assert not serializer.is_valid()
-        assert 'stock' in serializer.errors
+from apps.products.serializers import ProductSerializer
+
+
+@pytest.mark.django_db
+def test_product_serializer_accepts_valid_payload():
+    serializer = ProductSerializer(
+        data={"name": "Widget", "price": "19.99", "stock": 3}
+    )
+
+    assert serializer.is_valid(), serializer.errors
+
+
+@pytest.mark.django_db
+def test_product_serializer_rejects_negative_stock():
+    serializer = ProductSerializer(
+        data={"name": "Widget", "price": "19.99", "stock": -1}
+    )
+
+    assert not serializer.is_valid()
+    assert "stock" in serializer.errors
 ```
 
 ## API ViewSet Testing
 
 ```python
-# tests/test_api.py
 import pytest
-from rest_framework.test import APIClient
-from rest_framework import status
 from django.urls import reverse
-// ... (93 lines trimmed)
+from rest_framework import status
+from rest_framework.test import APIClient
 
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data['count'] == 1
+from tests.factories import ProductFactory, UserFactory
+
+
+@pytest.mark.django_db
+def test_products_endpoint_lists_results():
+    ProductFactory(name="Widget")
+    client = APIClient()
+
+    response = client.get(reverse("api:product-list"))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 1
+
+
+@pytest.mark.django_db
+def test_products_endpoint_requires_auth_for_create():
+    user = UserFactory()
+    client = APIClient()
+    client.force_authenticate(user=user)
+
+    response = client.post(
+        reverse("api:product-list"),
+        {"name": "Widget", "price": "19.99", "stock": 2},
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
 ```

@@ -78,7 +78,14 @@ name: code-quality-reviewer
 description: Use this agent when the user has written code and needs quality review, or explicitly asks to review code changes. Examples:
 
 <example>
-// ... (48 lines trimmed)
+<user>Review the authentication middleware changes.</user>
+<assistant>
+1. Security findings with file and line references
+2. Correctness or reliability risks
+3. Missing tests or verification gaps
+4. Positive implementation notes worth preserving
+5. Recommended next actions in severity order
+
 6. Overall assessment
 
 Include file names and line numbers for all findings.

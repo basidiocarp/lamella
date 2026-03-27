@@ -1,340 +1,64 @@
-<overview>
-Agent execution patterns for building robust agent loops. This covers how agents signal completion, track partial progress for resume, select appropriate model tiers, and handle context limits.
-</overview>
+# Agent Execution Patterns
 
-<completion_signals>
+Use this reference when designing the execution loop for an agent-native app.
+
 ## Completion Signals
 
-Agents need an explicit way to say "I'm done."
-
-### Anti-Pattern: Heuristic Detection
-
-Detecting completion through heuristics is fragile:
-
-- Consecutive iterations without tool calls
-- Checking for expected output files
-- Tracking "no progress" states
-- Time-based timeouts
-
-These break in edge cases and create unpredictable behavior.
-
-### Pattern: Explicit Completion Tool
-
-Provide a `complete_task` tool that:
-- Takes a summary of what was accomplished
-- Returns a signal that stops the loop
-- Works identically across all agent types
+Give the agent an explicit completion tool. Do not infer completion from
+timeouts, missing tool calls, or file heuristics.
 
 ```typescript
 tool("complete_task", {
-  summary: z.string().describe("Summary of what was accomplished"),
-  status: z.enum(["success", "partial", "blocked"]).optional(),
-}, async ({ summary, status = "success" }) => {
-  return {
-    text: summary,
-    shouldContinue: false,  // Key: signals loop should stop
-  };
-});
+  summary: z.string(),
+  status: z.enum(["success", "partial", "blocked"]).default("success"),
+}, async ({ summary, status }) => ({
+  text: `${status}: ${summary}`,
+  shouldContinue: false,
+}));
 ```
 
-### The ToolResult Pattern
+Key rule: success and continuation are separate concepts. A tool can fail and
+still allow the loop to continue, or succeed and explicitly stop the loop.
 
-Structure tool results to separate success from continuation:
-
-```swift
-struct ToolResult {
-    let success: Bool           // Did tool succeed?
-    let output: String          // What happened?
-    let shouldContinue: Bool    // Should agent loop continue?
-}
-// ... (15 lines trimmed)
-        ToolResult(success: true, output: summary, shouldContinue: false)
-    }
-}
-```
-
-### Key Insight
-
-**This is different from success/failure:**
-
-- A tool can **succeed** AND signal **stop** (task complete)
-- A tool can **fail** AND signal **continue** (recoverable error, try something else)
-
-```typescript
-// Examples:
-read_file("/missing.txt")
-// → { success: false, output: "File not found", shouldContinue: true }
-// Agent can try a different file or ask for clarification
-// ... (6 lines trimmed)
-// → { success: true, output: "Wrote file", shouldContinue: true }
-// Agent keeps working toward the goal
-```
-
-### System Prompt Guidance
-
-Tell the agent when to complete:
-
-```markdown
-## Completing Tasks
-
-When you've accomplished the user's request:
-1. Verify your work (read back files you created, check results)
-2. Call `complete_task` with a summary of what you did
-3. Don't keep working after the goal is achieved
-
-If you're blocked and can't proceed:
-- Call `complete_task` with status "blocked" and explain why
-- Don't loop forever trying the same thing
-```
-</completion_signals>
-
-<partial_completion>
 ## Partial Completion
 
-For multi-step tasks, track progress at the task level for resume capability.
+Track subtask state so interrupted work can resume cleanly:
 
-### Task State Tracking
+- pending
+- in progress
+- completed
+- failed
 
-```swift
-enum TaskStatus {
-    case pending      // Not yet started
-    case inProgress   // Currently working on
-    case completed    // Finished successfully
-    case failed       // Couldn't complete (with reason)
-// ... (19 lines trimmed)
-        return (done, tasks.count)
-    }
-}
-```
+Persist only the session summary, task list, and durable paths you need to
+restore work. Large artifacts should remain in files, not in the checkpoint
+blob.
 
-### UI Progress Display
+## Model Tiers
 
-Show users what's happening:
+- fast: simple transforms or high-volume classification
+- balanced: most tool loops and normal synthesis
+- powerful: complex synthesis, ranking, or multimodal reasoning
 
-```
-Progress: 3/5 tasks complete (60%)
-✅ [1] Find source materials
-✅ [2] Download full text
-✅ [3] Extract key passages
-❌ [4] Generate summary - Error: context limit exceeded
-⏳ [5] Create outline - Pending
-```
+Default to the cheapest tier that still achieves the product outcome. Save
+intermediate artifacts so expensive steps are not repeated after interruption.
 
-### Partial Completion Scenarios
-
-**Agent hits max iterations before finishing:**
-- Some tasks completed, some pending
-- Checkpoint saved with current state
-- Resume continues from where it left off, not from beginning
-
-**Agent fails on one task:**
-- Task marked `.failed` with error in notes
-- Other tasks may continue (agent decides)
-- Orchestrator doesn't automatically abort entire session
-
-**Network error mid-task:**
-- Current iteration throws
-- Session marked `.failed`
-- Checkpoint preserves messages up to that point
-- Resume possible from checkpoint
-
-### Checkpoint Structure
-
-```swift
-struct AgentCheckpoint: Codable {
-    let sessionId: String
-    let agentType: String
-    let messages: [Message]          // Full conversation history
-// ... (8 lines trimmed)
-    }
-}
-```
-
-### Resume Flow
-
-1. On app launch, scan for valid checkpoints
-2. Show user: "You have an incomplete session. Resume?"
-3. On resume:
-   - Restore messages to conversation
-   - Restore task states
-   - Continue agent loop from where it left off
-4. On dismiss:
-   - Delete checkpoint
-   - Start fresh if user tries again
-</partial_completion>
-
-<model_tier_selection>
-## Model Tier Selection
-
-Different agents need different intelligence levels. Use the cheapest model that achieves the outcome.
-
-### Tier Guidelines
-
-| Agent Type | Recommended Tier | Reasoning |
-|------------|-----------------|-----------|
-| Chat/Conversation | Balanced (Sonnet) | Fast responses, good reasoning |
-| Research | Balanced (Sonnet) | Tool loops, not ultra-complex synthesis |
-| Content Generation | Balanced (Sonnet) | Creative but not synthesis-heavy |
-| Complex Analysis | Powerful (Opus) | Multi-document synthesis, nuanced judgment |
-| Profile Generation | Powerful (Opus) | Photo analysis, complex pattern recognition |
-| Quick Queries | Fast (Haiku) | Simple lookups, quick transformations |
-| Simple Classification | Fast (Haiku) | High volume, simple decisions |
-
-### Implementation
-
-```swift
-enum ModelTier {
-    case fast      // claude-3-haiku: Quick, cheap, simple tasks
-    case balanced  // claude-sonnet: Good balance for most tasks
-    case powerful  // claude-opus: Complex reasoning, synthesis
-
-// ... (30 lines trimmed)
-    systemPrompt: "Answer quick questions about the user's library.",
-    maxIterations: 3
-)
-```
-
-### Cost Optimization Strategies
-
-1. **Start with balanced, upgrade if quality insufficient**
-2. **Use fast tier for tool-heavy loops** where each turn is simple
-3. **Reserve powerful tier for synthesis tasks** (comparing multiple sources)
-4. **Consider token limits per turn** to control costs
-5. **Cache expensive operations** to avoid repeated calls
-</model_tier_selection>
-
-<context_limits>
 ## Context Limits
 
-Agent sessions can extend indefinitely, but context windows don't. Design for bounded context from the start.
+Design tools for iterative retrieval rather than full dumps:
 
-### The Problem
+- previews before full file reads
+- summary or match modes before raw content
+- explicit consolidation tools or summaries for long sessions
 
-```
-Turn 1: User asks question → 500 tokens
-Turn 2: Agent reads file → 10,000 tokens
-Turn 3: Agent reads another file → 10,000 tokens
-Turn 4: Agent researches → 20,000 tokens
-...
-Turn 10: Context window exceeded
-```
+Important context should live in one of three places:
 
-### Design Principles
+1. the system prompt
+2. durable files the agent can re-read
+3. concise session summaries or `context.md`
 
-**1. Tools should support iterative refinement**
+## Operational Checklist
 
-Instead of all-or-nothing, design for summary → detail → full:
-
-```typescript
-// Good: Supports iterative refinement
-tool("read_file", {
-  path: z.string(),
-  preview: z.boolean().default(true),  // Return first 1000 chars by default
-// ... (5 lines trimmed)
-  summaryOnly: z.boolean().default(true),  // Return matches, not full files
-}, ...);
-```
-
-**2. Provide consolidation tools**
-
-Give agents a way to consolidate learnings mid-session:
-
-```typescript
-tool("summarize_and_continue", {
-  keyPoints: z.array(z.string()),
-  nextSteps: z.array(z.string()),
-}, async ({ keyPoints, nextSteps }) => {
-  // Store summary, potentially truncate earlier messages
-  await saveSessionSummary({ keyPoints, nextSteps });
-  return { text: "Summary saved. Continuing with focus on: " + nextSteps.join(", ") };
-});
-```
-
-**3. Design for truncation**
-
-Assume the orchestrator may truncate early messages. Important context should be:
-- In the system prompt (always present)
-- In files (can be re-read)
-- Summarized in context.md
-
-### Implementation Strategies
-
-```swift
-class AgentOrchestrator {
-    let maxContextTokens = 100_000
-    let targetContextTokens = 80_000  // Leave headroom
-
-    func shouldTruncate() -> Bool {
-// ... (8 lines trimmed)
-        }
-    }
-}
-```
-
-### System Prompt Guidance
-
-```markdown
-## Managing Context
-
-For long tasks, periodically consolidate what you've learned:
-1. If you've gathered a lot of information, summarize key points
-2. Save important findings to files (they persist beyond context)
-3. Use `summarize_and_continue` if the conversation is getting long
-
-Don't try to hold everything in memory. Write it down.
-```
-</context_limits>
-
-<orchestrator_pattern>
-## Unified Agent Orchestrator
-
-One execution engine, many agent types. All agents use the same orchestrator with different configurations.
-
-```swift
-class AgentOrchestrator {
-    static let shared = AgentOrchestrator()
-
-    func run(config: AgentConfig, userMessage: String) async -> AgentResult {
-        var messages: [Message] = [
-// ... (44 lines trimmed)
-        )
-    }
-}
-```
-
-### Benefits
-
-- Consistent lifecycle management across all agent types
-- Automatic checkpoint/resume (critical for mobile)
-- Shared tool protocol
-- Easy to add new agent types
-- Centralized error handling and logging
-</orchestrator_pattern>
-
-<checklist>
-## Agent Execution Checklist
-
-### Completion Signals
-- [ ] `complete_task` tool provided (explicit completion)
-- [ ] No heuristic completion detection
-- [ ] Tool results include `shouldContinue` flag
-- [ ] System prompt guides when to complete
-
-### Partial Completion
-- [ ] Tasks tracked with status (pending, in_progress, completed, failed)
-- [ ] Checkpoints saved for resume
-- [ ] Progress visible to user
-- [ ] Resume continues from where left off
-
-### Model Tiers
-- [ ] Tier selected based on task complexity
-- [ ] Cost optimization considered
-- [ ] Fast tier for simple operations
-- [ ] Powerful tier reserved for synthesis
-
-### Context Limits
-- [ ] Tools support iterative refinement (preview vs full)
-- [ ] Consolidation mechanism available
-- [ ] Important context persisted to files
-- [ ] Truncation strategy defined
-</checklist>
+- Does the agent have an explicit stop signal?
+- Can a partially completed task resume without replaying the entire session?
+- Is model selection tied to task complexity rather than guesswork?
+- Will the loop still work when older turns are truncated?

@@ -1,96 +1,65 @@
 # ViewSets & Views
 
-## ModelViewSet
+Use this reference to choose between DRF viewsets, generic views, and async
+views.
 
-```python
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django_filters.rest_framework import DjangoFilterBackend
-// ... (37 lines trimmed)
-        featured = self.get_queryset().filter(is_featured=True)[:10]
-        serializer = self.get_serializer(featured, many=True)
-        return Response(serializer.data)
-```
+## `ModelViewSet`
 
-## Django 5.0 Async Views
+Use `ModelViewSet` when the resource fits the standard CRUD shape and the custom
+behavior is still small.
 
-```python
-from django.http import JsonResponse
-from asgiref.sync import sync_to_async
+Typical extension points:
+- `get_queryset()`
+- `get_serializer_class()`
+- `perform_create()` / `perform_update()`
+- `@action()` for a small number of extra endpoints
 
-# Async function-based view
-async def user_list(request):
-// ... (15 lines trimmed)
-            'name': product.name,
-            'category': product.category.name,
-        })
-```
+If the custom actions start to dominate the resource, the viewset is probably
+too broad.
 
 ## Generic Views
 
-```python
-from rest_framework import generics
+Use DRF generic views when the endpoint is simple and you do not need the full
+viewset surface.
 
-class ProductListCreate(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+Good fits:
+- list/create
+- retrieve/update/destroy
+- narrow resource endpoints with one serializer and one queryset
 
-class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    lookup_field = 'slug'
-```
+They are often clearer than a large viewset for small APIs.
 
-## URL Configuration
+## Async Views
 
-```python
-from rest_framework.routers import DefaultRouter
+Use Django async views only when the stack is actually async-aware:
+- async ORM or async-safe access paths
+- async clients or external I/O
+- request handlers that benefit from non-blocking waits
 
-router = DefaultRouter()
-router.register('products', ProductViewSet, basename='product')
+Do not wrap sync-heavy code in async syntax and assume it is automatically
+better.
 
-urlpatterns = [
-    path('api/', include(router.urls)),
-]
+## URL Shape
 
-# Generated URLs:
-# GET/POST    /api/products/
-# GET/PUT/DELETE /api/products/{slug}/
-# POST        /api/products/{slug}/purchase/
-# GET         /api/products/featured/
-```
+Use routers for conventional resource APIs. Use explicit URLs when:
+- the route is unusual
+- the endpoint is not really CRUD
+- readability matters more than automatic wiring
 
 ## Pagination
 
-```python
-# settings.py
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20,
-}
-// ... (8 lines trimmed)
+Set a project-level default, then override only for endpoints with different
+payload or usage patterns.
 
-class ProductViewSet(viewsets.ModelViewSet):
-    pagination_class = LargeResultsSetPagination
-```
+Pagination policy should be consistent across similar list endpoints.
 
-## Quick Reference
+## Selection Guide
 
-| ViewSet Method | HTTP | Action |
-|---------------|------|--------|
-| `list()` | GET | List all |
-| `create()` | POST | Create new |
-| `retrieve()` | GET | Get one |
-| `update()` | PUT | Full update |
-| `partial_update()` | PATCH | Partial update |
-| `destroy()` | DELETE | Delete |
+| Need | Better default |
+|---|---|
+| standard CRUD resource | `ModelViewSet` |
+| simple narrow endpoint | generic view |
+| custom async request path | async view |
+| one-off business action | explicit endpoint or small `@action()` |
 
-| Hook | Purpose |
-|------|---------|
-| `get_queryset()` | Filter queryset |
-| `get_serializer_class()` | Dynamic serializer |
-| `perform_create()` | Pre-save logic |
-| `@action()` | Custom endpoints |
+Use the smallest view abstraction that still keeps the API readable.

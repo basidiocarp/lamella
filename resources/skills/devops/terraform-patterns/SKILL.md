@@ -37,9 +37,11 @@ Load detailed guidance based on context:
 | Topic | Reference | Load When |
 |-------|-----------|-----------|
 | Modules | `references/module-patterns.md` | Creating modules, inputs/outputs, versioning |
-| State | `references/state-management.md` | Remote backends, locking, workspaces, migrations |
+| State | `references/state-backends-and-workspaces.md` | Remote backends, locking, workspaces, backend config |
+| State Ops | `references/state-operations-and-security.md` | Imports, migrations, force unlock, state security |
 | Providers | `references/providers.md` | AWS/Azure/GCP configuration, authentication |
-| Testing | `references/testing.md` | terraform plan, terratest, policy as code |
+| Testing | `references/terraform-test-and-terratest.md` | terraform plan, terraform test, Terratest |
+| Policy Checks | `references/policy-and-lint-checks.md` | OPA, Conftest, TFLint |
 | Best Practices | `references/best-practices.md` | DRY patterns, naming, security, cost tracking |
 
 ## Constraints

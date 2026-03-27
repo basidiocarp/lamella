@@ -1,61 +1,19 @@
 # Bash Scripting Guide
 
-## Table of Contents
+Compact guidance for writing robust Bash instead of shell scripts that fail mysteriously.
 
-1. [Introduction](#introduction)
-2. [Bash vs POSIX sh](#bash-vs-posix-sh)
-3. [Strict Mode and Error Handling](#strict-mode-and-error-handling)
-4. [Variables and Parameter Expansion](#variables-and-parameter-expansion)
-5. [Functions and Scope](#functions-and-scope)
-6. [Arrays and Associative Arrays](#arrays-and-associative-arrays)
-7. [Control Structures](#control-structures)
-8. [Process and Command Substitution](#process-and-command-substitution)
-9. [Best Practices](#best-practices)
-10. [Common Pitfalls](#common-pitfalls)
+## Choose Bash Deliberately
 
-## Introduction
+Use Bash when:
+- the runtime is modern Linux or macOS
+- arrays, `[[ ... ]]`, or process substitution help
+- you want clearer scripting ergonomics
 
-Bash (Bourne Again Shell) is a powerful Unix shell and command language. This guide covers modern bash scripting practices and patterns for creating robust, maintainable scripts.
+Use POSIX `sh` when:
+- maximum portability matters more than convenience
+- the environment is minimal or embedded
 
-## Bash vs POSIX sh
-
-### Key Differences
-
-**Bash-specific features (not in POSIX sh):**
-- Arrays: `arr=(one two three)`
-- Associative arrays: `declare -A map=([key]=value)`
-- `[[` conditional expressions
-- `$(( ))` arithmetic expansion with more operators
-- `${var//pattern/replacement}` parameter expansion
-- Process substitution: `<(command)`
-- `select` keyword for menus
-- `**` recursive globbing with `shopt -s globstar`
-
-**POSIX sh compatible:**
-- Basic variable assignment and substitution
-- `[` test command (single brackets)
-- `case` statements
-- Basic parameter expansion
-- Command substitution with `$()`
-- Functions (with different syntax)
-
-### When to Choose
-
-**Use Bash when:**
-- Script runs on modern Linux/macOS systems
-- Need arrays or associative arrays
-- Want advanced string manipulation
-- Targeting bash-specific environments
-
-**Use POSIX sh when:**
-- Maximum portability required
-- Running on minimal systems (embedded, containers)
-- Need to run on different Unix variants
-- Following strict POSIX compliance requirements
-
-## Strict Mode and Error Handling
-
-### Essential: set -euo pipefail
+## Safe Starting Point
 
 ```bash
 #!/usr/bin/env bash
@@ -63,391 +21,150 @@ set -euo pipefail
 IFS=$'\n\t'
 ```
 
-**Explanation:**
-- `set -e` (errexit): Exit immediately if a command exits with non-zero status
-- `set -u` (nounset): Treat unset variables as an error
-- `set -o pipefail`: Return value of pipeline is status of last command to exit with non-zero status
-- `IFS=$'\n\t'`: Set Internal Field Separator to newline and tab only (prevents word splitting issues)
+This gives you:
+- exit on unhandled failures
+- errors for unset variables
+- correct failure behavior in pipelines
+- safer word splitting
 
-### When to Disable Strict Mode Temporarily
+## Quote Variables
 
 ```bash
-# Disable errexit for commands that are expected to fail
+cp "${source}" "${destination}"
+rm -- "${file}"
+echo "Value: ${value}"
+```
+
+Do not rely on unquoted variables unless you explicitly want splitting and globbing.
+
+## Error Handling
+
+### Simple `die`
+
+```bash
+die() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+[[ -f "${config_file}" ]] || die "Missing config: ${config_file}"
+```
+
+### Temporarily Relax `set -e`
+
+```bash
 set +e
 command_that_might_fail
 exit_code=$?
-// ... (7 lines trimmed)
-    echo "Command failed, but continuing..."
-fi
+set -e
 ```
 
-### Signal Handling with trap
+Only do this around commands that are expected to fail as part of normal control flow.
+
+## Cleanup with `trap`
 
 ```bash
-# Cleanup function
+tmp_file="$(mktemp)"
+
 cleanup() {
-    local exit_code=$?
-    echo "Cleaning up..." >&2
-    rm -f "${temp_file}"
-// ... (9 lines trimmed)
-temp_file=$(mktemp)
-
-# Rest of script...
-```
-
-### Error Handling Patterns
-
-```bash
-# Pattern 1: Die function
-die() {
-    echo "ERROR: $*" >&2
-    exit 1
+  local exit_code=$?
+  rm -f "${tmp_file}"
+  exit "${exit_code}"
 }
-// ... (19 lines trimmed)
 
-check_command "jq"
-check_command "curl"
+trap cleanup EXIT
+trap 'exit 130' INT TERM
 ```
 
-## Variables and Parameter Expansion
+Always trap cleanup when the script creates:
+- temp files
+- lock files
+- background jobs
 
-### Variable Naming Conventions
+## Variables and Scope
 
 ```bash
-# Constants - uppercase with readonly
-readonly MAX_RETRIES=3
 readonly CONFIG_FILE="/etc/myapp/config.conf"
 
-# Environment variables - uppercase
-// ... (9 lines trimmed)
-    local input="$1"
-    # ...
+process_file() {
+  local input_file="$1"
+  local output_file="$2"
+  grep "pattern" "${input_file}" > "${output_file}"
 }
 ```
 
-### Always Quote Variables
+Use:
+- `readonly` for constants
+- `local` inside functions
+- clear lowercase names for locals and uppercase for environment-style globals
+
+## Parameter Expansion
 
 ```bash
-# Good - properly quoted
-rm "${file}"
-cp "${source}" "${destination}"
-echo "Value: ${variable}"
-
-# Bad - unquoted (prone to word splitting and globbing)
-rm $file
-cp $source $destination
-echo "Value: $variable"
+name="${1:-default-name}"
+config="${CONFIG_FILE:?CONFIG_FILE must be set}"
+extension="${file##*.}"
+basename="${file%.*}"
 ```
 
-### Parameter Expansion
+These patterns replace a lot of brittle string parsing.
+
+## Arrays
 
 ```bash
-# Default values
-${var:-default}          # Use default if var is unset or empty
-${var:=default}          # Set var to default if unset or empty
-${var:?error message}    # Exit with error message if var is unset or empty
-${var:+alternative}      # Use alternative if var is set
-// ... (21 lines trimmed)
-${file%.*}               # /path/to/file (remove extension)
-${file##*.}              # txt (extension only)
-${file%/*}               # /path/to (dirname)
-```
+files=("a.txt" "b.txt" "c.txt")
 
-## Functions and Scope
-
-### Function Definition
-
-```bash
-# POSIX style (portable)
-function_name() {
-    # function body
-}
-
-// ... (10 lines trimmed)
-    # Process file
-    grep "pattern" "${input_file}" > "${output_file}"
-}
-```
-
-### Variable Scope
-
-```bash
-# Global variable
-GLOBAL_VAR="global"
-
-my_function() {
-    # Local variable - only visible in function
-// ... (10 lines trimmed)
-}
-
-my_function "arg1" "arg2"
-```
-
-### Return Values
-
-```bash
-# Functions return exit status (0-255)
-check_file() {
-    local file="$1"
-    [[ -f "${file}" ]] && return 0 || return 1
-}
-// ... (19 lines trimmed)
-
-get_data my_result
-echo "${my_result}"
-```
-
-## Arrays and Associative Arrays
-
-### Indexed Arrays (Bash-specific)
-
-```bash
-# Array creation
-arr=()                          # Empty array
-arr=(one two three)             # Initialize with values
-arr[0]="first"                  # Assign to specific index
-
-// ... (20 lines trimmed)
-
-# Remove element
-unset 'arr[1]'                  # Remove specific element
-```
-
-### Associative Arrays (Bash 4.0+)
-
-```bash
-# Declaration required
-declare -A map
-
-# Assignment
-map[key1]="value1"
-// ... (17 lines trimmed)
-for key in "${!map[@]}"; do
-    echo "${key}: ${map[${key}]}"
+for file in "${files[@]}"; do
+  echo "${file}"
 done
 ```
 
-### POSIX Alternative to Arrays
+Use arrays when:
+- file names may contain spaces
+- argument lists are dynamic
+- you need to preserve exact boundaries
+
+If true portability is required, avoid arrays and use positional parameters instead.
+
+## Conditionals and Tests
 
 ```bash
-# Use positional parameters
-set -- one two three
-
-# Access
-echo "$1"  # one
-// ... (10 lines trimmed)
-
-# Remove first item
-shift
-```
-
-## Control Structures
-
-### Conditional Expressions
-
-```bash
-# Bash [[ ... ]] (recommended for bash)
-if [[ -f "${file}" ]]; then
-    echo "File exists"
+if [[ -f "${file}" && -r "${file}" ]]; then
+  echo "Readable file"
 fi
 
-// ... (39 lines trimmed)
-[[ condition1 && condition2 ]]  # AND
-[[ condition1 || condition2 ]]  # OR
-[[ ! condition ]]                # NOT
-```
-
-### case Statements
-
-```bash
-case "${var}" in
-    pattern1)
-        # commands
-        ;;
-    pattern2|pattern3)
-// ... (16 lines trimmed)
-        echo "Unknown type"
-        ;;
+case "${command}" in
+  start|stop|restart) ;;
+  *) die "Unknown command: ${command}" ;;
 esac
 ```
 
-### Loops
+Prefer `[[ ... ]]` in Bash:
+- cleaner comparisons
+- safer pattern matching
+- fewer quoting surprises
+
+## Command Execution
 
 ```bash
-# while loop
-while condition; do
-    # commands
-done
+output="$(command arg1 arg2)"
 
-// ... (26 lines trimmed)
-for file in $(find . -name "*.txt"); do
-    echo "${file}"
-done
+while IFS= read -r line; do
+  echo "${line}"
+done < <(generate_lines)
 ```
 
-## Process and Command Substitution
+Use:
+- `$(...)` for command substitution
+- process substitution when a loop needs a command stream
 
-### Command Substitution
+## Default Best Practices
 
-```bash
-# Recommended: $( ... )
-result=$(command)
-result=$(command arg1 arg2)
-
-# Nested command substitution
-outer=$(echo "Inner: $(echo "value")")
-
-# Not recommended: backticks (legacy)
-result=`command`
+```text
+Start strict
+Quote everything unless you mean not to
+Use functions and local variables
+Trap cleanup
+Prefer arrays over string-built argument lists
+Keep scripts small; split complex logic into functions early
 ```
-
-### Process Substitution (Bash-specific)
-
-```bash
-# <( ... ) creates a named pipe/file descriptor
-# Treat command output as a file
-
-# Compare output of two commands
-// ... (5 lines trimmed)
-# Output redirection with process substitution
-command > >(tee stdout.log) 2> >(tee stderr.log >&2)
-```
-
-## Best Practices
-
-### Script Structure
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-IFS=$'\n\t'
-
-# ============================================================================
-// ... (29 lines trimmed)
-
-# Execute main
-main "$@"
-```
-
-### Always Use Quotes
-
-```bash
-# Good
-echo "${variable}"
-cp "${source}" "${dest}"
-[[ -f "${file}" ]]
-
-# Bad (unsafe)
-echo $variable
-cp $source $dest
-[[ -f $file ]]
-```
-
-### Use readonly for Constants
-
-```bash
-readonly MAX_RETRIES=3
-readonly CONFIG_FILE="/etc/config"
-```
-
-### Prefer $() Over Backticks
-
-```bash
-# Good
-output=$(command)
-result=$(first $(second))
-
-# Bad
-output=`command`
-result=`first \`second\``  # Hard to read
-```
-
-### Check Command Existence
-
-```bash
-if ! command -v required_cmd &> /dev/null; then
-    echo "Error: required_cmd not found" >&2
-    exit 1
-fi
-```
-
-### Validate Inputs
-
-```bash
-# Check argument count
-if [[ $# -lt 1 ]]; then
-    echo "Usage: $0 <file>" >&2
-    exit 1
-// ... (5 lines trimmed)
-# Validate numeric input
-[[ "${count}" =~ ^[0-9]+$ ]] || { echo "Count must be numeric" >&2; exit 1; }
-```
-
-## Common Pitfalls
-
-### Word Splitting
-
-```bash
-# Problem: Filename with spaces
-file="my file.txt"
-rm $file           # Tries to remove "my" and "file.txt"
-
-# Solution: Quote variables
-rm "${file}"       # Correctly removes "my file.txt"
-```
-
-### Globbing
-
-```bash
-# Problem: Pattern in variable
-pattern="*.txt"
-echo $pattern      # Expands to list of .txt files
-
-# Solution: Quote to prevent globbing
-echo "${pattern}"  # Prints "*.txt"
-```
-
-### Useless Use of Cat (UUOC)
-
-```bash
-# Bad: Unnecessary cat
-cat file.txt | grep "pattern"
-
-# Good: Direct input
-// ... (9 lines trimmed)
-    echo "${line}"
-done < file.txt
-```
-
-### Not Handling Spaces in Filenames
-
-```bash
-# Bad: Will break on filenames with spaces
-for file in $(find . -name "*.txt"); do
-    process "${file}"
-done
-// ... (8 lines trimmed)
-    process "${file}"
-done
-```
-
-### Ignoring Command Exit Status
-
-```bash
-# Bad: Ignoring failure
-command_that_might_fail
-next_command
-
-// ... (8 lines trimmed)
-# Or with errexit
-command_that_might_fail || { echo "Failed" >&2; exit 1; }
-```
-
----
-
-## References
-
-- [GNU Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
-- [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
-- [ShellCheck](https://www.shellcheck.net/) - Script analysis tool
-- [Bash Guide for Beginners](https://tldp.org/LDP/Bash-Beginners-Guide/html/)

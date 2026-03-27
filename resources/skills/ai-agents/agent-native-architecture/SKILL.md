@@ -329,7 +329,11 @@ These aren't necessarily wrong—they may be appropriate for your use case. But 
 tool("process_feedback", async ({ message }) => {
   const category = categorize(message);      // Your code decides
   const priority = calculatePriority(message); // Your code decides
-// ... (5 lines trimmed)
+  await db.insert({ message, category, priority });
+  if (priority >= 4) {
+    await notifier.send({ channel: "ops", message });
+  }
+});
 tools: store_item, send_message  // Primitives
 prompt: "Rate importance 1-5 based on actionability, store feedback, notify if >= 4"
 ```
@@ -460,4 +464,3 @@ If it says "I don't have a feature for that"—your architecture is still too co
   - [Product](#product)
   - [Mobile (if applicable)](#mobile-if-applicable)
   - [The Ultimate Test](#the-ultimate-test)
-

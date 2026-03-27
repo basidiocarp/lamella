@@ -1,101 +1,86 @@
 # Scanner Subagent Task Prompt
 
-Use this prompt template when spawning scanner Tasks in Step 4. Use `subagent_type: static-analysis:semgrep-scanner`.
+Use this prompt in Step 4 when spawning `static-analysis:semgrep-scanner` tasks.
 
 ## Template
 
-```
+```text
 You are a Semgrep scanner for [LANGUAGE_CATEGORY].
 
-## Task
-Run Semgrep scans for [LANGUAGE] files and save results to [OUTPUT_DIR]/raw.
+Task:
+- Run Semgrep scans for [LANGUAGE] files.
+- Save JSON and SARIF output under [OUTPUT_DIR]/raw.
+- Use only the approved rulesets listed below.
 
-// ... (14 lines trimmed)
-## Commands to Run (in parallel)
+Context:
+- Target path: [TARGET]
+- Pro available: [PRO_AVAILABLE]
+- Severity flags: [SEVERITY_FLAGS]
+- Include flags: [INCLUDE_FLAGS]
+- Rulesets:
+  - [RULESET_1]
+  - [RULESET_2]
+  - [RULESET_3]
 
-### Clone GitHub URL rulesets first:
-```bash
-mkdir -p [OUTPUT_DIR]/repos
-# For each GitHub URL ruleset, clone into [OUTPUT_DIR]/repos/[name]:
-git clone --depth 1 https://github.com/org/repo [OUTPUT_DIR]/repos/repo-name
+Commands:
+1. Create the raw output directory.
+2. Clone any GitHub URL rulesets into [OUTPUT_DIR]/repos.
+3. Run one Semgrep command per approved ruleset.
+4. Wait for all scans to finish.
+5. Remove cloned ruleset repos.
+
+Command pattern:
+semgrep [--pro if available] --metrics=off [SEVERITY_FLAGS] [INCLUDE_FLAGS] \
+  --config [RULESET] \
+  --json -o [OUTPUT_DIR]/raw/[lang]-[ruleset].json \
+  --sarif-output=[OUTPUT_DIR]/raw/[lang]-[ruleset].sarif \
+  [TARGET]
+
+Rules:
+- Always use --metrics=off.
+- Do not add or remove rulesets.
+- Use absolute paths.
+- Report any scan failures explicitly.
+
+Return:
+- rulesets run
+- files produced
+- errors encountered
+- whether Pro findings were available
 ```
 
-### Generate commands for EACH approved ruleset:
-```bash
-semgrep [--pro if available] --metrics=off [SEVERITY_FLAGS] [INCLUDE_FLAGS] --config [RULESET] --json -o [OUTPUT_DIR]/raw/[lang]-[ruleset].json --sarif-output=[OUTPUT_DIR]/raw/[lang]-[ruleset].sarif [TARGET] &
-```
+## Example
 
-Wait for all to complete:
-```bash
-wait
-```
-
-### Clean up cloned repos:
-```bash
-[ -n "[OUTPUT_DIR]" ] && rm -rf [OUTPUT_DIR]/repos
-```
-
-## Critical Rules
-- Use ONLY the rulesets listed above - do not add or remove any
-- Always use --metrics=off (prevents sending telemetry to Semgrep servers)
-- Use --pro when Pro is available (enables cross-file taint tracking)
-// ... (10 lines trimmed)
-- Any scan errors
-- File paths of JSON results (in [OUTPUT_DIR]/raw/)
-- [If Pro] Note any cross-file findings detected
-```
-
-## Variable Substitutions
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `[LANGUAGE_CATEGORY]` | Language group being scanned | Python, JavaScript, Docker |
-| `[LANGUAGE]` | Specific language | Python, TypeScript, Go |
-| `[OUTPUT_DIR]` | Output directory (absolute path, resolved in Step 1) | /path/to/static_analysis_semgrep_1 |
-| `[PRO_AVAILABLE]` | Whether Pro engine is available | true, false |
-| `[SEVERITY_FLAGS]` | Severity pre-filter flags | *(empty)* for run-all, `--severity MEDIUM --severity HIGH --severity CRITICAL` for important-only |
-| `[INCLUDE_FLAGS]` | File extension filter for language-specific rulesets | `--include="*.py"` for Python rulesets, *(empty)* for cross-language rulesets like p/security-audit, p/secrets, or third-party repos |
-| `[RULESET]` | Semgrep ruleset identifier or local clone path | p/python, [OUTPUT_DIR]/repos/semgrep-rules |
-| `[TARGET]` | Absolute path to directory to scan | /path/to/codebase |
-
-## Example: Python Scanner Task
-
-```
+```text
 You are a Semgrep scanner for Python.
 
-## Task
-Run Semgrep scans for Python files and save results to /path/to/static_analysis_semgrep_1/raw.
+Task:
+- Run Semgrep scans for Python files.
+- Save JSON and SARIF output under /path/to/static_analysis_semgrep_1/raw.
+- Use only the approved rulesets listed below.
 
-// ... (11 lines trimmed)
-## Commands to Run (in parallel)
-
-### Clone GitHub URL rulesets first:
-```bash
-mkdir -p /path/to/static_analysis_semgrep_1/repos
-git clone --depth 1 https://github.com/trailofbits/semgrep-rules /path/to/static_analysis_semgrep_1/repos/trailofbits
+Context:
+- Target path: /path/to/codebase
+- Pro available: true
+- Severity flags: --severity MEDIUM --severity HIGH --severity CRITICAL
+- Include flags: --include="*.py"
+- Rulesets:
+  - p/python
+  - p/django
+  - p/security-audit
+  - p/secrets
+  - /path/to/static_analysis_semgrep_1/repos/trailofbits
 ```
 
-### Run scans:
-```bash
-semgrep --pro --metrics=off --include="*.py" --config p/python --json -o /path/to/static_analysis_semgrep_1/raw/python-python.json --sarif-output=/path/to/static_analysis_semgrep_1/raw/python-python.sarif /path/to/codebase &
-semgrep --pro --metrics=off --include="*.py" --config p/django --json -o /path/to/static_analysis_semgrep_1/raw/python-django.json --sarif-output=/path/to/static_analysis_semgrep_1/raw/python-django.sarif /path/to/codebase &
-semgrep --pro --metrics=off --config p/security-audit --json -o /path/to/static_analysis_semgrep_1/raw/python-security-audit.json --sarif-output=/path/to/static_analysis_semgrep_1/raw/python-security-audit.sarif /path/to/codebase &
-semgrep --pro --metrics=off --config p/secrets --json -o /path/to/static_analysis_semgrep_1/raw/python-secrets.json --sarif-output=/path/to/static_analysis_semgrep_1/raw/python-secrets.sarif /path/to/codebase &
-semgrep --pro --metrics=off --config /path/to/static_analysis_semgrep_1/repos/trailofbits --json -o /path/to/static_analysis_semgrep_1/raw/python-trailofbits.json --sarif-output=/path/to/static_analysis_semgrep_1/raw/python-trailofbits.sarif /path/to/codebase &
-wait
-```
+## Variable Reference
 
-### Clean up cloned repos:
-```bash
-rm -rf /path/to/static_analysis_semgrep_1/repos
-```
-
-## Critical Rules
-- Use ONLY the rulesets listed above - do not add or remove any
-- Always use --metrics=off
-- Use --pro when Pro is available
-// ... (8 lines trimmed)
-- Any scan errors
-- File paths of JSON results (in raw/ subdirectory)
-- Note any cross-file findings detected
-```
+| Variable | Meaning |
+|----------|---------|
+| `[LANGUAGE_CATEGORY]` | language group such as Python or Docker |
+| `[LANGUAGE]` | exact language such as Python, TypeScript, or Go |
+| `[OUTPUT_DIR]` | resolved absolute output directory |
+| `[PRO_AVAILABLE]` | whether `--pro` should be used |
+| `[SEVERITY_FLAGS]` | optional severity pre-filter flags |
+| `[INCLUDE_FLAGS]` | optional file filter flags |
+| `[RULESET]` | approved Semgrep ruleset identifier or local path |
+| `[TARGET]` | absolute scan target |

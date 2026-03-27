@@ -67,8 +67,13 @@ Wycheproof test vectors are designed to catch specific vulnerability patterns:
                     │   (this skill)      │
                     └──────────┬──────────┘
                                │
-// ... (12 lines trimmed)
-              │   Technique Skills       │
-              │ coverage, harness, PBT   │
-              └──────────────────────────┘
+            ┌──────────────────┼──────────────────┐
+            │                  │                  │
+            ▼                  ▼                  ▼
+┌─────────────────────┐ ┌─────────────────────┐ ┌─────────────────────┐
+│   Tool Skills       │ │  Technique Skills   │ │  Domain Skills      │
+│ pytest, mocha,      │ │ coverage, harness,  │ │ crypto testing,     │
+│ constant-time       │ │ PBT                 │ │ fuzzing             │
+│ testing             │ │                     │ │                     │
+└─────────────────────┘ └─────────────────────┘ └─────────────────────┘
 ```

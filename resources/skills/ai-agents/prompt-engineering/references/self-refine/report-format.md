@@ -7,62 +7,47 @@ Standard format for self-reflection evaluation reports.
 
 ## Detailed Analysis
 
-### [Criterion 1 Name] (Weight: 0.XX)
-// ... (45 lines trimmed)
+### [Criterion Name] (Weight: 0.XX)
+- Score: X.XX
+- Evidence: [What supports the score]
+- Gaps: [What is missing or weak]
+
+## Overall Assessment
+- Strengths: [List]
+- Weaknesses: [List]
 - Edge cases: [Handled / Some uncertainty]
 
-**Confidence Level**: X.XX (Weighted Total of Criteria Scores) -> [High / Medium / Low]
+**Confidence Level**: X.XX -> [High / Medium / Low]
 ```
 
 ## Iterative Refinement Workflow
 
-### Chain of Verification (CoV)
+### Chain of Verification
 
-1. **Generate**: Create initial solution
-2. **Verify**: Check each component/claim
-3. **Question**: What could go wrong?
-4. **Re-answer**: Address identified issues
+1. Generate an initial answer.
+2. Verify each major claim or component.
+3. Ask what could be wrong.
+4. Revise based on the issues found.
 
-### Tree of Thoughts (ToT)
+### Tree of Thoughts
 
-For complex problems, consider multiple approaches:
-
-1. **Branch 1**: Current approach
-   - Pros: [List advantages]
-   - Cons: [List disadvantages]
-
-2. **Branch 2**: Alternative approach
-   - Pros: [List advantages]
-   - Cons: [List disadvantages]
-
-3. **Decision**: Choose best path based on:
-   - Simplicity
-   - Maintainability
-   - Performance
-   - Extensibility
+For complex problems:
+1. outline at least two plausible approaches
+2. compare them on simplicity, maintainability, performance, and extensibility
+3. select the best path and explain why
 
 ## Refinement Metrics
 
-Track the effectiveness of refinements:
+Track:
+- iteration count
+- complexity reduction
+- bug prevention
+- performance gain
+- readability improvement
 
-### Iteration Count
+## Learning Points
 
-- First attempt: [Initial solution]
-- Iteration 1: [What was improved]
-- Iteration 2: [Further improvements]
-- Final: [Convergence achieved]
-
-### Quality Indicators
-
-- **Complexity Reduction**: Did refactoring simplify the code?
-- **Bug Prevention**: Were potential issues identified and fixed?
-- **Performance Gain**: Was efficiency improved?
-- **Readability Score**: Is the final version clearer?
-
-### Learning Points
-
-Document patterns for future use:
-
-- What type of issue was this?
-- What solution pattern worked?
-- Can this be reused elsewhere?
+Document:
+- what type of issue this was
+- what fix pattern worked
+- whether the pattern can be reused elsewhere

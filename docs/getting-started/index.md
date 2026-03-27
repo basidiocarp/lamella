@@ -1,43 +1,51 @@
 # Getting Started
 
-Welcome to Lamella! This guide will help you get up and running with **230 skills** across **20 plugins**.
+Welcome to Lamella. This guide is the shortest path to using the current
+library of **286 skills** across **25 plugins**.
 
----
+## Prerequisites
 
-## Installation
+- Claude Code CLI if you want Claude plugin installs
+- Codex if you want Codex skill exports
+- Bash on macOS or Linux, or WSL on Windows
+- `jq`, `make`, and Node.js for local validation and build flows
+
+## Quick Start
+
+### Claude Code
 
 ```bash
-# Build all plugins
-for manifest in plugin-manifests/*.json; do
-  [[ "$(basename "$manifest")" != "schema.json" ]] && \
-    bash scripts/plugins/build-plugin.sh "$manifest"
-done
+# Build the local marketplace
+./lamella build-marketplace
 
-# Install specific plugins
-./scripts/plugins/install-plugin.sh core python typescript
+# Install a few plugins
+./lamella install core python typescript
 
-# Install all
-./scripts/plugins/install-plugin.sh --all
+# Inspect what is available
+./lamella list
 ```
 
----
+### Codex
 
-## Quick Overview
+```bash
+# Build Codex skill exports
+./lamella build-codex
 
-### What You'll Learn
+# Install exported skills
+./lamella install-codex --all
+```
 
-1. **[What Are Skills?](what-are-skills.md)** — Understanding how skills extend Claude's capabilities
-2. **Installation** — Building and installing plugins
-3. **[Your First Skill](your-first-skill.md)** — A hands-on tutorial
+## What You Should Learn Next
 
-### Prerequisites
+1. [What Are Skills?](what-are-skills.md)
+2. [Your First Skill](your-first-skill.md)
+3. [Categorizing Skills](categorizing-skills.md)
 
-- Claude Code CLI installed
-- Bash shell (Linux/macOS) or WSL (Windows)
-- Basic familiarity with terminal commands
+## Notes
 
----
-
-## Next Steps
-
-After installation, try the [Your First Skill](your-first-skill.md) tutorial to see skills in action.
+- The Claude install flow resolves manifest dependencies before installing.
+- The Codex flow builds exported skills from the same source library instead of
+  maintaining a separate skill tree by hand.
+- If you are on Windows, prefer WSL for local Lamella build steps. Built
+  Claude marketplace output can still be consumed from Windows paths after the
+  build completes.

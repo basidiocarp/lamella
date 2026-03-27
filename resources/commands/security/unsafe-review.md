@@ -1,134 +1,92 @@
-# /unsafe-review
+---
+description: Review unsafe Rust and FFI code for soundness risks, with optional quick-check mode
+argument-hint: "[path-or-symbol] [--quick]"
+---
 
-Interactive review session for unsafe Rust code.
+# Unsafe Review
 
-## Usage
+Review unsafe Rust or FFI code using the `unsafe-checker` skill. Use `--quick` for a fast single-pass audit, or omit it for a fuller review.
 
-```
-/unsafe-review
-```
-
-## Description
-
-Starts an interactive review session that guides you through reviewing unsafe code using the `unsafe-checker` skill checklists.
+If the target is not specified, infer the most relevant Rust file from the current task or ask the user which file or module to review.
 
 ## Workflow
 
-1. **Identify unsafe code** in the current file/selection
-2. **Load review checklist** from `unsafe-checker/checklists/review-unsafe.md`
-3. **Step through each check**:
-   - Ask clarifying questions
-   - Verify invariants
-   - Suggest improvements
-4. **Generate report** with findings and recommendations
+1. Identify the target file, module, or unsafe item.
+2. Load [`resources/skills/rust/unsafe-checker/`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/rust/unsafe-checker/SKILL.md).
+3. Enumerate:
+   - `unsafe` blocks
+   - `unsafe fn`
+   - `unsafe impl`
+   - FFI boundaries and raw pointer handling
+4. Check each item for the relevant invariants.
+5. Produce a concise report with severity, rationale, and concrete fixes.
 
-## Interactive Prompts
+## Quick Mode
 
-The review will ask questions like:
+When `--quick` is present:
+- do a fast pass over the target file
+- highlight only the highest-signal risks
+- prioritize missing `// SAFETY:` notes, FFI panic boundaries, pointer validity, layout assumptions, and `Send` or `Sync` soundness
 
-```
-Reviewing: unsafe { *ptr }
+## Full Review Mode
 
-1. Is this pointer guaranteed non-null?
-   - How is null prevented?
-   - Show me the null check
-
-2. Is the pointer properly aligned?
-   - What type is it pointing to?
-   - Where does the pointer come from?
-
-3. Is the pointed-to memory valid?
-   - Who allocated it?
-   - Is it initialized?
-   - How long is it valid?
-
-4. Could this panic?
-   - What happens if it panics here?
-   - Is cleanup needed?
-```
+When `--quick` is not present:
+- review each unsafe item one by one
+- explain the claimed invariant
+- verify whether the surrounding code actually establishes it
+- call out evidence gaps, not just missing comments
 
 ## Checklist Categories
 
 ### Surface-Level
-- SAFETY comments present and meaningful?
-- Safety documentation for unsafe fn?
-- Unsafe blocks minimized?
+
+- SAFETY comments present and meaningful
+- Safety documentation for `unsafe fn`
+- Unsafe blocks minimized
 
 ### Memory Safety
-- Pointer validity (non-null, aligned, valid)
+
+- Pointer validity: non-null, aligned, and live
 - No aliasing violations
-- No use-after-free
-- No double-free
-- Bounds checking
+- No use-after-free or double-free
+- Bounds and length assumptions
 
 ### Type Safety
-- Correct transmutes
-- Valid enum discriminants
-- Proper repr attributes
+
+- Valid transmutes and casts
+- Correct enum discriminants
+- Appropriate `repr` attributes
 
 ### Concurrency
-- Send/Sync correctness
-- No data races
-- Proper synchronization
+
+- `Send` and `Sync` correctness
+- Shared-state invariants
+- Required synchronization
 
 ### FFI
-- Type compatibility
-- Panic handling
+
+- ABI compatibility
+- Panic handling across the boundary
 - Error handling
-- Memory ownership
-
-## Example Session
-
-```
-/unsafe-review
-
-Scanning for unsafe code...
-Found 2 unsafe blocks and 1 unsafe fn.
-
---- Review 1/3 ---
-Location: src/buffer.rs:42
-Code: unsafe { slice::from_raw_parts(self.ptr, self.len) }
-
-[Checklist]
-[ ] SAFETY comment present?
-    > Yes: "// SAFETY: ptr and len are validated in new()"
-
-[ ] Pointer non-null?
-    > Checking... new() uses NonNull, so guaranteed
-
-[ ] Pointer aligned?
-    > Type is u8, alignment is 1, always aligned
-
-[ ] Length valid?
-    > len is set in new() and never changed
-
-[Result] PASS - All checks satisfied
-
---- Review 2/3 ---
-...
-```
+- Memory ownership and cleanup
 
 ## Output
 
-After review completes:
+Use this structure:
 
-```
-=== Unsafe Review Summary ===
+1. Scope reviewed
+2. Summary status: `PASS`, `WARN`, or `FAIL`
+3. Findings by location
+4. Suggested remediations
+5. Follow-up checks or tests
 
-Total unsafe items: 3
-- Passed: 2
-- Warnings: 1
-- Errors: 0
+For each finding, include:
+- location
+- unsafe construct
+- claimed invariant
+- issue or verification result
+- recommended next step
 
-Warnings:
-1. src/ffi.rs:87 - Missing catch_unwind in extern "C" fn
+## Related
 
-Recommendations:
-- Add panic handling to FFI functions
-- Consider using NonNull instead of raw pointers
-```
-
-## Related Commands
-
-- `/unsafe-check [file]` - Quick automated check
-- `/guideline P.UNS.*` - Query unsafe rules
+- [`/guideline`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/database/guideline.md) for rule lookup

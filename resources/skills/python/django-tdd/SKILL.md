@@ -112,7 +112,11 @@ def test_product_creation():
     product = ProductFactory(price=100.00)
     assert product.price == 100.00
 
-// ... (9 lines trimmed)
+def test_product_validation():
+    product = ProductFactory.build(price=-1)
+    with pytest.raises(ValidationError):
+        product.full_clean()
+
 def test_payment(mock_stripe, client, user):
     mock_stripe.Charge.create.return_value = {'status': 'succeeded'}
     # ... test payment flow

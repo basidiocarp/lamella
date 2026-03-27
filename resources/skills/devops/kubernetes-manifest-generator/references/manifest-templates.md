@@ -1,47 +1,110 @@
 # Kubernetes Manifest Templates
 
+Use these as starting points. Rename resources, namespaces, images, and secrets to fit the workload.
+
 ## Deployment Template
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <app-name>
-  namespace: <namespace>
-// ... (44 lines trimmed)
-                name: <app-name>-config
+  name: web-api
+  namespace: production
+  labels:
+    app.kubernetes.io/name: web-api
+    app.kubernetes.io/component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web-api
+        app.kubernetes.io/component: api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: ghcr.io/acme/web-api:v1.2.3
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: web-api-config
             - secretRef:
-                name: <app-name>-secret
+                name: web-api-secret
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
 ```
 
 ## Service Templates
 
-### ClusterIP (internal only)
+### ClusterIP
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: <app-name>
-  namespace: <namespace>
-// ... (8 lines trimmed)
+  name: web-api
+  namespace: production
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: web-api
+  ports:
+    - name: http
       port: 80
-      targetPort: 8080
-      protocol: TCP
+      targetPort: http
 ```
 
-### LoadBalancer (external access)
+### LoadBalancer
 
 ```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: <app-name>
-  namespace: <namespace>
-// ... (10 lines trimmed)
-      port: 80
-      targetPort: 8080
-      protocol: TCP
+  name: public-web-api
+  namespace: production
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: web-api
+  ports:
+    - name: https
+      port: 443
+      targetPort: https
 ```
 
 ## ConfigMap Template
@@ -50,31 +113,33 @@ metadata:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: <app-name>-config
-  namespace: <namespace>
+  name: web-api-config
+  namespace: production
 data:
   APP_MODE: production
   LOG_LEVEL: info
-  DATABASE_HOST: db.example.com
-  # For config files
-  app.properties: |
-    server.port=8080
-    server.host=0.0.0.0
-    logging.level=INFO
+  FEATURE_FLAGS: "search,metrics"
+  app.yaml: |
+    http:
+      port: 8080
+    logging:
+      format: json
 ```
 
 ## Secret Template
+
+Use `stringData` when authoring manifests by hand. Kubernetes will encode the values on write.
 
 ```yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: <app-name>-secret
-  namespace: <namespace>
-// ... (10 lines trimmed)
-    -----BEGIN PRIVATE KEY-----
-    ...
-    -----END PRIVATE KEY-----
+  name: web-api-secret
+  namespace: production
+type: Opaque
+stringData:
+  DATABASE_URL: postgres://app:change-me@postgres.production.svc.cluster.local:5432/app
+  API_TOKEN: change-me
 ```
 
 ## PersistentVolumeClaim Template
@@ -83,8 +148,8 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: <app-name>-data
-  namespace: <namespace>
+  name: web-api-data
+  namespace: production
 spec:
   accessModes:
     - ReadWriteOnce
@@ -94,24 +159,19 @@ spec:
       storage: 10Gi
 ```
 
-**Mount in Deployment:**
+Mount it in the Deployment:
 
 ```yaml
-spec:
-  template:
-    spec:
-      containers:
-        - name: app
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/app
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: <app-name>-data
+volumeMounts:
+  - name: data
+    mountPath: /var/lib/web-api
+volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: web-api-data
 ```
 
-## Security Context Template
+## Security Context Snippet
 
 ```yaml
 spec:
@@ -119,34 +179,41 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-// ... (9 lines trimmed)
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
 ```
 
-## Labels and Annotations
-
-### Standard labels (recommended)
+## Standard Labels
 
 ```yaml
 metadata:
   labels:
-    app.kubernetes.io/name: <app-name>
-    app.kubernetes.io/instance: <instance-name>
-    app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/part-of: <system-name>
+    app.kubernetes.io/name: web-api
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/version: "1.2.3"
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: checkout
     app.kubernetes.io/managed-by: kubectl
 ```
 
-### Useful annotations
+## Useful Annotations
 
 ```yaml
 metadata:
   annotations:
-    description: "Application description"
-    contact: "team@example.com"
+    description: "Public API for checkout requests"
+    contact: "platform@example.com"
     prometheus.io/scrape: "true"
     prometheus.io/port: "9090"
     prometheus.io/path: "/metrics"

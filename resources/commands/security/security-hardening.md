@@ -138,7 +138,11 @@ Task:
   prompt: |
     You are a backend security architect. Review the architecture for security weaknesses in: $TARGET.
 
-# ... (13 lines trimmed)
+    Focus on:
+    - trust boundaries and privileged paths
+    - authentication, authorization, and secret handling
+    - network exposure, data classification, and isolation
+    - concrete hardening steps tied to the deployed architecture
     Provide: security architecture assessment, zero-trust design recommendations,
     service mesh security requirements, and data classification matrix.
 ```
@@ -189,7 +193,11 @@ Task:
   prompt: |
     Coordinate immediate remediation of critical vulnerabilities (CVSS 7+) in: $TARGET.
 
-# ... (14 lines trimmed)
+    Prioritize:
+    - exploitability and blast radius
+    - safest code or config fix first
+    - required regression coverage
+    - rollback plan if remediation changes runtime behavior
     Provide: patched code with vulnerability fixes, security patch documentation,
     and regression test requirements.
 ```
@@ -211,7 +219,11 @@ Task:
   prompt: |
     You are a backend security engineer. Implement comprehensive backend security controls for: $TARGET.
 
-# ... (14 lines trimmed)
+    Include:
+    - strict input validation
+    - authz checks at resource boundaries
+    - safe secret and key handling
+    - secure defaults for logging and error handling
     Provide: hardened API endpoints, validation middleware, encryption implementation,
     and secure configuration templates.
 ```
@@ -233,7 +245,11 @@ Task:
   prompt: |
     You are a frontend security engineer. Implement frontend security measures for: $TARGET.
 
-# ... (14 lines trimmed)
+    Include:
+    - XSS-safe rendering and content handling
+    - secure token/session handling
+    - CSP and header expectations
+    - clickjacking and cross-origin considerations
     Provide: secure frontend components, CSP policy configuration,
     authentication flow implementation, and security headers configuration.
 ```
@@ -257,7 +273,11 @@ Task:
   prompt: |
     You are a mobile security engineer. Implement mobile app security for: $TARGET.
 
-# ... (14 lines trimmed)
+    Include:
+    - secure storage and key material handling
+    - transport security and certificate pinning
+    - hardening for debug, logging, and tamper-sensitive flows
+    - configuration differences by environment
     Provide: hardened mobile application configuration, security configuration files,
     obfuscation rules, and certificate pinning implementation.
 ```
@@ -310,7 +330,11 @@ Task:
   prompt: |
     Implement a modern authentication system for: $TARGET.
 
-# ... (14 lines trimmed)
+    Include:
+    - identity provider / credential flow choice
+    - MFA and recovery paths
+    - session/token lifecycle rules
+    - authorization model and default-deny behavior
     Provide: authentication service configuration, MFA implementation,
     authorization policies, and session management system.
 ```
@@ -332,7 +356,11 @@ Task:
   prompt: |
     You are an infrastructure security engineer. Deploy infrastructure security controls for: $TARGET.
 
-# ... (13 lines trimmed)
+    Include:
+    - network segmentation and ingress controls
+    - WAF / IDS / IPS coverage
+    - cloud account and IAM boundary recommendations
+    - logging and audit retention expectations
     Provide: WAF configuration, network security policies, IDS/IPS rules,
     and cloud security configurations.
 ```
@@ -354,7 +382,11 @@ Task:
   prompt: |
     You are a DevOps security engineer. Implement enterprise secrets management for: $TARGET.
 
-# ... (13 lines trimmed)
+    Include:
+    - secret storage backend selection
+    - access policy and rotation rules
+    - runtime injection path
+    - auditability and break-glass handling
     Provide: secrets management configuration, rotation policies,
     IAM role definitions, and key management procedures.
 ```
@@ -403,7 +435,11 @@ Task:
   prompt: |
     Execute comprehensive penetration testing for: $TARGET.
 
-# ... (17 lines trimmed)
+    Include:
+    - target surface and in-scope assumptions
+    - test categories and likely abuse paths
+    - evidence requirements for findings
+    - remediation validation expectations
     Provide: penetration test report, proof-of-concept exploits,
     remediation validation, and security control effectiveness metrics.
 ```
@@ -425,7 +461,11 @@ Task:
   prompt: |
     Verify compliance with security frameworks for: $TARGET.
 
-# ... (14 lines trimmed)
+    Include:
+    - applicable framework controls
+    - evidence expected per control family
+    - current gaps and compensating controls
+    - concrete remediation work to close gaps
     Provide: compliance assessment report, gap analysis,
     remediation requirements, and audit evidence collection.
 ```
@@ -447,7 +487,11 @@ Task:
   prompt: |
     You are a security operations engineer specializing in SIEM and incident response.
     Implement security monitoring and SIEM integration for: $TARGET.
-# ... (15 lines trimmed)
+    Include:
+    - log sources and normalization expectations
+    - detection rules for the highest-risk behaviors
+    - triage and escalation path
+    - dashboards and alert fatigue controls
     Provide: SIEM configuration, correlation rules, incident response playbooks,
     security dashboards, and alert definitions.
 ```
@@ -474,7 +518,12 @@ Security hardening complete: $TARGET
 - .security-hardening/01-vulnerability-scan.md
 - .security-hardening/02-threat-model.md
 - .security-hardening/03-architecture-review.md
-# ... (30 lines trimmed)
+- .security-hardening/04-critical-remediation.md
+- .security-hardening/05-backend-controls.md
+- .security-hardening/06-frontend-controls.md
+- .security-hardening/07-authentication.md
+- .security-hardening/08-secrets-management.md
+- .security-hardening/09-monitoring-and-siem.md
 3. Deploy monitoring configuration to production
 4. Schedule regular security reviews
 ```

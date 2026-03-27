@@ -1,324 +1,195 @@
 # Advanced PromQL Query Techniques
 
-Advanced query patterns for complex monitoring scenarios.
-
----
-
-## Table of Contents
-
-1. [Subqueries](#subqueries)
-2. [Offset Modifier](#offset-modifier)
-3. [@ Modifier (Timestamp Selection)](#-modifier-timestamp-selection)
-4. [Binary Operators and Vector Matching](#binary-operators-and-vector-matching)
-5. [Logical Operators](#logical-operators)
-6. [Label Manipulation](#label-manipulation)
-7. [Aggregation Strategies](#aggregation-strategies)
-
----
+Use this reference when the basic `rate`, `sum by`, and ratio patterns are not
+enough. These techniques are the ones that usually decide whether a PromQL
+query is merely valid or actually useful in production.
 
 ## Subqueries
 
-Subqueries enable complex time-based calculations by running a range query over another range query.
-
-### Syntax
-
-```
-<instant_query>[<range>:<resolution>]
-```
-
-- `<range>`: Time window to evaluate over
-- `<resolution>`: Step size between evaluations (optional, defaults to global eval interval)
-
-### Examples
+Subqueries run a range query over the result of another range or instant query.
+They are useful when you need a second layer of time-based reasoning.
 
 ```promql
-# Maximum 5-minute rate over the past 30 minutes
+# Highest 5m request rate observed during the last 30m
 max_over_time(
   rate(http_requests_total[5m])[30m:1m]
 )
 
-// ... (12 lines trimmed)
+# 95th percentile latency computed from 5m bucket rates,
+# then evaluated across a 6h window
+max_over_time(
+  histogram_quantile(
+    0.95,
     sum by (le) (rate(http_request_duration_seconds_bucket[5m]))
   )[6h:5m]
 )
 ```
 
-### Common Subquery Patterns
+Common pattern:
 
 ```promql
-# Detect if metric doubled in the last hour
+# Detect whether traffic more than doubled within the last hour
 max_over_time(rate(requests_total[5m])[1h:])
 /
 min_over_time(rate(requests_total[5m])[1h:]) > 2
-// ... (6 lines trimmed)
+
+# Count how many minutes in the last hour traffic exceeded 1000 rps
+sum_over_time(
   (rate(http_requests_total[5m]) > 1000)[1h:1m]
 )
 ```
 
----
-
 ## Offset Modifier
 
-Compare current data with historical data.
-
-### Basic Offset
+`offset` compares the current result with an earlier point in time.
 
 ```promql
-# Compare current rate with rate from 1 week ago
+# Difference from the same query one week ago
 rate(http_requests_total[5m])
 -
 rate(http_requests_total[5m] offset 1w)
 
-// ... (14 lines trimmed)
+# Percentage change from the same time yesterday
+(
+  rate(http_requests_total[5m])
+  -
+  rate(http_requests_total[5m] offset 1d)
 )
 /
-rate(http_requests_total[5m] offset 7d) * 100
-```
+rate(http_requests_total[5m] offset 1d) * 100
 
-### Week-over-Week Comparison
-
-```promql
-# Request rate comparison (this week vs last week)
-sum(rate(http_requests_total[5m])) / sum(rate(http_requests_total[5m] offset 1w))
-
-# Only alert if significantly higher than last week
-sum(rate(http_requests_total[5m])) > 1.5 * sum(rate(http_requests_total[5m] offset 1w))
-```
-
-### Offset with Aggregations
-
-```promql
-# Error rate change by service
+# Error-rate change by service
 sum by (service) (rate(errors_total[5m]))
 -
 sum by (service) (rate(errors_total[5m] offset 1d))
 ```
 
----
+Use `offset` for trend comparison, not for long-term forecasting.
 
-## @ Modifier (Timestamp Selection)
+## `@` Modifier
 
-Query metrics at specific timestamps. Useful for point-in-time comparisons.
-
-### Syntax
+`@` evaluates the selector at a specific timestamp instead of “now”.
 
 ```promql
-metric @ <timestamp>
-metric @ start()   # Start of the range query
-metric @ end()     # End of the range query
-```
-
-### Examples
-
-```promql
-# Rate at the end of the range query
+# Value at the end of the query range
 rate(http_requests_total[5m] @ end())
 
-# Rate at specific Unix timestamp
-rate(http_requests_total[5m] @ 1609459200)
-
-# Compare start vs end of query range
+# Compare query start vs query end
 rate(http_requests_total[5m] @ end())
 -
 rate(http_requests_total[5m] @ start())
+
+# Fixed historical point
+rate(http_requests_total[5m] @ 1704067200)
 ```
 
-### Combining @ with Offset
-
-```promql
-# Value at a specific time, offset by duration
-http_requests_total @ 1609459200 offset 1h
-```
-
----
+`@` is most useful in dashboards or range queries where a stable reference point
+matters.
 
 ## Binary Operators and Vector Matching
 
-Control how labels are matched when combining metrics.
+Most advanced PromQL failures come from mismatched labels. Explicit vector
+matching makes the intent visible.
 
-### Vector Matching Modes
-
-| Mode | Description |
-|------|-------------|
-| One-to-one | Default, labels must match exactly |
-| Many-to-one | Match multiple series to one, use `group_left` |
-| One-to-many | Match one series to multiple, use `group_right` |
-
-### One-to-One (Default)
+### One-to-One Matching
 
 ```promql
-# Labels must match exactly
+# Exact label match
 metric_a + metric_b
 
-# Only specific labels must match
+# Only these labels must match
 metric_a + on (job, instance) metric_b
 
-# All labels except specific ones must match
+# Match on every label except instance
 metric_a + ignoring (instance) metric_b
 ```
 
-### Many-to-One with group_left
+### Many-to-One with `group_left`
 
 ```promql
-# Enrich request rate with version info
+# Attach version metadata to request-rate series
 rate(http_requests_total[5m])
 * on (job, instance) group_left (version)
   app_version_info
 
-# Add metadata labels from info metric
+# Add owner metadata to pod CPU series
 sum by (pod) (rate(container_cpu_usage_seconds_total[5m]))
 * on (pod) group_left (owner_kind, owner_name)
   kube_pod_owner
 ```
 
-### One-to-Many with group_right
+### One-to-Many with `group_right`
 
 ```promql
-# Apply single multiplier to multiple series
 config_multiplier
 * on (job) group_right ()
   rate(http_requests_total[5m])
 ```
 
-### Common Patterns
+### Ratio Pattern
 
 ```promql
-# Calculate ratio with different cardinality
 sum by (job) (rate(errors_total[5m]))
 /
 sum by (job) (rate(requests_total[5m]))
-// ... (8 lines trimmed)
-and on (instance)
-  up == 1
 ```
 
----
+Keep label sets aligned before building ratios. If numerator and denominator do
+not aggregate the same way, the result usually lies.
 
 ## Logical Operators
 
-Filter or combine time series based on conditions.
-
-### Comparison Operators
-
-```promql
-# Return series only where value > 100
-http_requests_total > 100
-
-# Return series where value is between 50 and 100
-http_requests_total > 50 and http_requests_total < 100
-
-# Return 1 (true) or nothing (vs returning original value)
-http_requests_total > bool 100
-```
-
-### Set Operations
+Logical operators are useful when a query should return only the series that
+meet a condition.
 
 ```promql
-# AND: Return series present in both
-metric_a and metric_b
-
-# OR: Return series present in either
-metric_a or metric_b
-
-# UNLESS: Return series in A but not in B
-metric_a unless metric_b
-```
-
-### Filtering Examples
-
-```promql
-# Only show services with error rate > 5%
+# Return only services above 5% error rate
 (
   sum by (service) (rate(errors_total[5m]))
   /
   sum by (service) (rate(requests_total[5m]))
-// ... (8 lines trimmed)
+) > 0.05
+
+# Return active instances only
+rate(http_requests_total[5m])
+and on (instance)
+  up == 1
+
+# Return services with traffic but no errors
 sum by (service) (rate(requests_total[5m])) > 0
 unless
 sum by (service) (rate(errors_total[5m])) > 0
 ```
 
----
+Use `bool` only when you explicitly need `0` or `1` as the result.
 
-## Label Manipulation
+## Label Manipulation and Aggregation
 
-### label_replace()
-
-Add or modify labels based on regex extraction.
+Use label helpers sparingly. They are powerful, but they can also hide a bad
+metric model.
 
 ```promql
-# Extract environment from instance name
+# Extract method from a compound label
 label_replace(
-  up{job="api"},
-  "environment",
+  http_requests_total,
+  "method",
   "$1",
-// ... (9 lines trimmed)
-  "",
-  ""
+  "route",
+  "^(GET|POST|PUT|DELETE).*"
 )
+
+# Aggregate without one noisy label
+sum without (instance) (rate(http_requests_total[5m]))
+
+# Aggregate into service-level traffic
+sum by (service) (rate(http_requests_total[5m]))
 ```
 
-### label_join()
+## Rules
 
-Concatenate label values into a new label.
-
-```promql
-# Create combined identifier
-label_join(
-  up,
-  "identifier",
-  "-",
-  "job",
-  "instance"
-)
-```
-
----
-
-## Aggregation Strategies
-
-### Without vs By
-
-```promql
-# Keep only these labels
-sum by (job, service) (rate(http_requests_total[5m]))
-
-# Keep all labels except these
-sum without (instance, pod) (rate(http_requests_total[5m]))
-```
-
-### TopK and BottomK
-
-```promql
-# Top 5 services by request rate
-topk(5, sum by (service) (rate(http_requests_total[5m])))
-
-# Bottom 3 instances by availability
-// ... (6 lines trimmed)
-  sum by (job, endpoint) (rate(requests_total[5m]))
-)
-```
-
-### Quantile Aggregation
-
-```promql
-# 95th percentile of values across series
-quantile(0.95, rate(http_requests_total[5m]))
-
-# Distribution of request rates
-quantile(0.5, sum by (instance) (rate(http_requests_total[5m])))  # Median instance
-quantile(0.9, sum by (instance) (rate(http_requests_total[5m])))  # P90 instance
-```
-
-### Count and Group
-
-```promql
-# Count number of series matching criteria
-count(up{job="api"} == 1)
-
-# Count by label value
-count by (status_code) (rate(http_requests_total[5m]))
-
-# Group without aggregating values (preserves all series)
-group by (job) (http_requests_total)
-```
+- Reach for subqueries when you need time-on-time analysis, not for routine
+  single-window rates.
+- Use `offset` for historical comparison, not as a substitute for recording
+  rules.
+- Make vector matching explicit any time label cardinality differs.
+- Prefer fixing metric shape over relying on heavy label manipulation.

@@ -49,6 +49,8 @@ Expects from CLAUDE.md or prompt:
 
 ## Completion Report
 
+## Output Format
+
 ```markdown
 # QA Session Complete
 

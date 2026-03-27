@@ -80,7 +80,15 @@ TASK: Writing new tests
   → Then [references/strategies.md](references/strategies.md) if input generation is complex
 
 TASK: Designing a new feature
-// ... (10 lines trimmed)
+  → Read [references/properties.md](references/properties.md) (what to make true by construction)
+  → Then [references/strategies.md](references/strategies.md) for edge-heavy domains
+
+TASK: Reproducing a bug
+  → Read [references/shrinking.md](references/shrinking.md) (reduce failures to minimal counterexamples)
+  → Then [references/stateful.md](references/stateful.md) if the bug depends on sequences of actions
+
+TASK: Working with parsers, serializers, or validators
+  → Read [references/properties.md](references/properties.md) (round-trip and invariant patterns)
 
 TASK: Need library reference
   → Read [references/libraries.md](references/libraries.md) (PBT libraries by language, includes smart contract tools)

@@ -171,10 +171,25 @@ JAVA_ALL_EXT=$(find "$(codeql resolve qlpacks 2>/dev/null | grep 'java-queries' 
   -path '*/.codeql/libraries/codeql/java-all/*/ext' -type d 2>/dev/null | head -1)
 
 if [ -n "$JAVA_ALL_EXT" ]; then
-// ... (15 lines trimmed)
+  echo "Found java-all ext directory: $JAVA_ALL_EXT"
+  mkdir -p "$JAVA_ALL_EXT"
+  cp "$OUTPUT_DIR/extensions/"*.yml "$JAVA_ALL_EXT/"
+  echo "Copied extensions:"
+  ls -1 "$JAVA_ALL_EXT"/*.yml
+else
+  echo "Could not locate java-all ext directory automatically."
   echo "Attempted path lookup from: codeql resolve qlpacks | grep java-queries"
   echo "Run 'codeql resolve qlpacks' manually to debug."
 fi
+```
+
+**Typical manual fallback:**
+
+```bash
+codeql resolve qlpacks
+# Inspect the java-queries pack path from that output, then copy:
+cp "$OUTPUT_DIR/extensions/"*.yml \
+  /path/to/.codeql/libraries/codeql/java-all/<version>/ext/
 ```
 
 **For Python/JS/Go:** The same limitation may apply. Locate the `<lang>-all` pack's `ext/` directory and copy extensions there.

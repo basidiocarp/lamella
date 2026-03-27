@@ -1,35 +1,48 @@
 # Phase 5: Synthesis (Evidence-Based Combination)
 
-**Only executed when Strategy 3 (FULL_SYNTHESIS) selected in Phase 4.5**
+Only run this phase when full synthesis was selected after evaluation.
 
-Launch **1 synthesis agent** (recommended: Opus for quality):
+Launch **1 synthesis agent**.
 
-1. Agent receives:
-   - **All solutions** (from specified output location)
-   - **All evaluation reports** (from `.specs/reports/`)
-   - **Selection rationale** from pruning phase (from `.specs/research/`)
-2. Agent analyzes:
-   - **Consensus strengths** (what multiple judges praised)
-   - **Consensus weaknesses** (what multiple judges criticized)
-   - **Complementary elements** where solutions took different approaches
-3. Agent produces **final solution** by:
-   - **Copying superior sections** when one solution clearly wins
-   - **Combining approaches** when hybrid is better
-   - **Fixing identified issues** that judges caught
-   - **Documenting decisions** (what was taken from where and why)
+1. Provide all solutions.
+2. Provide all evaluation reports.
+3. Provide the pruning selection rationale.
+4. Ask the agent to:
+   - identify consensus strengths
+   - identify consensus weaknesses
+   - combine complementary strengths
+   - fix issues caught by judges
 
-**Key principle:** Evidence-based synthesis leverages collective intelligence from exploration and evaluation.
+**Key principle:** Synthesize from evidence, not preference.
 
 ## Prompt Template for Synthesizer
 
 ```markdown
-You are synthesizing the best solution from explored, pruned, and evaluated implementations.
+You are synthesizing the best final solution from explored, pruned, and evaluated candidates.
 
 <task>
 {task_description}
 </task>
-// ... (88 lines trimmed)
-- Cite your sources (which solution, which section)
-- Explain every major decision
-- Address all consensus weaknesses identified by judges
+
+<solutions>
+{solution_files}
+</solutions>
+
+<evaluations>
+{evaluation_reports}
+</evaluations>
+
+<selection_rationale>
+{selection_file}
+</selection_rationale>
+
+Produce:
+1. Final combined solution
+2. Source notes for major sections
+3. Explicit fixes for consensus weaknesses
+
+CRITICAL:
+- Cite which solution each major section came from.
+- Explain every major synthesis decision.
+- Address consensus weaknesses called out by judges.
 ```

@@ -1,7 +1,7 @@
-#!/bin/bash
-# PostToolUse hook: warn when edited files contain inline-dash comment headers
-# Detects: # ── TEXT ─────  or  // ── TEXT ─────
-# Suggests: boxed style with 80-char bars
+#!/usr/bin/env bash
+# PostToolUse hook: warn when edited files contain inline-dash comment headers.
+# Detects: # ── TEXT ───── or // ── TEXT ─────
+# Suggests: boxed style with full-width separator bars.
 
 set -e
 

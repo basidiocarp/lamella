@@ -36,7 +36,20 @@ Comprehensive guide to implementing CQRS (Command Query Responsibility Segregati
                     +------+------+
                            |
               +------------+------------+
-// ... (15 lines trimmed)
+              |                         |
+              v                         v
+       +-------------+          +-------------+
+       |  Command    |          |    Query    |
+       |   API       |          |    API      |
+       +------+------+          +------+------+
+              |                         |
+              v                         v
+       +-------------+          +-------------+
+       | Command     |  Events  | Projection  |
+       | Handler     |--------->| Builder     |
+       +------+------+          +------+------+
+              |                         |
+              v                         v
        |   Write     |--------->|    Read     |
        |   Model     |  Events  |   Model     |
        +-------------+          +-------------+

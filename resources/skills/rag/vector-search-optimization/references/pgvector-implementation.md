@@ -1,15 +1,16 @@
 # pgvector Implementation
 
-PostgreSQL pgvector with HNSW indexing and hybrid search.
+Use pgvector when retrieval needs to stay close to relational data and SQL workflows.
 
-```python
-import asyncpg
-from typing import List, Dict, Optional
-import numpy as np
+## Best Fit
 
-class PgVectorStore:
-// ... (128 lines trimmed)
-            )
+- Small to medium vector workloads
+- Strong transactional coupling with application data
+- Teams already operating PostgreSQL heavily
 
-        return [dict(row) for row in rows]
-```
+## Core Workflow
+
+1. Store embeddings alongside relational identifiers.
+2. Add the appropriate vector index strategy.
+3. Combine vector ranking with SQL filters.
+4. Use hybrid retrieval when lexical filtering still matters.

@@ -40,7 +40,13 @@ Solution: Always add `.DELETE_ON_ERROR:` at the top
 .DELETE_ON_ERROR:
 
 .PHONY: all clean
-// ... (6 lines trimmed)
+all: app.bin
+
+app.bin: app.c
+	$(CC) -o $@ $<
+
+clean:
+	$(RM) app.bin
 # Now if build fails, the partial file is deleted
 # Next "make" will properly rebuild
 ```
@@ -131,7 +137,10 @@ Problem: Missing backslash or space after backslash
 SOURCES = main.c
           utils.c
           config.c
-// ... (5 lines trimmed)
+
+CFLAGS = -O2 \
+         -g\ 
+         -Wall
 
 # Error: Unexpected token or incorrect variable value
 ```
@@ -237,7 +246,8 @@ Problem: Not declaring non-file targets as phony
 clean:
 	rm -rf build
 
-// ... (5 lines trimmed)
+touch clean
+
 # $ make clean
 # make: 'clean' is up to date.
 ```
@@ -283,7 +293,12 @@ app: main.o utils.o
 	$(CC) -o $@ $^
 
 main.o: main.c main.h common.h
-// ... (8 lines trimmed)
+utils.o: utils.c utils.h common.h
+
+DEPS := $(OBJECTS:.o=.d)
+DEPFLAGS := -MMD -MP -MF $(@:.o=.d)
+
+%.o: %.c
 	$(CC) $(DEPFLAGS) $(CFLAGS) -c $<
 
 -include $(DEPS)
@@ -359,7 +374,12 @@ Problem: Recursive expansion causing performance issues
 BUILD_TIME = $(shell date +%Y%m%d-%H%M%S)
 GIT_HASH = $(shell git rev-parse HEAD)
 
-// ... (7 lines trimmed)
+target1:
+	echo $(BUILD_TIME)  # Shell called now
+
+target2:
+	echo $(BUILD_TIME)  # Shell called AGAIN!
+
 target3:
 	echo $(GIT_HASH)    # Shell called AGAIN!
 ```
@@ -371,7 +391,12 @@ Solution: Use := for immediate expansion
 BUILD_TIME := $(shell date +%Y%m%d-%H%M%S)
 GIT_HASH := $(shell git rev-parse HEAD)
 
-// ... (7 lines trimmed)
+target1:
+	echo $(BUILD_TIME)  # Cached value
+
+target2:
+	echo $(BUILD_TIME)  # Same cached value
+
 target3:
 	echo $(GIT_HASH)    # Same cached value
 ```
@@ -477,7 +502,11 @@ Solution: Use environment variables
 deploy:
 	@if [ -z "$$API_KEY" ]; then \
 		echo "Error: API_KEY not set"; \
-// ... (5 lines trimmed)
+		exit 1; \
+	fi
+	curl -H "Authorization: Bearer $$API_KEY" https://api.example.com/
+
+# Or load from file during local development
 include .env
 export
 ```
@@ -507,7 +536,10 @@ Solution: Validate before dangerous operations
 BUILD_DIR := build  # Default value
 
 clean:
-// ... (5 lines trimmed)
+	@if [ -z "$(BUILD_DIR)" ] || [ "$(BUILD_DIR)" = "/" ]; then \
+		echo "Refusing to clean unsafe BUILD_DIR=$(BUILD_DIR)"; \
+		exit 1; \
+	else \
 		rm -rf $(BUILD_DIR)/*; \
 	fi
 ```
@@ -618,7 +650,13 @@ Solution: Proper dependency tracking
 OBJECTS := $(patsubst src/%.c,build/%.o,$(SOURCES))
 
 build: build/app
-// ... (7 lines trimmed)
+
+build/app: $(OBJECTS)
+	$(CC) $(OBJECTS) -o $@
+
+build/%.o: src/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Only rebuilds changed files
 ```
@@ -634,7 +672,11 @@ Problem: Duplicated rules for similar targets
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
-// ... (5 lines trimmed)
+utils.o: utils.c
+	$(CC) $(CFLAGS) -c utils.c -o utils.o
+
+helper.o: helper.c
+	$(CC) $(CFLAGS) -c helper.c -o helper.o
 
 # Lots of duplication!
 ```
@@ -726,7 +768,15 @@ UNAME_S := $(shell uname -s 2>/dev/null || echo Windows)
 
 ifeq ($(UNAME_S),Windows)
 	RM := del /Q /S
-// ... (9 lines trimmed)
+	CP := xcopy /E /I
+else
+	RM := rm -rf
+	CP := cp -r
+endif
+
+copy:
+	$(CP) src dest
+
 # Or use Go/Python for cross-platform scripts
 clean:
 	@go run scripts/clean.go
@@ -756,7 +806,14 @@ Solution: Use set -e or check exit codes
 test:
 	@set -e; \
 	go test ./pkg1; \
-// ... (8 lines trimmed)
+	go test ./pkg2; \
+	go test ./pkg3; \
+	echo "All tests passed!"
+
+# Or use explicit checks per line
+test-strict:
+	@go test ./pkg1 || exit 1
+	@go test ./pkg2 || exit 1
 	@go test ./pkg3 || exit 1
 	@echo "All tests passed!"
 ```
@@ -770,7 +827,12 @@ Problem: Unsafe parallel execution
 all: build-frontend build-backend
 
 build-frontend:
-// ... (6 lines trimmed)
+	npm install
+	npm run build:frontend
+
+build-backend:
+	npm install
+	npm run build:backend
 
 # With make -j2, both run npm install simultaneously
 ```
@@ -782,7 +844,15 @@ Solution: Use order dependencies or .NOTPARALLEL
 all: build-frontend build-backend
 
 build-frontend: node_modules
-// ... (9 lines trimmed)
+	npm run build:frontend
+
+build-backend: node_modules
+	npm run build:backend
+
+node_modules: package-lock.json
+	npm ci
+	touch $@
+
 # Or use .NOTPARALLEL for specific target
 .NOTPARALLEL: install
 ```
@@ -796,7 +866,13 @@ Problem: Relying on target order without dependencies
 all: build test deploy
 
 build:
-// ... (7 lines trimmed)
+	go build -o app ./...
+
+test:
+	go test ./...
+
+deploy:
+	./scripts/deploy.sh app
 
 # Direct "make test" or "make deploy" fails!
 ```
@@ -808,7 +884,13 @@ Solution: Explicit dependencies
 all: deploy
 
 build:
-// ... (7 lines trimmed)
+	go build -o app ./...
+
+test: build
+	go test ./...
+
+deploy: test
+	./scripts/deploy.sh app
 
 # Now "make deploy" automatically runs build → test → deploy
 ```

@@ -358,7 +358,10 @@ After creating all todo files, present comprehensive summary:
 
 ### Findings Summary:
 
-# ... (37 lines trimmed)
+1. **Record all findings**:
+   - severity
+   - file and line references
+   - concrete remediation guidance
 
 2. **Triage All Todos**:
    ```bash
@@ -377,7 +380,7 @@ After creating all todo files, present comprehensive summary:
    - Update Work Log as you work
    - Commit todos: `git add todos/ && git commit -m "refactor: add code review findings"`
 
-# ... (20 lines trimmed)
+- Security risks
 - Optimization opportunities
 - Documentation updates
 ````

@@ -1,66 +1,25 @@
 # Atheris Docker Environment Setup
 
-## Recommended Docker Environment
+Use a Docker environment when local Python, Clang, and sanitizer setup is too
+inconsistent for reliable Atheris runs.
 
-For a fully operational Linux environment with all dependencies configured:
+## What the Container Should Provide
 
-```dockerfile
-# https://hub.docker.com/_/python
-ARG PYTHON_VERSION=3.11
+- Python
+- Clang toolchain
+- sanitizer-compatible build flags
+- any native dependencies needed by the target library
 
-FROM python:$PYTHON_VERSION-slim-bookworm
+The container should make the fuzzing environment reproducible, not clever.
 
-// ... (47 lines trimmed)
-ENV ASAN_OPTIONS "allocator_may_return_null=1,detect_leaks=0"
+## Good Uses
 
-CMD ["/bin/bash"]
-```
+- fuzzing Python C extensions
+- sharing a known-good fuzzing setup across machines
+- avoiding local linker and sanitizer drift
 
-Build and run:
-```bash
-docker build -t atheris .
-docker run -it atheris
-```
+## Operational Rule
 
-## Fuzzing Python C Extensions
-
-### Environment Configuration
-
-If using the provided Dockerfile, these are already configured. For local setup:
-
-```bash
-export CC="clang"
-export CFLAGS="-fsanitize=address,fuzzer-no-link"
-export CXX="clang++"
-export CXXFLAGS="-fsanitize=address,fuzzer-no-link"
-export LDSHARED="clang -shared"
-```
-
-### Example: Fuzzing cbor2
-
-Install the extension from source:
-```bash
-CBOR2_BUILD_C_EXTENSION=1 python -m pip install --no-binary cbor2 cbor2==5.6.4
-```
-
-The `--no-binary` flag ensures the C extension is compiled locally with instrumentation.
-
-Create `cbor2-fuzz.py`:
-```python
-import sys
-import atheris
-
-# _cbor2 ensures the C library is imported
-from _cbor2 import loads
-// ... (11 lines trimmed)
-
-if __name__ == "__main__":
-    main()
-```
-
-Run:
-```bash
-python cbor2-fuzz.py
-```
-
-> **Important:** When running locally (not in Docker), set `LD_PRELOAD` manually.
+If the goal is to fuzz a native-backed Python library, make sure the extension
+is built from source inside the instrumented environment. Prebuilt wheels bypass
+the instrumentation you need.

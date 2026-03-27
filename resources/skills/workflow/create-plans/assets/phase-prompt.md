@@ -1,62 +1,51 @@
 # Phase Prompt Template
 
-Copy and fill this structure for `.planning/phases/XX-name/{phase}-{plan}-PLAN.md`:
+Use this structure for `.planning/phases/XX-name/{phase}-{plan}-PLAN.md`.
 
-**Naming:** Use `{phase}-{plan}-PLAN.md` format (e.g., `01-02-PLAN.md` for Phase 1, Plan 2)
+## Naming
+
+- file format: `{phase}-{plan}-PLAN.md`
+- example: `01-02-PLAN.md`
+
+## Core Template
 
 ```markdown
 ---
 phase: XX-name
 type: execute
-domain: [optional - if domain skill loaded]
+domain: [optional]
 ---
-// ... (119 lines trimmed)
-[If more plans in this phase: "Ready for {phase}-{next-plan}-PLAN.md"]
-[If phase complete: "Phase complete, ready for next phase"]
-</output>
-```
 
-<key_elements>
-From create-meta-prompts patterns:
-- XML structure for Claude parsing
-- @context references for file loading
-- Task types: auto, checkpoint:human-action, checkpoint:human-verify, checkpoint:decision
-- Action includes "what to avoid and WHY" (from intelligence-rules)
-- Verification is specific and executable
-- Success criteria is measurable
-- Output specification includes SUMMARY.md structure
+<context>
+@.planning/roadmap.md
+@.planning/product.md
+[add any phase-specific files]
+</context>
 
-**Scope guidance:**
-- Aim for 3-6 tasks per plan
-- If planning >7 tasks, split into multiple plans (01-01, 01-02, etc.)
-- Target ~80% context usage maximum
-- See ../references/scope-estimation.md for splitting guidance
-</key_elements>
+<tasks>
+1. [specific task]
+2. [specific task]
+3. [specific task]
+</tasks>
 
-<good_examples>
-```markdown
----
-phase: 01-foundation
-type: execute
-domain: next-js
----
-// ... (54 lines trimmed)
+<verification>
+- [executable check]
+- [executable check]
+</verification>
+
+<success_criteria>
+- [measurable outcome]
+- [measurable outcome]
+</success_criteria>
+
 <output>
-After completion, create `.planning/phases/01-foundation/01-01-SUMMARY.md`
+After completion, create `.planning/phases/XX-name/{phase}-{plan}-SUMMARY.md`
 </output>
 ```
-</good_examples>
 
-<bad_examples>
-```markdown
-# Phase 1: Foundation
+## Rules
 
-## Tasks
-
-### Task 1: Set up authentication
-**Action**: Add auth to the app
-**Done when**: Users can log in
-```
-
-This is useless. No XML structure, no @context, no verification, no specificity.
-</bad_examples>
+- aim for `3-6` tasks per plan
+- keep verification concrete and runnable
+- specify what to avoid when a failure mode is likely
+- split large plans before context gets crowded

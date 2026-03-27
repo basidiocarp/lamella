@@ -103,7 +103,11 @@ Task:
   description: "Formulate business hypotheses for $FEATURE"
   prompt: |
     You are a business analyst specializing in data-driven product development. Formulate business hypotheses for feature: $FEATURE based on the data analysis below.
-# ... (9 lines trimmed)
+    Include:
+    - primary user problem and target segment
+    - measurable business outcome and guardrail metric
+    - expected mechanism of impact
+    - leading indicators to watch before the lagging outcome moves
 
     Provide a hypothesis document with success metrics definition and expected ROI calculations.
 ```
@@ -125,7 +129,11 @@ Task:
   prompt: |
     You are a data scientist specializing in experimentation and statistical analysis. Design the statistical experiment for feature: $FEATURE.
 
-# ... (13 lines trimmed)
+    Include:
+    - experiment unit, variants, and assignment strategy
+    - primary metric, secondary metrics, and guardrails
+    - sample size / power assumptions
+    - expected runtime and stop conditions
 
     Provide an experiment design document with power analysis and statistical test plan.
 ```
@@ -172,7 +180,11 @@ Task:
   prompt: |
     Design the feature architecture for: $FEATURE with A/B testing capability.
 
-# ... (12 lines trimmed)
+    Include:
+    - control and treatment execution paths
+    - feature flag boundaries
+    - persistence and event emission points
+    - rollback and kill-switch behavior
 
     Provide architecture diagrams, feature flag schema, and rollout strategy.
 ```
@@ -194,7 +206,11 @@ Task:
   prompt: |
     Design comprehensive analytics instrumentation for: $FEATURE.
 
-# ... (12 lines trimmed)
+    Include:
+    - event names and trigger conditions
+    - required properties and identifiers
+    - attribution / experiment metadata
+    - data quality checks for missing or malformed events
 
     Provide an event tracking plan, analytics schema, and instrumentation guide.
 ```
@@ -216,7 +232,11 @@ Task:
   prompt: |
     Design data pipelines for feature: $FEATURE.
 
-# ... (13 lines trimmed)
+    Include:
+    - source systems and event ingestion path
+    - transformations and aggregation layers
+    - late-arriving / duplicate event handling
+    - output tables or views consumed by analysis
 
     Provide pipeline architecture, ETL/ELT specifications, and data flow diagrams.
 ```
@@ -261,7 +281,11 @@ Task:
   prompt: |
     Implement the backend for feature: $FEATURE with full instrumentation.
 
-# ... (13 lines trimmed)
+    Include:
+    - feature flag evaluation and experiment assignment
+    - business logic and persistence changes
+    - analytics events at meaningful state transitions
+    - tests for flag, metrics, and fallback behavior
 
     Write all code files. Report what files were created/modified.
 ```
@@ -283,7 +307,11 @@ Task:
   prompt: |
     You are a frontend developer. Build the frontend for feature: $FEATURE with analytics tracking.
 
-# ... (17 lines trimmed)
+    Include:
+    - control/treatment UI behavior
+    - analytics events for user-visible actions
+    - loading, empty, and error states
+    - accessibility and experiment guardrails
 
     Write all code files. Report what files were created/modified.
 ```
@@ -307,7 +335,11 @@ Task:
   prompt: |
     You are an ML engineer. Integrate ML models for feature: $FEATURE if needed.
 
-# ... (13 lines trimmed)
+    Include:
+    - whether ML is justified for the problem
+    - model inputs, outputs, and serving boundary
+    - instrumentation for prediction quality
+    - deterministic fallback when the model is unavailable
     If no ML component is needed for this feature, explain why and skip.
     Write all code files. Report what files were created/modified.
 ```
@@ -352,7 +384,11 @@ Task:
   prompt: |
     Validate the analytics implementation for: $FEATURE.
 
-# ... (16 lines trimmed)
+    Include:
+    - event coverage against the tracking plan
+    - field completeness and type validation
+    - duplicate / missing event checks
+    - experiment assignment consistency across events
 
     Provide a validation report with data quality metrics and tracking coverage analysis.
 ```
@@ -376,7 +412,11 @@ Task:
   prompt: |
     You are a deployment engineer specializing in experimentation platforms. Configure experiment infrastructure for: $FEATURE.
 
-# ... (13 lines trimmed)
+    Include:
+    - feature flag / experiment definitions
+    - environment-specific configuration
+    - rollout controls and blast-radius limits
+    - observability hooks for experiment health
 
     Provide experiment configuration, monitoring dashboards, and rollout plan.
 ```
@@ -390,7 +430,11 @@ Task:
   prompt: |
     You are an observability engineer. Set up comprehensive monitoring for: $FEATURE.
 
-# ... (16 lines trimmed)
+    Include:
+    - golden signals for the new feature path
+    - business and experiment guardrail alerts
+    - dashboard panels for adoption and failures
+    - SLO view for the critical user journey
 
     Provide monitoring dashboard configs, alert definitions, and SLO specifications.
 ```
@@ -423,7 +467,11 @@ Task:
   description: "Create gradual rollout plan for $FEATURE"
   prompt: |
     You are a deployment engineer. Create a detailed gradual rollout plan for feature: $FEATURE.
-# ... (10 lines trimmed)
+    Include:
+    - rollout stages and traffic percentages
+    - entry and exit criteria per stage
+    - monitoring checks before expansion
+    - rollback thresholds and owners
 
     Provide a stage-by-stage rollout plan with decision criteria.
 ```
@@ -445,7 +493,11 @@ Task:
   prompt: |
     You are a security auditor. Perform a security review of this data-driven feature implementation.
 
-# ... (13 lines trimmed)
+    Include:
+    - data exposure and permission boundaries
+    - experimentation abuse or tampering risks
+    - logging / analytics privacy concerns
+    - concrete remediation guidance tied to files or flows
 
     Provide findings with severity, location, and specific fix recommendations.
 ```
@@ -495,7 +547,11 @@ Task:
   prompt: |
     You are a data scientist specializing in experimentation. Create the statistical analysis plan for the A/B test results of: $FEATURE.
 
-# ... (13 lines trimmed)
+    Include:
+    - primary success metric and guardrail interpretation
+    - treatment effect estimation method
+    - segmentation rules and caveats
+    - rules for inconclusive or harmful outcomes
 
     Provide an analysis plan with templates for results reporting.
 ```
@@ -517,7 +573,11 @@ Task:
   prompt: |
     You are a business analyst. Create a business impact assessment framework for feature: $FEATURE.
 
-# ... (12 lines trimmed)
+    Include:
+    - revenue / retention / efficiency impact dimensions
+    - cost assumptions
+    - short-term vs long-term tradeoffs
+    - decision matrix for scale, iterate, or stop
 
     Provide a business impact framework and decision matrix.
 ```
@@ -539,7 +599,11 @@ Task:
   prompt: |
     You are a data scientist specializing in product optimization. Create a post-launch optimization roadmap for: $FEATURE.
 
-# ... (13 lines trimmed)
+    Include:
+    - first-wave follow-up experiments
+    - instrumentation gaps to close
+    - user segments needing deeper analysis
+    - criteria for graduating the feature from experiment to default
 
     Provide an optimization roadmap with follow-up experiment plans.
 ```
@@ -566,7 +630,9 @@ Data-driven feature development complete: $FEATURE
 [List all .data-driven-feature/ output files]
 
 ## Development Summary
-# ... (21 lines trimmed)
+1. Finalize the hypothesis and experiment artifacts before coding.
+2. Implement backend, frontend, analytics, and any required data pipelines.
+3. Validate instrumentation and experiment infrastructure before rollout.
 4. Run analysis after experiment completes using .data-driven-feature/14-analysis-plan.md
 5. Make go/no-go decision using .data-driven-feature/15-impact-framework.md
 ```

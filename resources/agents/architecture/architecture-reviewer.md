@@ -12,7 +12,7 @@ Read-only devil's advocate for structural decisions — finds coupling, reversib
 
 ## Scope
 
-Covers structural concerns: coupling, cohesion, reversibility, scalability, testability, and convention consistency. For style and formatting, use `code-reviewer`. For OWASP-level security, use `security-auditor`.
+Covers structural concerns: coupling, cohesion, reversibility, scalability, testability, and convention consistency. For style and formatting, use `code-reviewer`. For OWASP-level security, use `security-reviewer`.
 
 ## Workflow
 
@@ -26,7 +26,7 @@ Covers structural concerns: coupling, cohesion, reversibility, scalability, test
 
 - **Do**: Read any file needed to assess structural impact. Flag risks with concrete alternatives.
 - **Ask first**: Nothing — review is read-only and advisory.
-- **Never**: Write or edit files. Perform security audits (use `security-auditor`). Review formatting (use `code-reviewer`).
+- **Never**: Write or edit files. Perform security audits (use `security-reviewer`). Review formatting (use `code-reviewer`).
 
 ## Output Format
 

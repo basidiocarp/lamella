@@ -1,92 +1,83 @@
 # Running Custom Playwright Code
 
-Use `run-code` to execute arbitrary Playwright code for advanced scenarios not covered by CLI commands.
+Use `run-code` when the CLI has no direct command for the browser action you
+need.
 
 ## Syntax
 
 ```bash
 playwright-cli run-code "async page => {
-  // Your Playwright code here
-  // Access page.context() for browser context operations
+  return await page.title();
 }"
 ```
 
-## Geolocation
+Treat the callback as a small task script. Keep it short and return plain JSON,
+strings, or numbers when you want output back in the terminal.
+
+## Browser Context Recipes
+
+### Geolocation
 
 ```bash
-# Grant geolocation permission and set location
 playwright-cli run-code "async page => {
   await page.context().grantPermissions(['geolocation']);
-  await page.context().setGeolocation({ latitude: 37.7749, longitude: -122.4194 });
-}"
-// ... (8 lines trimmed)
-playwright-cli run-code "async page => {
-  await page.context().clearPermissions();
-}"
-```
-
-## Permissions
-
-```bash
-# Grant multiple permissions
-playwright-cli run-code "async page => {
-  await page.context().grantPermissions([
-    'geolocation',
-    'notifications',
-// ... (8 lines trimmed)
-    origin: 'https://example.com'
+  await page.context().setGeolocation({
+    latitude: 37.7749,
+    longitude: -122.4194
   });
+  return 'geolocation-set';
 }"
 ```
 
-## Media Emulation
+### Permissions
 
 ```bash
-# Emulate dark color scheme
 playwright-cli run-code "async page => {
-  await page.emulateMedia({ colorScheme: 'dark' });
-}"
-
-// ... (11 lines trimmed)
-playwright-cli run-code "async page => {
-  await page.emulateMedia({ media: 'print' });
+  await page.context().grantPermissions(
+    ['clipboard-read', 'clipboard-write', 'notifications'],
+    { origin: 'https://example.com' }
+  );
+  return 'permissions-granted';
 }"
 ```
 
-## Wait Strategies
+### Media Emulation
 
 ```bash
-# Wait for network idle
+playwright-cli run-code "async page => {
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  return {
+    colorScheme: 'dark',
+    reducedMotion: 'reduce'
+  };
+}"
+```
+
+## Page Control Recipes
+
+### Wait for a Stable Page
+
+```bash
 playwright-cli run-code "async page => {
   await page.waitForLoadState('networkidle');
-}"
-
-// ... (11 lines trimmed)
-playwright-cli run-code "async page => {
   await page.waitForSelector('.result', { timeout: 10000 });
+  return 'ready';
 }"
 ```
 
-## Frames and Iframes
+### Work With Frames
 
 ```bash
-# Work with iframe
 playwright-cli run-code "async page => {
   const frame = page.locator('iframe#my-iframe').contentFrame();
   await frame.locator('button').click();
-}"
-
-# Get all frames
-playwright-cli run-code "async page => {
-  const frames = page.frames();
-  return frames.map(f => f.url());
+  return await frame.locator('h1').textContent();
 }"
 ```
 
-## File Downloads
+### Handle a Download
 
 ```bash
-# Handle file download
 playwright-cli run-code "async page => {
   const [download] = await Promise.all([
     page.waitForEvent('download'),
@@ -97,73 +88,51 @@ playwright-cli run-code "async page => {
 }"
 ```
 
-## Clipboard
+## Evaluation Recipes
+
+### Read Page State
 
 ```bash
-# Read clipboard (requires permission)
 playwright-cli run-code "async page => {
-  await page.context().grantPermissions(['clipboard-read']);
-  return await page.evaluate(() => navigator.clipboard.readText());
-}"
-
-# Write to clipboard
-playwright-cli run-code "async page => {
-  await page.evaluate(text => navigator.clipboard.writeText(text), 'Hello clipboard!');
+  return {
+    title: await page.title(),
+    url: page.url(),
+    viewport: page.viewportSize(),
+    userAgent: await page.evaluate(() => navigator.userAgent)
+  };
 }"
 ```
 
-## Page Information
+### Run Browser JavaScript
 
 ```bash
-# Get page title
 playwright-cli run-code "async page => {
-  return await page.title();
-}"
-
-// ... (11 lines trimmed)
-playwright-cli run-code "async page => {
-  return page.viewportSize();
-}"
-```
-
-## JavaScript Execution
-
-```bash
-# Execute JavaScript and return result
-playwright-cli run-code "async page => {
-  return await page.evaluate(() => {
-    return {
-      userAgent: navigator.userAgent,
-// ... (8 lines trimmed)
   const multiplier = 5;
-  return await page.evaluate(m => document.querySelectorAll('li').length * m, multiplier);
+  return await page.evaluate(m => {
+    return document.querySelectorAll('li').length * m;
+  }, multiplier);
 }"
 ```
 
 ## Error Handling
 
 ```bash
-# Try-catch in run-code
 playwright-cli run-code "async page => {
   try {
     await page.click('.maybe-missing', { timeout: 1000 });
-    return 'clicked';
-  } catch (e) {
-    return 'element not found';
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      message: error instanceof Error ? error.message : String(error)
+    };
   }
 }"
 ```
 
-## Complex Workflows
+## Practical Rules
 
-```bash
-# Login and save state
-playwright-cli run-code "async page => {
-  await page.goto('https://example.com/login');
-  await page.fill('input[name=email]', 'user@example.com');
-  await page.fill('input[name=password]', 'secret');
-// ... (13 lines trimmed)
-  }
-  return results;
-}"
-```
+- Prefer normal CLI commands first. Use `run-code` only for gaps.
+- Keep scripts focused on one browser task.
+- Return structured output when the result will be reused.
+- Clean up permissions or modified state if later steps depend on defaults.

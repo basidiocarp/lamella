@@ -58,5 +58,5 @@ Query Rust coding guidelines and best practices.
 
 ## Related Commands
 
-- `/unsafe-check` - Check file for unsafe issues
+- `/unsafe-review` - Review unsafe Rust and FFI code
 - `/unsafe-review` - Interactive unsafe review

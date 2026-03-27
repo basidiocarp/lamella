@@ -19,7 +19,15 @@ import requests
 from pathlib import Path
 from typing import Dict, List, Any
 from dataclasses import dataclass
-# ... (252 lines trimmed)
+@dataclass
+class DependencyRecord:
+    name: str
+    version: str
+    ecosystem: str
+    direct: bool = True
+
+def collect_sbom(path: Path) -> Dict[str, Any]:
+    sbom = {"components": [], "generated_at": datetime.utcnow().isoformat()}
 
         return sbom
 ```
@@ -57,7 +65,14 @@ on:
   push:
     branches: [main]
   schedule:
-# ... (44 lines trimmed)
+    - cron: "0 6 * * 1"
+
+jobs:
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/scan-dependencies.sh all
             exit 1
           fi
 ```
@@ -71,7 +86,11 @@ on:
 set -euo pipefail
 
 ECOSYSTEM="$1"
-# ... (37 lines trimmed)
+case "$ECOSYSTEM" in
+  npm) npm audit --json ;;
+  cargo) cargo audit --json ;;
+  pip) pip-audit -f json ;;
+  *) echo "Unsupported ecosystem: $ECOSYSTEM"; exit 1 ;;
         ;;
 esac
 ```
@@ -85,7 +104,15 @@ class VulnerabilityReporter:
 
 **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-# ... (58 lines trimmed)
+## Summary
+- Total dependencies: {total_dependencies}
+- Critical findings: {critical_count}
+- High findings: {high_count}
+
+## Recommended Actions
+- Patch direct critical dependencies first
+- Review transitive risk and maintainers for high-severity packages
+- Regenerate lockfiles after updates
         }
         return mapping.get(severity.upper(), 'warning')
 ```

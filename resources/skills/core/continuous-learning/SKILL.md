@@ -45,9 +45,17 @@ Edit `config.json` to customize:
   "extraction_threshold": "medium",
   "auto_approve": false,
   "learned_skills_path": "~/.claude/skills/learned/",
-// ... (10 lines trimmed)
+  "observation_types": [
+    "workflow_patterns",
+    "user_corrections",
+    "validation_gaps",
     "external_api_issues"
-  ]
+  ],
+  "ignore_patterns": [
+    "simple_formatting",
+    "one_off_typos"
+  ],
+  "review_before_write": true
 }
 ```
 

@@ -164,6 +164,10 @@ kubectl get events --sort-by='.lastTimestamp'
 | [references/workflow-guide.md](references/workflow-guide.md) | Complete 10-step workflow |
 | [references/chart-templates.md](references/chart-templates.md) | Full template examples |
 | [references/chart-structure.md](references/chart-structure.md) | Chart structure guide |
+| [references/chart-metadata-and-layout.md](references/chart-metadata-and-layout.md) | Chart files, values, and template placement |
+| [references/chart-lifecycle-and-distribution.md](references/chart-lifecycle-and-distribution.md) | Dependencies, CRDs, hooks, tests, and packaging |
+| [references/metadata-and-selectors.md](references/metadata-and-selectors.md) | Labels, selectors, and metadata hygiene |
+| [references/workload-safety.md](references/workload-safety.md) | Resources, probes, and security context defaults |
 
 ### Validation References
 

@@ -5,209 +5,46 @@ description: Provides Playwright end-to-end testing patterns, Page Object Models
 
 # E2E Testing Patterns
 
+Use this skill when building or reviewing Playwright-based end-to-end tests. Keep the main skill focused on test structure, flake control, and artifact strategy; use the references for role-, page-, and flow-specific patterns.
 
-## Contents
+## When to Use
 
-- [Test File Organization](#test-file-organization)
-- [Page Object Model (POM)](#page-object-model-pom)
-- [Test Structure](#test-structure)
-- [Playwright Configuration](#playwright-configuration)
-- [Flaky Test Patterns](#flaky-test-patterns)
-  - [Quarantine](#quarantine)
-  - [Identify Flakiness](#identify-flakiness)
-  - [Common Causes & Fixes](#common-causes-fixes)
-- [Artifact Management](#artifact-management)
-  - [Screenshots](#screenshots)
-  - [Traces](#traces)
-  - [Video](#video)
-- [CI/CD Integration](#cicd-integration)
-- [Test Report Template](#test-report-template)
-- [Summary](#summary)
-- [Failed Tests](#failed-tests)
-  - [test-name](#test-name)
-- [Artifacts](#artifacts)
-- [Wallet / Web3 Testing](#wallet-web3-testing)
-- [Financial / Critical Flow Testing](#financial-critical-flow-testing)
+- Writing Playwright tests for user journeys
+- Organizing a test suite into flows, pages, or roles
+- Debugging flaky tests or poor CI signal
+- Deciding what screenshots, traces, or videos to retain
 
+## Core Rules
 
-Build Playwright test suites that stay stable, fast, and maintainable.
+1. Prefer explicit user journeys over broad brittle mega-tests.
+2. Use locators and observable conditions instead of fixed waits.
+3. Keep page objects thin and behavior-oriented.
+4. Capture artifacts on failure, not by default for every passing run.
 
-## Test File Organization
+## Core Workflow
 
-```
-tests/
-├── e2e/
-│   ├── auth/
-│   │   ├── login.spec.ts
-│   │   ├── logout.spec.ts
-// ... (8 lines trimmed)
-│   ├── auth.ts
-│   └── data.ts
-└── playwright.config.ts
-```
+1. Choose the test mode: flow, page, or role.
+2. Define stable fixtures and selectors.
+3. Add assertions at behavior boundaries rather than every click.
+4. Reproduce flakiness with repeat runs before changing retries.
+5. Tighten CI artifact retention and quarantine only as a temporary measure.
 
-## Page Object Model (POM)
+## Quick Commands
 
-```typescript
-import { Page, Locator } from '@playwright/test'
-
-export class ItemsPage {
-  readonly page: Page
-  readonly searchInput: Locator
-// ... (22 lines trimmed)
-    return await this.itemCards.count()
-  }
-}
-```
-
-## Test Structure
-
-```typescript
-import { test, expect } from '@playwright/test'
-import { ItemsPage } from '../../pages/ItemsPage'
-
-test.describe('Item Search', () => {
-  let itemsPage: ItemsPage
-// ... (20 lines trimmed)
-    expect(await itemsPage.getItemCount()).toBe(0)
-  })
-})
-```
-
-## Playwright Configuration
-
-```typescript
-import { defineConfig, devices } from '@playwright/test'
-
-export default defineConfig({
-  testDir: './tests/e2e',
-  fullyParallel: true,
-// ... (26 lines trimmed)
-    timeout: 120000,
-  },
-})
-```
-
-## Flaky Test Patterns
-
-### Quarantine
-
-```typescript
-test('flaky: complex search', async ({ page }) => {
-  test.fixme(true, 'Flaky - Issue #123')
-  // test code...
-})
-
-test('conditional skip', async ({ page }) => {
-  test.skip(process.env.CI, 'Flaky in CI - Issue #123')
-  // test code...
-})
-```
-
-### Identify Flakiness
-
-```bash
+```shell
+npx playwright test
 npx playwright test tests/search.spec.ts --repeat-each=10
-npx playwright test tests/search.spec.ts --retries=3
+npx playwright test --trace on
 ```
 
-### Common Causes & Fixes
-
-**Race conditions:**
-```typescript
-// Bad: assumes element is ready
-await page.click('[data-testid="button"]')
-
-// Good: auto-wait locator
-await page.locator('[data-testid="button"]').click()
+```powershell
+npx playwright test
+npx playwright test tests/search.spec.ts --repeat-each=10
+npx playwright test --trace on
 ```
 
-**Network timing:**
-```typescript
-// Bad: arbitrary timeout
-await page.waitForTimeout(5000)
+## References
 
-// Good: wait for specific condition
-await page.waitForResponse(resp => resp.url().includes('/api/data'))
-```
-
-**Animation timing:**
-```typescript
-// Bad: click during animation
-await page.click('[data-testid="menu-item"]')
-
-// Good: wait for stability
-await page.locator('[data-testid="menu-item"]').waitFor({ state: 'visible' })
-await page.waitForLoadState('networkidle')
-await page.locator('[data-testid="menu-item"]').click()
-```
-
-## Artifact Management
-
-### Screenshots
-
-```typescript
-await page.screenshot({ path: 'artifacts/after-login.png' })
-await page.screenshot({ path: 'artifacts/full-page.png', fullPage: true })
-await page.locator('[data-testid="chart"]').screenshot({ path: 'artifacts/chart.png' })
-```
-
-### Traces
-
-```typescript
-await browser.startTracing(page, {
-  path: 'artifacts/trace.json',
-  screenshots: true,
-  snapshots: true,
-})
-// ... test actions ...
-await browser.stopTracing()
-```
-
-### Video
-
-```typescript
-// In playwright.config.ts
-use: {
-  video: 'retain-on-failure',
-  videosPath: 'artifacts/videos/'
-}
-```
-
-## CI/CD Integration
-
-```yaml
-# .github/workflows/e2e.yml
-name: E2E Tests
-on: [push, pull_request]
-
-jobs:
-// ... (15 lines trimmed)
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
-```
-
-## Test Report Template
-
-```markdown
-# E2E Test Report
-
-**Date:** YYYY-MM-DD HH:MM
-**Duration:** Xm Ys
-**Status:** PASSING / FAILING
-// ... (14 lines trimmed)
-- Screenshots: artifacts/*.png
-- Videos: artifacts/videos/*.webm
-- Traces: artifacts/*.zip
-```
-
-## Specialized Testing Modes
-
-For role-based, page-level, and flow-based testing patterns, load the appropriate reference:
-
-| Mode | Reference | Load When |
-|------|-----------|-----------|
-| Flow Testing | `references/flow-patterns.md` | Testing complete user journeys (registration, checkout, CRUD) |
-| Page Testing | `references/page-testing.md` | Systematically testing all pages for errors and rendering |
-| Role Testing | `references/role-testing.md` | Testing role-based access control and permissions |
+- [references/flow-patterns.md](references/flow-patterns.md)
+- [references/page-testing.md](references/page-testing.md)
+- [references/role-testing.md](references/role-testing.md)

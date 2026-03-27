@@ -48,7 +48,7 @@
       "code-quality/code-auditor.md",
       "code-quality/dep-auditor.md",
       "code-quality/perf-auditor.md",
-      "data/db-auditor.md",
+      "data/database-architect.md",
       "debugging/bug-auditor.md",
       "devops/infra-auditor.md",
       "documentation/doc-auditor.md",
@@ -77,7 +77,6 @@
       "security/security-sast.md",
       "security/semgrep-rule.md",
       "security/ssl.md",
-      "security/unsafe-check.md",
       "security/unsafe-review.md",
       "security/xss-scan.md"
     ]

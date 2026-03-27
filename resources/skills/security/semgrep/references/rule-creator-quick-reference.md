@@ -43,7 +43,18 @@ pattern: (int16_t $X)
 
 # C/C++ - match function with typed parameter
 pattern: some_func((int $ARG))
-// ... (15 lines trimmed)
+
+# Java - typed receiver or argument
+pattern: ($REQ : HttpServletRequest).getParameter(...)
+
+# Go - typed short declaration
+pattern: ($ERR : error)
+
+# Python - use surrounding structure instead of types
+pattern-inside: |
+  def $FUNC(...):
+    ...
+pattern: subprocess.run(...)
 
 
 ### Deep Expression Matching
@@ -126,7 +137,7 @@ pattern-sinks:
 
 ## Test File Annotations
 
-Only allowed annotations are `ok: rule-id` and `ok: rule-id`.
+Only allowed annotations are `ruleid: rule-id` and `ok: rule-id`.
 
 ```python
 # ruleid: rule-id

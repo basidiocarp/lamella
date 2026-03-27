@@ -60,8 +60,19 @@ The filter reads from `$RAW_DIR/results.sarif` (unfiltered) and writes to `$RESU
 # Non-medium queries are always kept regardless of security-severity.
 # Reads from raw/, writes to results/ — preserving the unfiltered original.
 RAW_DIR="$OUTPUT_DIR/raw"
-// ... (13 lines trimmed)
-    ]
+RESULTS_DIR="$OUTPUT_DIR/results"
+
+jq '
+  .runs |= map(
+    . as $run
+    | .results |= map(
+        select(
+          (($run.tool.driver.rules[.ruleIndex].properties.precision // "unknown") != "medium")
+          or
+          ((($run.tool.driver.rules[.ruleIndex].properties["security-severity"] // "0") | tonumber) >= 6.0)
+        )
+      )
+  )
   )
 ' "$RAW_DIR/results.sarif" > "$RESULTS_DIR/results.sarif"
 ```

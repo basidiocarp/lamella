@@ -164,7 +164,7 @@ copied or symlinked into `~/.codex/skills/`.
 | **rust** | 11 | Ownership, concurrency, unsafe review, and idiomatic Rust practices |
 | **microservices** | 4 | Event sourcing, sagas, CQRS, and distributed systems |
 | **agile-pm** | 10 | Product planning and delivery artifacts |
-| **customer-insights** | 9 | JTBD, interview planning, market analysis, and journey mapping |
+| **customer-insights** | 9 | JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language |
 | **executive** | 11 | Board updates, operating rhythms, executive coaching, and scenario planning |
 | **go-to-market** | 6 | Pricing, launch content, press releases, content strategy, and email programs |
 | **enterprise-it** | 5 | Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations |
@@ -189,14 +189,14 @@ lamella/
 │   ├── rules/            # Project rules
 │   ├── templates/        # Configuration and doc templates
 │   ├── workflows/        # Development and quality workflows
-│   ├── mcp-configs/      # MCP server configs
-│   └── scripts/          # Build and validation scripts
+│   └── mcp-configs/      # MCP server configs
 ├── manifests/
 │   ├── claude/           # Claude plugin manifests
 │   └── codex/            # Codex export manifests
 ├── builders/
 │   ├── build-claude-plugin.sh
 │   ├── build-claude-marketplace.sh
+│   ├── install-codex-skills.sh
 │   ├── sync-codex-manifests.sh
 │   └── build-codex-skills.sh
 ├── scripts/

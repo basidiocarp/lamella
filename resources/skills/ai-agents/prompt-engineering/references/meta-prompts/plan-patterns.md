@@ -1,108 +1,71 @@
 <overview>
-Prompt patterns for creating approaches, roadmaps, and strategies that will be consumed by subsequent prompts.
+Prompt patterns for producing plans, roadmaps, and execution strategies that a
+later prompt or agent will consume.
 </overview>
 
 <prompt_template>
 ```xml
 <objective>
-Create a {plan type} for {topic}.
+Create a {plan_type} for {topic}.
 
-Purpose: {What decision/implementation this enables}
-Input: {Research or context being used}
-// ... (16 lines trimmed)
+Purpose: {what decision or implementation this enables}
+Input: {research, constraints, or context}
+Output: {target file or artifact}
+</objective>
 
-Structure the plan using this XML format:
+<planning_requirements>
+- Keep phases executable by a single downstream prompt or worker.
+- Make dependencies explicit.
+- Surface assumptions, open questions, and confidence.
+- Prefer concrete deliverables over abstract milestones.
+</planning_requirements>
 
-```xml
+<output_structure>
 <plan>
-  <summary>
-    {One paragraph overview of the approach}
-  </summary>
-
+  <summary>{one-paragraph overview}</summary>
   <phases>
     <phase number="1" name="{phase-name}">
-      <objective>{What this phase accomplishes}</objective>
+      <objective>{what this phase accomplishes}</objective>
       <tasks>
-        <task priority="high">{Specific actionable task}</task>
-        <task priority="medium">{Another task}</task>
+        <task priority="high">{specific task}</task>
       </tasks>
       <deliverables>
-        <deliverable>{What's produced}</deliverable>
+        <deliverable>{artifact or decision}</deliverable>
       </deliverables>
-      <dependencies>{What must exist before this phase}</dependencies>
+      <dependencies>{what must already exist}</dependencies>
     </phase>
-    <!-- Additional phases -->
   </phases>
-
   <metadata>
-    <confidence level="{high|medium|low}">
-      {Why this confidence level}
-    </confidence>
-    <dependencies>
-      {External dependencies needed}
-    </dependencies>
-    <open_questions>
-      {Uncertainties that may affect execution}
-    </open_questions>
-    <assumptions>
-      {What was assumed in creating this plan}
-    </assumptions>
+    <confidence level="{high|medium|low}">{why}</confidence>
+    <dependencies>{external dependencies}</dependencies>
+    <open_questions>{unresolved issues}</open_questions>
+    <assumptions>{assumptions made}</assumptions>
   </metadata>
 </plan>
-```
 </output_structure>
-
-<summary_requirements>
-Create `.prompts/{num}-{topic}-plan/SUMMARY.md`
-
-// ... (10 lines trimmed)
-- SUMMARY.md created with phase overview
-- Ready for implementation prompts to consume
-</success_criteria>
 ```
 </prompt_template>
 
 <key_principles>
 
 <reference_research>
-Plans should build on research findings:
-```xml
-<context>
-Research findings: @.prompts/001-auth-research/auth-research.md
-
-Key findings to incorporate:
-- Recommended approach from research
-- Constraints identified
-- Best practices to follow
-</context>
-```
+Plans should inherit conclusions from prior research instead of restating raw
+notes. Pull forward:
+- recommended approach
+- constraints and tradeoffs
+- decisions that are already settled
 </reference_research>
 
 <prompt_sized_phases>
-Each phase should be executable by a single prompt:
-```xml
-<phase number="1" name="setup-infrastructure">
-  <objective>Create base auth structure and types</objective>
-  <tasks>
-    <task>Create auth module directory</task>
-    <task>Define TypeScript types for tokens</task>
-    <task>Set up test infrastructure</task>
-  </tasks>
-</phase>
-```
+Each phase should be small enough for one downstream prompt or worker to own.
+If a phase needs multiple independent implementers, split it before execution.
 </prompt_sized_phases>
 
 <execution_hints>
-Help the next Claude understand how to proceed:
-```xml
-<phase number="2" name="implement-jwt">
-  <execution_notes>
-    This phase modifies files from phase 1.
-    Reference the types created in phase 1.
-    Run tests after each major change.
-  </execution_notes>
-</phase>
-```
+Add short execution notes only when the next prompt truly needs them, such as:
+- files or modules it must reuse
+- order-sensitive constraints
+- test or verification expectations
 </execution_hints>
 
 </key_principles>
@@ -110,125 +73,18 @@ Help the next Claude understand how to proceed:
 <plan_types>
 
 <implementation_roadmap>
-For breaking down how to build something:
-
-```xml
-<objective>
-Create implementation roadmap for user authentication system.
-
-Purpose: Guide phased implementation with clear milestones
-Input: Authentication research findings
-// ... (10 lines trimmed)
-- Include testing at each phase
-- Consider rollback points
-</planning_requirements>
-```
+Use for phased delivery plans where the main question is how to build
+something safely and incrementally.
 </implementation_roadmap>
 
 <decision_framework>
-For choosing between options:
-
-```xml
-<objective>
-Create decision framework for selecting database technology.
-
-Purpose: Make informed choice between PostgreSQL, MongoDB, and DynamoDB
-Input: Database research findings
-Output: database-plan.md with criteria, analysis, recommendation
-</objective>
-
-<output_structure>
-Structure as decision framework:
-
-```xml
-<decision_framework>
-  <options>
-    <option name="PostgreSQL">
-      <pros>{List}</pros>
-      <cons>{List}</cons>
-      <fit_score criteria="scalability">8/10</fit_score>
-      <fit_score criteria="flexibility">6/10</fit_score>
-    </option>
-    <!-- Other options -->
-  </options>
-
-  <recommendation>
-    <choice>{Selected option}</choice>
-    <rationale>{Why this choice}</rationale>
-    <risks>{What could go wrong}</risks>
-    <mitigations>{How to address risks}</mitigations>
-  </recommendation>
-
-  <metadata>
-    <confidence level="high">
-      Clear winner based on requirements
-    </confidence>
-    <assumptions>
-      - Expected data volume: 10M records
-      - Team has SQL experience
-    </assumptions>
-  </metadata>
-</decision_framework>
-```
-</output_structure>
-```
+Use when the output is a choice among options, with recommendation, rationale,
+risks, and mitigations.
 </decision_framework>
 
 <process_definition>
-For defining workflows or methodologies:
-
-```xml
-<objective>
-Create deployment process for production releases.
-
-Purpose: Standardize safe, repeatable deployments
-Input: Current infrastructure research
-Output: deployment-plan.md with step-by-step process
-</objective>
-
-<output_structure>
-Structure as process:
-
-```xml
-<process>
-  <overview>{High-level flow}</overview>
-
-  <steps>
-    <step number="1" name="pre-deployment">
-      <actions>
-        <action>Run full test suite</action>
-        <action>Create database backup</action>
-        <action>Notify team in #deployments</action>
-      </actions>
-      <checklist>
-        <item>Tests passing</item>
-        <item>Backup verified</item>
-        <item>Team notified</item>
-      </checklist>
-      <rollback>N/A - no changes yet</rollback>
-    </step>
-    <!-- Additional steps -->
-  </steps>
-
-  <metadata>
-    <dependencies>
-      - CI/CD pipeline configured
-      - Database backup system
-      - Slack webhook for notifications
-    </dependencies>
-    <open_questions>
-      - Blue-green vs rolling deployment?
-      - Automated rollback triggers?
-    </open_questions>
-  </metadata>
-</process>
-```
-</output_structure>
-```
+Use when the output is a repeatable workflow with explicit steps, checks, and
+rollback or recovery points.
 </process_definition>
 
 </plan_types>
-
-<metadata_guidelines>
-Load: [metadata-guidelines.md](metadata-guidelines.md)
-</metadata_guidelines>

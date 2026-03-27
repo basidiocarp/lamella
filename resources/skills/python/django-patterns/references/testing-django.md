@@ -1,86 +1,26 @@
 # Testing Django
 
-## APITestCase
+Use a small set of Django testing patterns consistently instead of mixing every
+available style in one suite.
 
-```python
-from rest_framework.test import APITestCase
-from rest_framework import status
-from django.urls import reverse
+## Common Patterns
 
-class ProductAPITest(APITestCase):
-// ... (40 lines trimmed)
-        response = self.client.post(url, {'name': 'Test'})
+- `TestCase` for model and service behavior
+- `APITestCase` or the project’s API test stack for endpoint behavior
+- fixtures or factories for repeatable setup
+- targeted auth tests for JWT or session-protected endpoints
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-```
+## Rules
 
-## Model Tests
+- prefer factories over large fixture blobs when tests need variation
+- keep API tests focused on status, payload, and permission behavior
+- make auth setup explicit so protected endpoints are easy to reason about
 
-```python
-from django.test import TestCase
-from django.core.exceptions import ValidationError
+## Minimal Matrix
 
-class ProductModelTest(TestCase):
-    def setUp(self):
-// ... (27 lines trimmed)
-                name='Second', slug='test', price=20,
-                category=self.category, created_by=self.user
-            )
-```
-
-## Fixtures
-
-```python
-# fixtures/products.json
-[
-  {
-    "model": "products.category",
-    "pk": 1,
-// ... (18 lines trimmed)
-    def test_with_fixture(self):
-        product = Product.objects.get(slug='laptop')
-        self.assertEqual(product.name, 'Laptop')
-```
-
-## Factory Boy
-
-```python
-import factory
-from factory.django import DjangoModelFactory
-
-class UserFactory(DjangoModelFactory):
-    class Meta:
-// ... (17 lines trimmed)
-    def test_with_factory(self):
-        product = ProductFactory(price=100)
-        self.assertEqual(product.price, 100)
-```
-
-## Testing JWT
-
-```python
-class JWTAuthTest(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            email='test@example.com',
-            username='test',
-// ... (21 lines trimmed)
-        response = self.client.get('/api/protected/')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-```
-
-## Quick Reference
-
-| Method | Purpose |
-|--------|---------|
-| `force_authenticate()` | Skip auth |
-| `credentials()` | Set headers |
-| `reverse()` | URL by name |
-| `fixtures` | Load test data |
-
-| Assertion | Check |
-|-----------|-------|
-| `assertEqual()` | Exact match |
-| `assertContains()` | Response contains |
-| `assertRaises()` | Exception raised |
+| Layer | Good Tool |
+| --- | --- |
+| models and validation | `TestCase` |
+| API endpoints | `APITestCase` |
+| reusable setup | factories or focused fixtures |
+| auth behavior | explicit token or login helpers |

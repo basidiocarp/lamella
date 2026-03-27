@@ -116,7 +116,13 @@ def append_to(item, items=[]):
     items.append(item)
     return items
 
-// ... (37 lines trimmed)
+def append_to(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items
+
+try:
     risky_operation()
 except SpecificError as e:
     logger.error(f"Operation failed: {e}")

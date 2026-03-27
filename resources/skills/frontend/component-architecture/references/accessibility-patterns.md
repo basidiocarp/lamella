@@ -1,115 +1,152 @@
-# Accessibility Patterns Reference
+# Accessibility Patterns for Components
 
 ## ARIA Patterns for Common Components
 
 ### Modal Dialog
 
 ```tsx
-import { useEffect, useRef, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+function Modal({
+  title,
+  open,
+  onClose,
+  children,
+}: {
+  title: string;
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  if (!open) return null;
 
-interface ModalProps {
-  isOpen: boolean;
-// ... (90 lines trimmed)
-    firstElement.focus();
-  }
+  return (
+    <div role="presentation" className="backdrop" onClick={onClose}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <h2 id="modal-title">{title}</h2>
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
 }
 ```
 
 ### Dropdown Menu
 
 ```tsx
-import { useState, useRef, useEffect, type ReactNode } from "react";
+function MenuButton() {
+  const [open, setOpen] = useState(false);
 
-interface DropdownProps {
-  trigger: ReactNode;
-  children: ReactNode;
-// ... (126 lines trimmed)
+  return (
+    <div>
+      <button
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-controls="menu-content"
+        onClick={() => setOpen((value) => !value)}
+      >
+        Actions
+      </button>
+      {open ? (
+        <ul id="menu-content" role="menu">
+          <li role="menuitem">
+            <button>Edit</button>
+          </li>
+          <li role="menuitem">
+            <button>Delete</button>
+          </li>
+        </ul>
+      ) : null}
+    </div>
   );
-  items?.[items.length - 1]?.focus();
 }
 ```
 
 ### Combobox / Autocomplete
 
 ```tsx
-import {
-  useState,
-  useRef,
-  useId,
-  type ChangeEvent,
-// ... (132 lines trimmed)
-    </div>
-  );
-}
+<div>
+  <label htmlFor="assignee">Assignee</label>
+  <input
+    id="assignee"
+    role="combobox"
+    aria-expanded={open}
+    aria-controls="assignee-list"
+    aria-autocomplete="list"
+  />
+  <ul id="assignee-list" role="listbox">
+    {options.map((option) => (
+      <li key={option.id} role="option">
+        {option.label}
+      </li>
+    ))}
+  </ul>
+</div>
 ```
 
 ### Form Validation
 
 ```tsx
-import { useId, type FormEvent } from "react";
-
-interface FormFieldProps {
-  label: string;
-  error?: string;
-// ... (73 lines trimmed)
-    </form>
-  );
-}
+<div>
+  <label htmlFor="email">Email</label>
+  <input
+    id="email"
+    aria-invalid={hasError}
+    aria-describedby={hasError ? "email-error" : undefined}
+  />
+  {hasError ? (
+    <p id="email-error" role="alert">
+      Enter a valid email address.
+    </p>
+  ) : null}
+</div>
 ```
 
 ## Skip Links
 
 ```tsx
-export function SkipLinks() {
-  return (
-    <div className="sr-only focus-within:not-sr-only">
-      <a
-        href="#main-content"
-// ... (10 lines trimmed)
-    </div>
-  );
-}
+<>
+  <a className="skip-link" href="#main-content">
+    Skip to main content
+  </a>
+  <main id="main-content">{children}</main>
+</>
 ```
 
 ## Live Regions
 
 ```tsx
-import { useState, useEffect } from "react";
-
-interface LiveAnnouncerProps {
-  message: string;
-  politeness?: "polite" | "assertive";
-// ... (43 lines trimmed)
-    </>
-  );
-}
+<div aria-live="polite" aria-atomic="true">
+  {statusMessage}
+</div>
 ```
+
+Use `polite` for non-critical updates and `assertive` only for urgent alerts.
 
 ## Focus Management Utilities
 
 ```tsx
-// useFocusReturn - restore focus after closing
-function useFocusReturn() {
-  const previousElement = useRef<Element | null>(null);
+function useRestoreFocus(active: boolean) {
+  const previous = useRef<HTMLElement | null>(null);
 
-  const saveFocus = () => {
-// ... (37 lines trimmed)
-    return () => container.removeEventListener("keydown", handleKeyDown);
-  }, [containerRef, isActive]);
+  useEffect(() => {
+    if (active) previous.current = document.activeElement as HTMLElement | null;
+    return () => previous.current?.focus();
+  }, [active]);
 }
 ```
 
 ## Color Contrast Utilities
 
-```tsx
-// Check if colors meet WCAG requirements
-function getContrastRatio(fg: string, bg: string): number {
-  const getLuminance = (hex: string): number => {
-    const rgb = parseInt(hex.slice(1), 16);
-    const r = (rgb >> 16) & 0xff;
-// ... (24 lines trimmed)
-  const ratio = getContrastRatio(fg, bg);
-  return level === "AAA" ? ratio >= 7 : ratio >= 4.5;
+```ts
+function meetsContrastRatio(ratio: number, largeText = false) {
+  return ratio >= (largeText ? 3 : 4.5);
 }
 ```
+
+Use contrast tooling in design reviews, but always confirm the final UI against
+actual rendered colors and states.

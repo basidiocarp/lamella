@@ -217,7 +217,13 @@ From primary and secondary colors, generate:
       "50": "#EFF6FF",
       "100": "#DBEAFE",
       "200": "#BFDBFE",
-# ... (29 lines trimmed)
+      "300": "#93C5FD",
+      "400": "#60A5FA",
+      "500": "#3B82F6",
+      "600": "#2563EB",
+      "700": "#1D4ED8",
+      "800": "#1E40AF",
+      "900": "#1E3A8A"
   }
 }
 ```
@@ -231,7 +237,12 @@ From primary and secondary colors, generate:
       "sans": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       "mono": "ui-monospace, 'Fira Code', monospace"
     },
-# ... (22 lines trimmed)
+    "fontSize": {
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem"
+    }
   }
 }
 ```
@@ -267,7 +278,10 @@ From primary and secondary colors, generate:
     "sm": "0.125rem",
     "base": "0.25rem",
     "md": "0.375rem",
-# ... (30 lines trimmed)
+    "lg": "0.5rem",
+    "xl": "0.75rem",
+    "2xl": "1rem",
+    "full": "9999px"
   }
 }
 ```
@@ -309,7 +323,11 @@ Create `.ui-design/tokens/tokens.css`:
 :root {
   /* Colors - Primary */
   --color-primary-50: #eff6ff;
-# ... (66 lines trimmed)
+  --color-primary-100: #dbeafe;
+  --color-primary-500: #3b82f6;
+  --color-primary-700: #1d4ed8;
+  --color-neutral-50: #f9fafb;
+  --color-neutral-900: #111827;
   --color-neutral-900: #f9fafb;
 }
 ```
@@ -325,7 +343,14 @@ Create `.ui-design/tokens/tailwind.config.js`:
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   theme: {
-# ... (23 lines trimmed)
+    extend: {
+      colors: {
+        primary: "var(--color-primary-500)",
+      },
+      borderRadius: {
+        md: "var(--radius-md)"
+      }
+    }
   },
 };
 ```
@@ -341,7 +366,11 @@ Create `.ui-design/tokens/tokens.ts`:
 export const colors = {
   primary: {
     50: "#EFF6FF",
-# ... (22 lines trimmed)
+    100: "#DBEAFE",
+    500: "#3B82F6",
+    700: "#1D4ED8",
+  },
+};
 export type ColorToken = keyof typeof colors;
 export type SpacingToken = keyof typeof spacing;
 ```
@@ -357,7 +386,12 @@ Create `.ui-design/docs/design-system.md`:
 
 This design system provides the foundation for consistent UI development.
 
-# ... (42 lines trimmed)
+### Token Families
+- color
+- typography
+- spacing
+- radius
+
 ### CSS Custom Properties
 
 ```css

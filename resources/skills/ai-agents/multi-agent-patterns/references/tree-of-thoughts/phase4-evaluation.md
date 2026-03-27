@@ -1,33 +1,48 @@
 # Phase 4: Evaluation (Judge Full Solutions)
 
-Launch **3 independent judges in parallel** (recommended: Opus for rigor):
+Launch **3 independent judges in parallel**.
 
-1. Each judge receives **ALL solution files** (solution.a.md, solution.b.md, solution.c.md)
-2. Judges evaluate against **final criteria** (task-specific):
-   - **Correctness** (weight based on task)
-   - **Completeness** (weight based on task)
-   - **Quality** (design, maintainability, etc.)
-   - **Feasibility** (can this be implemented?)
+1. Each judge receives all full solution files.
+2. Judges evaluate against final criteria:
+   - correctness
+   - completeness
+   - quality
+   - feasibility
 3. Each judge produces:
-   - **Comparative analysis** (which solution excels where)
-   - **Evidence-based ratings** (with specific quotes/examples)
-   - **Final vote** (which solution they prefer and why)
-4. Reports saved to `.specs/reports/{solution-name}-{date}.[1|2|3].md`
+   - comparative analysis
+   - evidence-based ratings
+   - final vote with rationale
+4. Save reports to `.specs/reports/{solution-name}-{date}.[1|2|3].md`.
 
-**Key principle:** Multiple independent evaluations with explicit evidence reduce bias and catch different quality aspects.
+**Key principle:** Independent judging with evidence reduces bias.
 
 ## Prompt Template for Evaluation Judges
 
 ```markdown
-You are evaluating {number} full solutions to this task:
+You are evaluating full candidate solutions for this task.
 
 <task>
 {task_description}
 </task>
-// ... (56 lines trimmed)
-- [ ] Checked for known biases (length, verbosity, confidence)
-- [ ] Confident in revised evaluation
-- [ ] Structured header with VOTE and SCORES at top of report
+
+<solutions>
+{solution_files}
+</solutions>
+
+For each solution:
+1. Score correctness, completeness, quality, and feasibility.
+2. Cite concrete evidence from the solution text.
+3. Explain where each solution is strongest and weakest.
+
+Output:
+- comparative summary
+- score table
+- final vote
+
+Checklist:
+- Checked for evidence, not just confidence
+- Considered verbosity bias
+- Structured the report with VOTE and SCORES near the top
 ```
 
 ## Output Naming

@@ -13,7 +13,7 @@ class Point:
 
 # Good: __slots__ reduces memory usage
 class Point:
-    __slots__ = ['x', 'y']
+    __slots__ = ["x", "y"]
 
     def __init__(self, x: float, y: float):
         self.x = x
@@ -65,7 +65,17 @@ total = 0
 for x in numbers:
     total += x
 
-// ... (8 lines trimmed)
+# Good: Built-in sum
+total = sum(numbers)
+
+# Bad: Manual maximum search
+largest = numbers[0]
+for x in numbers[1:]:
+    if x > largest:
+        largest = x
+
+# Good: Built-in max
+largest = max(numbers)
 
 # Good: Built-in min
 smallest = min(numbers)
@@ -79,7 +89,16 @@ if key in dictionary:
     value = dictionary[key]
 else:
     value = default
-// ... (10 lines trimmed)
+
+# Good: Use get for defaults
+value = dictionary.get(key, default)
+
+# Good: Increment counters without branching
+counts[key] = counts.get(key, 0) + 1
+
+# Better: Group values with setdefault
+grouped.setdefault(category, []).append(item)
+
 # Better: Use collections.Counter
 from collections import Counter
 counts = Counter(items)
@@ -90,10 +109,12 @@ counts = Counter(items)
 ```python
 # Slightly faster: local variable for repeated access
 def process(items):
+    result = []
     # Cache method lookup
     append = result.append
     for item in items:
         append(transform(item))
+    return result
 ```
 
 ## Profiling Tools

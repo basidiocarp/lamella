@@ -205,7 +205,25 @@ Maintain a tracking document:
 ### Root Cause
 [Statement of the vulnerability pattern]
 
-// ... (11 lines trimmed)
+### Search Levels
+- Level 0 exact match:
+- Level 1 variable abstraction:
+- Level 2 structural abstraction:
+- Level 3 semantic / taint:
+
+### True Positives
+- File:
+  Why it matches:
+
+### False Positives
+- File:
+  Why it is noise:
+
+### Follow-up Variants
+- Related API:
+- Related control-flow pattern:
+- Related data-shape edge case:
+
 ### False Positive Patterns
 - Pattern X: Always FP because [reason]
 - Pattern Y: FP in [context] but TP in [context]

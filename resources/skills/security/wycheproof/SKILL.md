@@ -5,58 +5,26 @@ description: Applies Google's Wycheproof test vectors and crypto vulnerability p
 
 # Wycheproof Crypto Testing
 
-## Contents
+Use Wycheproof when the implementation looks correct at the API layer but may still accept malformed signatures, weak keys, invalid curve points, or broken authenticated-encryption inputs.
 
-- [What is Wycheproof](#what-is-wycheproof)
-- [Quick Reference](#quick-reference)
-- [Workflow](#workflow)
-- [Key Vulnerability Classes](#key-vulnerability-classes)
-- [Best Practices](#best-practices)
-- [References](#references)
+## When to Use
 
-## What is Wycheproof
+- Verifying signature, key exchange, MAC, or AEAD implementations
+- Auditing a crypto library upgrade against known edge cases
+- Reproducing suspected validation bugs with structured test vectors
+- Building CI checks around high-risk crypto primitives
 
-Wycheproof is Google's collection of security tests for cryptographic libraries that detect known weaknesses. It catches implementation bugs that correct APIs miss via 80,000+ test vectors covering signatures, key exchange, symmetric encryption, and MACs.
+## Core Workflow
 
-## Quick Reference
+1. Identify the primitive and library version under review.
+2. Pull the matching Wycheproof test vectors.
+3. Map each vector result to expected application behavior.
+4. Run the suite in CI and flag any invalid vector that is accepted.
+5. Triage failures against known vulnerability classes before patching.
 
-| Category | Coverage | Common Issues |
-|----------|----------|---------------|
-| RSA/ECDSA Signatures | Key validation, encoding | Malleable signatures, weak keys |
-| Key Exchange (ECDH, DH) | Curve validation | Invalid curve attacks |
-| AES-GCM/ChaCha20 | Nonce handling, auth tags | Nonce reuse, tag truncation |
-| MACs (HMAC, Poly1305) | Key/tag validation | Length extension |
-
-## Workflow
-
-```
-┌─────────────────┐
-│ Identify crypto │
-│   operations    │
-└────────┬────────┘
-         │
-// ... (20 lines trimmed)
-│  All edge cases │
-│    handled      │
-└─────────────────┘
-```
-
-## Key Vulnerability Classes
-
-**Signature Issues**: Malleable ECDSA, weak RSA exponents, BER vs DER encoding
-**Key Exchange**: Small subgroup attacks, invalid curve points, weak DH params
-**Symmetric Crypto**: IV/nonce reuse, tag truncation, padding oracle
-**Encoding**: ASN.1 parsing bugs, integer overflow, length confusion
-
-## Best Practices
-
-1. **Test flag handling**: Verify acceptable/invalid results match expectations
-2. **Version testing**: Run against multiple library versions
-3. **CI integration**: Include Wycheproof in automated testing
-4. **Track CVEs**: Map test failures to known vulnerabilities
+## Minimal Test Pattern
 
 ```python
-# Basic test structure
 def test_ecdsa_signature(test_vector):
     result = verify(test_vector["sig"], test_vector["msg"], test_vector["key"])
     if test_vector["result"] == "invalid":
@@ -65,9 +33,18 @@ def test_ecdsa_signature(test_vector):
         assert result, f"Rejected valid sig: {test_vector['tcId']}"
 ```
 
+## High-Value Coverage Areas
+
+| Area | Typical Failures |
+|------|------------------|
+| Signatures | Malleability, BER vs DER parsing, weak key acceptance |
+| Key exchange | Invalid curve, subgroup, weak parameter acceptance |
+| AEAD | Nonce reuse handling, tag truncation, malformed ciphertext acceptance |
+| MACs | Key length handling, edge-case verification behavior |
+
 ## References
 
-- [references/implementation.md](references/implementation.md) - Full implementation guide
-- [references/case-study.md](references/case-study.md) - Real-world audit examples
-- [references/vulnerabilities.md](references/vulnerabilities.md) - Detailed vulnerability patterns
+- [references/implementation.md](references/implementation.md)
+- [references/vulnerabilities.md](references/vulnerabilities.md)
+- [references/case-study.md](references/case-study.md)
 - [Wycheproof GitHub](https://github.com/google/wycheproof)

@@ -265,7 +265,13 @@ Report to user:
 **Output directory:** $OUTPUT_DIR
 **Database:** $DB_NAME
 **Language:** <LANG>
-// ... (9 lines trimmed)
+**Method used:** <METHOD>
+**Quality:** <GOOD|ACCEPTED_WITH_LIMITATIONS>
+
+**Artifacts**
+- Build log: `$LOG_FILE`
+- Database path: `$DB_NAME`
+- Config (if interpreted): `$OUTPUT_DIR/codeql-config.yml`
 
 **Final command used:** <EXACT_COMMAND>
 **Ready for analysis.**

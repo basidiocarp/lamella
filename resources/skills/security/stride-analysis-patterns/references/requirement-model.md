@@ -1,15 +1,24 @@
 # Security Requirement Model
 
-Python data model for security requirements with type definitions, relationships, and export capabilities.
+Python data model for security requirements with type definitions and traceability.
 
 ```python
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Optional, Set
-from datetime import datetime
 
-// ... (128 lines trimmed)
-                    matrix[threat_id] = []
-                matrix[threat_id].append(req.id)
-        return matrix
+
+@dataclass
+class SecurityRequirement:
+    id: str
+    category: str
+    requirement: str
+    linked_threats: list[str] = field(default_factory=list)
+    verification: str = ""
+
+
+def traceability_matrix(requirements: list[SecurityRequirement]) -> dict[str, list[str]]:
+    matrix: dict[str, list[str]] = {}
+    for requirement in requirements:
+        for threat_id in requirement.linked_threats:
+            matrix.setdefault(threat_id, []).append(requirement.id)
+    return matrix
 ```

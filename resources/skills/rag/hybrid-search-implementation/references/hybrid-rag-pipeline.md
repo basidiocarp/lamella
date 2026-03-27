@@ -1,15 +1,9 @@
 # Hybrid RAG Pipeline
 
-Complete hybrid search pipeline with reranking for RAG applications.
+Use this reference for the shape of a hybrid retrieval pipeline.
 
-```python
-from typing import List, Dict, Optional, Callable
-from dataclasses import dataclass
-import asyncio
-
-@dataclass
-// ... (138 lines trimmed)
-            result.score = float(score)
-
-        return sorted(results, key=lambda x: x.score, reverse=True)
-```
+1. retrieve lexical candidates
+2. retrieve vector candidates
+3. merge or union candidates
+4. rerank
+5. pass the final context window to generation

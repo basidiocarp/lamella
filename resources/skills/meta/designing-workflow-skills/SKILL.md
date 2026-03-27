@@ -145,7 +145,22 @@ name: kebab-case-name
 description: "Third-person description with trigger keywords — this is how Claude decides to activate the skill"
 allowed-tools:
   - [minimum tools needed]
-// ... (28 lines trimmed)
+---
+
+## Purpose
+[What this workflow orchestrates and where it stops]
+
+## Phase 1: Intake
+- Gather inputs
+- Route to the right branch
+
+## Phase 2: Execution
+- Perform the main steps in order
+- Call out any decision points explicitly
+
+## Phase 3: Output
+- Return the final artifact shape
+- State validation checks and next actions
 
 ## Success Criteria
 [Checklist for output validation]

@@ -192,7 +192,16 @@ Original rule sources need framework-specific translation:
 pattern: request.args.get(...)
 
 # Java Servlet
-// ... (7 lines trimmed)
+pattern: request.getParameter(...)
+
+# JavaScript / Express
+pattern: req.query.$PARAM
+pattern: req.body.$PARAM
+
+# Go / net/http
+pattern: $REQ.URL.Query().Get(...)
+
+# Node / Next.js request object
 pattern: $REQ.query.$PARAM
 pattern: $REQ.body.$PARAM
 ```

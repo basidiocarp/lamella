@@ -1,162 +1,133 @@
-# Skill-Issue Architecture
+# Lamella Architecture
 
-How the system fits together — for new users and contributors.
+Lamella is a manifest-driven packaging system for AI coding resources. It takes
+skills, agents, commands, hooks, templates, workflows, and related assets from
+`resources/`, maps them through plugin manifests, and emits installable outputs
+for Claude Code and Codex.
 
-## Core Concept
+## Core Model
 
-Skill-Issue is a modular plugin system for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). It packages curated skills, agents, commands, rules, hooks, workflows, and templates into installable plugins that follow the **official Claude Code plugin format**.
+Lamella has three layers:
 
-Users pick plugins matching their tech stack (e.g., `core` + `python` + `security`), build them, and install to `~/.claude/plugins/lamella/` — or add the built marketplace directly in Claude Code.
+1. **Source resources**
+   Skills, agents, commands, hooks, rules, templates, workflows, scripts, and
+   MCP configs live under `resources/`.
+2. **Manifest selection**
+   Plugin manifests in `manifests/claude/*.json` define which resources belong
+   to each plugin and what dependencies exist between them.
+3. **Built outputs**
+   Builders transform source resources into:
+   - Claude Code plugins and a local marketplace under `dist/claude/`
+   - Codex skill exports and profiles under `dist/codex/`
 
-## Build & Install Pipeline
+## Build Pipeline
 
 ```mermaid
 flowchart LR
-    A["resources/\nskills/\nagents/\ncommands/\n..."] -->|referenced by| B[manifests/claude/*.json]
-    B -->|read by| C[build-claude-plugin.sh]
-    C -->|flattens into| D[dist/plugins/name/]
-    D -->|.claude-plugin/plugin.json| E[Official Claude Code Plugin]
-    F[build-claude-marketplace.sh] -->|generates| G[dist/.claude-plugin/marketplace.json]
-    E -->|installed via| H[/plugin marketplace add ./dist]
+    A["resources/\nskills/\nagents/\ncommands/\nhooks/\n..."] -->|selected by| B[manifests/claude/*.json]
+    B -->|Claude builders| C[dist/claude/plugins/<name>/]
+    B -->|Codex builders| D[dist/codex/skills/ + profiles/]
+    C --> E[dist/claude/.claude-plugin/marketplace.json]
+    C --> F[Claude plugin install flow]
+    D --> G[Codex skill install flow]
 ```
 
-### How it works
+## Directory Layout
 
-1. **Source resources** live in `resources/` subdirectories organized by category (`resources/skills/core/`, `resources/agents/code-quality/`, etc.)
-2. **Plugin manifests** (`manifests/claude/*.json`) declare which resources belong to each plugin
-3. **`build-claude-plugin.sh`** reads a manifest and:
-   - Generates `.claude-plugin/plugin.json` (official format)
-   - Flattens agents: `resources/agents/code-quality/code-reviewer.md` → `agents/code-reviewer.md`
-   - Flattens commands: `resources/commands/development/commit.md` → `commands/commit.md`
-   - Flattens skills: `resources/skills/core/brainstorming/` → `skills/brainstorming/`
-   - Bundles hooks with `resources/hooks/hooks.json`
-   - Puts non-plugin resources (rules, workflows, templates) in `_standalone/`
-4. **`build-claude-marketplace.sh`** builds all plugins and generates `marketplace.json`
-5. **`install.sh`** copies plugins to `~/.claude/plugins/lamella/<name>/`
-
-## Directory Structure
-
-```
+```text
 lamella/
 ├── resources/
-│   ├── skills/           # 230 skill directories (source, by category)
-│   ├── agents/           # 175 agent markdown files (source, by category)
-│   ├── commands/         # 213 slash commands (source, by category)
-│   ├── hooks/            # Event hook configs (JSON)
-│   ├── rules/            # Project rules (common/, typescript/, python/, etc.)
-│   ├── templates/        # Session, docs, claude config templates
-│   ├── workflows/        # Development, quality, release workflows
-│   ├── mcp-configs/      # MCP server configurations
-│   └── scripts/          # Hook scripts referenced by hooks.json
+│   ├── skills/          # Source skill directories with SKILL.md
+│   ├── agents/          # Source agent markdown files and shared fragments
+│   ├── commands/        # Source slash commands
+│   ├── hooks/           # Hook definitions and docs
+│   ├── rules/           # Standalone rule content
+│   ├── templates/       # Reusable templates
+│   ├── workflows/       # Workflow guides
+│   ├── mcp-configs/     # MCP configuration assets
+│   └── scripts/         # Helper scripts used by hooks and builds
 ├── manifests/
-│   ├── claude/           # JSON manifests — source of truth
-│   │   ├── schema.json   # JSON Schema for manifest validation
-│   │   ├── index.json    # Plugin registry
-│   │   └── *.json        # 20 individual plugin manifests
-│   └── codex/            # Codex export manifests
-├── builders/             # Builder scripts
-│   ├── build-claude-plugin.sh
-│   ├── build-claude-marketplace.sh
-│   └── ...
+│   ├── claude/          # Claude plugin manifests, schema, and registry
+│   └── codex/           # Generated Codex export manifests
+├── builders/            # Claude and Codex build scripts
 ├── scripts/
-│   ├── ci/               # 8 validation scripts
-│   ├── plugins/          # build-plugin.sh, build-marketplace.sh, install-plugin.sh
-│   └── ...
-├── dist/                 # Built output (generated, gitignored)
-│   ├── .claude-plugin/
-│   │   └── marketplace.json
-│   └── plugins/<name>/
-│       ├── .claude-plugin/plugin.json
-│       ├── agents/*.md
-│       ├── commands/*.md
-│       ├── skills/*/SKILL.md
-│       └── hooks/hooks.json
-└── docs/                 # Documentation
+│   ├── ci/              # Source and build validators
+│   ├── plugins/         # Plugin build/install helpers
+│   └── hooks/           # Hook support scripts
+├── dist/
+│   ├── claude/          # Built Claude marketplace and plugins
+│   └── codex/           # Built Codex skills and profiles
+└── docs/                # User, authoring, and reference docs
 ```
 
-## Resource Types
+## Resource Packaging
 
-| Type | Source Location | Built Location | Purpose |
-|------|---------------|----------------|---------|
-| **Skills** | `resources/skills/<cat>/<name>/SKILL.md` | `skills/<name>/SKILL.md` | Domain-specific knowledge Claude loads on-demand |
-| **Agents** | `resources/agents/<cat>/<name>.md` | `agents/<name>.md` | Specialized sub-agents with roles, models, tool access |
-| **Commands** | `resources/commands/<cat>/<name>.md` | `commands/<name>.md` | Slash commands users invoke directly |
-| **Hooks** | `resources/hooks/hooks.json` | `hooks/hooks.json` | Event-driven automation (session, tool-use, stop) |
-| **Rules** | `resources/rules/<lang>/*.md` | `_standalone/rules/` | Always-loaded coding standards (not official plugin resource) |
-| **Workflows** | `resources/workflows/*.md` | `_standalone/workflows/` | Multi-step process guides (not official plugin resource) |
-| **Templates** | `resources/templates/` | `_standalone/templates/` | Reusable templates (not official plugin resource) |
+| Resource Type | Source | Claude Output | Codex Output |
+|---------------|--------|---------------|--------------|
+| Skills | `resources/skills/<category>/<name>/SKILL.md` | `dist/claude/plugins/<plugin>/skills/<name>/SKILL.md` | `dist/codex/skills/<name>/SKILL.md` |
+| Agents | `resources/agents/<category>/<name>.md` | `dist/claude/plugins/<plugin>/agents/<name>.md` | Included only when exported as Codex-facing content |
+| Commands | `resources/commands/<category>/<name>.md` | `dist/claude/plugins/<plugin>/commands/<name>.md` | Not a primary Codex export target |
+| Hooks | `resources/hooks/...` | `dist/claude/plugins/<plugin>/hooks/...` | N/A |
+| Rules / Templates / Workflows | `resources/...` | copied as standalone support content where needed | optional support content |
 
-## Plugin System
+Claude builds flatten category-oriented source paths into plugin-local names.
+Codex builds export portable skill directories and profile metadata.
 
-Each plugin is defined by a JSON manifest in `manifests/claude/`. The build pipeline transforms it into an official Claude Code plugin directory.
+## Primary Commands
 
-**Official plugin output format:**
-
-```
-dist/plugins/core/
-├── .claude-plugin/
-│   └── plugin.json       ← Official Claude Code manifest
-├── agents/
-│   ├── code-reviewer.md  ← Flattened from resources/agents/code-quality/
-│   └── architect.md      ← Flattened from resources/agents/architecture/
-├── commands/
-│   └── commit.md         ← Flattened from resources/commands/development/
-├── skills/
-│   ├── brainstorming/    ← Flattened from resources/skills/core/
-│   │   └── SKILL.md
-│   └── systematic-debugging/
-│       └── SKILL.md
-└── hooks/
-    └── hooks.json
-```
-
-**Usage:**
+Lamella’s preferred local entrypoint is `./lamella`.
 
 ```bash
-# Build all plugins as a marketplace
-make build-marketplace
+./lamella build-marketplace
+./lamella install core python typescript
+./lamella list
 
-# Add the marketplace in Claude Code
-/plugin marketplace add ./dist
-
-# Or test a single plugin
-claude --plugin-dir dist/plugins/core
-
-# Or install to ~/.claude/plugins/
-./install.sh core python typescript
+./lamella build-codex
+./lamella install-codex --all
+./lamella update
 ```
 
-Common plugin combinations:
+The lower-level builders still exist for focused debugging or CI:
 
-- `core` — foundational skills and rules everyone needs
-- `core` + `typescript` + `frontend` — web development
-- `core` + `python` + `ai-agents` — Python AI/ML work
-- `core` + `security` + `devops` — infrastructure focus
+```bash
+bash builders/build-claude-plugin.sh manifests/claude/core.json
+bash builders/build-claude-marketplace.sh
+bash builders/sync-codex-manifests.sh
+bash builders/build-codex-skills.sh
+```
 
 ## Validation
 
-8 CI scripts in `scripts/ci/` enforce structural rules:
+Lamella has two validation layers:
 
-| Validator | Checks |
-|-----------|--------|
-| `validate-agents.js` | Agent frontmatter (name, description, model) |
-| `validate-commands.js` | Command structure and skill references |
-| `validate-hooks.js` | Hook events, types, matchers |
-| `validate-rules.js` | Rule formatting |
-| `validate-skills.js` | Skill directories and SKILL.md presence |
-| `validate-manifests.js` | Manifest resources exist on disk |
-| `validate-xrefs.js` | Cross-references between resources |
-| `validate-build.js` | Built plugin output integrity (post-build) |
+1. **Source validation**
+   - resource structure
+   - manifest references
+   - cross-file references
+   - command and agent frontmatter
+2. **Built-output validation**
+   - plugin directory integrity
+   - marketplace output correctness
+   - flattened resource packaging
+
+Primary commands:
 
 ```bash
-make validate                    # Run source validators
-node scripts/ci/validate-build.js  # Run post-build validator
+make validate
+make build-marketplace
+node scripts/ci/validate-build.js
 ```
 
-## Contributing
+## Current Scope
 
-1. Add or edit resources in the appropriate `resources/` subdirectory
-2. Reference new resources in the relevant plugin manifest(s) under `manifests/claude/`
-3. Run `make validate` to check for errors
-4. Run `make build-marketplace` to build all plugins
-5. Test with `claude --plugin-dir dist/plugins/<name>`
+Lamella currently documents and packages:
+
+- **25 plugins**
+- **286 skills**
+- manifest-driven Claude plugin builds
+- Codex skill exports
+- a local marketplace and hosted marketplace flow
+
+The main architectural work left is not “invent a build system.” It is keeping
+dependency resolution, validation, distribution, and host parity aligned as the
+content library evolves.

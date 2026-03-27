@@ -1,6 +1,6 @@
 ---
 name: tech-writer
-description: Creates and maintains comprehensive, accessible technical documentation by transforming complex concepts into clear, structured content. Handles API docs, user guides, architecture manuals, and long-form technical references for any audience.
+description: Writes clear technical documentation for users, developers, and operators. Use when the task is to create or revise guides, references, onboarding docs, or architecture explanations for a specific audience.
 model: sonnet
 color: magenta
 ---

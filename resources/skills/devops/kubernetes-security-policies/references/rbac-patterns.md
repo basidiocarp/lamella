@@ -1,8 +1,12 @@
 # RBAC Patterns and Best Practices
 
-## Common RBAC Patterns
+Use RBAC to express the least permissions a user, workload, or delivery system
+needs. Start with a narrow namespace-scoped role and expand only when the
+resource scope demands it.
 
-### Pattern 1: Read-Only Access
+## Common Patterns
+
+### Read-Only Cluster Access
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -15,7 +19,7 @@ rules:
     verbs: ["get", "list", "watch"]
 ```
 
-### Pattern 2: Namespace Admin
+### Namespace Admin
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -24,12 +28,15 @@ metadata:
   name: namespace-admin
   namespace: production
 rules:
-  - apiGroups: ["", "apps", "batch", "extensions"]
+  - apiGroups: ["", "apps", "batch"]
     resources: ["*"]
     verbs: ["*"]
 ```
 
-### Pattern 3: Deployment Manager
+Use sparingly. Namespace admin is still broad and should not be the default app
+role.
+
+### Deployment Manager
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -46,7 +53,7 @@ rules:
     verbs: ["get", "list", "watch"]
 ```
 
-### Pattern 4: Secret Reader (ServiceAccount)
+### Dedicated ServiceAccount Reader
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -54,13 +61,28 @@ kind: Role
 metadata:
   name: secret-reader
   namespace: production
-// ... (16 lines trimmed)
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["app-config"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: secret-reader
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: my-app
+    namespace: production
+roleRef:
   kind: Role
   name: secret-reader
   apiGroup: rbac.authorization.k8s.io
 ```
 
-### Pattern 5: CI/CD Pipeline Access
+### CI/CD Deployer
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -74,14 +96,9 @@ rules:
   - apiGroups: [""]
     resources: ["services", "configmaps"]
     verbs: ["get", "list", "create", "update", "patch"]
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list"]
 ```
 
-## ServiceAccount Best Practices
-
-### Create Dedicated ServiceAccounts
+## ServiceAccount Rules
 
 ```yaml
 apiVersion: v1
@@ -89,96 +106,24 @@ kind: ServiceAccount
 metadata:
   name: my-app
   namespace: production
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-app
-spec:
-  template:
-    spec:
-      serviceAccountName: my-app
-      automountServiceAccountToken: false # Disable if not needed
 ```
 
-### Least-Privilege ServiceAccount
+- Give each workload a dedicated ServiceAccount.
+- Disable token auto-mounting when the workload does not call the Kubernetes
+  API.
+- Prefer `Role` over `ClusterRole` unless the scope is truly cluster-wide.
 
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: my-app-role
-  namespace: production
-rules:
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["get"]
-    resourceNames: ["my-app-config"]
-```
-
-## Security Best Practices
-
-1. **Use Roles over ClusterRoles** when possible
-2. **Specify resourceNames** for fine-grained access
-3. **Avoid wildcard permissions** (`*`) in production
-4. **Create dedicated ServiceAccounts** for each app
-5. **Disable token auto-mounting** if not needed
-6. **Regular RBAC audits** to remove unused permissions
-7. **Use groups** for user management
-8. **Implement namespace isolation**
-9. **Monitor RBAC usage** with audit logs
-10. **Document role purposes** in metadata
-
-## Troubleshooting RBAC
-
-### Check User Permissions
+## Troubleshooting
 
 ```bash
 kubectl auth can-i list pods --as john@example.com
 kubectl auth can-i '*' '*' --as system:serviceaccount:default:my-app
-```
-
-### View Effective Permissions
-
-```bash
-kubectl describe clusterrole cluster-admin
 kubectl describe rolebinding -n production
-```
-
-### Debug Access Issues
-
-```bash
 kubectl get rolebindings,clusterrolebindings --all-namespaces -o wide | grep my-user
 ```
 
-## Common RBAC Verbs
+## Rules
 
-- `get` - Read a specific resource
-- `list` - List all resources of a type
-- `watch` - Watch for resource changes
-- `create` - Create new resources
-- `update` - Update existing resources
-- `patch` - Partially update resources
-- `delete` - Delete resources
-- `deletecollection` - Delete multiple resources
-- `*` - All verbs (avoid in production)
-
-## Resource Scope
-
-### Cluster-Scoped Resources
-
-- Nodes
-- PersistentVolumes
-- ClusterRoles
-- ClusterRoleBindings
-- Namespaces
-
-### Namespace-Scoped Resources
-
-- Pods
-- Services
-- Deployments
-- ConfigMaps
-- Secrets
-- Roles
-- RoleBindings
+- Avoid wildcard permissions in production roles where possible.
+- Use `resourceNames` when one object is enough.
+- Audit old bindings and unused service accounts regularly.

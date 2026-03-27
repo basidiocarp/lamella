@@ -1,182 +1,56 @@
 # CLI Design Patterns
 
-## Command Hierarchy
+Use this reference when shaping a command-line tool’s surface area and behavior.
 
+## Command Structure
+
+Favor a clear hierarchy:
+
+```text
+mycli
+  init
+  config get
+  config set
+  deploy
+  plugins list
 ```
-mycli                           # Root command
-├── init [options]              # Simple command
-├── config
-│   ├── get <key>              # Nested subcommand
-│   ├── set <key> <value>
-│   └── list
-├── deploy [environment]        # Command with args
-│   ├── --dry-run              # Flag
-│   ├── --force
-│   └── --config <file>        # Option with value
-└── plugins
-    ├── install <name>
-    ├── list
-    └── remove <name>
-```
+
+Subcommands should represent real task groups, not arbitrary nesting.
 
 ## Flag Conventions
 
-```bash
-# Boolean flags (presence = true)
-mycli deploy --force --dry-run
+- short and long forms for common flags
+- positional args for truly required values
+- repeatable flags for multi-value filtering
 
-# Short + long forms
-mycli -v --verbose
-mycli -c config.yml --config config.yml
+Example:
 
-# Required vs optional
-mycli deploy <env>              # Positional (required)
-mycli deploy --env production   # Flag (optional)
-
-# Multiple values
-mycli install pkg1 pkg2 pkg3    # Variadic args
-mycli --exclude node_modules --exclude .git
+```text
+mycli deploy production --dry-run --config ./config.yml
 ```
 
-## Configuration Layers
+## Configuration Precedence
 
-Priority order (highest to lowest):
+Most CLIs should resolve configuration in this order:
 
-1. **Command-line flags** - Explicit user intent
-2. **Environment variables** - Runtime context
-3. **Config files (project)** - `.myclirc`, `mycli.config.js`
-4. **Config files (user)** - `~/.myclirc`, `~/.config/mycli/config.yml`
-5. **Config files (system)** - `/etc/mycli/config.yml`
-6. **Defaults** - Hard-coded sensible defaults
+1. CLI flags
+2. environment variables
+3. project config
+4. user config
+5. defaults
 
-```javascript
-// Example config resolution
-const config = {
-  ...systemDefaults,
-  ...loadSystemConfig(),
-  ...loadUserConfig(),
-  ...loadProjectConfig(),
-  ...loadEnvVars(),
-  ...parseCliFlags(),
-};
-```
+## Errors and Exit Codes
 
-## Exit Codes
-
-Standard POSIX exit codes:
-
-```javascript
-const EXIT_CODES = {
-  SUCCESS: 0,
-  GENERAL_ERROR: 1,
-  MISUSE: 2,              // Invalid arguments
-  PERMISSION_DENIED: 77,
-  NOT_FOUND: 127,
-  SIGINT: 130,            // Ctrl+C
-};
-```
-
-## Plugin Architecture
-
-```
-mycli/
-├── core/                      # Core functionality
-├── plugins/
-│   ├── aws/                  # Plugin: AWS integration
-│   │   ├── package.json
-│   │   └── index.js
-│   └── github/               # Plugin: GitHub integration
-│       ├── package.json
-│       └── index.js
-└── plugin-loader.js          # Discovery & loading
-```
-
-Plugin discovery:
-1. Check `~/.mycli/plugins/`
-2. Check `node_modules/mycli-plugin-*`
-3. Check `MYCLI_PLUGIN_PATH` env var
-
-## Error Handling Patterns
-
-```javascript
-// Good: Actionable error messages
-Error: Config file not found at /path/to/config.yml
-
-Tried locations:
-  • ./mycli.config.yml
-  • ~/.myclirc
-  • /etc/mycli/config.yml
-
-Run 'mycli init' to create a config file, or use --config to specify location.
-
-// Bad: Unhelpful errors
-Error: ENOENT
-```
+Error messages should be actionable and specific about the failing file,
+argument, or external dependency. Reserve generic “something failed” output for
+truly unknown errors.
 
 ## Interactive vs Non-Interactive
 
-```javascript
-// Detect if running in CI/CD
-const isCI = process.env.CI === 'true' || !process.stdout.isTTY;
+Detect CI or non-TTY mode early. Prompts belong only in interactive mode; CI
+paths should fail fast with clear requirements.
 
-if (isCI) {
-  // Non-interactive: fail fast with clear errors
-// ... (8 lines trimmed)
-    choices: ['development', 'staging', 'production'],
-  });
-}
-```
+## Practical Rule
 
-## State Management
-
-```
-~/.mycli/
-├── config.yml           # User configuration
-├── cache/               # Cached data
-│   ├── plugins.json
-│   └── api-responses/
-├── credentials.json     # Sensitive data (600 perms)
-└── state.json          # Session state
-```
-
-## Performance Patterns
-
-```javascript
-// Lazy loading: Don't load unused dependencies
-if (command === 'deploy') {
-  const deploy = require('./commands/deploy'); // Load on demand
-  await deploy.run();
-}
-// ... (12 lines trimmed)
-  checkForUpdates(),
-  loadPlugins(),
-]);
-```
-
-## Versioning & Updates
-
-```javascript
-// Check for updates (non-blocking)
-checkForUpdates().then(update => {
-  if (update.available) {
-    console.log(`Update available: ${update.version}`);
-    console.log(`Run: npm install -g mycli@latest`);
-// ... (8 lines trimmed)
-  console.error(`mycli requires Node.js ${MIN_NODE_VERSION} or higher`);
-  process.exit(1);
-}
-```
-
-## Help Text Design
-
-```
-USAGE
-  mycli deploy [environment] [options]
-
-ARGUMENTS
-  environment  Target environment (development|staging|production)
-// ... (15 lines trimmed)
-  mycli deploy --config ./custom.yml
-
-Learn more: https://docs.mycli.dev/deploy
-```
+Good CLIs make the common path obvious and the dangerous path explicit. Do not
+hide destructive behavior behind ambiguous defaults.

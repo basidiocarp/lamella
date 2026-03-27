@@ -118,7 +118,10 @@ non-task interactions.
 **Date:** [date]
 **Session context:** [brief description of current task]
 **Skill:** [existing skill name, or "New skill candidate: [working name]"]
-// ... (8 lines trimmed)
+**Trigger:** [what happened that exposed the gap]
+**Observation:** [what Claude did or failed to do]
+**Evidence:** [specific command, artifact, or user correction]
+**Actionable pattern:** [what should be done differently next time]
 
 **Principle:** [Generalisable takeaway — why this matters beyond this
 instance. The most important part.]

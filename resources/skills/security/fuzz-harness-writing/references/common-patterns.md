@@ -1,158 +1,151 @@
 # Common Fuzzing Harness Patterns
 
-Detailed patterns for different fuzzing scenarios.
+Use these patterns when the target needs more structure than a raw byte slice
+but does not justify a large custom input model.
 
-## Pattern: Beyond Byte Arrays—Casting to Integers
+## Primitive Splitting
 
-**Use Case:** When target expects primitive types like integers or floats
+Use fixed-width parsing when the target expects a small number of integers or
+flags.
 
-**Implementation:**
 ```cpp
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    // Ensure exactly 2 4-byte numbers
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     if (size != 2 * sizeof(uint32_t)) {
         return 0;
     }
 
-    // Split input into two integers
-    uint32_t numerator = *(uint32_t*)(data);
-    uint32_t denominator = *(uint32_t*)(data + sizeof(uint32_t));
+    uint32_t numerator = 0;
+    uint32_t denominator = 0;
+    memcpy(&numerator, data, sizeof(uint32_t));
+    memcpy(&denominator, data + sizeof(uint32_t), sizeof(uint32_t));
 
     divide(numerator, denominator);
     return 0;
 }
 ```
 
-**Rust equivalent:**
-```rust
-fuzz_target!(|data: &[u8]| {
-    if data.len() != 2 * std::mem::size_of::<i32>() {
-        return;
-    }
+Prefer `memcpy` or explicit byte conversion over pointer casts so alignment and
+aliasing bugs stay out of the harness.
 
-    let numerator = i32::from_ne_bytes([data[0], data[1], data[2], data[3]]);
-    let denominator = i32::from_ne_bytes([data[4], data[5], data[6], data[7]]);
+## `FuzzedDataProvider`
 
-    divide(numerator, denominator);
-});
-```
+Use `FuzzedDataProvider` for mixed strings, numbers, and variable-length fields.
 
-**Why it works:** Any 8-byte input is valid. The fuzzer learns that inputs must be exactly 8 bytes, and every bit flip produces a new, potentially interesting input.
-
-## Pattern: FuzzedDataProvider for Complex Inputs
-
-**Use Case:** When target requires multiple strings, integers, or variable-length data
-
-**Implementation:**
 ```cpp
 #include "FuzzedDataProvider.h"
 
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    FuzzedDataProvider fuzzed_data(data, size);
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    FuzzedDataProvider provider(data, size);
 
-// ... (11 lines trimmed)
+    auto user = provider.ConsumeRandomLengthString(64);
+    auto count = provider.ConsumeIntegralInRange<uint32_t>(0, 1000);
+    auto body = provider.ConsumeRemainingBytes<uint8_t>();
 
+    parse_record(user, count, body.data(), body.size());
     return 0;
 }
 ```
 
-**Why it helps:** `FuzzedDataProvider` handles the complexity of extracting structured data from a byte stream.
+This keeps the harness readable and preserves stable boundaries between fields.
 
-## Pattern: Interleaved Fuzzing
+## Interleaved Related Operations
 
-**Use Case:** When multiple related operations should be tested in a single harness
+Use one harness for a few tightly related operations when a shared corpus is
+helpful.
 
-**Implementation:**
 ```cpp
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    if (size < 1 + 2 * sizeof(int32_t)) {
-        return 0;
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+    FuzzedDataProvider provider(data, size);
+
+    switch (provider.ConsumeIntegralInRange<uint8_t>(0, 2)) {
+        case 0:
+            parse_header(provider.ConsumeRemainingBytes<uint8_t>().data(), size);
+            break;
+        case 1:
+            normalize_header(provider.ConsumeRandomLengthString(128));
+            break;
+        case 2:
+            serialize_header(provider.ConsumeIntegral<uint16_t>());
+            break;
     }
 
-// ... (24 lines trimmed)
-    printf("%d", result);
     return 0;
 }
 ```
 
-**Advantages:**
-- Faster to write one harness than multiple individual harnesses
-- Single shared corpus means interesting inputs for one operation may be interesting for others
-- Can discover bugs in interactions between operations
+Do not combine unrelated formats. Shared corpora help only when the branches
+explore the same conceptual surface.
 
-## Pattern: Structure-Aware Fuzzing with Arbitrary (Rust)
+## Structure-Aware Rust Targets
 
-**Use Case:** When fuzzing Rust code that uses custom structs
+Use `arbitrary` when the Rust target already wants a typed input shape.
 
-**Implementation:**
 ```rust
 use arbitrary::Arbitrary;
-
-#[derive(Debug, Arbitrary)]
-pub struct Name {
-    data: String
-// ... (11 lines trimmed)
-        }
-    }
-}
-```
-
-**Harness with arbitrary:**
-```rust
-#![no_main]
 use libfuzzer_sys::fuzz_target;
 
-fuzz_target!(|data: your_project::Name| {
-    data.check_buf();
+#[derive(Debug, Arbitrary)]
+struct Request {
+    method: u8,
+    path: String,
+    body: Vec<u8>,
+}
+
+fuzz_target!(|req: Request| {
+    handle_request(req.method, &req.path, &req.body);
 });
 ```
 
-**Add to Cargo.toml:**
-```toml
-[dependencies]
-arbitrary = { version = "1", features = ["derive"] }
-```
+This reduces parsing noise and lets the fuzzer mutate semantic fields instead of
+raw offsets.
 
-## Structure-Aware Fuzzing with Protocol Buffers
+## Structured Formats
 
-For highly structured input formats, consider using Protocol Buffers as an intermediate format with custom mutators:
+For heavily structured inputs, use a generator or mutator layer instead of
+manually decoding every byte in the harness:
 
-```cpp
-// Define your input format in .proto file
-// Use libprotobuf-mutator to generate valid mutations
-// This ensures fuzzer mutates message contents, not the protobuf encoding itself
-```
+- `arbitrary` for Rust structs
+- protobuf plus libprotobuf-mutator for C and C++
+- format-native builders for JSON, AST, or protocol message trees
 
-This approach is more setup but prevents the fuzzer from wasting time on unparseable inputs.
+Use this when parse failures dominate coverage and the raw corpus cannot reach
+interesting logic.
 
-## Handling Non-Determinism
+## Non-Determinism and Global State
 
-**Problem:** Random values or timing dependencies cause non-reproducible crashes.
+Two recurring harness failures:
 
-**Solutions:**
-- Replace `rand()` with deterministic PRNG seeded from fuzzer input:
-  ```cpp
-  uint32_t seed = fuzzed_data.ConsumeIntegral<uint32_t>();
-  srand(seed);
-  ```
-- Mock system calls that return time, PIDs, or random data
-- Avoid reading from `/dev/random` or `/dev/urandom`
+- non-determinism from time, randomness, or process state
+- state leakage between iterations
 
-## Resetting Global State
-
-If your SUT uses global state, reset it between iterations:
+Typical mitigations:
 
 ```cpp
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    // Reset global state before each iteration
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
     global_reset();
 
-    target_function(data, size);
+    FuzzedDataProvider provider(data, size);
+    uint32_t seed = provider.ConsumeIntegral<uint32_t>();
+    srand(seed);
 
-    // Clean up resources
+    target_function(provider.ConsumeRemainingBytes<uint8_t>().data(), size);
+
     global_cleanup();
     return 0;
 }
 ```
 
-**Rationale:** Global state can cause crashes after N iterations rather than on a specific input, making bugs non-reproducible.
+Mock clocks or random sources when possible. The goal is input-driven behavior,
+not environment-driven behavior.
+
+## Pattern Selection
+
+| Target shape | Best pattern |
+|---|---|
+| Fixed small arguments | Primitive splitting |
+| Mixed strings and scalars | `FuzzedDataProvider` |
+| Typed Rust domain objects | `arbitrary` |
+| Rich nested schemas | Structure-aware generators |
+| Shared parser and serializer flows | Interleaved related operations |
+
+Use the simplest pattern that gives stable, high-signal inputs.

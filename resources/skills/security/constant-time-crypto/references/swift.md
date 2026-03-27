@@ -1,257 +1,102 @@
 # Constant-Time Analysis: Swift
 
-Analysis guidance for Swift targeting iOS, macOS, watchOS, and tvOS. Swift compiles to native code, making it subject to the same CPU-level timing side-channels as C, C++, Go, and Rust.
+Swift compiles to native code through LLVM, so the same constant-time concerns
+that apply to C, C++, Rust, and Go also apply here.
 
-## Understanding Swift Compilation
+## What to Watch For
 
-Swift compiles directly to native machine code:
+Swift source can hide timing-sensitive behavior behind friendly syntax. The
+highest-signal review targets are:
 
-```text
-Source Code (.swift)
-        |
-        v
-    swiftc (Swift Compiler / LLVM)
-        |
-        v
-   Native Assembly
-        |
-        v
-   Machine Code (binary)
-```
+- division or remainder on secret-derived values
+- branches or ternaries on secret-derived values
+- table lookups with secret-derived indices
+- standard equality checks on secret byte strings
+- optional or enum control flow that depends on secret state
 
-**Key implications:**
+## Review Patterns
 
-1. **Same vulnerabilities as C** - Division, branches, and table lookups have data-dependent timing
-2. **LLVM backend** - Swift uses LLVM, so analysis is similar to clang-compiled code
-3. **Architecture matters** - x86_64 (Mac) and arm64 (iOS devices, Apple Silicon) have different instruction sets
-
-## Running the Analyzer
-
-```bash
-# Analyze Swift for native architecture
-uv run {baseDir}/ct_analyzer/analyzer.py crypto.swift
-
-# Analyze for iOS device (arm64)
-uv run {baseDir}/ct_analyzer/analyzer.py --arch arm64 crypto.swift
-// ... (10 lines trimmed)
-
-# CI-friendly JSON output
-uv run {baseDir}/ct_analyzer/analyzer.py --json crypto.swift
-```
-
-## Dangerous Instructions by Architecture
-
-### ARM64 (iOS devices, Apple Silicon Macs)
-
-| Category | Instructions | Risk |
-|----------|--------------|------|
-| Division | `UDIV`, `SDIV` | Early termination optimization; variable-time |
-| Floating-Point | `FDIV`, `FSQRT` | Variable latency based on operand values |
-| Conditional Branches | `B.EQ`, `B.NE`, `CBZ`, `CBNZ`, etc. | Timing leak if condition depends on secrets |
-
-### x86_64 (Intel Macs)
-
-| Category | Instructions | Risk |
-|----------|--------------|------|
-| Division | `DIV`, `IDIV`, `DIVQ`, `IDIVQ` | Data-dependent timing |
-| Floating-Point | `DIVSS`, `DIVSD`, `SQRTSS`, `SQRTSD` | Variable latency |
-| Conditional Branches | `JE`, `JNE`, `JZ`, `JNZ`, etc. | Timing leak if condition depends on secrets |
-
-## Constant-Time Patterns
-
-### Replace Division
+### Secret-Dependent Branching
 
 ```swift
-// VULNERABLE: Division instruction emitted
-let q = secretValue / divisor
-
-// SAFE: Barrett reduction (for fixed divisor)
-// Precompute: mu = (1 << 32) / divisor
-let mu: UInt64 = (1 << 32) / UInt64(divisor)
-let q = Int32((UInt64(secretValue) &* mu) >> 32)
-```
-
-### Replace Branches
-
-```swift
-// VULNERABLE: Branch timing reveals secret
 let result = secret != 0 ? a : b
-
-// SAFE: Constant-time selection using bitwise ops
-let mask = Int32(bitPattern: UInt32(bitPattern: -Int32(secret != 0 ? 1 : 0)))
-// Better approach with no branch:
-let nonZero = (secret | -secret) >> 31  // -1 if secret != 0, else 0
-let result = (a & nonZero) | (b & ~nonZero)
 ```
 
-### Replace Comparisons
+This reads cleanly but still creates branch-dependent behavior. Prefer
+mask-based selection when the algorithm requires constant-time semantics.
+
+### Non-Constant Comparisons
 
 ```swift
-// VULNERABLE: Standard equality may early-terminate
-if computed == expected { ... }
-
-// SAFE: Constant-time comparison
-import CryptoKit  // Available on iOS 13+, macOS 10.15+
-// ... (14 lines trimmed)
-    }
-    return result == 0
+if computed == expected {
+    // early-exit compare path
 }
 ```
 
-### Secure Random
+Standard equality on strings, arrays, or byte buffers is not a constant-time
+comparison guarantee. Prefer a constant-time byte-wise comparison routine or a
+reviewed crypto library helper.
+
+### Secret-Indexed Lookup
 
 ```swift
-// VULNERABLE: Don't use for cryptographic purposes
-import Foundation
-let value = Int.random(in: 0..<100)  // Uses arc4random, generally OK but not verified
-
-// SAFE: Use CryptoKit (iOS 13+, macOS 10.15+)
-import CryptoKit
-
-// Generate secure random bytes
-var randomBytes = [UInt8](repeating: 0, count: 32)
-let status = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-guard status == errSecSuccess else { /* handle error */ }
-
-// Or use SymmetricKey for key generation
-let key = SymmetricKey(size: .bits256)
+let value = lookupTable[Int(secretIndex)]
 ```
 
-## Apple Platform Considerations
+This is a cache-timing review trigger even if the syntax looks harmless.
 
-### Using CryptoKit (Recommended)
+## Apple Platform Guidance
 
-CryptoKit provides constant-time implementations for common operations:
+Prefer platform crypto libraries over custom constant-time implementations when
+they cover the required primitive:
 
-```swift
-import CryptoKit
+- CryptoKit for common modern primitives
+- Security framework for secure random bytes and keychain access
 
-// HMAC (constant-time internally)
-let key = SymmetricKey(size: .bits256)
-let signature = HMAC<SHA256>.authenticationCode(for: data, using: key)
+That does not remove the need to audit surrounding control flow, comparisons,
+and indexing logic.
 
-// AES-GCM encryption
-let sealedBox = try AES.GCM.seal(plaintext, using: key)
+## Swift-Specific Footguns
 
-// Curve25519 key agreement
-let privateKey = Curve25519.KeyAgreement.PrivateKey()
-let sharedSecret = try privateKey.sharedSecretFromKeyAgreement(with: peerPublicKey)
-```
+Swift adds a few language-level review triggers:
 
-### Security Framework
+- optional unwrapping paths that branch on secret presence
+- `switch` over secret-derived enums or tags
+- collection and string operations whose behavior depends on data shape
+- implicit copies or conversions that obscure the real comparison path
 
-```swift
-import Security
+These are not automatically unsafe, but they deserve explicit review in
+cryptographic code.
 
-// Generate cryptographically secure random data
-func secureRandomBytes(count: Int) -> Data? {
-    var bytes = [UInt8](repeating: 0, count: count)
-// ... (10 lines trimmed)
-    ]
-    return SecItemAdd(query as CFDictionary, nil) == errSecSuccess
-}
-```
+## Architecture Notes
 
-## Swift-Specific Pitfalls
+The backend and architecture still matter:
+- `arm64` on iPhone, iPad, Apple Watch, and Apple Silicon Macs
+- `x86_64` on older Intel Macs
 
-### Optional Unwrapping
+If the code is security-critical, validate the actual production architecture
+instead of assuming one assembly profile generalizes to all targets.
 
-```swift
-// Branching on optionals
-if let secret = maybeSecret {  // Introduces branch
-    process(secret)
-}
+## Practical Workflow
 
-// Guard statements also branch
-guard let secret = maybeSecret else { return }
-```
+1. Review Swift source for branches, division, and table access driven by secret
+   values.
+2. Prefer reviewed library primitives for compare, key generation, and MAC
+   operations.
+3. Inspect generated output only when the source is ambiguous or the path is
+   critical.
+4. Run timing-oriented tests on the target architecture for the final check.
 
-### Pattern Matching
+## Detection Checklist
 
-```swift
-// Switch/case compiles to branching code
-switch secretEnum {
-case .optionA: handleA()  // Branch
-case .optionB: handleB()  // Branch
-}
-```
+| Pattern | Risk |
+|---|---|
+| `/` or `%` on secret-derived values | variable-time arithmetic |
+| ternary or `if` on secret-derived values | branch timing |
+| `switch` on secret-derived tags | branch timing |
+| direct `==` on secret bytes or strings | early-exit comparison |
+| lookup table indexed by secret | cache timing |
+| custom crypto helpers over library primitives | hidden implementation risk |
 
-### Array Subscripting
-
-```swift
-// Array access indexed by secret leaks via cache timing
-let value = lookupTable[secretIndex]  // Cache timing side-channel
-```
-
-### String Operations
-
-```swift
-// String comparison is NOT constant-time
-if secretString == expectedString { ... }  // Variable-time
-
-// Character iteration may also have timing variations
-for char in secretString { ... }
-```
-
-## Setup Requirements
-
-### Xcode (Recommended)
-
-Install Xcode from the Mac App Store. The Swift compiler is included.
-
-```bash
-# Verify installation
-swiftc --version
-```
-
-### Swift Toolchain (Alternative)
-
-Download from [swift.org](https://swift.org/download/) for standalone installation.
-
-```bash
-# Verify
-swiftc --version
-```
-
-### Cross-Compilation
-
-For analyzing code targeting different architectures:
-
-```bash
-# Analyze for iOS device
-uv run {baseDir}/ct_analyzer/analyzer.py --arch arm64 crypto.swift
-
-# Analyze for iOS simulator
-uv run {baseDir}/ct_analyzer/analyzer.py --arch x86_64 crypto.swift
-```
-
-## Common Mistakes
-
-1. **Using Swift's == for byte comparison** - Standard equality comparison may early-terminate; use constant-time comparison
-
-2. **Trusting CryptoKit for all operations** - CryptoKit provides constant-time primitives, but combining them incorrectly can introduce vulnerabilities
-
-3. **String manipulation on secrets** - Swift strings have complex internal representations; timing varies with content
-
-4. **Ignoring optimization levels** - Swift's optimizer can transform safe source code into unsafe assembly; test at multiple -O levels
-
-5. **Platform availability** - CryptoKit requires iOS 13+/macOS 10.15+; older platforms need alternative implementations
-
-## Testing on Different Architectures
-
-Always test your cryptographic code on actual target architectures:
-
-```bash
-# Apple Silicon Mac (arm64)
-uv run {baseDir}/ct_analyzer/analyzer.py crypto.swift
-
-# Cross-compile for Intel
-uv run {baseDir}/ct_analyzer/analyzer.py --arch x86_64 crypto.swift
-```
-
-## Further Reading
-
-- [Apple CryptoKit Documentation](https://developer.apple.com/documentation/cryptokit)
-- [Apple Security Framework](https://developer.apple.com/documentation/security)
-- [Swift.org Security](https://swift.org/blog/swift-5-release/)
-- [OWASP iOS Security Guide](https://owasp.org/www-project-mobile-security-testing-guide/)
+Use this reference as the Swift-specific review filter, then pair it with the
+general native-code guidance in the constant-time skill.

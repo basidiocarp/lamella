@@ -1,259 +1,143 @@
 # Swift Sharp Edges
 
-## Force Unwrapping
+Use this reference when scanning Swift code for APIs or language features that
+hide crashes, silent failures, or memory-management surprises behind concise
+syntax.
+
+## Crash-Prone Unwrapping and Casting
+
+Watch for direct unwrap and cast operators in paths influenced by optional data,
+UI outlets, or deserialization.
 
 ```swift
-// DANGEROUS: Crashes on nil
-let value = optionalValue!  // Runtime crash if nil
-
-// Common in:
-let cell = tableView.dequeueReusableCell(...)!
-let url = URL(string: userInput)!
-let data = try! JSONDecoder().decode(...)
-
-// DANGEROUS: Implicitly Unwrapped Optionals
-var name: String!  // IUO - crashes if accessed while nil
-
-class ViewController: UIViewController {
-    @IBOutlet weak var label: UILabel!  // Nil before viewDidLoad
-}
+let value = optionalValue!
+let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell") as! UserCell
+let data = try! JSONDecoder().decode(User.self, from: raw)
 ```
 
-**Fix**: Use optional binding or nil-coalescing:
+Safer replacements:
+
 ```swift
-if let value = optionalValue {
-    use(value)
-}
-let value = optionalValue ?? defaultValue
 guard let value = optionalValue else { return }
-```
+guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell") as? UserCell else {
+    return
+}
 
-## try! and try?
-
-```swift
-// DANGEROUS: try! crashes on error
-let data = try! Data(contentsOf: url)
-
-// DANGEROUS: try? silently converts error to nil
-let data = try? Data(contentsOf: url)
-// No way to know if failure was "file not found" or "permission denied"
-
-// DANGEROUS: Ignoring error completely
 do {
-    try riskyOperation()
+    let data = try JSONDecoder().decode(User.self, from: raw)
 } catch {
-    // Error swallowed
+    logger.error("decode failed: \(error)")
 }
 ```
 
-**Fix**: Handle errors explicitly:
-```swift
-do {
-    let data = try Data(contentsOf: url)
-} catch let error as NSError where error.code == NSFileNoSuchFileError {
-    // Handle file not found
-} catch {
-    // Handle other errors
-}
-```
+Flag these patterns:
+- `!` on optionals
+- `as!`
+- `try!`
+- `try?` when the nil case is ignored
 
-## as! Force Cast
+## String Bridging and Indexing
+
+Swift `String` uses grapheme clusters. `NSString` uses UTF-16 indices. Bugs
+show up when code mixes them.
 
 ```swift
-// DANGEROUS: Crashes if cast fails
-let user = object as! User
-
-// Common antipattern:
-let cell = tableView.dequeueReusableCell(...) as! CustomCell
-// Crashes if wrong identifier or wrong class
-```
-
-**Fix**: Use conditional cast:
-```swift
-if let user = object as? User {
-    use(user)
-}
-guard let user = object as? User else {
-    return  // or handle error
-}
-```
-
-## String/NSString Bridging
-
-```swift
-// DANGEROUS: Different indexing semantics
 let nsString: NSString = "café"
 let swiftString = nsString as String
 
-nsString.length        // 5 (UTF-16 code units)
-// ... (8 lines trimmed)
-emoji.count           // 1 (grapheme cluster)
-emoji.utf16.count     // 11 (UTF-16)
-(emoji as NSString).length  // 11
+nsString.length          // UTF-16 units
+swiftString.count        // user-visible characters
 ```
+
+Treat mixed `String` and `NSString` range math as a footgun, especially in
+parsers, validators, and substring-heavy code.
 
 ## Reference Cycles
 
+Closures and mutually referencing objects can leak silently.
+
 ```swift
-// DANGEROUS: Strong reference cycles cause memory leaks
-class Person {
-    var apartment: Apartment?
-}
-class Apartment {
-// ... (15 lines trimmed)
+class ViewModel {
+    var onRefresh: (() -> Void)?
+
+    func start() {
+        onRefresh = {
+            self.reload()
         }
     }
 }
 ```
 
-**Fix**: Use `weak` or `unowned`:
-```swift
-class Apartment {
-    weak var tenant: Person?  // Weak breaks cycle
-}
+Prefer:
 
-callback = { [weak self] in
-    self?.doSomething()
+```swift
+onRefresh = { [weak self] in
+    self?.reload()
 }
 ```
 
-## Array/Dictionary Thread Safety
+Also audit object graphs with `weak` or `unowned` expectations, especially
+delegates, UI callback chains, and parent-child object relationships.
+
+## Concurrency and Shared State
+
+Collections are not automatically thread-safe.
 
 ```swift
-// DANGEROUS: Collections are not thread-safe
-var array = [Int]()
-
-// Thread 1:
-array.append(1)
-
-// Thread 2:
-array.append(2)
-
-// Crash or corruption possible!
+var items = [Int]()
+DispatchQueue.global().async { items.append(1) }
+DispatchQueue.global().async { items.append(2) }
 ```
 
-**Fix**: Use serial dispatch queue, locks, or actors (Swift 5.5+):
-```swift
-actor SafeStorage {
-    private var items = [Int]()
+Prefer actors, a serial queue, or explicit locking for shared mutable state.
+Also flag code that mixes legacy GCD patterns with actor-isolated values without
+clear boundaries.
 
-    func add(_ item: Int) {
-        items.append(item)
-    }
-}
-```
+## Overflow and Arithmetic Semantics
 
-## Numeric Overflow
+Swift traps on overflow by default, but wrapping operators reintroduce silent
+wraparound.
 
 ```swift
-// In debug: crashes (overflow check)
-// In release: also crashes by default (unlike C)
 let x: Int8 = 127
-let y = x + 1  // Fatal error: arithmetic overflow
-
-// BUT: If using &+ operators, wraps silently
-let y = x &+ 1  // -128 (wrapping)
+let y = x &+ 1
 ```
 
-This is safer than C, but `&+` operators can still cause issues.
+The `&+`, `&-`, and `&*` operators are worth auditing anywhere counters, sizes,
+or security-relevant arithmetic matter.
 
-## Uninitialized Properties
+## Codable and Objective-C Interop
 
-```swift
-// DANGEROUS: Accessing before initialization
-class MyClass {
-    var value: Int
+Two common silent-failure zones:
 
-    init() {
-        print(value)  // Compile error in Swift, thankfully
-        value = 42
-    }
-}
+- `Codable` models that rely on implicit decoding behavior
+- Objective-C bridges that weaken Swift’s type guarantees
 
-// BUT: @objc interop can bypass
-// AND: Unsafe pointers have no initialization guarantees
-```
-
-## Protocol Witness Table Issues
-
-```swift
-// DANGEROUS: Protocol with Self requirement
-protocol Equatable {
-    static func ==(lhs: Self, rhs: Self) -> Bool
-}
-
-// Can't use heterogeneously:
-var items: [Equatable] = [...]  // Error!
-// Must use type erasure or existentials
-```
-
-## KeyPath Subscript Confusion
-
-```swift
-// DANGEROUS: Similar syntax, different behavior
-struct User {
-    var name: String
-    subscript(key: String) -> String? { ... }
-}
-
-user["name"]       // Calls subscript
-user[keyPath: \.name]  // Uses KeyPath
-
-// Easy to confuse when debugging
-```
-
-## Codable Pitfalls
-
-```swift
-// DANGEROUS: Decoding fails silently with wrong types
-struct User: Codable {
-    var id: Int
-}
-
-// ... (8 lines trimmed)
-
-// JSON: {"id": 1}  // Missing "name"
-// Throws, but error message may not be clear
-```
-
-**Fix**: Use explicit CodingKeys and handle errors:
 ```swift
 struct User: Codable {
     var id: Int
-    var name: String?  // Optional for missing keys
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case name
-    }
+    var name: String?
 }
-```
 
-## Objective-C Interop
-
-```swift
-// DANGEROUS: Objective-C returns nullable even when Swift sees non-optional
-@objc func legacyMethod() -> NSString  // May actually return nil
-
-// DANGEROUS: Objective-C exceptions not caught by Swift
-// NSException bypasses Swift error handling
-
-// DANGEROUS: Objective-C performSelector
 let result = obj.perform(NSSelectorFromString(userInput))
-// Can call any method!
 ```
 
-## Detection Patterns
+Prefer explicit `CodingKeys`, typed adapters around legacy APIs, and avoid
+`perform(_:)` on untrusted selectors.
+
+## Detection Checklist
 
 | Pattern | Risk |
-|---------|------|
-| `!` force unwrap | Crash on nil |
-| `as!` force cast | Crash on type mismatch |
+|---|---|
+| `!` unwrap | Crash on nil |
+| `as!` | Crash on mismatch |
 | `try!` | Crash on error |
-| `try?` without handling nil | Silent failure |
-| `String!` IUO types | Deferred crash |
-| Closure capturing `self` without `[weak self]` | Memory leak |
-| Collections modified from multiple threads | Race condition |
-| NSString/String conversion with ranges | Index mismatch |
-| `&+`, `&-`, `&*` operators | Silent overflow |
-| `@objc` methods returning non-optional | Nil bridge issues |
+| ignored `try?` | Silent failure |
+| `String!` or IUO properties | Deferred crash |
+| closure captures `self` strongly | Memory leak |
+| shared mutable collections across tasks | Race condition |
+| `NSString` range math on `String` data | Index mismatch |
+| `&+`, `&-`, `&*` | Silent wraparound |
+| `perform(_:)` or loose Objective-C bridging | Dynamic behavior bypass |
+
+Use this as a detection lens, not a full Swift handbook.

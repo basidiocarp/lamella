@@ -1,93 +1,63 @@
 # Async SQLAlchemy
 
-## Engine & Session Setup
+Use this reference for the standard FastAPI + SQLAlchemy async stack.
 
-```python
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
+## Engine and Session
 
-engine = create_async_engine(
-    settings.DATABASE_URL,
-// ... (9 lines trimmed)
+Core pieces:
+- `create_async_engine(...)`
+- `async_sessionmaker(...)`
+- `AsyncSession`
+- declarative base for models
 
-class Base(DeclarativeBase):
-    pass
-```
+Keep engine configuration in one place and expose a single session dependency to
+the app.
 
-## Model Definition
+## Session Dependency
 
-```python
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, DateTime, func
-from datetime import datetime
+The common pattern is:
+- open session
+- yield it to the request
+- commit on success
+- rollback on exception
 
-class User(Base):
-// ... (18 lines trimmed)
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+Keep transaction boundaries obvious. Do not spread commit logic across handlers
+and helpers arbitrarily.
 
-    author: Mapped["User"] = relationship(back_populates="posts")
-```
+## Query Patterns
 
-## Database Dependency
+Common async patterns:
+- `select(...)` with `await session.execute(...)`
+- `scalar_one_or_none()` for single-row fetches
+- `scalars().all()` for collections
+- `selectinload(...)` for eager loading
 
-```python
-from typing import AsyncGenerator
-from fastapi import Depends
+Prefer explicit query shapes over hidden lazy loading in request handlers.
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with async_session() as session:
-        try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
-            raise
+## CRUD Guidance
 
-# Type alias for injection
-DB = Annotated[AsyncSession, Depends(get_db)]
-```
+- create: `session.add(...)` plus `flush()` when you need generated IDs before
+  commit
+- update: load and mutate the object, or use explicit update expressions where
+  appropriate
+- delete: explicit delete plus affected-row or existence handling
 
-## CRUD Operations
+Consistency matters more than which update style you choose.
 
-```python
-from sqlalchemy import select, update, delete
-from sqlalchemy.orm import selectinload
+## Lifespan
 
-async def get_user(db: AsyncSession, user_id: int) -> User | None:
-    result = await db.execute(select(User).where(User.id == user_id))
-// ... (29 lines trimmed)
-async def delete_user(db: AsyncSession, user_id: int) -> bool:
-    result = await db.execute(delete(User).where(User.id == user_id))
-    return result.rowcount > 0
-```
+Use the app lifespan to initialize and dispose of async database resources.
 
-## Lifespan Handler
+Only create tables on startup in local or controlled environments. Production
+schema changes should go through migrations, not app boot.
 
-```python
-from contextlib import asynccontextmanager
-from fastapi import FastAPI
+## Design Rules
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield
-    # Shutdown
-    await engine.dispose()
+- one session per request by default
+- eager load intentionally
+- avoid implicit blocking calls inside async routes
+- keep migrations separate from runtime setup
+- centralize transaction handling
 
-app = FastAPI(lifespan=lifespan)
-```
-
-## Quick Reference
-
-| Operation | Method |
-|-----------|--------|
-| Select one | `result.scalar_one_or_none()` |
-| Select many | `result.scalars().all()` |
-| Eager load | `.options(selectinload(...))` |
-| Create | `db.add(obj)` + `await db.flush()` |
-| Update | `update(Model).where(...).values(...)` |
-| Delete | `delete(Model).where(...)` |
-| Commit | `await db.commit()` |
-| Rollback | `await db.rollback()` |
+This is the baseline async SQLAlchemy pattern, not a replacement for detailed
+query or migration guidance.

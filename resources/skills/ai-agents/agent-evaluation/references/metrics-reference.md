@@ -1,194 +1,82 @@
 # Metric Selection Guide
 
-This reference provides guidance on selecting appropriate metrics for different evaluation scenarios.
+Use this reference to choose metrics that match the evaluation question. Start
+with the task type, not the metric name.
 
-## Metric Categories
+## Classification Metrics
 
-### Classification Metrics
+Use for pass/fail or correct/incorrect decisions.
 
-Use for binary or multi-class evaluation tasks (pass/fail, correct/incorrect).
+| Metric | Use when |
+|---|---|
+| precision | false positives are costly |
+| recall | false negatives are costly |
+| F1 | you need a balanced single score |
 
-#### Precision
+These are usually appropriate for safety gates, moderation checks, or binary
+quality labels.
 
-```
-Precision = True Positives / (True Positives + False Positives)
-```
+## Agreement Metrics
 
-**Interpretation**: Of all responses the judge said were good, what fraction were actually good?
+Use when comparing automated judgments to human judgments.
 
-**Use when**: False positives are costly (e.g., approving unsafe content)
+| Metric | Best for |
+|---|---|
+| Cohen's kappa | categorical agreement |
+| weighted kappa | ordinal scales where bigger disagreements matter more |
 
-#### Recall
+Agreement metrics answer whether the judge aligns with a human rubric, not
+whether the underlying outputs are good in an absolute sense.
 
-```
-Recall = True Positives / (True Positives + False Negatives)
-```
+## Correlation Metrics
 
-**Interpretation**: Of all actually good responses, what fraction did the judge identify?
+Use when scores are ordinal or continuous.
 
-**Use when**: False negatives are costly (e.g., missing good content in filtering)
+| Metric | Best for |
+|---|---|
+| Spearman's rho | ranking quality |
+| Kendall's tau | rankings with many ties |
+| Pearson r | exact score relationship |
 
-#### F1 Score
+Prefer rank-based correlation when relative ordering matters more than exact
+numeric spacing.
 
-```
-F1 = 2 * (Precision * Recall) / (Precision + Recall)
-```
+## Pairwise Metrics
 
-**Interpretation**: Harmonic mean of precision and recall
+Use for winner/loser judgments.
 
-**Use when**: You need a single number balancing both concerns
+| Metric | Best for |
+|---|---|
+| win rate | comparing two models or prompts |
+| agreement rate | checking decision stability |
+| position consistency | detecting swap sensitivity and bias |
 
-### Agreement Metrics
+If position consistency is weak, fix the comparison protocol before trusting win
+rate conclusions.
 
-Use for comparing automated evaluation with human judgment.
+## Selection Guide
 
-#### Cohen's Kappa (κ)
-
-```
-κ = (Observed Agreement - Expected Agreement) / (1 - Expected Agreement)
-```
-
-**Interpretation**: Agreement adjusted for chance
-- κ > 0.8: Almost perfect agreement
-- κ 0.6-0.8: Substantial agreement
-- κ 0.4-0.6: Moderate agreement
-- κ < 0.4: Fair to poor agreement
-
-**Use for**: Binary or categorical judgments
-
-#### Weighted Kappa
-
-For ordinal scales where disagreement severity matters.
-
-**Interpretation**: Penalizes large disagreements more than small ones
-
-### Correlation Metrics
-
-Use for ordinal/continuous scores.
-
-#### Spearman's Rank Correlation (ρ)
-
-**Interpretation**: Correlation between rankings, not absolute values
-- ρ > 0.9: Very strong correlation
-- ρ 0.7-0.9: Strong correlation
-- ρ 0.5-0.7: Moderate correlation
-- ρ < 0.5: Weak correlation
-
-**Use when**: Order matters more than exact values
-
-#### Kendall's Tau (τ)
-
-**Interpretation**: Similar to Spearman but based on pairwise concordance
-
-**Use when**: You have many tied values
-
-#### Pearson Correlation (r)
-
-**Interpretation**: Linear correlation between scores
-
-**Use when**: Exact score values matter, not just order
-
-### Pairwise Comparison Metrics
-
-#### Agreement Rate
-
-```
-Agreement = (Matching Decisions) / (Total Comparisons)
+```text
+binary decision?
+├─ yes -> precision / recall / F1 and agreement checks
+└─ no
+   ├─ ranking or scored judgment -> correlation metrics
+   └─ pairwise comparison -> win rate and position consistency
 ```
 
-**Interpretation**: Simple percentage of agreement
+## Common Use Cases
 
-#### Position Consistency
+- validating an automated judge against humans -> kappa or Spearman
+- comparing two prompt variants -> win rate plus position consistency
+- monitoring a live evaluation system -> rolling agreement, bias indicators,
+  and score distribution checks
 
-```
-Consistency = (Consistent across position swaps) / (Total comparisons)
-```
+## Warning Signs
 
-**Interpretation**: How often does swapping position change the decision?
+- strong agreement but weak rank correlation
+- high length correlation in a quality judge
+- low position consistency in pairwise evaluation
+- one criterion drifting while the overall score looks stable
 
-## Selection Decision Tree
-
-```
-What type of evaluation task?
-│
-├── Binary classification (pass/fail)
-│   └── Use: Precision, Recall, F1, Cohen's κ
-│
-// ... (8 lines trimmed)
-│
-└── Multi-label classification
-    └── Use: Macro-F1, Micro-F1, Per-label metrics
-```
-
-## Metric Selection by Use Case
-
-### Use Case 1: Validating Automated Evaluation
-
-**Goal**: Ensure automated evaluation correlates with human judgment
-
-**Recommended Metrics**:
-1. Primary: Spearman's ρ (for ordinal scales) or Cohen's κ (for categorical)
-2. Secondary: Per-criterion agreement
-3. Diagnostic: Confusion matrix for systematic errors
-
-### Use Case 2: Comparing Two Models
-
-**Goal**: Determine which model produces better outputs
-
-**Recommended Metrics**:
-1. Primary: Win rate (from pairwise comparison)
-2. Secondary: Position consistency (bias check)
-3. Diagnostic: Per-criterion breakdown
-
-### Use Case 3: Quality Monitoring
-
-**Goal**: Track evaluation quality over time
-
-**Recommended Metrics**:
-1. Primary: Rolling agreement with human spot-checks
-2. Secondary: Score distribution stability
-3. Diagnostic: Bias indicators (position, length)
-
-## Interpreting Metric Results
-
-### Good Evaluation System Indicators
-
-| Metric | Good | Acceptable | Concerning |
-|--------|------|------------|------------|
-| Spearman's ρ | > 0.8 | 0.6-0.8 | < 0.6 |
-| Cohen's κ | > 0.7 | 0.5-0.7 | < 0.5 |
-| Position consistency | > 0.9 | 0.8-0.9 | < 0.8 |
-| Length correlation | < 0.2 | 0.2-0.4 | > 0.4 |
-
-### Warning Signs
-
-1. **High agreement but low correlation**: May indicate calibration issues
-2. **Low position consistency**: Position bias affecting results
-3. **High length correlation**: Length bias inflating scores
-4. **Per-criterion variance**: Some criteria may be poorly defined
-
-## Reporting Template
-
-```markdown
-## Evaluation System Metrics Report
-
-### Human Agreement
-- Spearman's ρ: 0.82 (p < 0.001)
-- Cohen's κ: 0.74
-// ... (13 lines trimmed)
-### Recommendations
-- All metrics within acceptable ranges
-- Monitor "Clarity" criterion - lower agreement may indicate need for rubric refinement
-```
-
-## Quick Reference Table
-
-| Metric | Type | Best For | Interpretation |
-|--------|------|----------|----------------|
-| Precision | Classification | Avoiding false positives | Higher = fewer false approvals |
-| Recall | Classification | Avoiding false negatives | Higher = fewer missed items |
-| F1 | Classification | Balanced measure | Higher = better overall |
-| Cohen's κ | Agreement | Categorical judgments | >0.7 is good |
-| Spearman's ρ | Correlation | Ordinal rankings | >0.8 is good |
-| Kendall's τ | Correlation | Rankings with ties | >0.7 is good |
-| Position consistency | Bias | Pairwise comparisons | >0.9 is good |
+Choose metrics that help explain failure modes, not only produce one headline
+number.

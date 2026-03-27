@@ -5,106 +5,76 @@ description: Provides authentication and authorization patterns for JWT, OAuth2,
 
 # Authentication & Authorization Patterns
 
-
-## Contents
-
-- [When to Use](#when-to-use)
-- [JWT Authentication](#jwt-authentication)
-- [Session-Based Authentication](#session-based-authentication)
-- [OAuth2 / Social Login](#oauth2-social-login)
-- [Authorization Patterns](#authorization-patterns)
-- [Security Essentials](#security-essentials)
-- [Common Pitfalls](#common-pitfalls)
+Use this skill when the main task is choosing or implementing an auth model, not when auditing an already-built system for broad OWASP issues.
 
 ## When to Use
 
-- Implementing user authentication (JWT, sessions, OAuth2)
-- Securing REST or GraphQL APIs
-- Implementing RBAC or permission-based access control
-- Adding social login or SSO
-- Debugging auth issues
+- Adding JWT, session, or OAuth2 authentication
+- Protecting REST or GraphQL routes
+- Implementing RBAC or permission checks
+- Debugging token, cookie, or session bugs
+- Hardening login, refresh, or logout flows
 
-## JWT Authentication
+## Core Patterns
 
-### Token Generation and Verification
+### JWT
+
+- Issue short-lived access tokens.
+- Store refresh tokens hashed in the database.
+- Prefer `httpOnly`, `secure`, `sameSite` cookies over `localStorage`.
+- Reject missing, expired, or malformed tokens before route logic runs.
 
 ```typescript
-import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+function requireJwt(req: Request, res: Response, next: NextFunction) {
+  const token = req.cookies.accessToken;
+  if (!token) return res.status(401).json({ error: "Authentication required" });
 
-interface JWTPayload {
-  userId: string;
-// ... (27 lines trimmed)
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    next();
+  } catch {
     return res.status(401).json({ error: "Invalid token" });
   }
 }
 ```
 
-### Refresh Token Flow
+### Sessions
 
-Store refresh tokens hashed in the database. On refresh: verify JWT, look up hashed token, check expiry, issue new access token. On logout: delete the stored token. On "logout all devices": delete all tokens for that user.
-
-## Session-Based Authentication
+- Use server-side sessions when you want revocation and simpler browser flows.
+- Back sessions with Redis or another shared store in multi-instance deployments.
+- Enable CSRF protection for session-authenticated form or browser flows.
 
 ```typescript
-import session from "express-session";
-import RedisStore from "connect-redis";
-
 app.use(
   session({
-// ... (9 lines trimmed)
-    },
+    store: redisStore,
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: true, sameSite: "strict" },
   }),
 );
 ```
 
-## OAuth2 / Social Login
+### Authorization
 
-Use Passport.js strategies (Google, GitHub, etc.). On callback, find-or-create user by provider ID, then either create a session or issue JWT tokens.
-
-## Authorization Patterns
-
-### RBAC with Role Hierarchy
-
-```typescript
-const roleHierarchy: Record<Role, Role[]> = {
-  [Role.ADMIN]: [Role.ADMIN, Role.MODERATOR, Role.USER],
-  [Role.MODERATOR]: [Role.MODERATOR, Role.USER],
-  [Role.USER]: [Role.USER],
-};
-
-function requireRole(...roles: Role[]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    if (!roles.some((role) => roleHierarchy[req.user.role].includes(role))) {
-      return res.status(403).json({ error: "Insufficient permissions" });
-    }
-    next();
-  };
-}
-```
-
-### Permission-Based Access
-
-Map roles to granular permissions (`read:users`, `write:posts`, etc.). Check with `requirePermission(Permission.READ_USERS)` middleware.
-
-### Resource Ownership
-
-Check `resource.userId === req.user.userId` before allowing mutations. Admins bypass ownership checks.
+- Use RBAC for broad role gates.
+- Use permission checks for action-level control.
+- Use ownership checks for per-resource writes.
+- Keep authorization on the server side, not only in the client.
 
 ## Security Essentials
 
-- Hash passwords with bcrypt (saltRounds=12) or argon2. Never store plain text.
-- Short-lived access tokens (15-30 min). Long-lived refresh tokens stored hashed in DB.
-- Cookie flags: `httpOnly`, `secure`, `sameSite: "strict"`.
-- Rate limit auth endpoints (5 attempts per 15 min window).
-- Validate all input (email format, password strength with zod or similar).
-- Implement CSRF protection for session-based auth.
-- Log security events: login attempts, failed auth, privilege escalation.
+- Hash passwords with Argon2 or bcrypt.
+- Rate-limit auth endpoints.
+- Rotate or revoke refresh tokens on compromise.
+- Log login failures, lockouts, and privilege changes.
+- Keep reset and magic-link tokens short-lived and signed.
 
 ## Common Pitfalls
 
-- Storing JWTs in localStorage (XSS vulnerable) -- use httpOnly cookies instead.
-- Tokens without expiration.
-- Auth checks only on the client side.
-- Insecure password reset flows (use short-lived signed tokens).
-- No rate limiting on login endpoints.
+- JWTs in `localStorage`
+- Tokens without expiration
+- Missing CSRF protection in session flows
+- Client-only auth checks
+- No login throttling or suspicious-event logging

@@ -93,7 +93,11 @@ Task:
   prompt: |
     Review all uncommitted changes for code quality issues.
 
-# ... (18 lines trimmed)
+    Focus on:
+    - correctness or regression risk
+    - security and data handling issues
+    - missing tests and verification gaps
+    - file/line-specific findings ordered by severity
 
     Write your complete review as a single markdown document.
 ```
@@ -115,7 +119,11 @@ Task:
   prompt: |
     Analyze the changes for dependency and breaking change issues.
 
-# ... (20 lines trimmed)
+    Focus on:
+    - direct and transitive dependency changes
+    - config or API compatibility risks
+    - migration steps required before release
+    - lockfile or generated file drift
 
     Write your complete analysis as a single markdown document.
 ```
@@ -166,7 +174,11 @@ Task:
   prompt: |
     You are a test automation expert. Execute all test suites for the modified code.
 
-# ... (20 lines trimmed)
+    Cover:
+    - which test commands were run
+    - pass/fail status and notable failures
+    - flaky or skipped areas
+    - whether additional validation is still needed
 
     Write your complete test report as a single markdown document.
 ```
@@ -188,7 +200,11 @@ Task:
   prompt: |
     You are a test automation expert. Based on test results and code changes, identify
     testing gaps.
-# ... (20 lines trimmed)
+    Cover:
+    - changed behavior without direct coverage
+    - edge cases still unverified
+    - integration paths not exercised
+    - highest-value next tests to add
 
     Write your complete analysis as a single markdown document.
 ```
@@ -236,7 +252,10 @@ Task:
   prompt: |
     Analyze all changes and categorize them according to Conventional Commits specification.
 
-# ... (14 lines trimmed)
+    Consider:
+    - whether the dominant change is feat, fix, refactor, docs, test, or chore
+    - whether there are separate independent change groups
+    - whether the scope should name a specific subproject
 
     Write your complete categorization as a single markdown document.
 ```
@@ -258,7 +277,10 @@ Task:
   prompt: |
     You are an expert at writing clear, well-structured Conventional Commits messages.
     Create commit message(s) based on the change categorization.
-# ... (17 lines trimmed)
+    Output:
+    - one preferred commit message
+    - optional alternatives if the diff splits naturally
+    - brief rationale for scope choice when ambiguous
 
     Write the commit messages as a single markdown document with clear delimiters.
 ```
@@ -302,7 +324,11 @@ Task:
   prompt: |
     You are a deployment engineer specializing in git workflows and CI/CD.
 
-# ... (27 lines trimmed)
+    Validate:
+    - branch is ready for push or PR
+    - required checks/tests are identified
+    - release or deployment implications are called out
+    - any blockers to merge are explicit
 
     Write your complete validation as a single markdown document.
 ```
@@ -367,7 +393,11 @@ Task:
   prompt: |
     You are a technical writer specializing in pull request documentation.
     Create a comprehensive PR description.
-# ... (24 lines trimmed)
+    Include:
+    - summary of the change
+    - affected areas and risk notes
+    - validation performed
+    - follow-up work or rollout notes
 
     Write the complete PR description as a single markdown document.
 ```
@@ -422,7 +452,8 @@ Git workflow complete!
 [List all .git-workflow/ output files]
 
 ## Workflow Summary
-# ... (19 lines trimmed)
+1. Review code quality and dependency impact before committing.
+2. Run tests and identify remaining test gaps.
 3. Hotfix Branch: For critical issues, create hotfix branch from main
 4. Communication: Notify team via designated channels
 ```

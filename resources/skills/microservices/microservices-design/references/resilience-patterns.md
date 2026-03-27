@@ -1,61 +1,122 @@
 # Resilience Patterns
 
+Compact patterns for building fault-tolerant distributed systems.
+
 ## Circuit Breaker Pattern
 
 ```python
 from enum import Enum
-from datetime import datetime, timedelta
-from typing import Callable, Any
+
 
 class CircuitState(Enum):
-// ... (74 lines trimmed)
-        payment_client.process_payment,
-        payment_data
-    )
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold: int = 5):
+        self.failure_threshold = failure_threshold
+        self.failures = 0
+        self.state = CircuitState.CLOSED
+
+    async def call(self, fn, *args, **kwargs):
+        if self.state == CircuitState.OPEN:
+            raise RuntimeError("dependency unavailable")
+        try:
+            result = await fn(*args, **kwargs)
+            self.failures = 0
+            self.state = CircuitState.CLOSED
+            return result
+        except Exception:
+            self.failures += 1
+            if self.failures >= self.failure_threshold:
+                self.state = CircuitState.OPEN
+            raise
 ```
+
+Use for:
+- external service calls
+- database or cache dependencies
+- high-fanout service hops
 
 ## Retry with Exponential Backoff
 
 ```python
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+import asyncio
+import random
 
-@retry(
-    stop=stop_after_attempt(5),
-    wait=wait_exponential(multiplier=1, min=2, max=60),
-    retry=retry_if_exception_type((ConnectionError, TimeoutError))
-)
-async def call_external_service(data: dict):
-    """Call with automatic retry and exponential backoff."""
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        response = await client.post(SERVICE_URL, json=data)
-        response.raise_for_status()
-        return response.json()
+
+async def retry_with_backoff(fn, *, attempts: int = 5, base_delay: float = 0.1):
+    for attempt in range(attempts):
+        try:
+            return await fn()
+        except (ConnectionError, TimeoutError):
+            if attempt == attempts - 1:
+                raise
+            delay = min(5.0, base_delay * (2 ** attempt))
+            await asyncio.sleep(delay + random.uniform(0, delay / 4))
 ```
+
+Only retry:
+- timeouts
+- temporary network failures
+- rate limits or 503-style conditions
 
 ## Bulkhead Pattern
 
 ```python
 import asyncio
-from contextlib import asynccontextmanager
+
 
 class Bulkhead:
-    """Isolate resources to limit failure impact."""
-// ... (24 lines trimmed)
-async def process_payment(data: dict):
-    async with payment_bulkhead.acquire():
-        return await payment_service.charge(data)
+    def __init__(self, concurrency: int):
+        self._semaphore = asyncio.Semaphore(concurrency)
+
+    async def run(self, fn, *args, **kwargs):
+        async with self._semaphore:
+            return await fn(*args, **kwargs)
+
+
+payment_bulkhead = Bulkhead(20)
+inventory_bulkhead = Bulkhead(40)
 ```
+
+Use separate pools for:
+- payment paths
+- inventory or search
+- reporting and back-office jobs
 
 ## Timeout Pattern
 
 ```python
 import asyncio
-from functools import wraps
 
-def with_timeout(seconds: float):
-    """Decorator to add timeout to async functions."""
-// ... (16 lines trimmed)
-async def call_slow_service(data: dict):
-    """This will timeout after 5 seconds."""
-    return await slow_service.process(data)
+
+async def call_with_timeout(fn, seconds: float):
+    async with asyncio.timeout(seconds):
+        return await fn()
 ```
+
+Recommended hierarchy:
+- user request budget at the edge
+- shorter child timeouts inside
+- never let child operations outlive the parent request
+
+## Saga Pattern
+
+```text
+1. Create order
+2. Charge payment
+3. Reserve inventory
+4. Confirm shipment
+
+Compensations:
+- refund payment if inventory fails
+- cancel order if payment fails
+```
+
+Use a saga when:
+- one workflow spans multiple services
+- 2PC is too expensive or unavailable
+- compensating actions are well-defined

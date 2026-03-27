@@ -67,7 +67,35 @@ CREATE OR REPLACE FUNCTION create_market_with_position(
   position_data jsonb
 )
 RETURNS jsonb
-// ... (10 lines trimmed)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  new_market_id uuid;
+  new_position_id uuid;
+BEGIN
+  INSERT INTO markets (name, creator_id, status)
+  VALUES (
+    market_data->>'name',
+    (market_data->>'creator_id')::uuid,
+    COALESCE(market_data->>'status', 'draft')
+  )
+  RETURNING id INTO new_market_id;
+
+  INSERT INTO positions (market_id, side, amount)
+  VALUES (
+    new_market_id,
+    position_data->>'side',
+    (position_data->>'amount')::numeric
+  )
+  RETURNING id INTO new_position_id;
+
+  RETURN jsonb_build_object(
+    'success', true,
+    'market_id', new_market_id,
+    'position_id', new_position_id
+  );
+EXCEPTION
+  WHEN OTHERS THEN
     RETURN jsonb_build_object('success', false, 'error', SQLERRM);
 END;
 $$;

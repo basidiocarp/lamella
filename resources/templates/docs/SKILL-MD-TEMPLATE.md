@@ -2,12 +2,14 @@
 
 <!--
 ABOUT THIS TEMPLATE:
-This template helps you write skills (slash commands) that Claude can execute effectively.
+This template helps you write skills that Claude can execute effectively.
 A well-structured skill is the difference between Claude guessing at what you want and
 Claude executing precisely what you need.
 
 Skills are markdown files that Claude reads and follows as instructions.
-Place skills in your project's skills/ directory or ~/.claude/skills/ for global skills.
+Place them in the layout that matches your environment, for example
+`resources/skills/<category>/<name>/SKILL.md` in Lamella or `skills/<name>/SKILL.md`
+in a standalone Claude plugin.
 
 WHY STRUCTURE MATTERS:
 - Purpose tells Claude WHAT this skill is for (so it can decide when to use it)

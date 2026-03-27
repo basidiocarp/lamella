@@ -119,7 +119,15 @@ $                 - End anchor
 
 ### ✅ Matches
 - `A123` → ✓ Full match
-// ... (14 lines trimmed)
+- `B9999` → ✓ Full match
+
+### ❌ Non-matches
+- `AA123` → extra leading letter
+- `a12` → too short and lowercase start
+
+### Fix Strategy
+- If lowercase should be valid, expand the first character class.
+- If length should vary, change the quantifier instead of duplicating branches.
 - **Fix**: Use `[A-Za-z]` instead of `[A-Z]`
 
 ## Suggested Improvements

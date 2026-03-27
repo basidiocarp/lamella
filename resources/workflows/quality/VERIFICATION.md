@@ -94,7 +94,7 @@ npx tsc --noEmit && npx lint-staged && npm test
 
 Run all core phases PLUS deployment-specific checks in parallel:
 
-**Agents (parallel):** `deploy-checker` + `env-validator` + `dep-auditor`
+**Agents (parallel):** `deploy-checker` + `infra-auditor` + `dep-auditor`
 
 Additional checks:
 - All required env vars set

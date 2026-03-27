@@ -3,106 +3,26 @@ name: git-analyze-issue
 description: Analyzes a GitHub issue and creates a detailed technical specification. Use when starting work on a GitHub issue, creating technical specs from issues, or planning implementation.
 argument-hint: Issue number (e.g., 42)
 ---
-Please analyze GitHub issue #$ARGUMENTS and create a technical specification.
 
-Follow these steps:
+# GitHub Issue to Technical Spec
 
-1. Check if the issue is already loaded:
-   - Look for the issue file in `./specs/issues/` folder
-   - File naming pattern: `<number-padded-to-3-digits>-<kebab-case-title>.md`
-   - If not found, fetch the issue details from GitHub (see step 2)
+Use this skill to turn issue `#$ARGUMENTS` into a saved technical specification.
 
-2. Fetch the issue details (if not already loaded):
-   - Use your configured GitHub issue workflow, such as `gh issue view`, to fetch the issue details
-   - Save the issue file using the naming pattern above if you want to keep a local copy
+## Core Workflow
 
-3. Understand the requirements thoroughly
-4. Review related code and project structure
-5. Create a technical specification with the format below
+1. check whether the issue is already stored locally
+2. fetch it from GitHub if needed
+3. understand requirements and related code
+4. write the technical specification
+5. save it under `./specs/issues/`
 
-# Technical Specification for Issue #$ARGUMENTS
+## Required Sections
 
-## Issue Summary
-- Title: [Issue title from GitHub]
-- Description: [Brief description from issue]
-- Labels: [Labels from issue]
-- Priority: [High/Medium/Low based on issue content]
-
-## Problem Statement
-[1-2 paragraphs explaining the problem]
-
-## Technical Approach
-[Detailed technical approach]
-
-## Implementation Plan
-1. [Step 1]
-2. [Step 2]
-3. [Step 3]
-
-## Test Plan
-1. Unit Tests:
-   - [test scenario]
-2. Component Tests:
-   - [test scenario]
-3. Integration Tests:
-   - [test scenario]
-
-## Files to Modify
-- [file path]: [changes]
-
-## Files to Create
-- [file path]: [purpose]
-
-## Existing Utilities to Leverage
-- [utility name/path]: [purpose]
-
-## Success Criteria
-- [ ] [criterion 1]
-- [ ] [criterion 2]
-
-## Out of Scope
-- [item 1]
-- [item 2]
-
-follow our strict TDD principles, KISS approach, and 300-line file limit.
-
-IMPORTANT: After completing your analysis, SAVE the full technical specification to:
-`./specs/issues/<number-padded-to-3-digits>-<kebab-case-title>.specs.md`
-
-For example, for issue #7 with title "Make code review trigger on any *.SQL and .sh file changes", save to:
-`./specs/issues/007-make-code-review-trigger-on-sql-sh-changes.specs.md`
-
-After saving, provide a brief summary to the user confirming:
-- Issue number and title analyzed
-- File path where the specification was saved
-- Key highlights from the specification (2-3 bullet points)
-
-
----
-
-## Bulk Loading Issues
-
-To load all open issues from the current repository as local markdown files:
-
-```bash
-# List all open issues
-gh issue list --limit 100
-
-# For each issue, fetch details
-gh issue view <number> --json number,title,body,state,createdAt,updatedAt,author,labels,assignees,url
-```
-
-Save to `./specs/issues/` with naming pattern: `<number-padded-to-3-digits>-<kebab-case-title>.md`
-
-Template:
-```markdown
-# Issue #<number>: <title>
-
-**Status:** <state>
-**Created:** <createdAt>
-**Updated:** <updatedAt>
-// ... (11 lines trimmed)
-## Assignees
-
-<assignees or "None">
-```
+- issue summary
+- problem statement
+- technical approach
+- implementation plan
+- test plan
+- files to modify or create
+- success criteria
+- out of scope

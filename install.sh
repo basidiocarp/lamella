@@ -67,7 +67,9 @@ check_deps() {
     command -v jq &>/dev/null || missing+=("jq")
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_error "Missing dependencies: ${missing[*]}"
-        echo "Install with: brew install ${missing[*]}"
+        echo "Install them with your package manager, for example:"
+        echo "  brew install ${missing[*]}"
+        echo "  apt-get install ${missing[*]}"
         exit 1
     fi
 }

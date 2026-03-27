@@ -86,7 +86,40 @@ Create a structured document:
 **Date:** [YYYY-MM-DD] **Project:** [project name/path] **Session Duration:**
 [approximate]
 
-// ... (44 lines trimmed)
+## Current State
+
+- Active task: [what we were trying to finish]
+- Current phase: [exploration | planning | implementation | debugging | review]
+- Progress: [what is done vs what remains]
+
+## What We Did
+
+- [Important action or milestone]
+- [Another completed action]
+
+## Decisions Made
+
+- [Decision] — because [reasoning]
+- [Decision] — because [reasoning]
+
+## Code Changes
+
+- `path/to/file.ts` — [what changed and why]
+- `path/to/other-file.rs` — [what changed and why]
+
+## Open Questions
+
+- [ ] [Question that still needs an answer]
+
+## Context to Remember
+
+- [Constraint, preference, or domain fact the next session needs]
+
+## Next Steps
+
+- [ ] [First action to take on resume]
+- [ ] [Follow-up action]
+
 ## Files to Review on Resume
 
 - `path/to/key/file.ts` — [why it matters]
@@ -161,7 +194,44 @@ re-explanation.
 **Date:** 2025-01-15 **Project:** /path/to/my-api **Session
 Duration:** ~2 hours
 
-// ... (49 lines trimmed)
+## Current State
+
+- Active task: finish JWT auth flow and protect private routes
+- Current phase: implementation moving into verification
+- Progress: middleware and token helpers are in place; tests are incomplete
+
+## What We Did
+
+- Added JWT issue/verify helpers
+- Wired auth middleware into protected API routes
+- Added login route scaffolding and request validation
+
+## Decisions Made
+
+- Use signed JWTs instead of server sessions to keep the API stateless
+- Store auth configuration in environment variables to avoid hardcoded secrets
+
+## Code Changes
+
+- `src/auth/jwt.ts` — token issue/verify helpers
+- `src/auth/middleware.ts` — bearer-token guard for protected routes
+- `src/routes/auth.ts` — login endpoint and credential validation
+
+## Open Questions
+
+- [ ] Should refresh tokens be part of the first release?
+- [ ] Do we need role-based authorization immediately or later?
+
+## Context to Remember
+
+- Existing route tests use Vitest and request fixtures under `tests/helpers/`
+- Team prefers explicit auth errors over generic 500 responses
+
+## Next Steps
+
+- [ ] Add integration tests for login and protected routes
+- [ ] Verify token expiry and invalid-token handling
+- [ ] Update API docs with auth usage examples
 
 - `src/auth/jwt.ts` — Core token logic
 - `src/routes/auth.ts` — Current endpoint implementation

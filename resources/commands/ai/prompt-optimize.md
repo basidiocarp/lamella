@@ -43,7 +43,10 @@ prompt = "Analyze this customer feedback and determine sentiment"
 
 # After: CoT enhanced
 prompt = """Analyze this customer feedback step by step:
-# ... (9 lines trimmed)
+Step 1 - Key emotional phrases:
+Step 2 - Core product friction:
+Step 3 - Severity and affected persona:
+Step 4 - Recommended product response:
 Step 1 - Key emotional phrases:
 [Analysis...]"""
 ```
@@ -81,7 +84,10 @@ Example 1 (Simple case):
 Input: {simple_input}
 Output: {simple_output}
 
-# ... (8 lines trimmed)
+Pattern:
+- restate the structure
+- show one transformed example
+- then apply it directly
 Now apply to: {actual_input}
 """
 ```
@@ -140,7 +146,11 @@ claude_optimized = """
 {background_information}
 </context>
 
-# ... (12 lines trimmed)
+<instructions>
+- use only the provided context
+- identify explicit evidence vs inference
+- cite source sections when available
+</instructions>
 </output_format>
 """
 ````
@@ -153,7 +163,9 @@ gemini_optimized = """
 **Primary Objective:** {goal}
 
 **Process:**
-# ... (10 lines trimmed)
+- list assumptions explicitly
+- separate evidence from recommendation
+- prefer concrete outputs over abstract advice
 - No speculation without disclaimers
 """
 ```
@@ -168,7 +180,11 @@ rag_prompt = """
 {retrieved_documents}
 
 ## Query
-# ... (9 lines trimmed)
+{query}
+
+## Citation Rules
+- attribute claims to specific sources
+- say "not found" when evidence is missing
 Example: "Based on [Source 1], {answer}. [Source 3] corroborates: {detail}. No information found for {gap}."
 """
 ```
@@ -201,7 +217,11 @@ Evaluate AI response quality.
 
 ## Original Task
 {prompt}
-# ... (12 lines trimmed)
+
+## Review Questions
+- Is the prompt explicit about output format?
+- Does it contain unnecessary ambiguity?
+- Are constraints and guardrails concrete?
 Recommendation: Accept/Revise/Reject
 """
 ```
@@ -264,7 +284,8 @@ You are a senior customer support specialist for TechCorp with 5+ years experien
 
 - Product: {product_name}
 - Customer Tier: {tier}
-# ... (37 lines trimmed)
+- Goal: {desired_outcome}
+- Constraints: {constraints}
 ## Format
 
 ```json
@@ -377,7 +398,10 @@ import re
 
 @dataclass
 class ProcessedUser:
-# ... (32 lines trimmed)
+    id: str
+    email: str
+    display_name: str
+    metadata: dict[str, Any]
         metadata={k: v for k, v in raw_data.items() if k not in required}
     )
 ````

@@ -42,7 +42,24 @@ kind: Ingress
 metadata:
   name: argocd-server-ingress
   namespace: argocd
-// ... (18 lines trimmed)
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: argocd.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 443
+  tls:
     - hosts:
         - argocd.example.com
       secretName: argocd-secret
@@ -82,7 +99,15 @@ kind: ConfigMap
 metadata:
   name: argocd-cm
   namespace: argocd
-// ... (9 lines trimmed)
+data:
+  url: https://argocd.example.com
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: $GITHUB_CLIENT_ID
           clientSecret: $GITHUB_CLIENT_SECRET
           orgs:
           - name: my-org

@@ -1,299 +1,402 @@
 # Ansible Security Checklist
 
+## Contents
+
+- [Overview](#overview)
+- [Secrets Management](#secrets-management)
+- [Privilege Escalation](#privilege-escalation)
+- [File Permissions](#file-permissions)
+- [Command Injection Prevention](#command-injection-prevention)
+- [Network Security](#network-security)
+- [SELinux and AppArmor](#selinux-and-apparmor)
+- [Audit and Logging](#audit-and-logging)
+- [Security Validation Checklist](#security-validation-checklist)
+- [Tools for Security Scanning](#tools-for-security-scanning)
+- [Additional Resources](#additional-resources)
+
 ## Overview
 
-This checklist provides comprehensive security validation guidelines for Ansible playbooks, roles, and collections. Use this as a reference when reviewing Ansible code for security vulnerabilities.
+Use this checklist when reviewing playbooks, roles, and collections for secrets exposure, unsafe privilege use, weak file modes, shell injection risks, and insecure network defaults.
 
 ## Secrets Management
 
-### ❌ Bad Practices
+### Bad Practices
 
 ```yaml
-# Hardcoded passwords
-- name: Create user
-  user:
-    name: admin
-    password: "P@ssw0rd123"  # NEVER DO THIS
-// ... (10 lines trimmed)
-vars:
-  db_password: "secret123"  # NEVER DO THIS
-  aws_secret_key: "AKIAIOSFODNN7EXAMPLE"  # NEVER DO THIS
+- hosts: db
+  vars:
+    db_password: "secret123"
+    aws_secret_key: "AKIAIOSFODNN7EXAMPLE"
+  tasks:
+    - name: Create admin user
+      ansible.builtin.user:
+        name: admin
+        password: "P@ssw0rd123"
+
+    - name: Show database password in logs
+      ansible.builtin.debug:
+        msg: "Database password is {{ db_password }}"
 ```
 
-### ✅ Good Practices
+### Good Practices
 
 ```yaml
-# Use Ansible Vault for sensitive data
-- name: Create user
-  user:
-    name: admin
-    password: "{{ admin_password | password_hash('sha512') }}"
-// ... (18 lines trimmed)
-  set_fact:
-    db_password: "{{ lookup('hashi_vault', 'secret=secret/data/db:password') }}"
-  no_log: true
+- hosts: db
+  vars_files:
+    - vault.yml
+  tasks:
+    - name: Create admin user
+      ansible.builtin.user:
+        name: admin
+        password: "{{ vault_admin_password | password_hash('sha512') }}"
+      no_log: true
+
+    - name: Read database password from Vault
+      ansible.builtin.set_fact:
+        db_password: "{{ lookup('community.hashi_vault.hashi_vault', 'secret=secret/data/db:password') }}"
+      no_log: true
 ```
 
-### Best Practices
+### Review Rules
 
-1. **Always use Ansible Vault** for sensitive data
-   ```bash
-   ansible-vault create secrets.yml
-   ansible-vault encrypt existing_file.yml
-   ```
-
-2. **Never commit unencrypted secrets** to version control
-
-3. **Use `no_log: true`** for tasks handling sensitive data
-   ```yaml
-   - name: Set database password
-     set_fact:
-       db_password: "{{ vault_db_password }}"
-     no_log: true
-   ```
-
-4. **Rotate secrets regularly** and use version control for vault IDs
-
-5. **Use different vault passwords** for different environments
+1. Store secrets in Ansible Vault or an external secret manager.
+2. Add `no_log: true` anywhere credentials, tokens, or private keys appear.
+3. Never commit plaintext secrets to the repo or inventory.
+4. Rotate vault credentials and keep separate vault IDs per environment.
+5. Avoid `debug` output for sensitive variables.
 
 ## Privilege Escalation
 
-### ❌ Bad Practices
+### Bad Practices
 
 ```yaml
-# Running entire playbook as root unnecessarily
 - hosts: all
-  become: yes
+  become: true
   become_user: root
   tasks:
-// ... (10 lines trimmed)
-    name: nginx
-    state: present
-  # This will fail without become
+    - name: Check application status
+      ansible.builtin.command: systemctl status myapp
+
+    - name: Read application config
+      ansible.builtin.command: cat /etc/myapp/config.yml
+
+    - name: Install package
+      ansible.builtin.apt:
+        name: nginx
+        state: present
 ```
 
-### ✅ Good Practices
+### Good Practices
 
 ```yaml
-# Only use become when necessary
 - hosts: all
   tasks:
     - name: Check application status
-      command: systemctl status myapp
-// ... (14 lines trimmed)
+      ansible.builtin.command: systemctl status myapp
+      changed_when: false
+
+    - name: Install nginx package
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      become: true
+
+    - name: Write protected configuration
+      ansible.builtin.template:
+        src: myapp.conf.j2
+        dest: /etc/myapp/config.yml
+        owner: root
         group: myapp
-        mode: '0640'
-      become: yes
+        mode: "0640"
+      become: true
 ```
 
-### Best Practices
+### Review Rules
 
-1. **Principle of least privilege** - only escalate when necessary
-2. **Use specific become_user** instead of always root
-3. **Limit sudo access** to specific commands in sudoers
-4. **Audit all become usage** in playbooks
-5. **Use become_flags** carefully and document why
+1. Default to no privilege escalation at play level.
+2. Add `become: true` only to tasks that need it.
+3. Prefer a specific `become_user` when root is unnecessary.
+4. Document any unusual `become_flags` or sudo expectations.
+5. Audit shell commands run under privilege escalation with extra care.
 
 ## File Permissions
 
-### ❌ Bad Practices
+### Bad Practices
 
 ```yaml
-# World-readable sensitive files
-- name: Create SSH key
-  copy:
+- name: Copy private SSH key with weak mode
+  ansible.builtin.copy:
     src: id_rsa
-    dest: /home/user/.ssh/id_rsa
-// ... (12 lines trimmed)
+    dest: /home/deploy/.ssh/id_rsa
+    mode: "0644"
+
+- name: Install world-writable script
+  ansible.builtin.copy:
     src: deploy.sh
     dest: /usr/local/bin/deploy.sh
-    mode: '0777'  # WRONG: World writable
+    mode: "0777"
 ```
 
-### ✅ Good Practices
+### Good Practices
 
 ```yaml
-# Appropriate permissions for private keys
-- name: Create SSH key
-  copy:
+- name: Copy private SSH key with strict mode
+  ansible.builtin.copy:
     src: id_rsa
-    dest: /home/user/.ssh/id_rsa
-// ... (27 lines trimmed)
-    owner: appuser
-    group: appgroup
-    mode: '0750'
+    dest: /home/deploy/.ssh/id_rsa
+    owner: deploy
+    group: deploy
+    mode: "0600"
+
+- name: Install deployment script
+  ansible.builtin.copy:
+    src: deploy.sh
+    dest: /usr/local/bin/deploy.sh
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Create application config directory
+  ansible.builtin.file:
+    path: /etc/myapp
+    state: directory
+    owner: root
+    group: myapp
+    mode: "0750"
 ```
 
 ### Permission Guidelines
 
 | File Type | Recommended Mode | Owner | Group |
-|-----------|-----------------|-------|-------|
-| Private keys | 0600 | user | user |
-| Public keys | 0644 | user | user |
-| Config files (sensitive) | 0640 | app | app |
-| Config files (public) | 0644 | app | app |
-| Executables | 0755 | root | root |
-| Directories (sensitive) | 0750 | app | app |
-| Directories (public) | 0755 | app | app |
-| Log files | 0640 | app | app |
+|-----------|------------------|-------|-------|
+| Private keys | `0600` | service user | service user |
+| Public keys | `0644` | service user | service user |
+| Sensitive config | `0640` | root or app user | app group |
+| Public config | `0644` | app user | app group |
+| Executables | `0755` | root | root |
+| Sensitive directories | `0750` | app user | app group |
+| Log files | `0640` | app user | app group |
 
 ## Command Injection Prevention
 
-### ❌ Bad Practices
+### Bad Practices
 
 ```yaml
-# Unvalidated user input in commands
-- name: Process user file
-  shell: "cat {{ user_provided_filename }}"
-  # VULNERABLE: User could provide "; rm -rf /"
-// ... (8 lines trimmed)
-  shell: "mkdir -p {{ directory_name }}"
-  # RISKY: Use file module instead
+- name: Read user-provided file
+  ansible.builtin.shell: "cat {{ user_provided_filename }}"
+
+- name: Create directory from unsanitized input
+  ansible.builtin.shell: "mkdir -p {{ directory_name }}"
+
+- name: Run script with raw argument interpolation
+  ansible.builtin.shell: "/usr/local/bin/script.sh {{ user_input }}"
 ```
 
-### ✅ Good Practices
+### Good Practices
 
 ```yaml
-# Use quote filter for variables in shell
-- name: Process user file
-  shell: "cat {{ user_provided_filename | quote }}"
-  when: user_provided_filename is match('^[a-zA-Z0-9._-]+$')
+- name: Validate incoming filename
+  ansible.builtin.assert:
+    that:
+      - user_provided_filename is match("^[A-Za-z0-9._-]+$")
+    fail_msg: "Filename contains unsupported characters"
 
-// ... (19 lines trimmed)
-  command: /usr/local/bin/script.sh
+- name: Read validated file
+  ansible.builtin.command:
+    argv:
+      - cat
+      - "{{ user_provided_filename }}"
+  changed_when: false
+
+- name: Create application directory safely
+  ansible.builtin.file:
+    path: "{{ directory_name }}"
+    state: directory
+    mode: "0750"
+
+- name: Run script with stdin instead of shell interpolation
+  ansible.builtin.command: /usr/local/bin/script.sh
   args:
     stdin: "{{ user_input }}"
 ```
 
-### Best Practices
+### Review Rules
 
-1. **Prefer modules over command/shell** whenever possible
-2. **Always use quote filter** for variables in shell commands
-3. **Validate input** with regex patterns
-4. **Use whitelist validation** not blacklist
-5. **Never trust user input** without validation
+1. Prefer Ansible modules over `shell` or `command`.
+2. If shell is unavoidable, validate inputs and use `quote`.
+3. Use whitelist validation with `assert` or strict regex tests.
+4. Avoid string-built commands when `argv` or module parameters exist.
+5. Treat all inventory, extra vars, and prompt input as untrusted.
 
 ## Network Security
 
-### ❌ Bad Practices
+### Bad Practices
 
 ```yaml
-# Unencrypted protocols
-- name: Download file
-  get_url:
-    url: http://example.com/file.tar.gz  # WRONG: HTTP not HTTPS
+- name: Download artifact over HTTP
+  ansible.builtin.get_url:
+    url: http://example.com/file.tar.gz
     dest: /tmp/file.tar.gz
-// ... (11 lines trimmed)
+
+- name: Fetch certificate without validation
+  ansible.builtin.uri:
+    url: https://internal.example.com/health
+    validate_certs: false
+
+- name: Render service bound to every interface
+  ansible.builtin.template:
+    src: app.conf.j2
     dest: /etc/app/config.yml
   vars:
-    bind_address: "0.0.0.0"  # RISKY: Expose to all
+    bind_address: "0.0.0.0"
 ```
 
-### ✅ Good Practices
+### Good Practices
 
 ```yaml
-# Use HTTPS
-- name: Download file
-  get_url:
+- name: Download artifact over HTTPS with checksum
+  ansible.builtin.get_url:
     url: https://example.com/file.tar.gz
     dest: /tmp/file.tar.gz
-// ... (22 lines trimmed)
-    port: '443'
-    proto: tcp
-    src: '10.0.0.0/8'  # Only from internal network
+    checksum: "sha256:4d4f8e4dfd2f6b0f5b8cb7d9f9d84b2c4bc53a18d5cb4e41f5d35dca2f1d0abc"
+
+- name: Validate internal health endpoint
+  ansible.builtin.uri:
+    url: https://internal.example.com/health
+    validate_certs: true
+    status_code: 200
+
+- name: Restrict app listener and firewall
+  block:
+    - name: Render service config
+      ansible.builtin.template:
+        src: app.conf.j2
+        dest: /etc/app/config.yml
+      vars:
+        bind_address: "10.0.5.10"
+
+    - name: Allow HTTPS from internal network only
+      ansible.posix.firewalld:
+        port: 443/tcp
+        source: 10.0.0.0/8
+        permanent: true
+        state: enabled
+        immediate: true
 ```
 
-### Best Practices
+### Review Rules
 
-1. **Always use HTTPS** for external communications
-2. **Validate SSL certificates** - only disable for testing
-3. **Bind services to specific interfaces** when possible
-4. **Use firewall rules** to restrict access
-5. **Encrypt sensitive data in transit** (TLS/SSL)
+1. Prefer HTTPS and verify certificates by default.
+2. Pin downloads with checksums when practical.
+3. Bind services to the narrowest interface possible.
+4. Restrict ingress with firewall rules or security groups.
+5. Review any `validate_certs: false` as an exception, not a default.
 
 ## SELinux and AppArmor
 
-### Best Practices
+### Good Practices
 
 ```yaml
-# Don't disable SELinux
-- name: Configure SELinux
-  selinux:
+- name: Keep SELinux enforcing
+  ansible.posix.selinux:
     policy: targeted
-    state: enforcing  # Not permissive or disabled
-// ... (11 lines trimmed)
-# Manage AppArmor profiles
-- name: Load AppArmor profile
-  command: apparmor_parser -r /etc/apparmor.d/usr.bin.myapp
+    state: enforcing
+
+- name: Label application data path
+  community.general.sefcontext:
+    target: "/srv/myapp(/.*)?"
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: Apply SELinux labels
+  ansible.builtin.command: restorecon -Rv /srv/myapp
+  changed_when: false
+
+- name: Reload AppArmor profile
+  ansible.builtin.command: apparmor_parser -r /etc/apparmor.d/usr.bin.myapp
+  changed_when: false
 ```
+
+### Review Rules
+
+1. Do not disable SELinux or AppArmor just to make a task pass.
+2. Fix labels, profiles, and file contexts instead of weakening enforcement.
+3. Use purpose-built modules when available before falling back to shell commands.
 
 ## Audit and Logging
 
-### Best Practices
+### Good Practices
 
 ```yaml
-# Log security-relevant actions
-- name: Create admin user
-  user:
-    name: admin
-    groups: sudo
-// ... (15 lines trimmed)
+- name: Create audited admin user
+  block:
+    - name: Create admin user
+      ansible.builtin.user:
+        name: admin
+        groups: sudo
+        append: true
+
+    - name: Record admin change
+      ansible.builtin.lineinfile:
+        path: /var/log/ansible-security.log
+        create: true
+        line: "admin user ensured on {{ inventory_hostname }}"
+        mode: "0640"
+      changed_when: false
   tags:
     - security
-    - ssh
+    - identity
 ```
+
+### Review Rules
+
+1. Tag security-relevant tasks so reviews and selective runs are easier.
+2. Make privileged account, firewall, and secret-management changes easy to audit.
+3. Avoid logging raw credentials while still preserving operational traceability.
 
 ## Security Validation Checklist
 
-Before running playbooks in production, verify:
+Before production runs, verify:
 
-- [ ] No hardcoded secrets (passwords, API keys, tokens)
-- [ ] All sensitive data encrypted with Ansible Vault
-- [ ] `no_log: true` used for tasks handling secrets
-- [ ] Privilege escalation only where necessary
-- [ ] File permissions explicitly set (not relying on umask)
-- [ ] Private keys have mode 0600
-- [ ] No world-writable files or directories
-- [ ] Input validation for user-provided variables
-- [ ] Using modules instead of shell/command where possible
-- [ ] Quote filter used for variables in shell commands
-- [ ] HTTPS used instead of HTTP
-- [ ] SSL certificate validation enabled
-- [ ] Services bound to specific interfaces, not 0.0.0.0
-- [ ] Firewall rules configured appropriately
-- [ ] SELinux/AppArmor not disabled
-- [ ] Security contexts set correctly
-- [ ] Security-relevant actions logged
-- [ ] Regular security updates applied
-- [ ] Unused packages removed
-- [ ] Default credentials changed
-- [ ] Unnecessary services disabled
+- [ ] No hardcoded passwords, keys, or tokens appear in playbooks, inventory, or vars files.
+- [ ] Secrets come from Vault or a secret manager.
+- [ ] Sensitive tasks use `no_log: true`.
+- [ ] Privilege escalation is limited to tasks that require it.
+- [ ] File modes are explicit and appropriate for the resource type.
+- [ ] Private keys use `0600`.
+- [ ] No world-writable files or directories are created unintentionally.
+- [ ] User-controlled input is validated before shell or command execution.
+- [ ] Modules replace `shell` and `command` where possible.
+- [ ] External downloads use HTTPS and certificate validation.
+- [ ] Services do not bind to `0.0.0.0` without a documented reason.
+- [ ] SELinux or AppArmor remains enabled.
+- [ ] Security-relevant changes are tagged or otherwise auditable.
 
 ## Tools for Security Scanning
 
-1. **ansible-lint** - Includes security-focused rules
+1. `ansible-lint`
    ```bash
-   ansible-lint --profile security playbook.yml
+   ansible-lint --profile safety playbook.yml
    ```
 
-2. **Ansible Galaxy Security Scan**
+2. `checkov`
    ```bash
-   ansible-galaxy collection scan namespace.collection
+   checkov -d .
    ```
 
-3. **Git-secrets** - Prevent committing secrets
-   ```bash
-   git secrets --scan
-   ```
-
-4. **Trivy** - Scan for vulnerabilities
+3. `trivy`
    ```bash
    trivy config .
    ```
 
+4. `git-secrets`
+   ```bash
+   git secrets --scan
+   ```
+
 ## Additional Resources
 
-- [Ansible Security Automation](https://www.ansible.com/use-cases/security-automation)
-- [Ansible Best Practices - Security](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#best-practices-for-variables-and-vaults)
+- [Ansible security documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_privilege_escalation.html)
+- [Ansible Vault guide](https://docs.ansible.com/ansible/latest/vault_guide/index.html)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks/)

@@ -1,6 +1,6 @@
 # Research Prompt Template
 
-For phases requiring research before planning:
+Use this template when a phase needs research before plan creation.
 
 ```markdown
 ---
@@ -8,61 +8,36 @@ phase: XX-name
 type: research
 topic: [research-topic]
 ---
-// ... (96 lines trimmed)
 
-<workflow>
-Step 1 - Initialize:
-```bash
-# Create skeleton file
-cat > .planning/phases/XX-name/FINDINGS.md <<'EOF'
 # [Topic] Research Findings
 
 ## Summary
-[Will complete at end]
+[Complete at the end]
 
 ## Recommendations
-[Will complete at end]
+[Complete at the end]
 
 ## Key Findings
-[Append findings here as discovered]
+- [Add findings as discovered]
 
 ## Code Examples
-[Append examples here as found]
+- [Add only high-value examples]
 
 ## Metadata
-[Will complete at end]
-EOF
+- sources checked
+- assumptions
+- open questions
 ```
 
-Step 2 - Append findings as discovered:
-After researching each aspect, immediately append to Key Findings section
+## When to Use
 
-Step 3 - Finalize at end:
-// ... (77 lines trimmed)
-- Quality report distinguishes verified from assumed
-- Ready to inform PLAN.md creation
-</success_criteria>
-```
+- technology choice is unclear
+- library or API behavior needs verification
+- architecture decisions depend on unfamiliar tradeoffs
+- multiple valid implementation paths exist
 
-<when_to_use>
-Create RESEARCH.md before PLAN.md when:
-- Technology choice unclear
-- Best practices needed for unfamiliar domain
-- API/library investigation required
-- Architecture decision pending
-- Multiple valid approaches exist
-</when_to_use>
+## Success Criteria
 
-<example>
-```markdown
----
-phase: 02-auth
-type: research
-topic: JWT library selection for Next.js App Router
----
-// ... (36 lines trimmed)
-- Known limitations documented
-- Verification checklist completed
-</success_criteria>
-```
-</example>
+- findings distinguish verified facts from assumptions
+- recommendations are actionable for `PLAN.md`
+- major tradeoffs and open questions are explicit

@@ -205,7 +205,16 @@ docker compose exec app sh
 
 # Shell into failed container
 docker compose run --entrypoint sh app
-// ... (9 lines trimmed)
+
+# Follow container logs
+docker compose logs -f app
+
+# Inspect resolved configuration
+docker compose config
+
+# Check process table and health state
+docker compose top app
+docker inspect "$(docker compose ps -q app)"
 
 # Copy files from container
 docker compose cp app:/app/logs ./logs

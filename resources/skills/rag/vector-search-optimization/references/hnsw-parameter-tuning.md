@@ -1,15 +1,16 @@
 # HNSW Parameter Tuning
 
-Benchmark and recommend HNSW parameters for your dataset.
+Use this reference when HNSW settings are the main retrieval lever.
 
-```python
-import numpy as np
-from typing import List, Tuple
-import time
+## Main Parameters
 
-def benchmark_hnsw_parameters(
-// ... (92 lines trimmed)
-        "ef_search": ef_search,
-        "notes": f"Estimated for {num_vectors:,} vectors, {target_recall:.0%} recall"
-    }
-```
+- `M`: graph connectivity and memory cost
+- `ef_construction`: build-time search depth
+- `ef_search`: query-time recall versus latency
+
+## Tuning Order
+
+1. Pick sane defaults for the dataset size.
+2. Benchmark recall and latency at multiple `ef_search` levels.
+3. Increase `M` only if recall targets remain out of reach.
+4. Re-test after any quantization or embedding-model change.

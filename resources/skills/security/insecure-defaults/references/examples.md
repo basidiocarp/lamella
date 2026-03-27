@@ -79,7 +79,11 @@ def test_token_creation():
 def bootstrap_admin():
     """Create default admin account if none exists"""
     if not User.query.filter_by(role='admin').first():
-// ... (5 lines trimmed)
+        admin = User(
+            username='admin',
+            password=hash_password('admin123'),
+            role='admin',
+        )
         db.session.add(admin)
         db.session.commit()
 ```

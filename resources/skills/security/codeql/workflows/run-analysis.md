@@ -55,7 +55,16 @@ if [ -z "$DB_NAME" ]; then
   # Discover databases inside OUTPUT_DIR
   FOUND_DBS=()
   while IFS= read -r yml; do
-// ... (21 lines trimmed)
+    FOUND_DBS+=("$(dirname "$yml")")
+  done < <(find "$OUTPUT_DIR" -maxdepth 2 -name "codeql-database.yml" 2>/dev/null)
+
+  if [ "${#FOUND_DBS[@]}" -eq 0 ]; then
+    echo "No CodeQL databases found in $OUTPUT_DIR" >&2
+    exit 1
+  fi
+
+  DB_NAME="${FOUND_DBS[0]}"
+fi
 
 CODEQL_LANG=$(codeql resolve database --format=json -- "$DB_NAME" | jq -r '.languages[0]')
 echo "Using: $DB_NAME (language: $CODEQL_LANG)"
@@ -177,7 +186,12 @@ cat > "$OUTPUT_DIR/rulesets.txt" << RULESETS
 # Generated: $(date -Iseconds)
 # Scan mode: <run-all|important-only>
 # Database: $DB_NAME
-// ... (8 lines trimmed)
+# Query packs:
+<one query pack per line>
+
+# Model packs:
+<one model pack per line, or "none">
+
 ## Threat models:
 <threat model selection, or "default (remote)">
 RULESETS
@@ -256,7 +270,14 @@ Report to user:
 **Output directory:** $OUTPUT_DIR
 **Database:** $DB_NAME
 **Language:** <LANG>
-// ... (12 lines trimmed)
+**Scan mode:** <run-all|important-only>
+**Threat models:** <selection>
+**Result count:** <N findings>
+**Top rules:** <top 3 rule IDs or "none">
+
+**Artifacts**
+- Rulesets: `$OUTPUT_DIR/rulesets.txt`
+- SARIF (raw): `$OUTPUT_DIR/raw/results.sarif`
 - SARIF (final): $OUTPUT_DIR/results/results.sarif
 - SARIF (unfiltered): $OUTPUT_DIR/raw/results.sarif
 - Rulesets: $OUTPUT_DIR/rulesets.txt

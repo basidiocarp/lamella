@@ -1,126 +1,89 @@
 # Database Design
 
-## Normalization Levels
+## Normalization
 
 ```sql
--- 1NF: Atomic values, no repeating groups
--- Bad: Non-atomic phone column
-CREATE TABLE customers_bad (
-    customer_id INT PRIMARY KEY,
-    name VARCHAR(100),
-// ... (64 lines trimmed)
-    street VARCHAR(200) NOT NULL,
-    zip_code VARCHAR(10) NOT NULL REFERENCES zip_codes(zip_code)
+CREATE TABLE customers (
+    customer_id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE customer_phones (
+    customer_id BIGINT NOT NULL REFERENCES customers(customer_id),
+    phone_number VARCHAR(30) NOT NULL,
+    PRIMARY KEY (customer_id, phone_number)
 );
 ```
+
+Normalize repeating values into separate tables before adding denormalized
+shortcuts.
 
 ## Primary and Foreign Keys
 
 ```sql
--- Natural vs Surrogate keys
--- Natural key (business meaning)
 CREATE TABLE countries (
-    country_code CHAR(2) PRIMARY KEY,  -- ISO 3166-1 alpha-2
+    country_code CHAR(2) PRIMARY KEY,
     country_name VARCHAR(100) NOT NULL
-// ... (46 lines trimmed)
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
-        ON DELETE RESTRICT  -- Prevent deleting product if used in orders
+);
+
+CREATE TABLE orders (
+    order_id BIGSERIAL PRIMARY KEY,
+    customer_id BIGINT NOT NULL REFERENCES customers(customer_id)
 );
 ```
 
-## Constraints and Validation
+## Constraints
 
 ```sql
--- CHECK constraints
 CREATE TABLE employees (
-    employee_id SERIAL PRIMARY KEY,
+    employee_id BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-// ... (39 lines trimmed)
-        booked_during WITH &&
-    )  -- Prevent overlapping bookings for same room
+    salary NUMERIC(12,2) NOT NULL CHECK (salary >= 0),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('active', 'inactive'))
 );
 ```
 
 ## Indexing Strategy
 
 ```sql
--- Index foreign keys (critical for JOIN performance)
 CREATE INDEX idx_orders_customer_id ON orders(customer_id);
-CREATE INDEX idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX idx_order_items_product_id ON order_items(product_id);
 
-// ... (11 lines trimmed)
-CREATE UNIQUE INDEX idx_users_active_email ON users(LOWER(email))
+CREATE UNIQUE INDEX idx_users_active_email
+ON users (LOWER(email))
 WHERE deleted_at IS NULL;
--- Ensures no duplicate emails among active users
 ```
 
-## Common Design Patterns
+## Temporal and Soft Deletes
 
 ```sql
--- Polymorphic associations (flexible but harder to enforce integrity)
-CREATE TABLE comments (
-    comment_id SERIAL PRIMARY KEY,
-    commentable_type VARCHAR(50) NOT NULL,  -- 'Post', 'Photo', 'Video'
-    commentable_id INT NOT NULL,
-// ... (58 lines trimmed)
-    (2, 'Computers', 1, 1),
-    (3, 'Laptops', 2, 2),
-    (4, 'Desktops', 2, 2);
-```
-
-## Temporal/Historical Data
-
-```sql
--- Slowly Changing Dimension Type 2 (SCD2) - Full history
-CREATE TABLE customer_history (
-    customer_history_id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-// ... (23 lines trimmed)
-CREATE TRIGGER versioning_trigger
-BEFORE INSERT OR UPDATE OR DELETE ON products
-FOR EACH ROW EXECUTE FUNCTION versioning('sys_period', 'products_history', true);
-```
-
-## Soft Deletes
-
-```sql
--- Soft delete pattern
 CREATE TABLE posts (
-    post_id SERIAL PRIMARY KEY,
+    post_id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-// ... (13 lines trimmed)
-SELECT post_id, title, content, author_id, created_at, updated_at
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE VIEW active_posts AS
+SELECT post_id, title
 FROM posts
 WHERE deleted_at IS NULL;
 ```
 
-## Audit Trails
+## Audit Trail
 
 ```sql
--- Audit table pattern
 CREATE TABLE audit_log (
     audit_id BIGSERIAL PRIMARY KEY,
     table_name VARCHAR(100) NOT NULL,
     record_id BIGINT NOT NULL,
-// ... (30 lines trimmed)
-CREATE TRIGGER products_audit
-AFTER INSERT OR UPDATE OR DELETE ON products
-FOR EACH ROW EXECUTE FUNCTION audit_trigger_func();
+    action VARCHAR(20) NOT NULL,
+    changed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 ```
 
-## Schema Design Best Practices
+## Best Practices
 
-1. **Choose appropriate data types**: Use smallest type that fits (INT vs BIGINT, VARCHAR(50) vs TEXT)
-2. **Index foreign keys**: Always index FK columns for JOIN performance
-3. **Avoid NULLs when possible**: Use NOT NULL with defaults
-4. **Use constraints**: Enforce data integrity at database level
-5. **Normalize to 3NF**: Then denormalize strategically for performance
-6. **Consider soft deletes**: For auditing and data recovery
-7. **Plan for growth**: Use BIGINT for high-volume PKs
-8. **Document schema**: Comment tables and complex constraints
-9. **Version control**: Track schema changes with migrations
-10. **Test with realistic data**: Validate design with production-scale data
+1. Choose the smallest data type that fits realistic growth.
+2. Index foreign keys and common filter paths.
+3. Use constraints to enforce integrity at the database layer.
+4. Normalize first, then denormalize deliberately for performance.

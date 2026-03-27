@@ -5,155 +5,44 @@ description: "Designs event stores for event-sourced systems. Use when building 
 
 # Event Store Design
 
+Use this skill when designing the persistence layer for event-sourced systems.
 
-## Contents
+## When to Use
 
-- [When to Use This Skill](#when-to-use-this-skill)
-- [Core Concepts](#core-concepts)
-  - [1. Event Store Architecture](#1-event-store-architecture)
-  - [2. Event Store Requirements](#2-event-store-requirements)
-- [Technology Comparison](#technology-comparison)
-- [Templates](#templates)
-  - [Template 1: PostgreSQL Event Store Schema](#template-1-postgresql-event-store-schema)
-  - [Template 2: Python Event Store Implementation](#template-2-python-event-store-implementation)
-  - [Template 3: EventStoreDB Usage](#template-3-eventstoredb-usage)
-  - [Template 4: DynamoDB Event Store](#template-4-dynamodb-event-store)
-- [Best Practices](#best-practices)
-  - [Do's](#dos)
-  - [Don'ts](#donts)
-- [Resources](#resources)
+- Choosing between EventStoreDB, PostgreSQL, DynamoDB, or streaming-backed approaches
+- Designing stream layout, global ordering, and concurrency checks
+- Defining append-only persistence and replay boundaries
+- Reviewing subscription and projection needs before implementation
 
+## Core Requirements
 
-Comprehensive guide to designing event stores for event-sourced applications.
+- append-only writes
+- per-stream ordering
+- optimistic concurrency
+- replayable event history
+- idempotent append behavior
+- projection or subscription support
 
-## When to Use This Skill
+## Core Workflow
 
-- Designing event sourcing infrastructure
-- Choosing between event store technologies
-- Implementing custom event stores
-- Optimizing event storage and retrieval
-- Setting up event store schemas
-- Planning for event store scaling
+1. Define aggregate and stream boundaries.
+2. Choose the storage technology based on ordering, query, and ops constraints.
+3. Design write contracts around optimistic concurrency and idempotency.
+4. Separate read models and subscriptions from the primary append path.
+5. Plan for event versioning and replay before the first production write.
 
-## Core Concepts
+## Technology Guide
 
-### 1. Event Store Architecture
+| Option | Good fit |
+|-------|----------|
+| EventStoreDB | dedicated event-sourcing platform |
+| PostgreSQL | teams already operating Postgres well |
+| DynamoDB | serverless AWS-native event storage |
+| Kafka | event streaming backbone, not always best as the primary store |
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    Event Store                       │
-├─────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
-│  │   Stream 1   │  │   Stream 2   │  │   Stream 3   │ │
-│  │ (Aggregate)  │  │ (Aggregate)  │  │ (Aggregate)  │ │
-│  ├─────────────┤  ├─────────────┤  ├─────────────┤ │
-│  │ Event 1     │  │ Event 1     │  │ Event 1     │ │
-│  │ Event 2     │  │ Event 2     │  │ Event 2     │ │
-│  │ Event 3     │  │ ...         │  │ Event 3     │ │
-│  │ ...         │  │             │  │ Event 4     │ │
-│  └─────────────┘  └─────────────┘  └─────────────┘ │
-├─────────────────────────────────────────────────────┤
-│  Global Position: 1 → 2 → 3 → 4 → 5 → 6 → ...     │
-└─────────────────────────────────────────────────────┘
-```
+## Guardrails
 
-### 2. Event Store Requirements
-
-| Requirement       | Description                        |
-| ----------------- | ---------------------------------- |
-| **Append-only**   | Events are immutable, only appends |
-| **Ordered**       | Per-stream and global ordering     |
-| **Versioned**     | Optimistic concurrency control     |
-| **Subscriptions** | Real-time event notifications      |
-| **Idempotent**    | Handle duplicate writes safely     |
-
-## Technology Comparison
-
-| Technology       | Best For                  | Limitations                      |
-| ---------------- | ------------------------- | -------------------------------- |
-| **EventStoreDB** | Pure event sourcing       | Single-purpose                   |
-| **PostgreSQL**   | Existing Postgres stack   | Manual implementation            |
-| **Kafka**        | High-throughput streaming | Not ideal for per-stream queries |
-| **DynamoDB**     | Serverless, AWS-native    | Query limitations                |
-| **Marten**       | .NET ecosystems           | .NET specific                    |
-
-## Templates
-
-### Template 1: PostgreSQL Event Store Schema
-
-```sql
--- Events table
-CREATE TABLE events (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    stream_id VARCHAR(255) NOT NULL,
-    stream_type VARCHAR(255) NOT NULL,
-// ... (34 lines trimmed)
-    last_position BIGINT NOT NULL DEFAULT 0,
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### Template 2: Python Event Store Implementation
-
-```python
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Optional, List
-from uuid import UUID, uuid4
-import json
-// ... (166 lines trimmed)
-class ConcurrencyError(Exception):
-    """Raised when optimistic concurrency check fails."""
-    pass
-```
-
-### Template 3: EventStoreDB Usage
-
-```python
-from esdbclient import EventStoreDBClient, NewEvent, StreamState
-import json
-
-# Connect
-client = EventStoreDBClient(uri="esdb://localhost:2113?tls=false")
-// ... (54 lines trimmed)
-def read_category(category: str):
-    """Read all events for a category using system projection."""
-    return read_stream(f"$ce-{category}")
-```
-
-### Template 4: DynamoDB Event Store
-
-```python
-import boto3
-from boto3.dynamodb.conditions import Key
-from datetime import datetime
-import json
-import uuid
-// ... (47 lines trimmed)
-
-Capacity: On-demand or provisioned based on throughput needs
-"""
-```
-
-## Best Practices
-
-### Do's
-
-- **Use stream IDs that include aggregate type** - `Order-{uuid}`
-- **Include correlation/causation IDs** - For tracing
-- **Version events from day one** - Plan for schema evolution
-- **Implement idempotency** - Use event IDs for deduplication
-- **Index appropriately** - For your query patterns
-
-### Don'ts
-
-- **Don't update or delete events** - They're immutable facts
-- **Don't store large payloads** - Keep events small
-- **Don't skip optimistic concurrency** - Prevents data corruption
-- **Don't ignore backpressure** - Handle slow consumers
-
-## Resources
-
-- [EventStoreDB](https://www.eventstore.com/)
-- [Marten Events](https://martendb.io/events/)
-- [Event Sourcing Pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing)
+- never mutate or delete historical events
+- keep payloads small and explicit
+- version events from day one
+- test replay and projection rebuild as first-class workflows

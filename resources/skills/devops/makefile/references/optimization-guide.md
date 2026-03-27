@@ -86,7 +86,12 @@ Use cases for .WAIT:
 build: setup .WAIT compile .WAIT test .WAIT package
 	@echo "Build complete"
 
-// ... (7 lines trimmed)
+release: lint .WAIT build .WAIT publish
+	@echo "Release complete"
+
+deploy: upload-assets .WAIT migrate-db .WAIT restart
+	@echo "Deploy complete"
+
 test: migrate .WAIT run-tests
 	@echo "Tests complete"
 ```
@@ -119,7 +124,16 @@ When to use .NOTPARALLEL with prerequisites:
 .NOTPARALLEL: deploy
 
 deploy: deploy-database deploy-backend deploy-frontend
-// ... (5 lines trimmed)
+deploy-database:
+	./scripts/deploy-db.sh
+
+deploy-backend:
+	./scripts/deploy-backend.sh
+
+deploy-frontend:
+	./scripts/deploy-frontend.sh
+
+program: a.o b.o c.o
 	$(CC) $^ -o $(TARGET)
 # Object files compile in parallel (unaffected by .NOTPARALLEL: deploy)
 ```
@@ -134,7 +148,10 @@ MAKE_VERSION_MAJOR := $(word 1,$(subst ., ,$(MAKE_VERSION)))
 MAKE_VERSION_MINOR := $(word 2,$(subst ., ,$(MAKE_VERSION)))
 
 # Simple version check
-// ... (12 lines trimmed)
+ifeq ($(shell [ "$(MAKE_VERSION_MAJOR)" -gt 4 ] || { [ "$(MAKE_VERSION_MAJOR)" -eq 4 ] && [ "$(MAKE_VERSION_MINOR)" -ge 4 ]; } && echo yes),yes)
+    all: compile .WAIT link
+else
+    $(warning GNU Make 4.4+ not detected; falling back to dependency ordering)
     link: compile
     all: link
 endif
@@ -147,7 +164,10 @@ Practical version check pattern:
 MIN_MAKE_VERSION := 4.4
 CURRENT_MAKE_VERSION := $(MAKE_VERSION)
 
-// ... (5 lines trimmed)
+ifneq ($(filter 4.4 4.5 4.6 4.7,$(CURRENT_MAKE_VERSION)),)
+    HAVE_WAIT := 1
+else
+    HAVE_WAIT := 0
     $(warning Some parallel control features may not work)
 endif
 ```
@@ -168,7 +188,11 @@ Example comparison:
 # Problem: Creates false dependency relationship
 link: compile
 package: link
-// ... (8 lines trimmed)
+
+# Using .WAIT (requires GNU Make 4.4+)
+all: compile .WAIT link .WAIT package
+
+# Using target-scoped .NOTPARALLEL
 .NOTPARALLEL: deploy
 deploy: step1 step2 step3
 ```
@@ -312,7 +336,9 @@ helper.o: helper.c
 .INTERMEDIATE: $(OBJECTS)
 # Deleted after use
 
-// ... (5 lines trimmed)
+.SECONDARY: $(OBJECTS:.o=.d)
+# Keep generated dependency files for debugging
+
 .PRECIOUS: %.o %.d
 # Protected from deletion
 ```
@@ -506,7 +532,11 @@ time make -j4
 make -d
 
 # Show only remake decisions
-// ... (5 lines trimmed)
+make --trace
+
+# Dump the evaluated database without executing recipes
+make -pRrq -f Makefile : 2>/dev/null | less
+
 # Profile make itself
 make --profile=profile.log
 ```
@@ -597,7 +627,34 @@ config.h: config.h.in Makefile
 .SUFFIXES:
 
 PROJECT := optimized
-// ... (53 lines trimmed)
+TARGET := build/$(PROJECT)
+CC ?= gcc
+CFLAGS ?= -O2 -Wall -Wextra
+CPPFLAGS += -MMD -MP -Iinclude
+LDFLAGS ?=
+LDLIBS ?=
+SOURCES := $(wildcard src/*.c)
+OBJECTS := $(patsubst src/%.c,build/%.o,$(SOURCES))
+DEPS := $(OBJECTS:.o=.d)
+
+.PHONY: all clean distclean profile
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+build/%.o: src/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+-include $(DEPS)
+
+clean:
+	$(RM) $(TARGET)
+
+distclean: clean
+	$(RM) -r build
+
 profile:
 	time $(MAKE) clean
 	time $(MAKE) -j$(shell nproc) all
@@ -652,7 +709,12 @@ release: $(TARGET)
 unity.c: $(SOURCES)
 	@echo "Generating unity build..."
 	@for src in $(SOURCES); do \
-// ... (6 lines trimmed)
+		echo "#include \"$$src\"" >> $@; \
+	done
+
+unity-build: unity.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) unity.c -o $(TARGET)
+
 # Fast single-file compilation
 # Trade-off: No parallel compilation
 ```
@@ -664,7 +726,12 @@ unity.c: $(SOURCES)
 make --profile=profile.log
 # Analyze profile.log
 
-// ... (6 lines trimmed)
+# System-level timing
+perf stat make -j4
+
+# Compare alternative build shapes
+hyperfine 'make clean all' 'make -j4 clean all'
+
 # Remake (make debugger)
 remake --debug
 ```

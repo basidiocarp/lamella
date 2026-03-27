@@ -48,10 +48,20 @@
 // Make custom element keyboard accessible
 class AccessibleDropdown extends HTMLElement {
   connectedCallback() {
-    this.setAttribute('tabindex', '0')
-    this.setAttribute('role', 'combobox')
-// ... (21 lines trimmed)
-    })
+    this.setAttribute("tabindex", "0");
+    this.setAttribute("role", "combobox");
+    this.setAttribute("aria-expanded", "false");
+
+    this.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        this.toggle();
+      }
+
+      if (event.key === "Escape") {
+        this.close();
+      }
+    });
   }
 }
 ```
@@ -66,7 +76,13 @@ class AccessibleDropdown extends HTMLElement {
   outline: none;
 }
 
-// ... (9 lines trimmed)
+:focus-visible {
+  outline: 3px solid #0a66ff;
+  outline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
     outline: 3px solid CanvasText;
   }
 }

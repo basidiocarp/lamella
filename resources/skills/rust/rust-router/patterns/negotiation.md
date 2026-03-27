@@ -24,7 +24,16 @@ Query Received
      ▼
 ┌─────────────────────────────┐
 │ Is query single-lookup?     │
-// ... (22 lines trimmed)
+└──────────────┬──────────────┘
+               │ Yes
+               ▼
+      Negotiate among candidate skills
+               │
+               ▼
+      Pick best-fit specialist
+               │
+               ▼
+      Dispatch with focused context
      │
      ▼ No
      └── Direct dispatch (no negotiation)

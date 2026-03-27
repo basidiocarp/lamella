@@ -1,156 +1,183 @@
 # Common Ansible Errors and Solutions
 
+## Contents
+
+- [Overview](#overview)
+- [Syntax Errors](#syntax-errors)
+- [Module Errors](#module-errors)
+- [Template Errors](#template-errors)
+- [Connection Errors](#connection-errors)
+- [Privilege Escalation Errors](#privilege-escalation-errors)
+- [Variable Errors](#variable-errors)
+- [Inventory Errors](#inventory-errors)
+- [Loop Errors](#loop-errors)
+- [Handler Errors](#handler-errors)
+- [Include and Import Errors](#include-and-import-errors)
+- [Collection Errors](#collection-errors)
+- [Dry-Run and Check Mode Errors](#dry-run-and-check-mode-errors)
+- [Debugging Tips](#debugging-tips)
+- [Performance Issues](#performance-issues)
+- [Error Prevention Checklist](#error-prevention-checklist)
+- [Quick Reference Commands](#quick-reference-commands)
+
 ## Overview
 
-This document provides solutions to common Ansible errors, including syntax errors, module errors, connection issues, and runtime problems.
+Use this guide when a playbook fails during YAML parsing, module execution, templating, SSH connection setup, privilege escalation, or dry-run validation.
 
 ## Syntax Errors
 
-### Error: mapping values are not allowed here
+### Error: `mapping values are not allowed here`
 
-```
+```text
 ERROR! Syntax Error while loading YAML.
   mapping values are not allowed here
 ```
 
-**Cause:** YAML indentation error or missing quote
+**Cause:** YAML indentation error or an unquoted value containing `:`.
 
-**Example Problem:**
+**Problem:**
+
 ```yaml
 - name: Configure app
   template:
     src: config.j2
     dest: /etc/app/config.yml
     vars:
-      db_host: localhost:5432  # WRONG: colon not quoted
+      db_host: localhost:5432
 ```
 
-**Solution:**
+**Fix:**
+
 ```yaml
 - name: Configure app
-  template:
+  ansible.builtin.template:
     src: config.j2
     dest: /etc/app/config.yml
-    vars:
-      db_host: "localhost:5432"  # Quoted
+  vars:
+    db_host: "localhost:5432"
 ```
 
-### Error: found undefined alias
+### Error: `found undefined alias`
 
-```
+```text
 ERROR! Syntax Error while loading YAML.
   found undefined alias 'anchor'
 ```
 
-**Cause:** Using YAML anchor/alias incorrectly
+**Cause:** YAML alias used before the anchor is defined.
 
-**Solution:** Ensure anchors are defined before use
+**Fix:**
+
 ```yaml
-# Define anchor
 common_packages: &common_packages
   - git
   - curl
   - vim
 
-# Use alias
 - name: Install common packages
-  apt:
-    name: *common_packages
+  ansible.builtin.apt:
+    name: "{{ common_packages }}"
+    state: present
 ```
 
-### Error: could not find expected ':'
+### Error: `could not find expected ':'`
 
-```
+```text
 ERROR! could not find expected ':'
 ```
 
-**Cause:** Missing colon or improper YAML structure
+**Cause:** Missing colon or malformed YAML structure.
 
-**Example Problem:**
+**Problem:**
+
 ```yaml
-- name Install package  # Missing colon after name
+- name Install package
   apt:
-    name nginx  # Missing colon after name
+    name nginx
 ```
 
-**Solution:**
+**Fix:**
+
 ```yaml
 - name: Install package
-  apt:
+  ansible.builtin.apt:
     name: nginx
+    state: present
 ```
 
 ## Module Errors
 
 ### Error: Unsupported parameters for module
 
-```
+```text
 ERROR! Unsupported parameters for (module) module: parameter_name
 ```
 
-**Cause:** Using wrong parameter name or typo
+**Cause:** Wrong parameter name, typo, or parameters copied from a different module.
 
-**Example Problem:**
+**Problem:**
+
 ```yaml
 - name: Create file
-  file:
+  ansible.builtin.file:
     path: /tmp/test
-    state: present
-    mod: '0644'  # WRONG: should be 'mode'
+    state: touch
+    mod: "0644"
 ```
 
-**Solution:**
+**Fix:**
+
 ```yaml
 - name: Create file
-  file:
+  ansible.builtin.file:
     path: /tmp/test
-    state: present
-    mode: '0644'  # Correct parameter name
+    state: touch
+    mode: "0644"
 ```
 
-**How to check:** Use `ansible-doc module_name` to see correct parameters
+Run `ansible-doc ansible.builtin.file` to confirm valid arguments.
 
-### Error: MODULE FAILURE
+### Error: `MODULE FAILURE`
 
-```
+```text
 fatal: [host]: FAILED! => {"changed": false, "module_stderr": "..."}
 ```
 
-**Common Causes:**
-1. Python not installed on target
-2. Wrong Python interpreter
-3. SELinux blocking module execution
+**Common causes:**
 
-**Solutions:**
-```yaml
-# Specify Python interpreter in inventory
+1. Python is missing on the target.
+2. The wrong interpreter is selected.
+3. SELinux blocks temporary module execution.
+
+**Fixes:**
+
+```ini
 [webservers]
 server1 ansible_python_interpreter=/usr/bin/python3
+```
 
-# Or in playbook
+```yaml
 - hosts: all
   vars:
     ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Gather facts explicitly
+      ansible.builtin.setup:
 ```
 
 ### Error: Missing required arguments
 
-```
+```text
 fatal: [host]: FAILED! => {"changed": false, "msg": "missing required arguments: name"}
 ```
 
-**Cause:** Required module parameter not provided
+**Cause:** Required module parameter omitted.
 
-**Solution:** Add the required parameter
+**Fix:**
+
 ```yaml
-# Wrong
 - name: Install package
-  apt:
-    state: present
-
-# Correct
-- name: Install package
-  apt:
+  ansible.builtin.apt:
     name: nginx
     state: present
 ```
@@ -159,182 +186,205 @@ fatal: [host]: FAILED! => {"changed": false, "msg": "missing required arguments:
 
 ### Error: template error while templating string
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "An unhandled exception occurred while templating..."}
 ```
 
-**Common Causes:**
-1. Undefined variable
-2. Wrong filter syntax
-3. Jinja2 syntax error
+**Common causes:**
 
-**Example Problem:**
+1. Undefined variable.
+2. Wrong filter syntax.
+3. Jinja expression error.
+
+**Problem:**
+
 ```yaml
 - name: Configure app
-  template:
+  ansible.builtin.template:
     src: config.j2
     dest: /etc/app/config.yml
   vars:
-    port: "{{ app_port }}"  # app_port undefined
+    port: "{{ app_port }}"
 ```
 
-**Solutions:**
-```yaml
-# Use default filter
-vars:
-  port: "{{ app_port | default(8080) }}"
+**Fixes:**
 
-// ... (8 lines trimmed)
+```yaml
+- name: Render config with default
+  ansible.builtin.template:
+    src: config.j2
+    dest: /etc/app/config.yml
+  vars:
+    port: "{{ app_port | default(8080) }}"
+
+- name: Render config only when variable exists
+  ansible.builtin.template:
+    src: config.j2
     dest: /etc/app/config.yml
   when: app_port is defined
 ```
 
 ### Error: Unexpected templating type error
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "Unexpected templating type error occurred on (...)"}
 ```
 
-**Cause:** Wrong variable type (e.g., trying to use int as string)
+**Cause:** Variable type does not match the template or module expectation.
 
-**Solution:** Use type conversion filters
+**Fix:**
+
 ```yaml
-# Convert to string
-port: "{{ app_port | string }}"
-
-# Convert to int
-replicas: "{{ replica_count | int }}"
-
-# Convert to bool
-enabled: "{{ feature_enabled | bool }}"
+vars:
+  port_text: "{{ app_port | string }}"
+  replicas: "{{ replica_count | int }}"
+  feature_enabled: "{{ feature_enabled_raw | bool }}"
 ```
 
 ## Connection Errors
 
 ### Error: Failed to connect to the host via ssh
 
-```
+```text
 fatal: [host]: UNREACHABLE! => {"msg": "Failed to connect to the host via ssh"}
 ```
 
-**Common Causes:**
-1. Host not accessible
-2. Wrong SSH key
-3. Wrong username
-4. SSH not running on host
+**Common causes:**
 
-**Solutions:**
+1. Host is unreachable.
+2. Wrong SSH key or username.
+3. SSH service is not running.
+
+**Fixes:**
+
 ```bash
-# Test SSH connectivity
-ssh user@host
+ssh ubuntu@server1
+ansible -i inventory webservers -m ping
+```
 
-# Check Ansible can ping
-// ... (6 lines trimmed)
+```ini
 [webservers]
-server1 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+server1 ansible_host=192.168.1.10 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
 ```
 
 ### Error: Permission denied (publickey)
 
-```
+```text
 fatal: [host]: UNREACHABLE! => {"msg": "Failed to connect to the host via ssh: Permission denied (publickey)."}
 ```
 
-**Solutions:**
+**Fixes:**
+
 ```bash
-# Ensure SSH key is added to target
-ssh-copy-id user@host
-
-# Or specify key in inventory
-[webservers]
-server1 ansible_ssh_private_key_file=~/.ssh/custom_key
-
-# Check SSH agent
+ssh-copy-id ubuntu@server1
 ssh-add -l
 ssh-add ~/.ssh/id_rsa
 ```
 
+```ini
+[webservers]
+server1 ansible_ssh_private_key_file=~/.ssh/custom_key
+```
+
 ### Error: Authentication or permission failure
 
-```
+```text
 fatal: [host]: UNREACHABLE! => {"msg": "Authentication or permission failure."}
 ```
 
-**Solutions:**
+**Fixes:**
+
+```bash
+ansible-playbook -i inventory playbook.yml --ask-pass --ask-become-pass
+```
+
 ```yaml
-# Use password authentication (less secure)
 - hosts: all
   vars:
-    ansible_ssh_pass: password  # Better to use vault
-    ansible_become_pass: password
-
-# Or use ask-pass
-ansible-playbook -i inventory playbook.yml --ask-pass --ask-become-pass
+    ansible_ssh_pass: "{{ vault_ssh_password }}"
+    ansible_become_pass: "{{ vault_become_password }}"
 ```
 
 ## Privilege Escalation Errors
 
 ### Error: Missing sudo password
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "Missing sudo password"}
 ```
 
-**Solutions:**
-```bash
-# Provide sudo password at runtime
-ansible-playbook -i inventory playbook.yml --ask-become-pass
+**Fixes:**
 
-# Or configure passwordless sudo on target
+```bash
+ansible-playbook -i inventory playbook.yml --ask-become-pass
+```
+
+```text
 # /etc/sudoers.d/ansible
 ansible_user ALL=(ALL) NOPASSWD: ALL
 ```
 
-### Error: you must be root
+### Error: Permission denied when task needs root
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "Could not create file: Permission denied"}
 ```
 
-**Solution:** Add `become: yes` to task or play
+**Problem:**
+
 ```yaml
 - name: Install package
-  apt:
+  ansible.builtin.apt:
     name: nginx
     state: present
-// ... (7 lines trimmed)
-      apt:
-        name: nginx
+```
+
+**Fix:**
+
+```yaml
+- name: Install package
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  become: true
 ```
 
 ## Variable Errors
 
 ### Error: The task includes an option with an undefined variable
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'variable' is undefined"}
 ```
 
-**Solutions:**
+**Fixes:**
+
 ```yaml
-# Use default filter
 - name: Use variable with default
-  debug:
+  ansible.builtin.debug:
     msg: "{{ my_var | default('default_value') }}"
-// ... (9 lines trimmed)
-  debug:
-    msg: "{{ my_var | required('my_var must be defined') }}"
+
+- name: Fail early if variable is missing
+  ansible.builtin.assert:
+    that:
+      - my_var is defined
+    fail_msg: "my_var must be defined"
+
+- name: Require variable at render time
+  ansible.builtin.debug:
+    msg: "{{ my_var | mandatory }}"
 ```
 
-### Error: Conflicting variable name
+### Warning: Invalid characters in group names
 
-```
+```text
 [WARNING]: Invalid characters were found in group names but not replaced, use -vvvv to see details
 ```
 
-**Cause:** Variable or group name contains invalid characters (hyphens, spaces)
+**Cause:** Inventory group names include hyphens, spaces, or other unsupported characters.
 
-**Solution:** Use underscores instead
+**Fix:**
+
 ```ini
 # Wrong
 [web-servers]
@@ -347,15 +397,15 @@ fatal: [host]: FAILED! => {"msg": "The task includes an option with an undefined
 
 ### Error: Could not match supplied host pattern
 
-```
+```text
 [WARNING]: Could not match supplied host pattern, ignoring: webservers
 ```
 
-**Cause:** Host group not defined in inventory
+**Cause:** Play target does not exist in the inventory being used.
 
-**Solution:** Check inventory file
+**Fix:**
+
 ```ini
-# inventory/hosts
 [webservers]
 web1.example.com
 web2.example.com
@@ -366,21 +416,22 @@ db1.example.com
 
 ### Error: Unable to parse inventory
 
-```
+```text
 [WARNING]: Unable to parse /path/to/inventory as an inventory source
 ```
 
-**Cause:** Invalid inventory format
+**Cause:** Mixed YAML and INI syntax or malformed inventory content.
 
-**Solution:** Fix inventory syntax
+**Fix:**
+
 ```ini
-# Wrong - mixing styles
+# Wrong
 [webservers]
 web1 ansible_host=192.168.1.10
 web2
-  ansible_host: 192.168.1.11  # YAML syntax in INI file
+  ansible_host: 192.168.1.11
 
-# Correct - consistent INI format
+# Correct
 [webservers]
 web1 ansible_host=192.168.1.10
 web2 ansible_host=192.168.1.11
@@ -388,38 +439,60 @@ web2 ansible_host=192.168.1.11
 
 ## Loop Errors
 
-### Error: Invalid data passed to 'loop'
+### Error: Invalid data passed to `loop`
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "Invalid data passed to 'loop', it requires a list"}
 ```
 
-**Cause:** Loop variable is not a list
+**Cause:** `loop` received a string or dictionary instead of a list.
 
-**Solution:** Ensure loop variable is a list
+**Problem:**
+
 ```yaml
-# Wrong
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
-// ... (7 lines trimmed)
+    state: present
+  loop: nginx
+```
+
+**Fix:**
+
+```yaml
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
     - nginx
     - python3
 ```
 
-### Error: with_items is deprecated
+### Warning: `with_items` is deprecated
 
-```
+```text
 [DEPRECATION WARNING]: with_items is deprecated, use loop instead
 ```
 
-**Solution:** Replace `with_items` with `loop`
+**Fix:**
+
 ```yaml
-# Old style (deprecated)
+# Old
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
-// ... (9 lines trimmed)
+    state: present
+  with_items:
+    - nginx
+    - python3
+
+# New
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
     - nginx
     - python3
 ```
@@ -428,144 +501,147 @@ fatal: [host]: FAILED! => {"msg": "Invalid data passed to 'loop', it requires a 
 
 ### Error: Handler not found
 
-```
+```text
 ERROR! The requested handler 'restart nginx' was not found
 ```
 
-**Cause:** Handler name mismatch or handler not defined
+**Cause:** `notify` string does not exactly match a handler name.
 
-**Solution:** Ensure handler name matches exactly
+**Fix:**
+
 ```yaml
 # tasks/main.yml
-- name: Configure nginx
-  template:
+- name: Render nginx config
+  ansible.builtin.template:
     src: nginx.conf.j2
-// ... (6 lines trimmed)
+    dest: /etc/nginx/nginx.conf
+  notify: Restart nginx
+
+# handlers/main.yml
+- name: Restart nginx
+  ansible.builtin.service:
     name: nginx
     state: restarted
 ```
 
-## Include/Import Errors
+## Include and Import Errors
 
 ### Error: Unable to retrieve file contents
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "Unable to retrieve file contents. Could not find or access 'file.yml'"}
 ```
 
-**Cause:** File path incorrect or file doesn't exist
+**Cause:** Included file path is wrong relative to the current playbook or role.
 
-**Solution:** Check file path (relative to playbook location)
+**Fix:**
+
 ```yaml
 # Wrong
-- include_tasks: tasks/install.yml  # If tasks/ doesn't exist
+- ansible.builtin.include_tasks: tasks/install.yml
 
-# Correct
-- include_tasks: install.yml  # File in same directory
-# Or
-- include_tasks: roles/common/tasks/install.yml  # Full path
+# Correct when file is in the same role task directory
+- ansible.builtin.include_tasks: install.yml
+
+# Correct when referencing another role path explicitly
+- ansible.builtin.include_tasks: roles/common/tasks/install.yml
 ```
 
-### Error: Include/Import loop detected
+### Error: Include or import loop detected
 
-```
+```text
 ERROR! Recursively included/imported file is causing infinite loop
 ```
 
-**Cause:** Circular dependency (file A includes file B, file B includes file A)
+**Cause:** File A includes file B and file B includes file A.
 
-**Solution:** Restructure includes to avoid circular dependencies
+**Fix:** Move shared tasks into a third file and include that from both places instead of mutual includes.
 
 ## Collection Errors
 
 ### Error: couldn't resolve module/action
 
-```
+```text
 ERROR! couldn't resolve module/action 'community.general.docker_container'
 ```
 
-**Cause:** Collection not installed
+**Cause:** Required collection is missing.
 
-**Solution:** Install required collection
+**Fix:**
+
 ```bash
-# Install single collection
 ansible-galaxy collection install community.general
+```
 
-# Install from requirements.yml
+```yaml
 # requirements.yml
 collections:
   - name: community.general
     version: ">=5.0.0"
+```
 
+```bash
 ansible-galaxy collection install -r requirements.yml
 ```
 
 ### Error: Collection version conflict
 
-```
+```text
 ERROR! Requirement already satisfied by a different version
 ```
 
-**Solution:** Update or downgrade collection
-```bash
-# Force reinstall
-ansible-galaxy collection install community.general --force
+**Fix:**
 
-# Install specific version
+```bash
+ansible-galaxy collection install community.general --force
 ansible-galaxy collection install community.general:5.0.0
 ```
 
-## Dry-Run / Check Mode Errors
+## Dry-Run and Check Mode Errors
 
 ### Error: This module does not support check mode
 
-```
+```text
 fatal: [host]: FAILED! => {"msg": "This module does not support check mode"}
 ```
 
-**Cause:** Module doesn't support check mode
+**Fix:**
 
-**Solution:** Skip check mode for this task
 ```yaml
-- name: Command that doesn't support check mode
-  command: /usr/local/bin/custom-script.sh
-  check_mode: no  # Always run, even in check mode
+- name: Run task outside check mode
+  ansible.builtin.command: /usr/local/bin/custom-script.sh
+  check_mode: false
 ```
 
 ## Debugging Tips
 
-### Enable Verbose Output
+### Enable verbose output
 
 ```bash
-# Basic verbosity
 ansible-playbook playbook.yml -v
-
-# More details
-// ... (5 lines trimmed)
-# Connection debugging
+ansible-playbook playbook.yml -vv
+ansible-playbook playbook.yml -vvv
 ansible-playbook playbook.yml -vvvv
 ```
 
-### Use Debug Module
+### Use the debug module
 
 ```yaml
-# Print variable
-- name: Debug variable
-  debug:
+- name: Print a variable
+  ansible.builtin.debug:
     var: my_variable
 
-// ... (12 lines trimmed)
-  debug:
+- name: Print a message on Ubuntu only
+  ansible.builtin.debug:
     msg: "Debug message"
   when: ansible_distribution == "Ubuntu"
 ```
 
-### Use assert Module
+### Use the assert module
 
 ```yaml
-# Validate conditions
-- name: Assert variables are defined
-  assert:
+- name: Validate required application settings
+  ansible.builtin.assert:
     that:
       - app_version is defined
       - app_version | length > 0
@@ -577,81 +653,74 @@ ansible-playbook playbook.yml -vvvv
 
 ## Performance Issues
 
-### Slow Playbook Execution
+### Slow playbook execution
 
-**Solutions:**
-1. Enable SSH pipelining
-```ini
-# ansible.cfg
-[ssh_connection]
-pipelining = True
-```
+1. Enable SSH pipelining.
+   ```ini
+   [ssh_connection]
+   pipelining = True
+   ```
 
-2. Use fact caching
-```ini
-# ansible.cfg
-[defaults]
-gathering = smart
-fact_caching = jsonfile
-fact_caching_connection = /tmp/ansible_facts
-fact_caching_timeout = 86400
-```
+2. Use fact caching.
+   ```ini
+   [defaults]
+   gathering = smart
+   fact_caching = jsonfile
+   fact_caching_connection = /tmp/ansible_facts
+   fact_caching_timeout = 86400
+   ```
 
-3. Disable fact gathering if not needed
-```yaml
-- hosts: all
-  gather_facts: no
-```
+3. Disable fact gathering when unnecessary.
+   ```yaml
+   - hosts: all
+     gather_facts: false
+   ```
 
-4. Use async for long tasks
-```yaml
-- name: Long running task
-  command: /usr/bin/long-task
-  async: 3600
-  poll: 0
-```
+4. Use async for long-running tasks.
+   ```yaml
+   - name: Long task
+     ansible.builtin.command: /usr/bin/long-task
+     async: 3600
+     poll: 0
+   ```
 
-### High Memory Usage
+### High memory usage
 
-**Solutions:**
-1. Process hosts in batches
-```yaml
-- hosts: all
-  serial: 10  # Process 10 hosts at a time
-```
+1. Process hosts in batches.
+   ```yaml
+   - hosts: all
+     serial: 10
+   ```
 
-2. Use free strategy
-```yaml
-- hosts: all
-  strategy: free  # Don't wait for all hosts to complete task
-```
+2. Use the free strategy.
+   ```yaml
+   - hosts: all
+     strategy: free
+   ```
 
 ## Error Prevention Checklist
 
-- [ ] Run yamllint before ansible-playbook
-- [ ] Run ansible-lint on all playbooks
-- [ ] Use --syntax-check before execution
-- [ ] Test with --check mode first
-- [ ] Start with limited host scope (--limit)
-- [ ] Use tags for incremental testing
-- [ ] Enable verbose mode for debugging (-vvv)
-- [ ] Validate variables with assert
-- [ ] Use molecule for role testing
-- [ ] Test in staging before production
-- [ ] Keep collections up to date
-- [ ] Document custom variables
-- [ ] Use version control for all playbooks
+- [ ] Run `yamllint` before `ansible-playbook`.
+- [ ] Run `ansible-lint` on changed playbooks and roles.
+- [ ] Use `--syntax-check` before the first real run.
+- [ ] Test with `--check --diff` when modules support it.
+- [ ] Limit scope with `--limit` during debugging.
+- [ ] Use tags for incremental verification.
+- [ ] Turn on `-vvv` or `-vvvv` for hard-to-reproduce failures.
+- [ ] Validate required variables with `assert`.
+- [ ] Use Molecule for roles when available.
+- [ ] Test in staging before production.
 
 ## Quick Reference Commands
 
 ```bash
-# Syntax check
 ansible-playbook playbook.yml --syntax-check
-
-# Dry run
 ansible-playbook playbook.yml --check --diff
-// ... (18 lines trimmed)
-
-# Start at specific task
+ansible-playbook playbook.yml --limit webservers
+ansible-playbook playbook.yml --tags config
+ansible-playbook playbook.yml --skip-tags packages
+ansible-playbook playbook.yml -vvv
+ansible-inventory -i inventory --graph
+ansible-doc ansible.builtin.copy
 ansible-playbook playbook.yml --start-at-task="Install nginx"
 ```

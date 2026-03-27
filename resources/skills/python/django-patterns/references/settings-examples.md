@@ -1,49 +1,41 @@
 # Django Settings Examples
 
-Detailed settings configuration for split settings pattern.
+Use split settings when the project needs different configuration by environment
+without hiding the shared defaults.
 
-## Base Settings
+## Common Shape
 
-```python
-# config/settings/base.py
-from pathlib import Path
+Typical layout:
+- `base.py` for shared defaults
+- `development.py` for local tooling and debug behavior
+- `production.py` for hardened runtime settings
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-// ... (41 lines trimmed)
-        'PORT': env('DB_PORT', default='5432'),
-    }
-}
-```
+Keep the base file authoritative for defaults. Environment-specific files should
+override only what truly changes.
 
 ## Development Settings
 
-```python
-# config/settings/development.py
-from .base import *
+Typical development-only concerns:
+- `DEBUG = True`
+- local hosts
+- debug toolbar
+- console email backend
+- local database name overrides
 
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-DATABASES['default']['NAME'] = 'myproject_dev'
-
-INSTALLED_APPS += ['debug_toolbar']
-
-MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-```
+Do not let development settings become a second base file.
 
 ## Production Settings
 
-```python
-# config/settings/production.py
-from .base import *
+Typical production concerns:
+- `DEBUG = False`
+- environment-driven hosts and secrets
+- secure cookie and header settings
+- real email, logging, and cache backends
 
-DEBUG = False
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-// ... (23 lines trimmed)
-        },
-    },
-}
-```
+Treat production settings as an explicit hardening layer, not just “base with
+DEBUG off.”
+
+## Design Rule
+
+If the settings split becomes hard to understand, the override model is too
+clever. Keep the environment files narrow and obvious.

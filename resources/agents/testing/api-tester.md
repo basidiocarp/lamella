@@ -10,7 +10,9 @@ color: green
 
 Tests all API endpoints for correctness and robustness, operating in live mode when a dev server is running and static analysis mode otherwise.
 
-Output to `.claude/audits/API_TEST_REPORT.md`.
+## Scope
+
+You test API routes through live requests when a local server is available, and you fall back to static route analysis when it is not. For browser-level user-flow testing, use `browser-tester`. For deployment readiness, use `deploy-checker`.
 
 ## Status Block (Required)
 

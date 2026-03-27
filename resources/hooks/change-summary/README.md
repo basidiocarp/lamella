@@ -1,86 +1,52 @@
 # Change Summary Hook
 
-Runs when Claude finishes a task, providing TypeScript type checking and a summary of all changes made during the session.
+Runs when Claude finishes a task and prints a repo-focused summary of the current diff.
+
+This folder contains a **standalone Bash example**. The main Lamella catalog uses the shared Node hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) instead of this one-file shell bundle.
 
 ## What It Does
 
-This `Stop` hook fires when Claude completes its work. It performs two functions:
+The standalone `Stop` hook does three things:
 
-1. **TypeScript Type Checking (blocking)** — If TypeScript files were modified, runs `tsc --noEmit` and blocks if there are type errors
-2. **Change Summary (informational)** — Displays a summary of all files changed during the session
+1. **TypeScript type checking** for modified `.ts` and `.tsx` files
+2. **Go linting** for modified `.go` files when `golangci-lint` is installed
+3. **Change summary** showing file-level diff context
 
 ## Behavior
 
 ### TypeScript Checking
 
-If any `.ts` or `.tsx` files were modified:
-
-1. Locates `tsconfig.json` (checks git root, then `src/`, `app/`, `packages/`)
-2. Runs `npx tsc --noEmit` to check types
-3. **Blocks Claude from stopping** if type errors are found
-4. Claude must fix the errors before finishing
-
-This ensures you never end a session with broken TypeScript.
+If TypeScript files changed, the hook finds the nearest `tsconfig.json`, runs `tsc --noEmit`, and blocks session end until those errors are fixed.
 
 ### Go Linting
 
-If any `.go` files were modified:
-
-1. Runs `golangci-lint` on modified files
-2. Reports issues but **doesn't block** (non-blocking)
-3. Shows installation hint if golangci-lint isn't found
+If Go files changed and `golangci-lint` is installed, the hook reports lint findings without blocking.
 
 ### Change Summary
 
-Always displays at the end:
-
-```
-═══════════════════════════════════════════════════════════════
-                    SESSION CHANGE SUMMARY
-═══════════════════════════════════════════════════════════════
-
-📊 Overall Statistics:
-───────────────────────────────────────────────────────────────
- 3 files changed, 45 insertions(+), 12 deletions(-)
-
-📁 Modified Files:
-───────────────────────────────────────────────────────────────
-M  src/auth/jwt.ts
-A  src/middleware/auth.ts
-M  src/routes/index.ts
-
-🔍 Change Preview (per file):
-───────────────────────────────────────────────────────────────
-
-► src/auth/jwt.ts
-  ─────────────────────────────────────────────────────────────
-  +import { sign, verify } from 'jsonwebtoken';
-  +
-  +export function generateToken(payload: object) {
-  ...
-```
+The hook always prints:
+- a diff stat
+- changed files
+- a short preview of each file's diff
 
 ## Prerequisites
 
 ```bash
 # For TypeScript checking
 npm install -g typescript
-# Or have it as a project dependency
 
-# For Go linting (optional)
+# For Go linting
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 ```
 
 ## Installation
 
-### Step 1: Copy the hook
+### Standalone example
 
 ```bash
 cp change-summary.sh ~/.claude/hooks/change-summary.sh
 chmod +x ~/.claude/hooks/change-summary.sh
 ```
-
-### Step 2: Configure in settings.json
 
 Add to `~/.claude/settings.json`:
 
@@ -102,77 +68,37 @@ Add to `~/.claude/settings.json`:
 }
 ```
 
-## Why TypeScript Checking is Blocking
+## Platform Notes
 
-The auto-format hook doesn't run TypeScript checking because:
+This standalone hook is Bash-based. Use it on macOS, Linux, or Windows via Git Bash or WSL.
 
-1. Type checking is slow compared to formatting
-2. Running it after every edit would interrupt flow
-3. Type errors often span multiple files
-
-Instead, type checking runs once at the end. If there are errors, Claude is told to fix them before finishing. This ensures:
-
-- Fast feedback during editing (formatting only)
-- No broken TypeScript when the session ends
-- Claude takes responsibility for type safety
+If you want the Lamella default on Windows, prefer the shared Node hooks:
+- [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
+- [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
+- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js)
 
 ## Customization
 
-### Make TypeScript non-blocking
-
-Change `exit 1` to `exit 0` in the TypeScript section:
-
-```bash
-if [[ $tsc_exit -ne 0 ]]; then
-  # ... error output ...
-  exit 0  # Changed from exit 1
-fi
-```
-
-### Add other language checks
-
-Add sections for other languages before the change summary:
-
-```bash
-# Example: Python type checking with mypy
-python_files_changed=$(git diff --name-only HEAD 2>/dev/null | grep -E '\.py$' || true)
-if [[ -n "$python_files_changed" ]]; then
-  mypy $python_files_changed
-fi
-```
-
-### Customize change summary output
-
-Modify the git commands in the summary section to show more or less detail.
+Edit the script if you want to:
+- make TypeScript failures non-blocking
+- add more language-specific checks
+- shorten or expand the diff preview
 
 ## Troubleshooting
 
-### TypeScript errors but I want to stop anyway
+### TypeScript errors but I still want to stop
 
-Use `/stop` to force stop, or temporarily modify the hook to be non-blocking.
+Make the TypeScript branch non-blocking or use the Node shared hooks instead.
 
-### tsconfig.json not found
+### `tsconfig.json` not found
 
-The hook checks these locations:
+The script checks the repo root, then `src/`, `app/`, and `packages/`. Add more locations if your project uses a different layout.
 
-- `$git_root/tsconfig.json`
-- `$git_root/src/tsconfig.json`
-- `$git_root/app/tsconfig.json`
-- `$git_root/packages/tsconfig.json`
+### `golangci-lint` not found
 
-Add your location to the script if needed.
-
-### golangci-lint not found
-
-Install it with:
-
-```bash
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-```
-
-Or remove the Go linting section if you don't need it.
+Install it, or remove the Go lint section if you do not need it.
 
 ## Related Hooks
 
-- **[auto-format](../auto-format/)** — Formats files after each edit (complements this hook by handling formatting during the session)
-- **[compaction](../compaction/)** — Improves context preservation when compacting
+- [auto-format](../auto-format/)
+- [compaction](../compaction/)

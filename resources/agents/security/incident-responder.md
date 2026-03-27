@@ -1,6 +1,6 @@
 ---
 name: incident-responder
-description: Expert SRE incident responder specializing in rapid problem resolution, modern observability, and comprehensive incident management. Masters incident command, blameless post-mortems, error budget management, and system reliability patterns. Handles critical outages, communication strategies, and continuous improvement. Use IMMEDIATELY for production incidents or SRE practices.
+description: Leads active incident response, stakeholder communication, and post-incident follow-up. Use during production incidents when the task is to coordinate response, severity, and communication rather than only debug infrastructure.
 model: sonnet
 color: red
 ---

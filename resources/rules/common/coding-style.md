@@ -1,48 +1,41 @@
 # Coding Style
 
-## Immutability (CRITICAL)
+Use this rule for general readability and structure. Put project-specific
+patterns such as immutability, boundary validation, and API response
+conventions in [coding-standards.md](./coding-standards.md).
 
-ALWAYS create new objects, NEVER mutate existing ones:
+## Readability First
 
-```
-// Pseudocode
-WRONG:  modify(original, field, value) → changes original in-place
-CORRECT: update(original, field, value) → returns new copy with change
-```
+- Prefer clear names over clever abbreviations.
+- Keep control flow easy to scan.
+- Use early returns to avoid deep nesting.
+- Keep related logic together instead of spreading it across distant files.
 
-Rationale: Immutable data prevents hidden side effects, makes debugging easier, and enables safe concurrency.
+## Comments
 
-## File Organization
+- Explain why, constraints, or non-obvious tradeoffs.
+- Do not narrate obvious line-by-line behavior.
+- Delete comments that no longer match the code.
 
-MANY SMALL FILES > FEW LARGE FILES:
-- High cohesion, low coupling
-- 200-400 lines typical, 800 max
-- Extract utilities from large modules
-- Organize by feature/domain, not by type
+## File and Function Shape
 
-## Error Handling
+- Keep files cohesive and organized by feature or responsibility.
+- Split large functions once they stop fitting in one mental pass.
+- Extract helpers only when the new name improves clarity.
+- Prefer a small number of well-named public entrypoints.
 
-ALWAYS handle errors comprehensively:
-- Handle errors explicitly at every level
-- Provide user-friendly error messages in UI-facing code
-- Log detailed error context on the server side
-- Never silently swallow errors
+## Formatting
 
-## Input Validation
-
-ALWAYS validate at system boundaries:
-- Validate all user input before processing
-- Use schema-based validation where available
-- Fail fast with clear error messages
-- Never trust external data (API responses, user input, file content)
+- Use the standard formatter and linter for the language.
+- Do not hand-format around the formatter.
+- Keep examples and snippets consistent with repo conventions.
 
 ## Code Quality Checklist
 
 Before marking work complete:
 - [ ] Code is readable and well-named
-- [ ] Functions are small (<50 lines)
-- [ ] Files are focused (<800 lines)
+- [ ] Functions are focused and easy to scan
+- [ ] Files have one clear responsibility
 - [ ] No deep nesting (>4 levels)
-- [ ] Proper error handling
-- [ ] No hardcoded values (use constants or config)
-- [ ] No mutation (immutable patterns used)
+- [ ] Comments explain why, not what
+- [ ] Formatting and lint expectations are satisfied

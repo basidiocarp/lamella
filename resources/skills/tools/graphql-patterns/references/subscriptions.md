@@ -6,135 +6,134 @@
 // schema.graphql
 type Subscription {
   postCreated: Post!
-  postUpdated(id: ID!): Post!
   commentAdded(postId: ID!): Comment!
-// ... (68 lines trimmed)
-app.use('/graphql', express.json(), expressMiddleware(server));
-
-httpServer.listen(4000);
+}
 ```
 
-## PubSub Implementation
+```typescript
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@apollo/server/express4'
+import express from 'express'
+import http from 'http'
+
+const app = express()
+const httpServer = http.createServer(app)
+
+app.use('/graphql', express.json(), expressMiddleware(server))
+httpServer.listen(4000)
+```
+
+## PubSub
 
 ```typescript
-// pubsub.ts
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-import Redis from 'ioredis';
+import { RedisPubSub } from 'graphql-redis-subscriptions'
+import Redis from 'ioredis'
 
-// In-memory (development only)
-// ... (19 lines trimmed)
+const pubsub = new RedisPubSub({
+  publisher: new Redis(process.env.REDIS_URL!),
+  subscriber: new Redis(process.env.REDIS_URL!),
+})
+
+export const EVENTS = {
+  POST_CREATED: 'POST_CREATED',
   COMMENT_ADDED: 'COMMENT_ADDED',
-  USER_ONLINE: 'USER_ONLINE',
-} as const;
+} as const
 ```
 
 ## Subscription Resolvers
 
 ```typescript
-import { withFilter } from 'graphql-subscriptions';
-import { pubsub, EVENTS } from './pubsub';
+import { withFilter } from 'graphql-subscriptions'
 
 const resolvers = {
   Subscription: {
-// ... (86 lines trimmed)
+    postCreated: {
+      subscribe: () => pubsub.asyncIterator([EVENTS.POST_CREATED]),
+    },
+    commentAdded: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator([EVENTS.COMMENT_ADDED]),
+        (payload, variables) => payload.commentAdded.postId === variables.postId
+      ),
     },
   },
-};
-```
-
-## Advanced Filtering
-
-```typescript
-// Type-safe payload
-interface PostCreatedPayload {
-  postCreated: Post;
-  tags: string[];
-  isPublic: boolean;
-// ... (38 lines trimmed)
-    },
-  },
-};
+}
 ```
 
 ## Connection Management
 
 ```typescript
-import { useServer } from 'graphql-ws/lib/use/ws';
+import { useServer } from 'graphql-ws/lib/use/ws'
+import { WebSocketServer } from 'ws'
 
-const wsServer = useServer(
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/graphql',
+})
+
+useServer(
   {
     schema,
-// ... (51 lines trimmed)
+    context: async (ctx) => {
+      const token = ctx.connectionParams?.authorization
+      const user = token ? await authService.verify(token) : null
+      return { user }
+    },
   },
   wsServer
-);
+)
 ```
 
-## Subscription Patterns
+## Publishing Events
 
 ```typescript
-// Pattern 1: Entity updates
-type Subscription {
-  entityUpdated(id: ID!): Entity!
-}
+await pubsub.publish(EVENTS.POST_CREATED, {
+  postCreated: newPost,
+})
 
-// ... (28 lines trimmed)
-    },
-  },
-};
-```
-
-## Error Handling
-
-```typescript
-const resolvers = {
-  Subscription: {
-    postCreated: {
-      subscribe: withFilter(
-        () => pubsub.asyncIterator([EVENTS.POST_CREATED]),
-// ... (28 lines trimmed)
-    },
-  },
-};
+await pubsub.publish(EVENTS.COMMENT_ADDED, {
+  commentAdded: newComment,
+})
 ```
 
 ## Client Usage
 
 ```typescript
-// Apollo Client setup
-import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { createClient } from 'graphql-ws';
-// ... (51 lines trimmed)
+import { createClient } from 'graphql-ws'
 
-// Unsubscribe
-subscription.unsubscribe();
+const client = createClient({
+  url: 'ws://localhost:4000/graphql',
+  connectionParams: {
+    authorization: 'Bearer token',
+  },
+})
+
+const dispose = client.subscribe(
+  {
+    query: `
+      subscription OnCommentAdded($postId: ID!) {
+        commentAdded(postId: $postId) {
+          id
+          content
+        }
+      }
+    `,
+    variables: { postId: 'post-1' },
+  },
+  {
+    next: (value) => console.log(value),
+    error: (err) => console.error(err),
+    complete: () => console.log('done'),
+  }
+)
+
+// later
+dispose()
 ```
 
-## Scaling Subscriptions
+## Best Practices
 
-```typescript
-// Use Redis for multi-instance deployments
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-
-// Horizontal scaling pattern
-const pubsub = new RedisPubSub({
-// ... (10 lines trimmed)
-// Load balancing with sticky sessions
-// Ensure same user connects to same server instance
-// for connection state management
-```
-
-## Subscription Best Practices
-
-1. **Authentication**: Always validate auth in onConnect and filters
-2. **Authorization**: Check permissions in withFilter
-3. **Rate Limiting**: Limit subscriptions per user
-4. **Filtering**: Use withFilter for server-side filtering
-5. **Cleanup**: Always clean up subscriptions on disconnect
-6. **Scaling**: Use Redis PubSub for multi-instance deployments
-7. **Error Handling**: Gracefully handle errors in filters and resolvers
-8. **Testing**: Test subscription lifecycle and filtering
-9. **Monitoring**: Track active connections and subscription count
-10. **Performance**: Avoid N+1 in subscription resolvers
+1. Authenticate on websocket connect and authorize in filters.
+2. Use server-side filtering to avoid sending irrelevant events.
+3. Use Redis-backed PubSub for multi-instance deployments.
+4. Track active connections and clean up resources on disconnect.

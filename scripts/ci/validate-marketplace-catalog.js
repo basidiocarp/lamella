@@ -16,7 +16,7 @@ const MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
 
 const EXPECTED_NAME = 'lamella';
 const EXPECTED_OWNER = 'William Newton';
-const EXPECTED_DESCRIPTION = 'Skill-Issue — curated skills, agents, and commands for Claude Code';
+const EXPECTED_DESCRIPTION = 'Lamella — curated skills, agents, and commands for Claude Code';
 const EXPECTED_SOURCE_URL = 'https://github.com/basidiocarp/lamella.git';
 const EXPECTED_SOURCE_REF = 'gh-pages';
 const semverRegex = /^[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;

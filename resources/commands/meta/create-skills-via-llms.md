@@ -31,7 +31,7 @@ name: {crate_name}-{feature}
 description: |
   CRITICAL: Use for {crate_name} {feature} questions. Triggers on:
   {keyword1}, {keyword2}, {keyword3}, "{common question}",
-  {中文关键词1}, {中文关键词2}, {中文问题}
+  {alternate keyword 1}, {alternate keyword 2}, {alternate question}
 ---
 
 # {CrateName} {Feature} Skill
@@ -56,7 +56,7 @@ Refer to the local files for detailed documentation:
 
 1. Read the relevant reference file(s) listed above
 2. If file read fails or file is empty:
-   - Inform user: "本地文档不完整，建议运行 `/sync-crate-skills {crate_name} --force` 更新文档"
+   - Inform user: "Local docs are incomplete. Consider running `/sync-crate-skills {crate_name} --force` to refresh them."
    - Still answer based on SKILL.md patterns + built-in knowledge
 3. If reference file exists, incorporate its content into the answer
 
@@ -184,7 +184,7 @@ For each skill:
 ## Quality Checklist
 
 - [ ] Each SKILL.md has CSO-optimized description with "CRITICAL:" prefix
-- [ ] Each SKILL.md description includes Chinese trigger keywords
+- [ ] Each SKILL.md description includes useful trigger keywords
 - [ ] Each SKILL.md has version info and update date
 - [ ] Each SKILL.md has "You are an expert..." role definition
 - [ ] Each SKILL.md has Documentation navigation list

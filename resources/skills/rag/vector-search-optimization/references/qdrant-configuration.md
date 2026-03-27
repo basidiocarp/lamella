@@ -1,15 +1,17 @@
 # Qdrant Index Configuration
 
-Qdrant-specific optimization settings.
+Use this reference when tuning Qdrant collections rather than writing application code.
 
-```python
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
+## Main Knobs
 
-def create_optimized_collection(
-    client: QdrantClient,
-// ... (107 lines trimmed)
-        )
+- Vector size and distance metric
+- HNSW parameters
+- Payload indexing
+- Quantization mode
+- Search-time `ef` overrides
 
-    return search_params
-```
+## Rule of Thumb
+
+- Tune collection design first.
+- Tune HNSW next.
+- Add quantization only when memory cost remains the real constraint.

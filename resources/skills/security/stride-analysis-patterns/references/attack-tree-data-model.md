@@ -1,15 +1,27 @@
 # Attack Tree Data Model
 
-Python data model for attack trees with nodes, attributes, and analysis capabilities.
+Python data model for attack trees with lightweight export support.
 
 ```python
-from dataclasses import dataclass, field
-from enum import Enum
-from typing import List, Dict, Optional, Union
+from dataclasses import dataclass, field, asdict
 import json
 
-// ... (184 lines trimmed)
-            "version": self.version,
-            "root": self.root.to_dict()
-        }, indent=2)
+
+@dataclass
+class AttackNode:
+    id: str
+    name: str
+    likelihood: int
+    impact: int
+    children: list["AttackNode"] = field(default_factory=list)
+
+
+@dataclass
+class AttackTree:
+    name: str
+    root: AttackNode
+    version: str = "1.0"
+
+    def to_json(self) -> str:
+        return json.dumps(asdict(self), indent=2)
 ```

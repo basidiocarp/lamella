@@ -3,164 +3,150 @@
 ## Subgraph Setup
 
 ```typescript
-// users-subgraph/schema.graphql
-extend schema
-  @link(url: "https://specs.apollo.dev/federation/v2.5", import: ["@key", "@shareable"])
+import { ApolloServer } from '@apollo/server'
+import { buildSubgraphSchema } from '@apollo/subgraph'
+import gql from 'graphql-tag'
 
-type User @key(fields: "id") {
-// ... (38 lines trimmed)
+const typeDefs = gql`
+  extend schema
+    @link(url: "https://specs.apollo.dev/federation/v2.5", import: ["@key"])
+
+  type User @key(fields: "id") {
+    id: ID!
+    email: String!
+    username: String!
+  }
+
+  type Query {
+    user(id: ID!): User
+  }
+`
+
+const resolvers = {
+  Query: {
+    user: (_parent, { id }) => ({ id, email: 'alice@example.com', username: 'alice' }),
+  },
+}
+
 const server = new ApolloServer({
   schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
-});
+})
 ```
 
 ## Entity Keys and References
 
 ```graphql
-# products-subgraph/schema.graphql
 extend schema
-  @link(url: "https://specs.apollo.dev/federation/v2.5", import: [
-    "@key",
-    "@shareable",
-// ... (24 lines trimmed)
+  @link(url: "https://specs.apollo.dev/federation/v2.5", import: ["@key", "@external"])
+
+type Product @key(fields: "id") {
+  id: ID!
+  name: String!
+}
+
+type Review @key(fields: "id") {
+  id: ID!
+  product: Product!
   rating: Int!
   content: String!
 }
 ```
 
+Use `@key` for entities other subgraphs need to reference by identity.
+
 ## Extending Types Across Subgraphs
 
 ```graphql
-# users-subgraph: owns User
+# users subgraph
 type User @key(fields: "id") {
   id: ID!
   email: String!
-  username: String!
-// ... (12 lines trimmed)
+}
+
+# posts subgraph
+extend type User @key(fields: "id") {
+  id: ID! @external
+  posts: [Post!]!
+}
+
+type Post {
+  id: ID!
   authorId: ID!
   author: User!
 }
 ```
 
 ```typescript
-// posts-subgraph/resolvers.ts
 const resolvers = {
   User: {
-    // Reference resolver: fetch User stub by id
-    __resolveReference: async (
-// ... (16 lines trimmed)
-    },
+    __resolveReference: async (reference: { id: string }, { dataSources }) =>
+      dataSources.users.byId(reference.id),
+    posts: async (user: { id: string }, { dataSources }) =>
+      dataSources.posts.byAuthor(user.id),
   },
-};
+}
 ```
 
 ## Federation Directives
 
 ```graphql
 extend schema
-  @link(url: "https://specs.apollo.dev/federation/v2.5", import: [
-    "@key",
-    "@requires",
-    "@provides",
-// ... (58 lines trimmed)
-  products: [Product!]! @tag(name: "public")
-  adminUsers: [User!]! @tag(name: "admin")
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.5"
+    import: ["@key", "@requires", "@provides", "@shareable", "@override"]
+  )
+
+type Inventory @key(fields: "sku") {
+  sku: ID!
+  inStock: Boolean! @shareable
+  shippingEstimate: String! @requires(fields: "inStock")
 }
 ```
+
+Use:
+- `@shareable` for fields multiple subgraphs can safely resolve
+- `@requires` when a resolver depends on external fields
+- `@override` during gradual ownership migration
 
 ## Gateway Configuration
 
 ```typescript
-// gateway/server.ts
-import { ApolloGateway, IntrospectAndCompose } from '@apollo/gateway';
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer } from '@apollo/server'
+import { ApolloGateway, IntrospectAndCompose } from '@apollo/gateway'
 
 const gateway = new ApolloGateway({
-// ... (26 lines trimmed)
+  supergraphSdl: new IntrospectAndCompose({
+    subgraphs: [
+      { name: 'users', url: 'http://localhost:4001/graphql' },
+      { name: 'posts', url: 'http://localhost:4002/graphql' },
+    ],
+  }),
+})
 
-await server.listen(4000);
-console.log('Gateway ready at http://localhost:4000');
-```
-
-## Managed Federation (Apollo Studio)
-
-```typescript
-// gateway/server.ts with managed federation
-import { ApolloGateway } from '@apollo/gateway';
-import { ApolloServer } from '@apollo/server';
-
-const gateway = new ApolloGateway({
-// ... (18 lines trimmed)
-    ApolloServerPluginInlineTrace(),
-  ],
-});
+const server = new ApolloServer({ gateway })
 ```
 
 ## Value Types vs Entities
 
 ```graphql
-# Value type: no @key, resolved entirely by one subgraph
 type Address {
   street: String!
   city: String!
   country: String!
-// ... (13 lines trimmed)
-  id: ID! @external
-  orders: [Order!]!
 }
-```
 
-## Interface Objects
-
-```graphql
-# accounts-subgraph
-type User implements Account @key(fields: "id") {
+type Order @key(fields: "id") {
   id: ID!
-  email: String!
-  role: String!
-// ... (24 lines trimmed)
-type Account @key(fields: "id") @interfaceObject {
-  id: ID!
+  shippingAddress: Address!
 }
 ```
 
-## Query Planning Optimization
+Use value types for embedded data owned by one subgraph. Use entities for data
+shared and extended across subgraphs.
 
-```graphql
-# Inefficient: requires multiple roundtrips
-type Query {
-  user(id: ID!): User
-}
+## Best Practices
 
-// ... (17 lines trimmed)
-
-# Gateway can fulfill some User fields from Post subgraph
-# without fetching from User subgraph
-```
-
-## Error Handling in Federation
-
-```typescript
-const resolvers = {
-  User: {
-    __resolveReference: async (
-      reference: { id: string },
-      context: Context
-// ... (17 lines trimmed)
-    },
-  },
-};
-```
-
-## Federation Best Practices
-
-1. **Entity Design**: Use @key for types that need to be extended
-2. **Subgraph Boundaries**: Align with team/service boundaries
-3. **Shared Types**: Use @shareable for truly shared fields
-4. **Migration**: Use @override for gradual subgraph migration
-5. **Performance**: Use @provides to optimize query planning
-6. **Value Types**: Use plain types for embedded data
-7. **Composition**: Test schema composition in CI/CD
-8. **Versioning**: Use managed federation for safe deployments
-9. **Monitoring**: Track query planning and resolver performance
-10. **Documentation**: Document entity ownership and extension patterns
+1. Keep subgraph boundaries aligned with service or team ownership.
+2. Prefer a small number of stable entity keys.
+3. Test schema composition in CI before deploying subgraphs.
+4. Document who owns each entity and which fields are shared.

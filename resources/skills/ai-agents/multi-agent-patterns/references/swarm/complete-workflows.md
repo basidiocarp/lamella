@@ -1,74 +1,84 @@
 # Complete Workflows Reference
 
-End-to-end workflow examples for common swarm orchestration scenarios.
+Use these patterns when you need an end-to-end swarm workflow rather than a
+single delegation step.
 
----
+## Workflow 1: Parallel Specialist Review
 
-## Workflow 1: Full Code Review with Parallel Specialists
+Use this when one artifact needs several independent reviews at the same time.
 
-```javascript
-// === STEP 1: Setup ===
-Teammate({ operation: "spawnTeam", team_name: "pr-review-123", description: "Reviewing PR #123" })
-
-// === STEP 2: Spawn reviewers in parallel ===
-// (Send all these in a single message for parallel execution)
-// ... (59 lines trimmed)
-Teammate({ operation: "requestShutdown", target_agent_id: "arch" })
-// Wait for approvals...
-Teammate({ operation: "cleanup" })
+```text
+1. Spawn team
+2. Assign independent review tracks
+3. Collect results
+4. Synthesize findings
+5. Shut down workers
 ```
 
----
+Best fit:
+- code review with security, architecture, and testing lenses
+- document review with separate factual and editorial checks
+- audits where findings can be gathered independently
 
-## Workflow 2: Research → Plan → Implement → Test Pipeline
+Avoid it if every worker depends on the same evolving intermediate result.
 
-```javascript
-// === SETUP ===
-Teammate({ operation: "spawnTeam", team_name: "feature-oauth" })
+## Workflow 2: Research -> Plan -> Implement -> Test
 
-// === CREATE PIPELINE ===
-TaskCreate({ subject: "Research OAuth providers", description: "Research OAuth2 best practices and compare providers (Google, GitHub, Auth0)", activeForm: "Researching OAuth..." })
-// ... (50 lines trimmed)
-})
+Use this when later work should start only after earlier outputs are ready.
 
-// Pipeline auto-progresses as each stage completes
+```text
+research -> planning -> implementation -> verification
 ```
 
----
+Best fit:
+- feature delivery with clear stage gates
+- new integration work
+- migrations where the plan needs to exist before code changes start
 
-## Workflow 3: Self-Organizing Code Review Swarm
+The key is explicit handoff artifacts between stages.
 
-```javascript
-// === SETUP ===
-Teammate({ operation: "spawnTeam", team_name: "codebase-review" })
+## Workflow 3: Self-Organizing Task Pool
 
-// === CREATE TASK POOL (all independent, no dependencies) ===
-const filesToReview = [
-// ... (47 lines trimmed)
+Use this when many tasks are independent and workers can claim them from a pool.
 
-// Workers self-organize: race to claim tasks, naturally load-balance
-// Monitor progress with TaskList() or by reading inbox
+```text
+1. define a shared task pool
+2. let workers claim tasks
+3. monitor progress and rebalance only if needed
+4. synthesize outputs at the end
 ```
 
----
+Best fit:
+- codebase-wide review sweeps
+- many-file cleanup passes
+- independent research tasks
 
-## Workflow Checklist
+This pattern fails when tasks have hidden dependencies or inconsistent finish
+criteria.
 
-Before starting any workflow:
+## Choosing the Workflow
 
-- [ ] Choose appropriate pattern for your use case
-- [ ] Plan team name and worker names
-- [ ] Define tasks and dependencies
-- [ ] Write clear, specific prompts
+| Situation | Better workflow |
+|---|---|
+| same artifact, multiple lenses | parallel specialist review |
+| staged delivery with dependencies | research -> plan -> implement -> test |
+| many independent tasks | self-organizing task pool |
 
-During workflow:
+## Checklist
 
-- [ ] Monitor inbox for results
-- [ ] Check task progress with `TaskList()`
-- [ ] Handle any permission requests
+Before starting:
+- choose the workflow shape deliberately
+- define worker ownership
+- define output format and handoff points
 
-After workflow:
+During execution:
+- monitor for blocked tasks or scope drift
+- keep synthesis centralized
+- shut workers down once their slice is complete
 
-- [ ] Collect and synthesize results
-- [ ] Shutdown all teammates gracefully
-- [ ] Run cleanup to remove team resources
+After execution:
+- collect outputs into one final artifact
+- record any reusable workflow decisions
+
+The workflow matters as much as the individual prompts. Pick the structure that
+matches the dependency pattern.

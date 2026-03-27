@@ -1,26 +1,20 @@
 # Python Sharp Edges
 
-## Mutable Default Arguments
+Use this reference when scanning Python for language features that turn small
+convenience patterns into security or reliability hazards.
+
+## Mutable Defaults
+
+Default arguments are evaluated once at function definition time.
 
 ```python
-# DANGEROUS: Default is shared across all calls
 def append_to(item, target=[]):
     target.append(item)
     return target
-
-append_to(1)  # [1]
-append_to(2)  # [1, 2] - same list!
-append_to(3)  # [1, 2, 3]
-
-# Also affects dicts and other mutables
-def register(name, registry={}):
-    registry[name] = True
-    return registry
 ```
 
-**The Problem**: Default arguments are evaluated once at function definition, not at each call.
+Safer pattern:
 
-**Fix**: Use `None` sentinel:
 ```python
 def append_to(item, target=None):
     if target is None:
@@ -29,212 +23,122 @@ def append_to(item, target=None):
     return target
 ```
 
-## Eval, Exec, and Code Execution
+Flag mutable defaults on `list`, `dict`, `set`, and custom objects.
+
+## Dynamic Code Execution
+
+Several built-ins turn data into code or shell behavior.
 
 ```python
-# DANGEROUS: Arbitrary code execution
-eval(user_input)      # Executes Python expression
-exec(user_input)      # Executes Python statements
-
-# DANGEROUS: compile + exec
-code = compile(user_input, '<string>', 'exec')
+eval(user_input)
+exec(user_input)
+code = compile(user_input, "<string>", "exec")
 exec(code)
-
-# DANGEROUS: input() in Python 2
-# In Python 2: input() == eval(raw_input())
-# Python 2 code taking input() from users = RCE
-
-# DANGEROUS: Dynamic import
-__import__(user_input)
-importlib.import_module(user_input)
+subprocess.run(f"ls {user_input}", shell=True)
 ```
 
-**Also Dangerous**:
-- `pickle.loads()` - arbitrary code execution
-- `yaml.load()` - arbitrary code execution (use `safe_load`)
-- `subprocess.Popen(shell=True)` with user input
+Also treat these as high-risk:
+- `pickle.loads`
+- unsafe `yaml.load`
+- dynamic import paths from untrusted input
 
-## Late Binding Closures
+## Closure Binding and Loop Reuse
+
+Closures capture variables by reference, not by value.
 
 ```python
-# DANGEROUS: Closures capture variable by reference, not value
 funcs = []
 for i in range(3):
     funcs.append(lambda: i)
-
-[f() for f in funcs]  # [2, 2, 2] - all see final i
-
-# Same with list comprehension
-funcs = [lambda: i for i in range(3)]
-[f() for f in funcs]  # [2, 2, 2]
 ```
 
-**Fix**: Capture by value using default argument:
+Safer pattern:
+
 ```python
 funcs = []
 for i in range(3):
-    funcs.append(lambda i=i: i)  # i=i captures current value
-
-[f() for f in funcs]  # [0, 1, 2]
+    funcs.append(lambda i=i: i)
 ```
 
-## Identity vs Equality
+This matters anywhere handlers, callbacks, or deferred jobs are built in loops.
+
+## Identity, Equality, and Shadowing
+
+Python makes it easy to write code that works until implementation details
+change.
 
 ```python
-# DANGEROUS: 'is' checks identity, not equality
-a = 256
-b = 256
-a is b  # True - CPython caches small integers [-5, 256]
-
-// ... (13 lines trimmed)
-# DANGEROUS in conditionals
-if x is True:   # Wrong - use: if x is True (for singletons only)
-if x is 1:      # Wrong - use: if x == 1
+if x is 1:
+    ...
 ```
 
-**Rule**: Use `is` only for `None`, `True`, `False`, and explicit singleton checks.
+Use `is` only for singletons such as `None`, `True`, and `False`.
 
-## Import Shadowing
+Also flag local modules that shadow stdlib or dependency names, such as
+`random.py`, `types.py`, or `email.py`.
 
-```python
-# DANGEROUS: Naming your file same as stdlib module
-# File: random.py
-import random
-print(random.randint(1, 10))  # ImportError or recursion!
+## Exception Handling
 
-# Your random.py shadows the stdlib random module
-
-# Similarly dangerous names:
-# - email.py (shadows email module)
-# - test.py (shadows test framework)
-# - types.py (shadows types module)
-```
-
-## Exception Handling Pitfalls
+Over-broad catches can hide both user errors and programmer mistakes.
 
 ```python
-# DANGEROUS: Bare except catches everything
 try:
     risky_operation()
-except:  # Catches KeyboardInterrupt, SystemExit, etc.
+except:
     pass
-// ... (16 lines trimmed)
-except SomeError as e:
-    log(e)  # If log() raises, original exception lost
-    raise
 ```
 
-## Name Rebinding in Loops
+Watch for:
+- bare `except`
+- `except Exception:` without re-raise or narrowing
+- error-swallowing log-only handlers
+- cleanup code that can replace the original exception path
 
-```python
-# DANGEROUS: Reusing loop variable
-for item in items:
-    process(item)
+## Shared Mutability and Formatting
 
-# Later in same scope:
-// ... (8 lines trimmed)
+Two recurring footguns:
 
-# In Python 3, 'e' is deleted after except block
-# But 'item' persists
-```
-
-## Class vs Instance Attributes
-
-```python
-# DANGEROUS: Mutable class attribute shared by all instances
-class User:
-    permissions = []  # Class attribute - shared!
-
-u1 = User()
-u2 = User()
-u1.permissions.append('admin')
-print(u2.permissions)  # ['admin'] - u2 is also admin!
-```
-
-**Fix**: Initialize in `__init__`:
 ```python
 class User:
-    def __init__(self):
-        self.permissions = []  # Instance attribute - unique
+    permissions = []
+
+template = user_template
+template.format(obj)
 ```
 
-## String Formatting Injection
+- mutable class attributes share state across instances
+- user-controlled format strings can expose object attributes or structure
+
+Prefer instance initialization and safe templating paths.
+
+## Precision and Attribute Chains
+
+Python will happily hide precision loss or crash late in deep access chains.
 
 ```python
-# DANGEROUS: Format string with user data as format spec
-template = user_input  # "{0.__class__.__mro__[1].__subclasses__()}"
-template.format(some_object)  # Can access arbitrary attributes!
-
-# DANGEROUS: f-string with user input (if using eval)
-eval(f'f"{user_input}"')  # Code execution
-
-# DANGEROUS: % formatting with user-controlled format
-user_template % (data,)  # Less dangerous but still risky
-```
-
-**Fix**: Use string concatenation or safe templating (Jinja2 with autoescape).
-
-## Numeric Precision
-
-```python
-# DANGEROUS: Float comparison
-0.1 + 0.2 == 0.3  # False!
-# 0.1 + 0.2 = 0.30000000000000004
-
-# DANGEROUS: Large integer to float
-n = 10**20
-float(n) == float(n + 1)  # True - precision loss
-
-# DANGEROUS: Division in Python 2
-# 5 / 2 = 2 (integer division in Python 2)
-# 5 / 2 = 2.5 (float division in Python 3)
-```
-
-## Unpacking Pitfalls
-
-```python
-# DANGEROUS: Unpacking user-controlled data
-a, b, c = user_list  # ValueError if wrong length
-
-# Can be used for DoS:
-# Send list with 10 million elements to function expecting 3
-# Python will iterate entire list before raising ValueError
-```
-
-## Subprocess Shell Injection
-
-```python
-# DANGEROUS: shell=True with user input
-import subprocess
-subprocess.run(f"ls {user_input}", shell=True)
-# user_input = "; rm -rf /" → command injection
-
-# SAFE: Use list form without shell
-subprocess.run(["ls", user_input])  # user_input is just an argument
-```
-
-## Attribute Access on None
-
-```python
-# DANGEROUS: Chained access without checks
+0.1 + 0.2 == 0.3
 result = api.get_user().profile.settings.theme
-# Any None in chain causes AttributeError
-
-# Python doesn't have optional chaining like JS (?.)
-# Must check each step or use getattr with default
 ```
 
-## Detection Patterns
+Flag:
+- float equality in money or boundary logic
+- integer-to-float coercion on large values
+- long attribute chains without `None` handling
+- unpacking of untrusted iterables into fixed arity
+
+## Detection Checklist
 
 | Pattern | Risk |
-|---------|------|
-| `def f(x=[])` or `def f(x={})` | Mutable default argument |
+|---|---|
+| `def f(x=[])` or `def f(x={})` | Shared mutable default |
 | `eval(`, `exec(`, `compile(` | Code execution |
-| `pickle.loads(`, `yaml.load(` | Deserialization RCE |
-| `lambda: var` in loop | Late binding closure |
-| `x is 1`, `x is "string"` | Identity vs equality confusion |
-| `import x` where x.py exists locally | Import shadowing |
-| `except:` or `except Exception:` | Over-broad exception catching |
-| `class Foo: bar = []` | Shared mutable class attribute |
-| `template.format(obj)` with user template | Format string injection |
+| `pickle.loads(`, unsafe `yaml.load(` | Deserialization RCE |
+| `lambda: var` in loop | Late binding bug |
+| `x is 1` or `x is "foo"` | Identity confusion |
+| local file shadows import target | Import confusion |
+| bare `except` or wide `except Exception` | Hidden failures |
+| mutable class attributes | Shared state |
+| user-controlled format template | Format injection |
 | `subprocess.*(..., shell=True)` | Command injection |
+
+Keep the detector focused on misuse patterns, not general Python style.

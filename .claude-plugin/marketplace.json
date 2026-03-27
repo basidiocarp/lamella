@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Lamella — curated skills, agents, and commands for Claude Code",
-    "version": "0.5.1"
+    "version": "0.5.2"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
         "ref": "gh-pages"
       },
       "description": "Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "ai-agents",
@@ -28,7 +28,7 @@
         "ref": "gh-pages"
       },
       "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "atmos",
@@ -39,7 +39,7 @@
         "ref": "gh-pages"
       },
       "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "collaboration",
@@ -50,7 +50,7 @@
         "ref": "gh-pages"
       },
       "description": "Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "core",
@@ -61,7 +61,7 @@
         "ref": "gh-pages"
       },
       "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "cpp",
@@ -72,7 +72,7 @@
         "ref": "gh-pages"
       },
       "description": "C++ development: modern C++ patterns, coding standards, and testing practices",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "customer-insights",
@@ -83,7 +83,7 @@
         "ref": "gh-pages"
       },
       "description": "Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "database",
@@ -94,7 +94,7 @@
         "ref": "gh-pages"
       },
       "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "developer-ops",
@@ -105,7 +105,7 @@
         "ref": "gh-pages"
       },
       "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "devops",
@@ -116,7 +116,7 @@
         "ref": "gh-pages"
       },
       "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "enterprise-it",
@@ -127,7 +127,7 @@
         "ref": "gh-pages"
       },
       "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "executive",
@@ -138,7 +138,7 @@
         "ref": "gh-pages"
       },
       "description": "Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "frontend",
@@ -149,7 +149,7 @@
         "ref": "gh-pages"
       },
       "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "go",
@@ -160,7 +160,7 @@
         "ref": "gh-pages"
       },
       "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "go-to-market",
@@ -171,7 +171,7 @@
         "ref": "gh-pages"
       },
       "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "meta",
@@ -182,7 +182,7 @@
         "ref": "gh-pages"
       },
       "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "microservices",
@@ -193,7 +193,7 @@
         "ref": "gh-pages"
       },
       "description": "Microservices architecture, event sourcing, and distributed systems",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "python",
@@ -204,7 +204,7 @@
         "ref": "gh-pages"
       },
       "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "rag",
@@ -215,7 +215,7 @@
         "ref": "gh-pages"
       },
       "description": "Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "rust",
@@ -226,7 +226,7 @@
         "ref": "gh-pages"
       },
       "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "security",
@@ -237,7 +237,7 @@
         "ref": "gh-pages"
       },
       "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "tools",
@@ -248,7 +248,7 @@
         "ref": "gh-pages"
       },
       "description": "CLI tools, shell and PowerShell scripting, analytics implementation, MCP integration, API design, and productivity utilities",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "typescript",
@@ -259,7 +259,7 @@
         "ref": "gh-pages"
       },
       "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "workflow",
@@ -270,7 +270,7 @@
         "ref": "gh-pages"
       },
       "description": "Development workflows: planning, git operations, decision records, continuous improvement, mental models, and Conductor project management",
-      "version": "0.5.1"
+      "version": "0.5.2"
     },
     {
       "name": "writing",
@@ -281,7 +281,7 @@
         "ref": "gh-pages"
       },
       "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
-      "version": "0.5.1"
+      "version": "0.5.2"
     }
   ]
 }

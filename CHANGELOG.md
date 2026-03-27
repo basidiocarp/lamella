@@ -4,6 +4,8 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-03-27
+
 ### Added
 
 - **Cleanup tracking docs**: Added the trimmed-placeholder cleanup plan, classification, and execution log to document the large repo-wide normalization pass.

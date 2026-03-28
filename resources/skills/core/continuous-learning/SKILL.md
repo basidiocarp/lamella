@@ -71,23 +71,25 @@ Edit `config.json` to customize:
 
 ## Hook Setup
 
-Add to your `~/.claude/settings.json`:
+For a manual home-directory install, add this to your `~/.claude/settings.json`:
 
 ```json
 {
   "hooks": {
-    "Stop": [{
+    "SessionEnd": [{
       "matcher": "*",
       "hooks": [{
         "type": "command",
-        "command": "~/.claude/skills/continuous-learning/evaluate-session.sh"
+        "command": "~/.claude/skills/core/continuous-learning/scripts/evaluate-session.sh"
       }]
     }]
   }
 }
 ```
 
-## Why Stop Hook?
+If you are using the Lamella plugin instead of a manual `~/.claude/skills/` copy, prefer the shipped hook catalog in `hooks/hooks.json` rather than duplicating this entry by hand.
+
+## Why SessionEnd Hook?
 
 - **Lightweight**: Runs once at session end
 - **Non-blocking**: Doesn't add latency to every message

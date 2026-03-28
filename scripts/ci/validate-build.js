@@ -10,11 +10,83 @@
 const fs = require('fs');
 const path = require('path');
 
-const DIST_DIR = path.join(__dirname, '../../dist/plugins');
+const DIST_DIR = path.join(__dirname, '../../dist/claude/plugins');
 
 let errors = 0;
 let warnings = 0;
 let pluginCount = 0;
+
+function reportError(message) {
+  console.error(message);
+  errors++;
+}
+
+function validateLspServerMap(name, sourceLabel, value) {
+  if (!value || Array.isArray(value) || typeof value !== 'object') {
+    reportError(`ERROR: ${name} — ${sourceLabel} must be an object mapping server names to configs`);
+    return;
+  }
+
+  for (const [serverName, config] of Object.entries(value)) {
+    if (!config || Array.isArray(config) || typeof config !== 'object') {
+      reportError(`ERROR: ${name} — ${sourceLabel}.${serverName} must be an object`);
+      continue;
+    }
+
+    if (typeof config.command !== 'string' || config.command.trim() === '') {
+      reportError(`ERROR: ${name} — ${sourceLabel}.${serverName} missing string 'command'`);
+    }
+
+    const mapping = config.extensionToLanguage;
+    if (!mapping || Array.isArray(mapping) || typeof mapping !== 'object' || Object.keys(mapping).length === 0) {
+      reportError(`ERROR: ${name} — ${sourceLabel}.${serverName} missing object 'extensionToLanguage'`);
+      continue;
+    }
+
+    for (const [extension, language] of Object.entries(mapping)) {
+      if (!extension.startsWith('.')) {
+        reportError(`ERROR: ${name} — ${sourceLabel}.${serverName} extension '${extension}' must start with '.'`);
+      }
+
+      if (typeof language !== 'string' || language.trim() === '') {
+        reportError(`ERROR: ${name} — ${sourceLabel}.${serverName}.${extension} must map to a non-empty language string`);
+      }
+    }
+  }
+}
+
+function validateLspReference(name, pluginDir, ref) {
+  if (typeof ref === 'string') {
+    if (!ref.startsWith('./')) {
+      reportError(`ERROR: ${name} — lspServers path must start with './': ${ref}`);
+      return;
+    }
+
+    const lspPath = path.join(pluginDir, ref.slice(2));
+    if (!fs.existsSync(lspPath)) {
+      reportError(`ERROR: ${name} — missing lsp config: ${ref}`);
+      return;
+    }
+
+    try {
+      const config = JSON.parse(fs.readFileSync(lspPath, 'utf-8'));
+      validateLspServerMap(name, `${ref}`, config);
+    } catch (e) {
+      reportError(`ERROR: ${name} — invalid JSON in ${ref}: ${e.message}`);
+    }
+
+    return;
+  }
+
+  if (Array.isArray(ref)) {
+    for (const item of ref) {
+      validateLspReference(name, pluginDir, item);
+    }
+    return;
+  }
+
+  validateLspServerMap(name, 'lspServers', ref);
+}
 
 function validatePlugin(pluginDir) {
   const name = path.basename(pluginDir);
@@ -48,6 +120,10 @@ function validatePlugin(pluginDir) {
       console.warn(`WARN: ${name} — plugin.json missing '${field}'`);
       warnings++;
     }
+  }
+
+  if (manifest.lspServers !== undefined) {
+    validateLspReference(name, pluginDir, manifest.lspServers);
   }
 
   // Agents should be flat .md files (not nested in subdirs)

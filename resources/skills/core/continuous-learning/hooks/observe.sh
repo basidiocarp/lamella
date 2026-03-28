@@ -53,11 +53,43 @@ fi
 # ─────────────────────────────────────────────
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SKILL_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Source shared project detection helper
+resolve_detect_project() {
+  local candidates=(
+    "$SCRIPT_DIR/../scripts/detect-project.sh"
+    "$SCRIPT_DIR/../../skills/continuous-learning/scripts/detect-project.sh"
+    "$SCRIPT_DIR/../../skills/core/continuous-learning/scripts/detect-project.sh"
+  )
+
+  if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+    candidates+=(
+      "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning/scripts/detect-project.sh"
+      "${CLAUDE_PLUGIN_ROOT}/skills/core/continuous-learning/scripts/detect-project.sh"
+    )
+  fi
+
+  local candidate
+  for candidate in "${candidates[@]}"; do
+    if [ -f "$candidate" ]; then
+      echo "$candidate"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+DETECT_PROJECT_SCRIPT="$(resolve_detect_project || true)"
+if [ -z "$DETECT_PROJECT_SCRIPT" ]; then
+  echo "[ContinuousLearning] detect-project.sh not found for observe hook at $SCRIPT_DIR" >&2
+  exit 0
+fi
+
+SKILL_ROOT="$(cd "$(dirname "$DETECT_PROJECT_SCRIPT")/.." && pwd)"
+
+# Source shared project detection helper.
 # This sets: PROJECT_ID, PROJECT_NAME, PROJECT_ROOT, PROJECT_DIR
-source "${SKILL_ROOT}/scripts/detect-project.sh"
+source "$DETECT_PROJECT_SCRIPT"
 
 # ─────────────────────────────────────────────
 # Configuration

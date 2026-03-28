@@ -4,6 +4,15 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-03-27
+
+### Fixed
+
+- **Claude LSP plugin packaging**: Corrected Lamella's LSP plugin output so generated `plugin.json` files point at `./.lsp.json`, and updated the Python, Rust, and TypeScript LSP configs to the schema Claude Code currently validates.
+- **Continuous-learning hook path resolution**: Hardened `observe.sh` so it can locate `detect-project.sh` in both plugin installs and copied `.claude/hooks/` layouts without failing every hook invocation.
+- **Manual hook guidance**: Updated the manual settings template and continuous-learning docs so pre/post observe hooks pass the correct phase argument, SessionEnd examples point at the current script path, and the shell evaluator loads its skill-root `config.json` correctly.
+- **Post-build validation coverage**: Pointed `validate-build.js` at the real `dist/claude/plugins` output and added LSP config checks so invalid hook and LSP packaging is caught before install or release.
+
 ## [0.5.1] - 2026-03-27
 
 ### Added

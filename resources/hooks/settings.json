@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh",
+            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh pre",
             "timeout": 10,
             "async": true
           }
@@ -175,7 +175,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh",
+            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh post",
             "timeout": 10,
             "async": true
           }

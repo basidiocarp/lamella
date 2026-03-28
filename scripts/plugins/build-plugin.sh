@@ -350,8 +350,8 @@ build_plugin() {
         cp "$lsp_config" "$output_dir/.lsp.json"
         # Add lspServers reference to plugin.json
         local plugin_json="$output_dir/.claude-plugin/plugin.json"
-        jq '. + {"lspServers": "../.lsp.json"}' "$plugin_json" > "${plugin_json}.tmp" && mv "${plugin_json}.tmp" "$plugin_json"
-        log_success "  lsp: $(jq -r '.lspServers | keys[0]' "$lsp_config")"
+        jq '. + {"lspServers": "./.lsp.json"}' "$plugin_json" > "${plugin_json}.tmp" && mv "${plugin_json}.tmp" "$plugin_json"
+        log_success "  lsp: $(jq -r 'keys[0]' "$lsp_config")"
     fi
 
     # Standalone resources (outside plugin spec)

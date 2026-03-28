@@ -1,19 +1,19 @@
 #!/bin/bash
 # Continuous Learning - Session Evaluator
-# Runs on Stop hook to extract reusable patterns from Claude Code sessions
+# Runs on SessionEnd hook to extract reusable patterns from Claude Code sessions
 #
-# Why Stop hook instead of UserPromptSubmit:
-# - Stop runs once at session end (lightweight)
+# Why SessionEnd hook instead of UserPromptSubmit:
+# - SessionEnd runs once at session end (lightweight)
 # - UserPromptSubmit runs every message (heavy, adds latency)
 #
 # Hook config (in ~/.claude/settings.json):
 # {
 #   "hooks": {
-#     "Stop": [{
+#     "SessionEnd": [{
 #       "matcher": "*",
 #       "hooks": [{
 #         "type": "command",
-#         "command": "~/.claude/skills/continuous-learning/evaluate-session.sh"
+#         "command": "~/.claude/skills/core/continuous-learning/scripts/evaluate-session.sh"
 #       }]
 #     }]
 #   }
@@ -26,7 +26,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="$SCRIPT_DIR/config.json"
+CONFIG_FILE="$(cd "$SCRIPT_DIR/.." && pwd)/config.json"
 LEARNED_SKILLS_PATH="${HOME}/.claude/skills/learned"
 MIN_SESSION_LENGTH=10
 

@@ -82,29 +82,20 @@ is_semver() {
 json_get() { jq -r "$2 // empty" "$1"; }
 json_array() { jq -r "$2 // [] | .[]" "$1"; }
 
-# Copy agents — flatten category/name.md to name.md
+# Legacy manifest agent entries are no longer a supported source path.
+# Keep this check only to surface stale manifest configuration explicitly.
 copy_agents() {
     local manifest="$1" output_dir="$2"
-    local count=0 missing=0
+    local count=0
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/resources/agents/$item"
-        local filename; filename=$(basename "$item")
-        local dst="$output_dir/agents/$filename"
-
-        if [[ -f "$src" ]]; then
-            mkdir -p "$output_dir/agents"
-            cp "$src" "$dst"
-            ((count++))
-        else
-            log_warn "Missing agent: $item"
-            ((missing++))
-        fi
+        log_warn "Manifest still declares legacy agent entry '$item'; migrate it to resources/subagents instead"
+        ((count++))
     done < <(json_array "$manifest" '.resources.agents')
 
-    [[ $count -gt 0 ]] && log_success "  agents: $count files"
-    return $missing
+    [[ $count -gt 0 ]] && log_warn "  legacy-agents: $count stale manifest entries"
+    return 0
 }
 
 # Copy commands — flatten category/name.md to name.md

@@ -13,7 +13,7 @@ Sample outputs from different audit modes.
 
 ## Top Findings
 
-1. `resources/agents/code-reviewer.md`
+1. `resources/subagents/code-quality/code-reviewer/SUBAGENT.md`
    - Missing explicit output format
    - No boundary section for when not to use the agent
 2. `resources/skills/test-writing/SKILL.md`
@@ -78,7 +78,7 @@ Sample outputs from different audit modes.
   },
   "findings": [
     {
-      "path": "resources/agents/code-reviewer.md",
+      "path": "resources/subagents/code-quality/code-reviewer/SUBAGENT.md",
       "severity": "high",
       "issue": "Missing output format",
       "recommendation": "Add a short required response structure section"

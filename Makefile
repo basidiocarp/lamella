@@ -20,12 +20,12 @@ help: ## Show this help
 
 validate: ## Run all CI validators
 	@echo "Running validators..."
-	@node scripts/ci/validate-agents.js
 	@node scripts/ci/validate-commands.js
 	@node scripts/ci/validate-hooks.js
 	@node scripts/ci/validate-rules.js
 	@node scripts/ci/validate-skills.js
 	@node scripts/ci/validate-subagents.js
+	@node scripts/ci/test-subagents.js
 	@node scripts/ci/validate-manifests.js
 	@node scripts/ci/validate-marketplace-catalog.js
 	@node scripts/ci/validate-xrefs.js
@@ -74,7 +74,6 @@ clean: ## Remove dist/ build output
 
 count: ## Show asset counts
 	@echo "Skills:   $$(find resources/skills -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | tr -d ' ')"
-	@echo "Agents:   $$(find resources/agents -name '*.md' -not -path '*/_shared/*' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Subagents:$$(find resources/subagents -name 'SUBAGENT.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Commands: $$(find resources/commands -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Rules:    $$(find resources/rules -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"

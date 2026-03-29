@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Validate command markdown files are non-empty, readable,
- * and have valid cross-references to other commands, agents, and skills.
+ * and have valid cross-references to other commands, subagents, and skills.
  */
 
 const fs = require('fs');
@@ -10,7 +10,6 @@ const { findSubagentFiles, loadSubagent } = require('../lib/subagents');
 
 const ROOT_DIR = path.join(__dirname, '../..');
 const COMMANDS_DIR = path.join(ROOT_DIR, 'resources', 'commands');
-const AGENTS_DIR = path.join(ROOT_DIR, 'resources', 'agents');
 const SKILLS_DIR = path.join(ROOT_DIR, 'resources', 'skills');
 
 /** Recursively find all .md files (excluding README.md) */
@@ -70,11 +69,8 @@ function validateCommands() {
   // Build set of valid command names (without .md extension)
   const validCommands = new Set(files.map(f => path.basename(f).replace(/\.md$/, '')));
 
-  // Build set of valid agent names (without .md extension)
+  // Build set of valid subagent names from the shared source catalog.
   const validAgents = new Set();
-  for (const f of findMdFiles(AGENTS_DIR)) {
-    validAgents.add(path.basename(f).replace(/\.md$/, ''));
-  }
   for (const filePath of findSubagentFiles()) {
     validAgents.add(loadSubagent(filePath).data.name);
   }
@@ -120,12 +116,12 @@ function validateCommands() {
       }
     }
 
-    // Check agent references (e.g., "resources/agents/planner.md" or "`planner` agent")
-    const agentPathRefs = contentNoCodeBlocks.matchAll(/resources\/agents\/([a-z][-a-z0-9]*)\.md/g);
+    // Check shared subagent references (e.g., "resources/subagents/planning/planner/SUBAGENT.md")
+    const agentPathRefs = contentNoCodeBlocks.matchAll(/resources\/subagents\/[a-z][-a-z0-9]*\/([a-z][-a-z0-9]*)\/SUBAGENT\.md/g);
     for (const match of agentPathRefs) {
       const refName = match[1];
       if (!validAgents.has(refName)) {
-        console.error(`ERROR: ${relPath} - references non-existent agent resources/agents/${refName}.md`);
+        console.error(`ERROR: ${relPath} - references non-existent subagent resources/subagents/.../${refName}/SUBAGENT.md`);
         hasErrors = true;
       }
     }

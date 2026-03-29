@@ -14,12 +14,12 @@ Related:
 - Shared subagents validated: `128`
 - Claude artifacts emitted: `132`
 - Codex artifacts emitted: `129`
-- Legacy `resources/agents/` sources are still present for non-migrated agents
+- Legacy `resources/agents/` sources removed from the repo
 - Removed legacy duplicates: `128`
 
 ## Deprecation Stages
 
-Use these states for legacy files under `resources/agents/`:
+Use these states for the historical migration record:
 
 | Stage | Meaning |
 |-------|---------|

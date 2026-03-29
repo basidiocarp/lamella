@@ -185,9 +185,10 @@ After building, `dist/codex/skills/` contains portable skill folders and
 lamella/
 ├── resources/
 │   ├── skills/           # Source skills (organized by category)
-│   ├── agents/           # Agent definitions (source, by category)
+│   ├── subagents/        # Shared Claude/Codex subagent source
 │   ├── commands/         # Slash commands (source, by category)
 │   ├── hooks/            # Event hooks
+│   ├── protocols/        # Shared protocol and rubric docs
 │   ├── rules/            # Project rules
 │   ├── templates/        # Configuration and doc templates
 │   ├── workflows/        # Development and quality workflows

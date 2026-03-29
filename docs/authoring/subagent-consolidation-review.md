@@ -33,6 +33,10 @@ Related:
 | `team-reviewer` vs domain reviewers | `Keep separate` | `team-reviewer` is a lane-specific review primitive for coordinated parallel review, not a replacement for domain-specific solo reviewers. |
 | `team-lead` vs `planner` | `Keep separate` | `planner` structures work; `team-lead` actively coordinates multi-worker execution. |
 | `socratic-mentor` vs direct tutoring or implementation help | `Keep separate` | The discovery-learning interaction pattern is intentionally different from direct instruction or coding help. |
+| `requirements-analyst` vs `prd-interviewer` | `Keep separate` | `requirements-analyst` turns ambiguity into verifiable requirements; `prd-interviewer` is an interview-led discovery workflow that produces a PRD draft. |
+| `context-manager` vs `repo-index` | `Keep separate` | `context-manager` designs retrieval and handoff strategy; `repo-index` writes a compact repository briefing artifact. |
+| `ui-visual-validator` vs `figma-design-sync` | `Keep separate` | `ui-visual-validator` is evidence-based visual verification; `figma-design-sync` is an implementation worker that edits code to match a design source. |
+| `language-developer` vs `python-developer` and `rust-developer` | `Keep separate` | `language-developer` is the fallback polyglot implementer; `python-developer` and `rust-developer` encode language-specific constraints, tooling, and failure modes. |
 
 ## Renames
 
@@ -44,6 +48,10 @@ Current rename decisions:
 
 No additional renames are recommended right now. Most migrated names are
 already specific, composable, and aligned with the current shared taxonomy.
+
+The current review does not recommend any immediate merges. The overlapping
+pairs reviewed so far still diverge meaningfully in trigger, workflow, or
+execution profile.
 
 ## Likely Future Consolidation Targets
 

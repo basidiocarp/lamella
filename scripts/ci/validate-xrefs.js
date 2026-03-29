@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 /**
- * Validate cross-references — ensure path references to agents/, skills/,
- * commands/, workflows/, templates/ in markdown files resolve to real targets.
+ * Validate cross-references between authoring resources.
  *
- * Scans all .md files under agents/, commands/, workflows/, templates/, docs/,
- * and skills/ for path-like references and checks they exist on disk.
+ * Scans markdown files under the shared source directories and checks that
+ * path-like references to resources resolve on disk.
  */
 
 const fs = require('fs');
@@ -13,7 +12,7 @@ const path = require('path');
 const BASE_DIR = path.join(__dirname, '../..');
 
 // Directories to scan for markdown files containing references
-const SCAN_DIRS = ['resources/agents', 'resources/commands', 'resources/workflows', 'resources/templates'];
+const SCAN_DIRS = ['resources/subagents', 'resources/commands', 'resources/workflows', 'resources/templates'];
 
 // Files/directories to skip (reference docs with example paths, roadmap with future plans)
 const SKIP_PATHS = [
@@ -23,12 +22,13 @@ const SKIP_PATHS = [
   'docs/roadmap.md',
 ];
 
-// Path prefixes we validate (relative to BASE_DIR)
-const VALID_PREFIXES = ['resources/agents/', 'resources/skills/', 'resources/commands/', 'resources/workflows/', 'resources/templates/'];
-
 // Patterns that look like resource path references
-// Matches: resources/agents/foo/bar.md, resources/skills/core/brainstorming, resources/commands/dev/tdd.md, etc.
-const PATH_PATTERN = /(?:resources\/)?(?:agents|skills|commands|workflows|templates)\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_.-]+)*/g;
+// Matches:
+// - resources/subagents/code-quality/code-reviewer/SUBAGENT.md
+// - resources/subagents/code-quality/code-reviewer
+// - resources/skills/core/brainstorming
+// - resources/commands/dev/tdd.md
+const PATH_PATTERN = /(?:resources\/)?(?:subagents|skills|commands|workflows|templates)\/[a-zA-Z0-9_-]+(?:\/[a-zA-Z0-9_.-]+)*/g;
 
 // Paths to ignore (common false positives)
 const IGNORE_PATTERNS = [
@@ -83,17 +83,40 @@ function validateFile(filePath) {
 
       refsChecked++;
 
-      // Resolve paths: try as-is first, then under resources/
-      const fullPath = path.join(BASE_DIR, ref);
-      const resourcesPath = ref.startsWith('resources/') ? fullPath : path.join(BASE_DIR, 'resources', ref);
-
-      if (!fs.existsSync(fullPath) && !fs.existsSync(fullPath + '.md') &&
-          !fs.existsSync(resourcesPath) && !fs.existsSync(resourcesPath + '.md')) {
+      if (!referenceExists(ref)) {
         console.error(`ERROR: ${relFile}:${i + 1} - Broken reference: ${ref}`);
         errors++;
       }
     }
   }
+}
+
+function referenceExists(ref) {
+  const candidatePaths = [];
+  const basePath = path.join(BASE_DIR, ref);
+  candidatePaths.push(basePath);
+  candidatePaths.push(`${basePath}.md`);
+
+  if (!ref.startsWith('resources/')) {
+    const resourcesPath = path.join(BASE_DIR, 'resources', ref);
+    candidatePaths.push(resourcesPath);
+    candidatePaths.push(`${resourcesPath}.md`);
+  }
+
+  for (const candidate of candidatePaths) {
+    if (fs.existsSync(candidate)) {
+      return true;
+    }
+
+    if (candidate.includes(`${path.sep}subagents${path.sep}`)) {
+      const stat = fs.statSync(candidate, { throwIfNoEntry: false });
+      if (stat && stat.isDirectory() && fs.existsSync(path.join(candidate, 'SUBAGENT.md'))) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 // Scan all target directories

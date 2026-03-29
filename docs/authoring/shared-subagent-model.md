@@ -5,6 +5,9 @@ exports. This document defines a cleaner path for subagents so one repo can
 author shared intent and emit product-specific outputs for both Claude and
 Codex.
 
+For the day-to-day authoring workflow, see
+`docs/authoring/create-shared-subagent.md`.
+
 ## Recommendation
 
 Keep one repository.
@@ -21,9 +24,13 @@ Instead:
 - Keep skills as a separate shared track because many current "agents" are
   better expressed as Codex skills than Codex custom agents.
 
-## Audit Summary
+## Historical Audit Snapshot
 
-Current state of `resources/agents/`:
+This section records the pre-migration state of the old Claude-only
+`resources/agents/` catalog. It is historical context for the shared-subagent
+model, not the current repo layout.
+
+Former state of `resources/agents/`:
 
 - `130` Markdown files under `resources/agents/`
 - `128` define `color`
@@ -372,23 +379,15 @@ In code and repo layout:
 This gives the repo one neutral vocabulary without fighting either product's
 official naming.
 
-## Migration Plan
+## Migration Outcome
 
-1. Add a new validator for `resources/subagents/**/SUBAGENT.md`.
-2. Add a builder that emits:
-   - Claude Markdown agent files
-   - Codex TOML custom-agent files
-3. Migrate 3 to 5 representative agents first:
-   - one reviewer
-   - one implementer
-   - one explorer
-   - one planner
-   - one docs or research agent
-4. Classify the rest of the current `resources/agents/` catalog into:
-   - shared subagent
-   - Claude-only subagent
-   - Codex skill instead
-5. Only after the pilot works, migrate the full catalog.
+Lamella now has:
+
+1. A validator for `resources/subagents/**/SUBAGENT.md`.
+2. Claude and Codex emitters for shared subagents.
+3. Build-pipeline integration for shared subagent distribution.
+4. A fully migrated shared source catalog under `resources/subagents/`.
+5. Historical migration tracking in `docs/authoring/subagent-migration-audit.md`.
 
 ## Naming And Consolidation Policy
 
@@ -420,15 +419,8 @@ Recommended first shared-source ports:
 - `test-runner`
 - `git-history-analyzer`
 
-## Immediate Next Step
+## Current Focus
 
-Do not bulk-rename `resources/agents/` yet.
-
-First build a pilot around a handful of representative subagents and validate
-that:
-
-- the shared source model is expressive enough
-- Claude output remains clean
-- Codex output is actually useful as a custom-agent catalog
-
-If the pilot fails, adjust the model before migrating the rest of the repo.
+The remaining work is no longer source migration. It is keeping the shared
+schema, emitters, validation, and consolidation guidance aligned as the catalog
+evolves.

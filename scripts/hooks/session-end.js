@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
- * Stop Hook (Session End) - Persist learnings when session ends
+ * SessionEnd wrapper - delegate to Cortina when available, otherwise fall back locally
  *
  * Cross-platform (Windows, macOS, Linux)
  *
- * Runs when Claude session ends. Extracts a meaningful summary from
- * the session transcript (via stdin JSON transcript_path) and saves it
- * to a session file for cross-session continuity.
+ * Lamella keeps this script as wrapper glue for the shared hook catalog.
+ * Cortina owns the primary SessionEnd runtime semantics when it is installed.
  */
 
 const path = require('path');
 const fs = require('fs');
+const { spawnSync } = require('child_process');
 const {
   getSessionsDir,
   getDateString,
@@ -126,15 +126,14 @@ function runMain() {
 }
 
 async function main() {
-  // Parse stdin JSON to get transcript_path
-  let transcriptPath = null;
-  try {
-    const input = JSON.parse(stdinData);
-    transcriptPath = input.transcript_path;
-  } catch {
-    // Fallback: try env var for backwards compatibility
-    transcriptPath = process.env.CLAUDE_TRANSCRIPT_PATH;
+  const input = parseHookInput(stdinData);
+
+  if (runCortinaSessionEnd(input, stdinData)) {
+    process.exit(0);
   }
+
+  // Parse stdin JSON to get transcript_path
+  const transcriptPath = input?.transcript_path || process.env.CLAUDE_TRANSCRIPT_PATH || null;
 
   const sessionsDir = getSessionsDir();
   const today = getDateString();
@@ -205,6 +204,42 @@ ${summarySection}
   process.exit(0);
 }
 
+function parseHookInput(rawInput) {
+  try {
+    return JSON.parse(rawInput);
+  } catch {
+    return null;
+  }
+}
+
+function runCortinaSessionEnd(parsedInput, rawInput) {
+  if (!parsedInput || typeof parsedInput.cwd !== 'string' || !parsedInput.cwd.trim()) {
+    return false;
+  }
+
+  const result = spawnSync(
+    'cortina',
+    ['adapter', 'claude-code', 'session-end'],
+    {
+      input: rawInput,
+      encoding: 'utf8',
+      stdio: ['pipe', 'inherit', 'inherit']
+    }
+  );
+
+  if (!result.error && result.status === 0) {
+    return true;
+  }
+
+  if (result.error && result.error.code !== 'ENOENT') {
+    log(`[SessionEnd] Cortina handoff failed: ${result.error.message}`);
+  } else if (typeof result.status === 'number' && result.status !== 0) {
+    log(`[SessionEnd] Cortina handoff exited ${result.status}; falling back to legacy summary writer`);
+  }
+
+  return false;
+}
+
 function buildSummarySection(summary) {
   let section = '## Session Summary\n\n';
 
@@ -233,4 +268,3 @@ function buildSummarySection(summary) {
 
   return section;
 }
-

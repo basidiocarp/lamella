@@ -319,8 +319,7 @@ Never skip the RED phase. Never write code before tests.
 
 ## Related Agents
 
-This command invokes the `tdd-guide` agent located at:
-`~/.claude/agents/testing/tdd-guide.md`
+This command invokes the shared `tdd-guide` subagent.
 
 And can reference the `test-driven-development` skill at:
 `~/.claude/skills/core/test-driven-development/`

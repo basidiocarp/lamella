@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * PostToolUse Hook: Capture test results in hyphae
+ * Legacy PostToolUse helper: capture test results in Hyphae
  *
  * Cross-platform (Windows, macOS, Linux)
  *
- * Detects test commands from Bash tool output, stores failures in hyphae
- * for cross-session recall, and tracks resolutions when previously-failed
- * tests start passing again.
+ * This script is not wired into the shipped Lamella hook catalog.
+ * Cortina now owns the primary shared lifecycle runtime for PostToolUse.
+ *
+ * Kept as a reference or fallback implementation for older local setups.
  */
 
 const fs = require('fs');

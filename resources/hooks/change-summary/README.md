@@ -2,11 +2,11 @@
 
 Runs when Claude finishes a task and prints a repo-focused summary of the current diff.
 
-This folder contains a **standalone Bash example**. The main Lamella catalog uses the shared Node hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) instead of this one-file shell bundle.
+This folder contains a **standalone Bash example**. The main Lamella catalog uses the shared hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) plus Cortina for the primary lifecycle runtime instead of this one-file shell bundle.
 
 ## What It Does
 
-The standalone `Stop` hook does three things:
+This standalone `Stop` example adds three behaviors:
 
 1. **TypeScript type checking** for modified `.ts` and `.tsx` files
 2. **Go linting** for modified `.go` files when `golangci-lint` is installed
@@ -76,7 +76,7 @@ If you want the Lamella default on Windows, prefer the shared catalog:
 - [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
 - [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
 - `cortina adapter claude-code post-tool-use`, which owns the shared capture runtime for errors, validations, corrections, and export or ingest signals
-- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js), which delegates to `cortina adapter claude-code session-end` when `cortina` is installed
+- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js), which remains wrapper glue and delegates to `cortina adapter claude-code session-end` when `cortina` is installed
 
 ## Customization
 

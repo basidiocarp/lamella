@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * PostToolUse Hook: Capture self-corrections in hyphae
+ * Legacy PostToolUse helper: capture self-corrections in Hyphae
  *
  * Cross-platform (Windows, macOS, Linux)
  *
- * Detects when an agent corrects its own recent edit (same file edited within
- * 5 minutes, with the second old_string overlapping the first new_string).
- * Stores corrections in hyphae for cross-session pattern recall.
+ * This script is not wired into the shipped Lamella hook catalog.
+ * Cortina now owns the primary shared lifecycle runtime for PostToolUse.
+ *
+ * Kept as a reference or fallback implementation for older local setups.
  */
 
 const fs = require('fs');

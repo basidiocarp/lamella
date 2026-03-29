@@ -1,6 +1,8 @@
 # Feedback Capture Hooks
 
-The Lamella plugin now ships a Cortina-first capture path for Claude lifecycle hooks. Lamella still packages the hook catalog and related docs, but the shared runtime for lifecycle capture lives in Cortina rather than the older standalone JavaScript capture scripts.
+Lamella ships the hook catalog, templates, wrappers, and related docs. Cortina owns the shared lifecycle runtime for `PostToolUse`, `Stop`, and `SessionEnd`.
+
+The older standalone JavaScript capture scripts remain in the repo as legacy reference helpers. They are not the shipped lifecycle path.
 
 See the [ecosystem LLM Training Guide](https://github.com/basidiocarp/.github/blob/main/docs/LLM-TRAINING.md) for how this data feeds into fine-tuning.
 
@@ -64,6 +66,11 @@ flowchart TD
     style Output fill:#6554c0,stroke:#403294,color:#fff
 ```
 
+## Ownership
+
+- Cortina owns lifecycle capture semantics, policy, dedupe, attribution, and durable outcome storage.
+- Lamella owns packaging, installation templates, wrapper scripts, fallback glue, and continuous-learning or evaluation hooks that sit beside the shared runtime.
+
 ## Hook Details
 
 ### Cortina PostToolUse Runtime
@@ -95,6 +102,8 @@ sequenceDiagram
 
 ### capture-code-changes.js
 
+Legacy helper. Not registered in the shipped hook catalog.
+
 Tracks file edits across a session. Triggers two actions:
 1. After 5+ code file edits and a successful build → `rhizome export` (code graph update)
 2. After 3+ document file edits → `hyphae ingest-file` for each (RAG re-indexing)
@@ -102,6 +111,19 @@ Tracks file edits across a session. Triggers two actions:
 **What it triggers (not stores):**
 - Rhizome code graph export (keeps knowledge graphs current)
 - Hyphae document ingestion (keeps RAG index current)
+
+### Legacy JavaScript Capture Scripts
+
+These scripts are kept as reference or fallback implementations, not as the primary Lamella runtime:
+
+- `scripts/hooks/capture-errors.js`
+- `scripts/hooks/capture-corrections.js`
+- `scripts/hooks/capture-test-results.js`
+
+The shipped lifecycle path uses Cortina instead:
+
+- `cortina adapter claude-code post-tool-use`
+- `scripts/hooks/session-end.js`, which delegates to `cortina adapter claude-code session-end` when Cortina is available
 
 ## Error Observability
 
@@ -115,7 +137,7 @@ cat /tmp/hyphae-hook-errors.log
 
 ## Installation
 
-Hooks are installed automatically by Lamella or Stipe. The shared Claude catalog now registers `cortina adapter claude-code post-tool-use` for the main lifecycle capture path and keeps the remaining Lamella hooks for packaging, evaluation, and local workflow behavior.
+Hooks are installed automatically by Lamella or Stipe. The shared Claude catalog registers Cortina for the main lifecycle capture path and keeps Lamella-owned hooks for packaging, evaluation, wrappers, and local workflow behavior.
 
 To verify installation:
 

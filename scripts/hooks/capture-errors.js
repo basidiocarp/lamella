@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * PostToolUse Hook: Capture Bash errors in hyphae
+ * Legacy PostToolUse helper: capture Bash errors in Hyphae
  *
  * Cross-platform (Windows, macOS, Linux)
  *
- * Detects command failures from Bash tool output and stores them in hyphae
- * for cross-session recall. Tracks active errors in a temp file and detects
- * resolutions when a previously-failed command succeeds.
+ * This script is not wired into the shipped Lamella hook catalog.
+ * Cortina now owns the primary shared lifecycle runtime for PostToolUse.
+ *
+ * Kept as a reference or fallback implementation for older local setups.
  */
 
 const fs = require('fs');

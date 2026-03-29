@@ -150,6 +150,17 @@
         ]
       },
       {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cortina adapter claude-code post-tool-use",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      },
+      {
         "matcher": "*",
         "hooks": [
           {
@@ -222,16 +233,6 @@
           {
             "type": "command",
             "command": "node \"$HOME/.claude/hooks/scripts/evaluate-session.js\""
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/bash/session-summary.sh",
-            "timeout": 30
           }
         ]
       }

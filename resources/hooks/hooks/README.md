@@ -31,7 +31,8 @@ The main [`hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/re
 - TypeScript checking after `.ts` or `.tsx` edits
 - `console.log` warning after edits
 - comment style warning after edits or writes
-- Hyphae capture hooks for errors, test failures, PR reviews, and self-corrections
+- Cortina runtime capture for errors, validations, self-corrections, and export or ingest signals
+- Lamella-only PR review capture hook
 - asynchronous continuous-learning observation
 
 ### Lifecycle Hooks
@@ -39,7 +40,15 @@ The main [`hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/re
 - session startup context and package-manager detection
 - pre-compaction state logging
 - stop-time `console.log` scan
-- session-end persistence and evaluation
+- Cortina-first session-end persistence plus Lamella evaluation fallback
+
+## Cortina Boundary
+
+The shared Lamella catalog no longer owns the primary lifecycle capture runtime.
+
+- Cortina owns reusable capture behavior for `PostToolUse`, `Stop`, and `SessionEnd`
+- Lamella owns packaging, templates, docs, continuous-learning observation, and local workflow hooks
+- the bundled `session-end.js` remains as fallback glue when Cortina is unavailable, but the default shipped runtime is Cortina
 
 ## Cross-Platform Notes
 

@@ -1,6 +1,6 @@
 # Feedback Capture Hooks
 
-Lamella's capture hooks run as Claude Code PostToolUse hooks. They observe agent behavior, detect patterns, and store signals in Hyphae for later analysis and lesson extraction.
+The Lamella plugin now ships a Cortina-first capture path for Claude lifecycle hooks. Lamella still packages the hook catalog and related docs, but the shared runtime for lifecycle capture lives in Cortina rather than the older standalone JavaScript capture scripts.
 
 See the [ecosystem LLM Training Guide](https://github.com/basidiocarp/.github/blob/main/docs/LLM-TRAINING.md) for how this data feeds into fine-tuning.
 
@@ -14,11 +14,9 @@ flowchart TD
         Build["Build command"]
     end
 
-    subgraph Hooks["Lamella PostToolUse Hooks"]
-        CE["capture-errors.js"]
-        CC["capture-corrections.js"]
-        CT["capture-test-results.js"]
-        CCH["capture-code-changes.js"]
+    subgraph Hooks["Shared Runtime"]
+        CPT["cortina adapter claude-code post-tool-use"]
+        CCH["capture-code-changes.js (legacy/inactive)"]
     end
 
     subgraph Hyphae["Hyphae Memory Store"]
@@ -35,17 +33,16 @@ flowchart TD
         Cap["Cap Dashboard"]
     end
 
-    Bash --> CE
-    Bash --> CT
-    Write --> CC
+    Bash --> CPT
+    Write --> CPT
     Write --> CCH
     Build --> CCH
 
-    CE --> EA
-    CE --> ER
-    CC --> CO
-    CT --> TF
-    CT --> TR
+    CPT --> EA
+    CPT --> ER
+    CPT --> CO
+    CPT --> TF
+    CPT --> TR
 
     EA --> Lessons
     ER --> Lessons
@@ -69,29 +66,23 @@ flowchart TD
 
 ## Hook Details
 
-### capture-errors.js
+### Cortina PostToolUse Runtime
 
-Watches Bash tool results for error patterns (`error`, `Error`, `ERROR`, `failed`, `panic`). Tracks active errors in a temp file; when a subsequent Bash call succeeds for the same command, marks the error as resolved.
+Watches Bash, Edit, Write, and MultiEdit results through `cortina adapter claude-code post-tool-use`. Cortina normalizes the host envelope, applies capture policy, dedupes repeated outcomes, and stores structured lifecycle signals in Hyphae or Rhizome.
 
 **What it stores:**
 - `errors/active` — command and error output (medium importance)
 - `errors/resolved` — command, original error, and successful output (high importance)
+- `corrections` — file path, original change, correction (high importance)
+- validation outcomes for successful build or test commands
+- export and ingest outcomes for pending code or document batches
 
 **Training value:** Error/resolution pairs are natural SFT training data. "Given this error, here's the fix."
-
-### capture-corrections.js
-
-Watches Write and Edit tool calls. When an agent edits a file it just wrote to (within the same session), that's a self-correction. The hook records both the original and corrected versions.
-
-**What it stores:**
-- `corrections` — file path, original change, correction (high importance)
-
-**Training value:** These are natural DPO preference pairs. The original is "rejected," the correction is "chosen."
 
 ```mermaid
 sequenceDiagram
     participant A as Agent
-    participant H as Hook
+    participant H as Cortina
     participant DB as Hyphae
 
     A->>H: Write file.rs (version 1)
@@ -101,16 +92,6 @@ sequenceDiagram
     H->>DB: Store correction (v1 → v2)
     Note over DB: topic: corrections<br/>importance: high
 ```
-
-### capture-test-results.js
-
-Watches Bash tool results for test runner output patterns (cargo test, vitest, pytest, jest, playwright, go test). Detects failures, tracks them, and marks resolution when tests pass.
-
-**What it stores:**
-- `tests/failed` — test runner, failure output (medium importance)
-- `tests/resolved` — test runner, original failure, passing output (high importance)
-
-**Training value:** Similar to error resolution pairs but specific to test failures.
 
 ### capture-code-changes.js
 
@@ -134,12 +115,12 @@ cat /tmp/hyphae-hook-errors.log
 
 ## Installation
 
-Hooks are installed automatically by `mycelium init --ecosystem` when Hyphae is detected. They're placed in `~/.claude/hooks/basidiocarp/` and registered as PostToolUse hooks in `~/.claude/settings.json`.
+Hooks are installed automatically by Lamella or Stipe. The shared Claude catalog now registers `cortina adapter claude-code post-tool-use` for the main lifecycle capture path and keeps the remaining Lamella hooks for packaging, evaluation, and local workflow behavior.
 
 To verify installation:
 
 ```bash
-cat ~/.claude/settings.json | grep -A3 "capture"
+cat ~/.claude/settings.json | grep -A3 "cortina adapter claude-code post-tool-use"
 ```
 
 ## Related

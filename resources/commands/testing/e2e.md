@@ -337,8 +337,7 @@ For PMX, prioritize these E2E tests:
 
 ## Related Agents
 
-This command invokes the `e2e-runner` agent located at:
-`~/.claude/agents/testing/e2e-runner.md`
+This command invokes the shared `e2e-runner` subagent.
 
 ## Quick Commands
 

@@ -153,28 +153,16 @@
         "description": "Warn about inline-dash comment style, suggest boxed style"
       },
       {
-        "matcher": "Bash",
+        "matcher": "Bash|Edit|Write|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-errors.js\"",
+            "command": "cortina adapter claude-code post-tool-use",
             "async": true,
             "timeout": 10
           }
         ],
-        "description": "Capture command errors in hyphae for cross-session recall"
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-test-results.js\"",
-            "async": true,
-            "timeout": 10
-          }
-        ],
-        "description": "Capture test failures and resolutions in hyphae"
+        "description": "Cortina runtime: capture errors, validations, corrections, and export or ingest signals"
       },
       {
         "matcher": "Bash",
@@ -187,18 +175,6 @@
           }
         ],
         "description": "Capture PR review feedback in hyphae"
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-corrections.js\"",
-            "async": true,
-            "timeout": 10
-          }
-        ],
-        "description": "Detect self-corrections and store in hyphae"
       },
       {
         "matcher": "*",
@@ -234,7 +210,7 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-end.js\""
           }
         ],
-        "description": "Persist session state on end"
+        "description": "Persist session state on end, preferring Cortina when available"
       },
       {
         "matcher": "*",

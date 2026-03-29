@@ -72,10 +72,11 @@ Add to `~/.claude/settings.json`:
 
 This standalone hook is Bash-based. Use it on macOS, Linux, or Windows via Git Bash or WSL.
 
-If you want the Lamella default on Windows, prefer the shared Node hooks:
+If you want the Lamella default on Windows, prefer the shared catalog:
 - [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
 - [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
-- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js)
+- `cortina adapter claude-code post-tool-use`, which owns the shared capture runtime for errors, validations, corrections, and export or ingest signals
+- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js), which delegates to `cortina adapter claude-code session-end` when `cortina` is installed
 
 ## Customization
 
@@ -88,7 +89,7 @@ Edit the script if you want to:
 
 ### TypeScript errors but I still want to stop
 
-Make the TypeScript branch non-blocking or use the Node shared hooks instead.
+Make the TypeScript branch non-blocking or use the shared catalog instead.
 
 ### `tsconfig.json` not found
 

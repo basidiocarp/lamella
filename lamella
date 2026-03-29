@@ -8,7 +8,7 @@
 #   ./lamella build-repo-marketplace
 #   ./lamella build-codex
 #   ./lamella install [options] [plugin-names...]
-#   ./lamella install-codex [options] [skill-names...]
+#   ./lamella install-codex [options] [skill-or-agent-names...]
 #   ./lamella uninstall [plugin-names...]
 #   ./lamella update [claude|codex|all]
 
@@ -24,11 +24,11 @@ USAGE
     ./lamella <command> [args...]
 
 COMMANDS
-    list [plugins|codex|all]   List available built plugins or skills
+    list [plugins|codex|all]   List available built plugins, Codex skills, or Codex agents
     build-marketplace          Build the Claude plugin marketplace
-    build-codex                Build and export Codex skills
+    build-codex                Build and export Codex skills and agents
     install [args...]          Install Claude plugins
-    install-codex [args...]    Install Codex skills
+    install-codex [args...]    Install Codex skills and agents
     uninstall [args...]        Remove installed Claude plugins
     update [claude|codex|all]  Refresh generated outputs
 

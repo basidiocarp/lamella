@@ -72,3 +72,4 @@ installable outputs.
 | [Reference](reference/plugins.md) | Claude Code reference snapshots plus Lamella-specific marketplace and packaging context |
 | [Architecture](architecture.md) | Build pipeline, packaging model, and validation flow |
 | [Roadmap](roadmap.md) | Current priorities and shipped milestones |
+| [Tool Cleanup Plan](tool-boundary-cleanup.md) | Per-file keep, migrate, retire, and sequencing decisions for Lamella tooling |

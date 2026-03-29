@@ -29,16 +29,7 @@
       "ai-agents/prompt-engineering",
       "ai-agents/subagent-driven-development"
     ],
-    "agents": [
-      "ai-ml/ai-engineer.md",
-      "ai-ml/ml-engineer.md",
-      "ai-ml/mlops-engineer.md",
-      "analysis/performance-analyzer.md",
-      "meta/agent-creator.md",
-      "meta/agent-native-reviewer.md",
-      "meta/agent-sdk-verifier-py.md",
-      "meta/agent-sdk-verifier-ts.md"
-    ],
+    "agents": [],
     "commands": [
       "ai/cancel-skill-improver.md",
       "ai/ct-check.md",

@@ -49,7 +49,7 @@ The shared Lamella catalog no longer owns the primary lifecycle capture runtime.
 - Cortina owns reusable capture behavior for `PostToolUse`, `Stop`, and `SessionEnd`
 - Lamella owns packaging, templates, docs, continuous-learning observation, and local workflow hooks
 - the bundled `session-end.js` remains as fallback glue when Cortina is unavailable, but the default shipped runtime is Cortina
-- the older JS capture helpers such as `capture-errors.js`, `capture-corrections.js`, and `capture-test-results.js` are legacy reference scripts and are not wired into the shipped hook catalog
+- the older Lamella JS capture helpers have been removed; the shipped lifecycle path is Cortina
 
 ## Cross-Platform Notes
 

@@ -4,6 +4,26 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-03-29
+
+### Added
+
+- **Shared subagent pipeline**: Added `resources/subagents/` as the canonical cross-surface source plus shared validation and emitters for Claude markdown agents and Codex TOML agents.
+
+### Changed
+
+- **Dual-surface agent packaging**: Integrated shared subagents into the main Claude plugin and Codex profile builds, including distribution metadata and Codex install support.
+- **Agent source of truth**: Migrated the full legacy agent catalog into the shared subagent model and moved negotiation protocol docs to `resources/protocols/negotiation/`.
+
+### Fixed
+
+- **Release workflow helper**: Restored `scripts/release/extract-changelog-entry.sh` so tagged releases can still extract notes from `CHANGELOG.md`.
+
+### Removed
+
+- **Legacy agent tree**: Removed `resources/agents/` as a source of agent definitions after the shared subagent migration completed.
+- **Placeholder cleanup log**: Removed the old trimmed-placeholder execution log now that the cleanup and migration work is captured elsewhere.
+
 ## [0.5.2] - 2026-03-27
 
 ### Fixed

@@ -2,7 +2,7 @@
 
 Lamella ships the hook catalog, templates, wrappers, and related docs. Cortina owns the shared lifecycle runtime for `PostToolUse`, `Stop`, and `SessionEnd`.
 
-The older standalone JavaScript capture scripts remain in the repo as legacy reference helpers. They are not the shipped lifecycle path.
+The older standalone JavaScript capture scripts have been removed from Lamella. They are not part of the shipped lifecycle path.
 
 See the [ecosystem LLM Training Guide](https://github.com/basidiocarp/.github/blob/main/docs/LLM-TRAINING.md) for how this data feeds into fine-tuning.
 
@@ -18,7 +18,6 @@ flowchart TD
 
     subgraph Hooks["Shared Runtime"]
         CPT["cortina adapter claude-code post-tool-use"]
-        CCH["capture-code-changes.js (legacy/inactive)"]
     end
 
     subgraph Hyphae["Hyphae Memory Store"]
@@ -37,8 +36,6 @@ flowchart TD
 
     Bash --> CPT
     Write --> CPT
-    Write --> CCH
-    Build --> CCH
 
     CPT --> EA
     CPT --> ER
@@ -82,7 +79,7 @@ Watches Bash, Edit, Write, and MultiEdit results through `cortina adapter claude
 - `errors/resolved` — command, original error, and successful output (high importance)
 - `corrections` — file path, original change, correction (high importance)
 - validation outcomes for successful build or test commands
-- export and ingest outcomes for pending code or document batches
+- export and ingest outcomes for pending code or document batches, including Rhizome export and Hyphae ingest triggers that used to live in Lamella helpers
 
 **Training value:** Error/resolution pairs are natural SFT training data. "Given this error, here's the fix."
 
@@ -99,26 +96,6 @@ sequenceDiagram
     H->>DB: Store correction (v1 → v2)
     Note over DB: topic: corrections<br/>importance: high
 ```
-
-### capture-code-changes.js
-
-Legacy helper. Not registered in the shipped hook catalog.
-
-Tracks file edits across a session. Triggers two actions:
-1. After 5+ code file edits and a successful build → `rhizome export` (code graph update)
-2. After 3+ document file edits → `hyphae ingest-file` for each (RAG re-indexing)
-
-**What it triggers (not stores):**
-- Rhizome code graph export (keeps knowledge graphs current)
-- Hyphae document ingestion (keeps RAG index current)
-
-### Legacy JavaScript Capture Scripts
-
-These scripts are kept as reference or fallback implementations, not as the primary Lamella runtime:
-
-- `scripts/hooks/capture-errors.js`
-- `scripts/hooks/capture-corrections.js`
-- `scripts/hooks/capture-test-results.js`
 
 The shipped lifecycle path uses Cortina instead:
 

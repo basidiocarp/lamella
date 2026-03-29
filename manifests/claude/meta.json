@@ -31,15 +31,7 @@
       "meta/task-observer",
       "meta/team-communication-protocols"
     ],
-    "agents": [
-      "meta/output-evaluator.md",
-      "meta/plugin-validator.md",
-      "meta/post-dev-orchestrator.md",
-      "meta/skill-reviewer.md",
-      "meta/slash-command-auditor.md",
-      "meta/subagent-auditor.md",
-      "meta/workflow-skill-reviewer.md"
-    ],
+    "agents": [],
     "commands": [
       "meta/clean-crate-skills.md",
       "meta/create-llms-for-skills.md",

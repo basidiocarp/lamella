@@ -1,4 +1,4 @@
-.PHONY: validate build build-marketplace build-codex sync-codex-manifests install install-all uninstall install-codex audit clean help
+.PHONY: validate build build-marketplace build-codex build-claude-subagents build-codex-agents sync-codex-manifests install install-all uninstall install-codex audit clean help
 
 SHELL := /bin/bash
 PLUGIN_DIR := manifests/claude
@@ -25,6 +25,7 @@ validate: ## Run all CI validators
 	@node scripts/ci/validate-hooks.js
 	@node scripts/ci/validate-rules.js
 	@node scripts/ci/validate-skills.js
+	@node scripts/ci/validate-subagents.js
 	@node scripts/ci/validate-manifests.js
 	@node scripts/ci/validate-marketplace-catalog.js
 	@node scripts/ci/validate-xrefs.js
@@ -47,6 +48,12 @@ sync-codex-manifests: ## Generate Codex manifests from Claude manifests
 build-codex: ## Build Codex skill exports to dist/codex/
 	@bash $(LAMELLA) build-codex
 
+build-claude-subagents: ## Emit shared subagents as Claude markdown artifacts
+	@bash builders/build-claude-subagents.sh
+
+build-codex-agents: ## Emit shared subagents as Codex TOML agent artifacts
+	@bash builders/build-codex-agents.sh
+
 install-codex: build-codex ## Build and install Codex skills to ~/.codex/skills
 	@bash $(LAMELLA) install-codex --all --force
 
@@ -67,7 +74,8 @@ clean: ## Remove dist/ build output
 
 count: ## Show asset counts
 	@echo "Skills:   $$(find resources/skills -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | tr -d ' ')"
-	@echo "Agents:   $$(find resources/agents -name '*.md' -not -path '*/_shared/*' -not -path '*/_negotiation/*' 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Agents:   $$(find resources/agents -name '*.md' -not -path '*/_shared/*' 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Subagents:$$(find resources/subagents -name 'SUBAGENT.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Commands: $$(find resources/commands -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Rules:    $$(find resources/rules -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Plugins:  $$(ls $(PLUGIN_DIR)/*.json 2>/dev/null | grep -v schema.json | grep -v index.json | wc -l | tr -d ' ')"

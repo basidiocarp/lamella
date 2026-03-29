@@ -10,26 +10,26 @@ for Claude Code and Codex.
 Lamella has three layers:
 
 1. **Source resources**
-   Skills, agents, commands, hooks, rules, templates, workflows, scripts, and
-   MCP configs live under `resources/`.
+   Skills, agents, subagents, commands, hooks, rules, templates, workflows,
+   scripts, and MCP configs live under `resources/`.
 2. **Manifest selection**
    Plugin manifests in `manifests/claude/*.json` define which resources belong
    to each plugin and what dependencies exist between them.
 3. **Built outputs**
    Builders transform source resources into:
    - Claude Code plugins and a local marketplace under `dist/claude/`
-   - Codex skill exports and profiles under `dist/codex/`
+   - Codex skill exports, custom agents, and profiles under `dist/codex/`
 
 ## Build Pipeline
 
 ```mermaid
 flowchart LR
-    A["resources/\nskills/\nagents/\ncommands/\nhooks/\n..."] -->|selected by| B[manifests/claude/*.json]
+    A["resources/\nskills/\nagents/\nsubagents/\ncommands/\nhooks/\n..."] -->|selected by| B[manifests/claude/*.json]
     B -->|Claude builders| C[dist/claude/plugins/<name>/]
-    B -->|Codex builders| D[dist/codex/skills/ + profiles/]
+    B -->|Codex builders| D[dist/codex/skills/ + profiles/ + agents]
     C --> E[dist/claude/.claude-plugin/marketplace.json]
     C --> F[Claude plugin install flow]
-    D --> G[Codex skill install flow]
+    D --> G[Codex skill and agent install flow]
 ```
 
 ## Directory Layout
@@ -39,6 +39,7 @@ lamella/
 ├── resources/
 │   ├── skills/          # Source skill directories with SKILL.md
 │   ├── agents/          # Source agent markdown files and shared fragments
+│   ├── subagents/       # Shared Claude/Codex subagent source
 │   ├── commands/        # Source slash commands
 │   ├── hooks/           # Hook definitions and docs
 │   ├── rules/           # Standalone rule content
@@ -56,7 +57,7 @@ lamella/
 │   └── hooks/           # Hook support scripts
 ├── dist/
 │   ├── claude/          # Built Claude marketplace and plugins
-│   └── codex/           # Built Codex skills and profiles
+│   └── codex/           # Built Codex skills, agents, and profiles
 └── docs/                # User, authoring, and reference docs
 ```
 
@@ -65,13 +66,15 @@ lamella/
 | Resource Type | Source | Claude Output | Codex Output |
 |---------------|--------|---------------|--------------|
 | Skills | `resources/skills/<category>/<name>/SKILL.md` | `dist/claude/plugins/<plugin>/skills/<name>/SKILL.md` | `dist/codex/skills/<name>/SKILL.md` |
-| Agents | `resources/agents/<category>/<name>.md` | `dist/claude/plugins/<plugin>/agents/<name>.md` | Included only when exported as Codex-facing content |
+| Legacy agents | `resources/agents/<category>/<name>.md` | `dist/claude/plugins/<plugin>/agents/<name>.md` | Not emitted directly |
+| Shared subagents | `resources/subagents/<category>/<name>/SUBAGENT.md` | `dist/claude/plugins/<plugin>/agents/<name>.md` | `dist/codex/profiles/<profile>/agents/<name>.toml` |
 | Commands | `resources/commands/<category>/<name>.md` | `dist/claude/plugins/<plugin>/commands/<name>.md` | Not a primary Codex export target |
 | Hooks | `resources/hooks/...` | `dist/claude/plugins/<plugin>/hooks/...` | N/A |
 | Rules / Templates / Workflows | `resources/...` | copied as standalone support content where needed | optional support content |
 
 Claude builds flatten category-oriented source paths into plugin-local names.
-Codex builds export portable skill directories and profile metadata.
+Codex builds export portable skill directories, generated custom agents, and
+profile metadata.
 
 ## Primary Commands
 
@@ -125,7 +128,7 @@ Lamella currently documents and packages:
 - **25 plugins**
 - **286 skills**
 - manifest-driven Claude plugin builds
-- Codex skill exports
+- Codex skill and agent exports
 - a local marketplace and hosted marketplace flow
 
 The main architectural work left is not “invent a build system.” It is keeping

@@ -106,10 +106,6 @@ Similar tools:
 
 cc-sessions positioning: Unix-style CLI, fast search, powerful filters, no dependencies.
 
-AUTHOR
-------
-Created for terminal power users who prefer CLI over GUI.
-Gist: https://gist.github.com/FlorianBruniaux/992d4d1107592d9e98ca9d89838871c6
 """
 
 import argparse
@@ -126,7 +122,7 @@ INDEX_PATH = CLAUDE_DIR / "sessions-index.jsonl"
 
 def parse_duration(duration_str: str) -> datetime:
     """Parse duration string like '7d', '30d' or ISO date."""
-    if duration_str.endswith('d'):
+    if duration_str.endswith("d"):
         days = int(duration_str[:-1])
         return datetime.now() - timedelta(days=days)
     return datetime.fromisoformat(duration_str)
@@ -134,7 +130,7 @@ def parse_duration(duration_str: str) -> datetime:
 
 def encode_project_path(path: Path) -> str:
     """Encode project path to match Claude's format."""
-    return str(path).replace('/', '-')  # Keep leading - from root /
+    return str(path).replace("/", "-")  # Keep leading - from root /
 
 
 def detect_project() -> Optional[str]:
@@ -174,7 +170,7 @@ def get_project_dirs(all_projects: bool = False) -> List[Path]:
 def get_first_user_message(filepath: Path) -> Optional[str]:
     """Extract first significant user message from session JSONL."""
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             for line in f:
                 if not line.strip():
                     continue
@@ -182,21 +178,21 @@ def get_first_user_message(filepath: Path) -> Optional[str]:
                     entry = json.loads(line)
 
                     # Rule 1: Must be user message
-                    if entry.get('type') != 'user':
+                    if entry.get("type") != "user":
                         continue
 
-                    content = entry.get('message', {}).get('content', '')
+                    content = entry.get("message", {}).get("content", "")
 
                     # Rule 2: Must be string (not array = tool_result)
                     if not isinstance(content, str):
                         continue
 
                     # Rule 3: Not internal XML message
-                    if content.startswith('<'):
+                    if content.startswith("<"):
                         continue
 
                     # Found significant user message
-                    return content[:60].replace('\n', ' ')
+                    return content[:60].replace("\n", " ")
                 except json.JSONDecodeError:
                     continue
     except Exception:
@@ -209,7 +205,7 @@ def parse_session(filepath: Path) -> Optional[Dict]:
     session_id = filepath.stem
 
     # Skip subagent sessions
-    if session_id.startswith('agent-'):
+    if session_id.startswith("agent-"):
         return None
 
     mtime = filepath.stat().st_mtime
@@ -221,13 +217,13 @@ def parse_session(filepath: Path) -> Optional[Dict]:
     # Extract branch from gitBranch field in JSONL
     branch = "unknown"
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             for line in f:
                 if not line.strip():
                     continue
                 try:
                     entry = json.loads(line)
-                    git_branch = entry.get('gitBranch')
+                    git_branch = entry.get("gitBranch")
                     if git_branch:
                         branch = git_branch
                         break
@@ -244,11 +240,13 @@ def parse_session(filepath: Path) -> Optional[Dict]:
         "mtime": mtime,
         "branch": branch,
         "context": context,
-        "timestamp": datetime.fromtimestamp(mtime).isoformat()
+        "timestamp": datetime.fromtimestamp(mtime).isoformat(),
     }
 
 
-def build_index(project_dirs: List[Path], existing_index: Dict[str, Dict]) -> Dict[str, Dict]:
+def build_index(
+    project_dirs: List[Path], existing_index: Dict[str, Dict]
+) -> Dict[str, Dict]:
     """Build or update index incrementally."""
     index = existing_index.copy()
 
@@ -260,7 +258,7 @@ def build_index(project_dirs: List[Path], existing_index: Dict[str, Dict]) -> Di
             file_mtime = filepath.stat().st_mtime
 
             # Skip if already indexed and not modified
-            if session_id in index and index[session_id]['mtime'] >= file_mtime:
+            if session_id in index and index[session_id]["mtime"] >= file_mtime:
                 continue
 
             # Parse session
@@ -278,12 +276,12 @@ def load_index() -> Dict[str, Dict]:
 
     index = {}
     try:
-        with open(INDEX_PATH, 'r') as f:
+        with open(INDEX_PATH, "r") as f:
             for line in f:
                 if not line.strip():
                     continue
                 entry = json.loads(line)
-                index[entry['id']] = entry
+                index[entry["id"]] = entry
     except Exception as e:
         print(f"Warning: Failed to load index: {e}", file=sys.stderr)
         return {}
@@ -295,14 +293,19 @@ def save_index(index: Dict[str, Dict]):
     """Save index to disk."""
     CLAUDE_DIR.mkdir(exist_ok=True)
 
-    with open(INDEX_PATH, 'w') as f:
+    with open(INDEX_PATH, "w") as f:
         for entry in index.values():
-            f.write(json.dumps(entry) + '\n')
+            f.write(json.dumps(entry) + "\n")
 
 
-def cmd_search(keyword: str, project_dirs: List[Path], limit: int = 10,
-               since: Optional[str] = None, branch: Optional[str] = None,
-               json_output: bool = False):
+def cmd_search(
+    keyword: str,
+    project_dirs: List[Path],
+    limit: int = 10,
+    since: Optional[str] = None,
+    branch: Optional[str] = None,
+    json_output: bool = False,
+):
     """Search sessions by keyword."""
     # Build/update index
     existing = load_index()
@@ -315,27 +318,27 @@ def cmd_search(keyword: str, project_dirs: List[Path], limit: int = 10,
 
     for entry in index.values():
         # Filter by project
-        if not any(entry['project'] == d.name for d in project_dirs):
+        if not any(entry["project"] == d.name for d in project_dirs):
             continue
 
         # Filter by keyword (case-insensitive in context)
-        if keyword.lower() not in entry['context'].lower():
+        if keyword.lower() not in entry["context"].lower():
             continue
 
         # Filter by date
         if since_dt:
-            entry_dt = datetime.fromisoformat(entry['timestamp'])
+            entry_dt = datetime.fromisoformat(entry["timestamp"])
             if entry_dt < since_dt:
                 continue
 
         # Filter by branch
-        if branch and entry['branch'] != branch:
+        if branch and entry["branch"] != branch:
             continue
 
         matches.append(entry)
 
     # Sort by timestamp desc
-    matches.sort(key=lambda x: x['timestamp'], reverse=True)
+    matches.sort(key=lambda x: x["timestamp"], reverse=True)
     matches = matches[:limit]
 
     # Output
@@ -343,8 +346,10 @@ def cmd_search(keyword: str, project_dirs: List[Path], limit: int = 10,
         print(json.dumps(matches, indent=2))
     else:
         for m in matches:
-            dt = datetime.fromisoformat(m['timestamp'])
-            print(f"{dt.strftime('%Y-%m-%d %H:%M')}  {m['id']}  {m['branch']:12}  \"{m['context']}\"")
+            dt = datetime.fromisoformat(m["timestamp"])
+            print(
+                f'{dt.strftime("%Y-%m-%d %H:%M")}  {m["id"]}  {m["branch"]:12}  "{m["context"]}"'
+            )
 
 
 def cmd_recent(project_dirs: List[Path], limit: int = 10, json_output: bool = False):
@@ -355,11 +360,12 @@ def cmd_recent(project_dirs: List[Path], limit: int = 10, json_output: bool = Fa
     save_index(index)
 
     # Filter by project
-    sessions = [e for e in index.values()
-                if any(e['project'] == d.name for d in project_dirs)]
+    sessions = [
+        e for e in index.values() if any(e["project"] == d.name for d in project_dirs)
+    ]
 
     # Sort by timestamp desc
-    sessions.sort(key=lambda x: x['timestamp'], reverse=True)
+    sessions.sort(key=lambda x: x["timestamp"], reverse=True)
     sessions = sessions[:limit]
 
     # Output
@@ -367,8 +373,10 @@ def cmd_recent(project_dirs: List[Path], limit: int = 10, json_output: bool = Fa
         print(json.dumps(sessions, indent=2))
     else:
         for s in sessions:
-            dt = datetime.fromisoformat(s['timestamp'])
-            print(f"{dt.strftime('%Y-%m-%d %H:%M')}  {s['id']}  {s['branch']:12}  \"{s['context']}\"")
+            dt = datetime.fromisoformat(s["timestamp"])
+            print(
+                f'{dt.strftime("%Y-%m-%d %H:%M")}  {s["id"]}  {s["branch"]:12}  "{s["context"]}"'
+            )
 
 
 def cmd_info(session_id: str):
@@ -376,7 +384,7 @@ def cmd_info(session_id: str):
     # Match partial ID
     index = load_index()
 
-    matches = [s for s in index.values() if s['id'].startswith(session_id)]
+    matches = [s for s in index.values() if s["id"].startswith(session_id)]
 
     if not matches:
         print(f"Error: Session not found: {session_id}", file=sys.stderr)
@@ -389,7 +397,7 @@ def cmd_info(session_id: str):
         sys.exit(1)
 
     session = matches[0]
-    dt = datetime.fromisoformat(session['timestamp'])
+    dt = datetime.fromisoformat(session["timestamp"])
 
     print(f"Session: {session['id']}")
     print(f"Date:    {dt.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -403,7 +411,7 @@ def cmd_resume(session_id: str):
     # Match partial ID
     index = load_index()
 
-    matches = [s for s in index.values() if s['id'].startswith(session_id)]
+    matches = [s for s in index.values() if s["id"].startswith(session_id)]
 
     if not matches:
         print(f"Error: Session not found: {session_id}", file=sys.stderr)
@@ -415,10 +423,10 @@ def cmd_resume(session_id: str):
             print(f"  {m['id']}", file=sys.stderr)
         sys.exit(1)
 
-    full_id = matches[0]['id']
+    full_id = matches[0]["id"]
 
     # exec claude --resume
-    os.execvp('claude', ['claude', '--resume', full_id])
+    os.execvp("claude", ["claude", "--resume", full_id])
 
 
 def cmd_reindex():
@@ -440,37 +448,39 @@ def cmd_reindex():
 
 def main():
     parser = argparse.ArgumentParser(description="Search Claude Code session history")
-    parser.add_argument('--all', action='store_true', help="Search all projects")
-    parser.add_argument('--json', action='store_true', help="JSON output")
+    parser.add_argument("--all", action="store_true", help="Search all projects")
+    parser.add_argument("--json", action="store_true", help="JSON output")
 
-    subparsers = parser.add_subparsers(dest='command', required=True)
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
     # search
-    search_parser = subparsers.add_parser('search', help="Search sessions by keyword")
-    search_parser.add_argument('keyword', help="Search keyword")
-    search_parser.add_argument('--limit', type=int, default=10, help="Max results")
-    search_parser.add_argument('--since', help="Filter by date (7d, 30d, or ISO date)")
-    search_parser.add_argument('--branch', help="Filter by git branch")
+    search_parser = subparsers.add_parser("search", help="Search sessions by keyword")
+    search_parser.add_argument("keyword", help="Search keyword")
+    search_parser.add_argument("--limit", type=int, default=10, help="Max results")
+    search_parser.add_argument("--since", help="Filter by date (7d, 30d, or ISO date)")
+    search_parser.add_argument("--branch", help="Filter by git branch")
 
     # recent
-    recent_parser = subparsers.add_parser('recent', help="Show recent sessions")
-    recent_parser.add_argument('limit', nargs='?', type=int, default=10, help="Number of sessions")
+    recent_parser = subparsers.add_parser("recent", help="Show recent sessions")
+    recent_parser.add_argument(
+        "limit", nargs="?", type=int, default=10, help="Number of sessions"
+    )
 
     # info
-    info_parser = subparsers.add_parser('info', help="Show session details")
-    info_parser.add_argument('session_id', help="Session ID (partial match)")
+    info_parser = subparsers.add_parser("info", help="Show session details")
+    info_parser.add_argument("session_id", help="Session ID (partial match)")
 
     # resume
-    resume_parser = subparsers.add_parser('resume', help="Resume a session")
-    resume_parser.add_argument('session_id', help="Session ID (partial match)")
+    resume_parser = subparsers.add_parser("resume", help="Resume a session")
+    resume_parser.add_argument("session_id", help="Session ID (partial match)")
 
     # reindex
-    subparsers.add_parser('reindex', help="Force rebuild index")
+    subparsers.add_parser("reindex", help="Force rebuild index")
 
     args = parser.parse_args()
 
     # Get project dirs
-    if args.command in ['search', 'recent']:
+    if args.command in ["search", "recent"]:
         project_dirs = get_project_dirs(args.all)
 
         if not project_dirs:
@@ -482,17 +492,19 @@ def main():
             sys.exit(1)
 
     # Execute command
-    if args.command == 'search':
-        cmd_search(args.keyword, project_dirs, args.limit, args.since, args.branch, args.json)
-    elif args.command == 'recent':
+    if args.command == "search":
+        cmd_search(
+            args.keyword, project_dirs, args.limit, args.since, args.branch, args.json
+        )
+    elif args.command == "recent":
         cmd_recent(project_dirs, args.limit, args.json)
-    elif args.command == 'info':
+    elif args.command == "info":
         cmd_info(args.session_id)
-    elif args.command == 'resume':
+    elif args.command == "resume":
         cmd_resume(args.session_id)
-    elif args.command == 'reindex':
+    elif args.command == "reindex":
         cmd_reindex()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

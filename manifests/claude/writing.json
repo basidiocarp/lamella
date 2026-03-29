@@ -24,19 +24,7 @@
       "writing/voice-toolkit",
       "writing/writing-voice"
     ],
-    "agents": [
-      "content/clarity-editor.md",
-      "content/content-writer.md",
-      "content/seo-optimizer.md",
-      "content/voice-guardian.md",
-      "documentation/api-documenter.md",
-      "documentation/doc-auditor.md",
-      "documentation/docs-writer.md",
-      "documentation/tech-writer.md",
-      "documentation/tutorial-engineer.md",
-      "research/framework-researcher.md",
-      "specialized/pr-writer.md"
-    ],
+    "agents": [],
     "commands": [
       "content/ads.md",
       "content/articles.md",

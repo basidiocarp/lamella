@@ -202,7 +202,7 @@ The reviewer checks for:
 
 ## Related
 
-- Agent: `agents/languages/python-developer.md`
+- Subagent: `python-developer`
 - Skills: `skills/python/python-patterns/`, `skills/python/python-testing/`
 
 ## Common Fixes

@@ -21,6 +21,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+COPY_SHARED_SUBAGENTS_SCRIPT="$BASE_DIR/scripts/build/copy-shared-subagents.js"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -57,6 +58,10 @@ usage() {
 check_deps() {
     if ! command -v jq &>/dev/null; then
         log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
+        exit 1
+    fi
+    if ! command -v node &>/dev/null; then
+        log_error "node is required. Install Node.js 18+."
         exit 1
     fi
 }
@@ -340,6 +345,9 @@ build_plugin() {
 
     # Official plugin resources
     copy_agents "$manifest" "$output_dir" || ((total_missing += $?))
+    local shared_count
+    shared_count=$(node "$COPY_SHARED_SUBAGENTS_SCRIPT" claude "$name" "$output_dir" | awk '/^Emitted / {print $2}')
+    [[ -n "$shared_count" && "$shared_count" != "0" ]] && log_success "  shared-subagents: $shared_count files"
     copy_commands "$manifest" "$output_dir" || ((total_missing += $?))
     copy_skills "$manifest" "$output_dir" || ((total_missing += $?))
     copy_hooks "$manifest" "$output_dir" || true

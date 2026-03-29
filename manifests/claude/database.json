@@ -21,14 +21,7 @@
       "database/postgresql",
       "database/sql-pro"
     ],
-    "agents": [
-      "data/data-engineer.md",
-      "data/data-integrity-guardian.md",
-      "data/data-scientist.md",
-      "data/database-architect.md",
-      "data/seed-generator.md",
-      "data/vector-db-architect.md"
-    ],
+    "agents": [],
     "commands": [
       "database/data-driven-feature.md",
       "database/data-pipeline.md",

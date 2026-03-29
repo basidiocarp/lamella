@@ -24,11 +24,6 @@
       "collaboration/stress-test-design"
     ],
     "agents": [
-      "teams/socratic-mentor.md",
-      "teams/team-debugger.md",
-      "teams/team-implementer.md",
-      "teams/team-lead.md",
-      "teams/team-reviewer.md"
     ],
     "commands": []
   }

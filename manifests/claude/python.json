@@ -28,11 +28,7 @@
       "python/python-testing",
       "python/temporal-python-testing"
     ],
-    "agents": [
-      "languages/django-developer.md",
-      "languages/fastapi-developer.md",
-      "languages/python-developer.md"
-    ],
+    "agents": [],
     "commands": [
       "languages/python-review.md",
       "languages/python-scaffold.md"

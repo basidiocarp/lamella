@@ -75,7 +75,7 @@ function validateAgents() {
     const frontmatter = extractFrontmatter(content);
 
     if (!frontmatter) {
-      // Files in _shared/ and _negotiation/ are utility fragments, not full agents
+      // Files in underscore-prefixed directories are utility fragments, not full agents
       const dir = path.dirname(relPath);
       if (dir.startsWith('_')) {
         continue;

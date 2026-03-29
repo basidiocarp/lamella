@@ -25,6 +25,8 @@ reliable as the library continues to evolve.
 - Dependency-aware Claude install flow through the wrapper command surface.
 - The Lamella audit and naming pass is complete, with the docs now aligned to
   the current 25-plugin product story.
+- The remaining Claude host-maintenance scripts moved to `stipe`, and Lamella
+  dropped the leftover personal config-sync and stale release helper scripts.
 
 ## Next
 
@@ -41,6 +43,9 @@ reliable as the library continues to evolve.
   continue.
 - Hand off lifecycle and capture-hook ownership to Cortina wherever Lamella is
   still carrying runtime responsibilities.
+- Execute the per-file cleanup plan in [tool-boundary-cleanup.md](tool-boundary-cleanup.md)
+  so Lamella stops carrying host-maintenance and miscellaneous utility scripts
+  that no longer match its packaging boundary.
 
 ## Later
 

@@ -211,9 +211,7 @@
       "rust/unsafe-checker",
       "rust/zero-cost"
     ],
-    "agents": [
-      "languages/rust-developer.md"
-    ],
+    "agents": [],
     "commands": [
       "languages/rust.md"
     ]

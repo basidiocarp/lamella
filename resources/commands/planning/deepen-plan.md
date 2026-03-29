@@ -313,14 +313,14 @@ find .claude/agents -name "*.md" 2>/dev/null
 - Any local plugins
 
 **Agent folders by type:**
-- USE: `agents/code-quality/*` (code reviewers)
-- USE: `agents/architecture/*` (architecture reviewers)
-- USE: `agents/research/*` (all researchers)
-- USE: `agents/frontend/*` (design/UI agents)
-- USE: `agents/documentation/*` (documentation agents)
-- USE: `agents/security/*` (security reviewers)
-- USE: `agents/testing/*` (test reviewers)
-- SKIP: `agents/planning/*` (orchestrators, not reviewers)
+- USE: the `code-quality` subagent group (code reviewers)
+- USE: the `architecture` subagent group (architecture reviewers)
+- USE: the `research` subagent group (all researchers)
+- USE: the `frontend` subagent group (design or UI agents)
+- USE: the `documentation` subagent group (documentation agents)
+- USE: the `security` subagent group (security reviewers)
+- USE: the `testing` subagent group (test reviewers)
+- SKIP: the `planning` subagent group (orchestrators, not reviewers)
 
 **Step 2: For each discovered agent, read its description**
 

@@ -30,13 +30,7 @@
       "workflow/kaizen",
       "workflow/mental-models"
     ],
-    "agents": [
-      "planning/context-manager.md",
-      "planning/fix-planner.md",
-      "planning/prd-interviewer.md",
-      "planning/repo-index.md",
-      "planning/requirements-analyst.md"
-    ],
+    "agents": [],
     "commands": [
       "consider/10-10-10.md",
       "consider/5-whys.md",

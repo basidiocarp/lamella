@@ -30,4 +30,4 @@ source-side playbooks until they are promoted into a shipped plugin surface.
 ## See Also
 
 - [Audit scripts](../../scripts/audit/)
-- [Release automation](../../scripts/release/)
+- Release automation currently lives outside Lamella's shared script surface.

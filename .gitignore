@@ -17,3 +17,7 @@ __pycache__/
 .rhizome/
 .idea/
 .claude/
+
+# Local Codex project guidance/config
+/AGENTS.md
+/.codex/config.toml

@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 #
-# build-codex-skills.sh - Build lamella resources into Codex skill folders
+# build-codex-skills.sh - Build lamella resources into Codex skill and agent exports
 #
-# Codex consumes installed skill directories, not Claude plugin manifests.
+# Codex consumes installed skill directories and custom agent TOML files, not
+# Claude plugin manifests.
 # This builder exports portable resources into dist/codex/ so they can be
-# installed or symlinked into ~/.codex/skills.
+# installed or symlinked into ~/.codex/skills and ~/.codex/agents.
 #
 
 set -euo pipefail
@@ -13,6 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
 DEFAULT_MANIFEST_DIR="$BASE_DIR/manifests/codex"
 DEFAULT_OUTPUT_DIR="$BASE_DIR/dist/codex"
+COPY_SHARED_SUBAGENTS_SCRIPT="$BASE_DIR/scripts/build/copy-shared-subagents.js"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -30,7 +32,7 @@ usage() {
     cat <<EOF
 Usage: $0 [manifest-or-dir] [output-dir]
 
-Build lamella's portable resources into Codex skill folders.
+Build lamella's portable resources into Codex skill and agent exports.
 
 Arguments:
   manifest-or-dir  Optional manifest file or directory
@@ -44,6 +46,10 @@ EOF
 check_deps() {
     if ! command -v jq >/dev/null 2>&1; then
         log_error "jq is required. Install it with your package manager (for example: brew install jq or apt-get install jq)."
+        exit 1
+    fi
+    if ! command -v node >/dev/null 2>&1; then
+        log_error "node is required. Install Node.js 18+."
         exit 1
     fi
 }
@@ -230,7 +236,7 @@ build_manifest() {
     local all_skills_dir="$output_dir/skills"
     local profiles_dir="$output_dir/profiles"
     local name description profile_dir profile_skills_dir
-    local skill_count=0 workflow_count=0 template_count=0 script_count=0
+    local skill_count=0 workflow_count=0 template_count=0 script_count=0 subagent_count=0
 
     name=$(manifest_name "$manifest")
     description=$(manifest_description "$manifest")
@@ -272,6 +278,9 @@ build_manifest() {
         script_count=$((script_count + 1))
     done < <(json_array "$manifest" '.resources.scripts')
 
+    subagent_count=$(node "$COPY_SHARED_SUBAGENTS_SCRIPT" codex "$name" "$profile_dir" | awk '/^Emitted / {print $2}')
+    [[ -n "$subagent_count" && "$subagent_count" != "0" ]] && log_success "  shared-subagents: $subagent_count files"
+
     jq -n \
         --arg name "$name" \
         --arg description "$description" \
@@ -281,6 +290,7 @@ build_manifest() {
         --argjson workflows "$workflow_count" \
         --argjson templates "$template_count" \
         --argjson scripts "$script_count" \
+        --argjson subagents "${subagent_count:-0}" \
         '{
             name: $name,
             description: $description,
@@ -290,7 +300,8 @@ build_manifest() {
                 skills: $skills,
                 workflow_wrappers: $workflows,
                 template_wrappers: $templates,
-                script_wrappers: $scripts
+                script_wrappers: $scripts,
+                subagents: $subagents
             }
         }' > "$profile_dir/profile.json"
 }
@@ -355,7 +366,7 @@ main() {
         exit 1
     fi
 
-    echo -e "${BOLD}Building Codex Skills${NC}"
+    echo -e "${BOLD}Building Codex Exports${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
     local built=0
@@ -367,18 +378,24 @@ main() {
 
     write_index "$output_dir"
 
-    local total_skills
+    local total_skills total_agents
     total_skills=$(find "$output_dir/skills" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
+    total_agents=$(find "$output_dir/profiles" -path '*/agents/*.toml' -type f | wc -l | tr -d ' ')
 
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo -e "${BOLD}Codex Build Complete${NC}"
     echo -e "  Profiles built: ${GREEN}$built${NC}"
     echo -e "  Skills exported: ${GREEN}$total_skills${NC}"
+    echo -e "  Agents exported: ${GREEN}$total_agents${NC}"
     echo -e "  Output:          $output_dir"
     echo ""
-    echo "Install by copying or symlinking skill directories from:"
-    echo "  $output_dir/skills"
+    echo "Install with:"
+    echo "  ./lamella install-codex --all"
+    echo ""
+    echo "Manual export paths:"
+    echo "  Skills: $output_dir/skills"
+    echo "  Agents: $output_dir/profiles/<profile>/agents"
 }
 
 main "$@"

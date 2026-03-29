@@ -1,10 +1,11 @@
 # lamella
 
 A portable resource system for AI coding environments, with first-class Claude
-plugin builds and Codex skill exports.
+plugin builds and Codex exports.
 
 Claude builds follow the official Claude Code plugin format
-(`.claude-plugin/plugin.json`). Codex builds export installable skill folders.
+(`.claude-plugin/plugin.json`). Codex builds export installable skill folders
+and custom agent TOML files.
 
 ## Quick Start
 
@@ -14,10 +15,10 @@ Claude builds follow the official Claude Code plugin format
 ./lamella install core python typescript
 ./lamella list
 
-# Codex: generate manifests + build skill exports
+# Codex: generate manifests + build Codex exports
 ./lamella build-codex
 
-# Codex: build and install exported skills
+# Codex: build and install exported skills and agents
 ./lamella install-codex --all
 ```
 
@@ -125,10 +126,11 @@ If you want another repository to automatically offer lamella as a known marketp
 }
 ```
 
-## As a Codex Skill Export
+## As a Codex Export
 
-After building, `dist/codex/skills/` contains portable skill folders that can be
-copied or symlinked into `~/.codex/skills/`.
+After building, `dist/codex/skills/` contains portable skill folders and
+`dist/codex/profiles/*/agents/` contains generated custom agent TOML files.
+`./lamella install-codex` installs both into `~/.codex/`.
 
 ```bash
 ./lamella build-codex
@@ -142,7 +144,7 @@ copied or symlinked into `~/.codex/skills/`.
 
 - `./lamella list` lists built Claude plugins.
 - `./lamella install <plugin...>` installs Claude plugins in dependency order.
-- `./lamella install-codex <skill...>` installs exported Codex skills.
+- `./lamella install-codex <name...>` installs exported Codex skills and selected agents.
 - `./lamella update` refreshes both Claude and Codex build outputs.
 
 ## Plugins
@@ -218,12 +220,12 @@ lamella/
 
 ## Build Pipeline
 
-The source organizes resources in category subdirectories (`resources/agents/code-quality/code-reviewer.md`).
+The source organizes resources in category subdirectories (`resources/subagents/code-quality/code-reviewer/SUBAGENT.md`).
 The generalized build step can either flatten them into Claude Code plugin
-directories or export portable Codex skill folders.
+directories or export portable Codex skill folders and Codex agent TOML files.
 
 ```
-Source:  resources/agents/code-quality/code-reviewer.md
+Source:  resources/subagents/code-quality/code-reviewer/SUBAGENT.md
          resources/skills/core/brainstorming/SKILL.md
 
 Built:   dist/claude/plugins/core/agents/code-reviewer.md
@@ -231,6 +233,7 @@ Built:   dist/claude/plugins/core/agents/code-reviewer.md
          dist/claude/plugins/core/.claude-plugin/plugin.json
 
 Codex:   dist/codex/skills/brainstorming/SKILL.md
+         dist/codex/profiles/core/agents/code-reviewer.toml
          dist/codex/profiles/core/profile.json
 ```
 
@@ -250,7 +253,7 @@ bash builders/build-claude-marketplace.sh
 
 ### Codex build
 
-Generate Codex manifests from Claude manifests, then export skill folders:
+Generate Codex manifests from Claude manifests, then build the Codex exports:
 
 ```bash
 bash builders/sync-codex-manifests.sh

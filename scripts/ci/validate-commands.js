@@ -6,6 +6,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { findSubagentFiles, loadSubagent } = require('../lib/subagents');
 
 const ROOT_DIR = path.join(__dirname, '../..');
 const COMMANDS_DIR = path.join(ROOT_DIR, 'resources', 'commands');
@@ -73,6 +74,9 @@ function validateCommands() {
   const validAgents = new Set();
   for (const f of findMdFiles(AGENTS_DIR)) {
     validAgents.add(path.basename(f).replace(/\.md$/, ''));
+  }
+  for (const filePath of findSubagentFiles()) {
+    validAgents.add(loadSubagent(filePath).data.name);
   }
 
   // Build set of valid skill directory names (leaf-level)

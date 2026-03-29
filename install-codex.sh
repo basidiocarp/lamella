@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Thin compatibility wrapper for Codex skill installs.
+# Thin compatibility wrapper for Codex skill and agent installs.
 #
 # Preferred entrypoint:
 #   ./lamella install-codex [options]

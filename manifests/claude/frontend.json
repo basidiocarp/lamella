@@ -28,14 +28,7 @@
       "frontend/spline-3d-integration",
       "frontend/threejs-advanced"
     ],
-    "agents": [
-      "frontend/accessibility-reviewer.md",
-      "frontend/design-iterator.md",
-      "frontend/dx-optimizer.md",
-      "frontend/figma-design-sync.md",
-      "frontend/ui-designer.md",
-      "frontend/ui-visual-validator.md"
-    ],
+    "agents": [],
     "commands": [
       "frontend/accessibility-audit.md",
       "frontend/create-component.md",

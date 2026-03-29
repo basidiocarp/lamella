@@ -28,10 +28,7 @@
       "typescript/typescript",
       "typescript/zustand-store-ts"
     ],
-    "agents": [
-      "architecture/frontend-architect.md",
-      "frontend/frontend-developer.md"
-    ],
+    "agents": [],
     "commands": [
       "languages/typescript-scaffold.md"
     ]

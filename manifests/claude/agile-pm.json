@@ -24,12 +24,7 @@
       "agile-pm/iterate-retrospective",
       "agile-pm/storyboard"
     ],
-    "agents": [
-      "business/business-analyst.md",
-      "business/business-council.md",
-      "business/quant-analyst.md",
-      "business/startup-analyst.md"
-    ],
+    "agents": [],
     "commands": [
       "business/business-case.md",
       "business/business-panel.md",

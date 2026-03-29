@@ -44,18 +44,7 @@
       "devops/terraform-patterns",
       "devops/turborepo-caching"
     ],
-    "agents": [
-      "architecture/cloud-architect.md",
-      "devops/deploy-checker.md",
-      "devops/deployment-engineer.md",
-      "devops/devops-sre.md",
-      "devops/docker-engineer.md",
-      "devops/infra-auditor.md",
-      "devops/network-engineer.md",
-      "devops/observability-engineer.md",
-      "devops/service-mesh-architect.md",
-      "devops/terraform-specialist.md"
-    ],
+    "agents": [],
     "commands": [
       "devops/dockerfile.md",
       "devops/monitor-setup.md",

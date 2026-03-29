@@ -1,26 +1,29 @@
 # Maintenance Scripts
 
-Scripts for system maintenance and configuration.
+Scripts for Lamella corpus maintenance and packaging hygiene.
+
+Claude host-maintenance helpers have moved to `stipe/scripts/claude/`.
+Personal `~/.claude` sync automation has been retired from Lamella.
 
 ## Scripts
 
 | Script | Description |
 |--------|-------------|
-| `clean-reinstall-claude.sh` | Clean reinstall of Claude Code |
-| `sync-claude-config.sh` | Sync configuration across machines |
-| `check-claude.sh` | Health check for Claude installation |
+| `add-toc-to-skills.py` | Add tables of contents to long skills |
+| `add-triggers.py` | Normalize or add trigger sections in skills |
 | `check_upstream_action_surface.sh` | Check for upstream changes |
+| `fix-skill-frontmatter.py` | Normalize skill frontmatter |
+| `haiku-friendly-rewrites.py` | Rewrite content for smaller-model clarity |
+| `sync-manifests-with-folders.py` | Keep manifests aligned with resource folders |
+| `zip-skills.sh` | Package skill exports for distribution |
 
 ## Usage
 
 ```bash
-# Health check
-./scripts/maintenance/check-claude.sh
-
-# Sync config
-./scripts/maintenance/sync-claude-config.sh
+# Sync manifests with current folders
+./scripts/maintenance/sync-manifests-with-folders.py
 ```
 
 ## Caution
 
-These scripts modify system configuration. Always use `--dry-run` first when available.
+Some of these scripts rewrite source content. Review diffs before committing.

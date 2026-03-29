@@ -33,4 +33,5 @@ bundled into the shipped `core` plugin manifest.
 ## See Also
 
 - [Quality workflows](../quality/) - Pre-deploy checks
-- [Release scripts](../../../scripts/release/) - Release automation
+- Shared Lamella release scripts have been retired; keep release automation next
+  to the release workflow that owns it.

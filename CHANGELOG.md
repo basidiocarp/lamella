@@ -4,6 +4,24 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.5] - 2026-03-30
+
+### Added
+
+- **Cross-platform shared hook entrypoints**: Added Node-based shared hook scripts for observe, Claude markdown scanning, RTK baseline capture, output validation, session logging, subagent stop handling, and comment-style checks so the shipped Lamella hook path works across Windows, macOS, and Linux.
+- **Portable standalone bundles**: Added Node variants for the `auto-format`, `change-summary`, `compaction`, `gh-cli`, `obsidian-vault`, `ralph-wiggum`, `reflexion`, and `skill-improver` hook bundles while keeping the Bash variants as supported Unix-oriented alternatives.
+
+### Changed
+
+- **Hook catalog defaults**: Switched the main shared hook catalog, manual settings template, and specialized hook manifests from shell-first entrypoints to portable Node entrypoints.
+- **Obsidian vault command surface**: Added Node-based note-management scripts for init, add, search, update, import, list, tags, linking, and archive flows so the vault bundle no longer depends on Bash for its primary management path.
+- **Hook documentation**: Updated Lamella hook docs to document the supported dual-variant model explicitly: Node as the portable default, Bash as the supported Unix-oriented variant.
+
+### Fixed
+
+- **Lamella validation workflow**: Repaired the GitHub Actions validate workflow so it calls the current shared subagent validator instead of the removed `validate-agents.js` path.
+- **Obsidian search command docs**: Updated the bundled search command docs to point at the new Node `search-vault` entrypoint instead of the old shell path.
+
 ## [0.5.4] - 2026-03-29
 
 ### Added

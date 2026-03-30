@@ -379,7 +379,7 @@
         "path": "plugins/rust",
         "ref": "gh-pages"
       },
-      "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
+      "description": "Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout",
       "version": "0.5.5"
     },
     {

@@ -2,64 +2,21 @@
 
 > Use `Rc<T>` for shared ownership in single-threaded contexts
 
-## Why It Matters
+Use `Rc` only when shared ownership stays on one thread.
 
-`Rc<T>` (Reference Counted) provides shared ownership without the atomic overhead of `Arc<T>`. In single-threaded code, `Rc` is faster because it uses non-atomic reference counting. Using `Arc` when you don't need thread-safety wastes CPU cycles on unnecessary synchronization.
+## Prefer
 
-## Bad
+- `Rc` for single-threaded graphs, trees, and UI state
+- `Arc` only when cross-thread sharing is actually required
+- plain ownership when sharing is unnecessary
 
-```rust
-use std::sync::Arc;
+## Avoid
 
-// Single-threaded application using Arc unnecessarily
-fn build_tree() -> Arc<Node> {
-    let root = Arc::new(Node::new("root"));
-    let child1 = Arc::new(Node::new("child1"));
-    let child2 = Arc::new(Node::new("child2"));
-    
-    // All in same thread, but paying atomic overhead
-    root.add_child(child1.clone());
-    root.add_child(child2.clone());
-    root
-}
-```
-
-Atomic operations have measurable overhead even without contention.
-
-## Good
-
-```rust
-use std::rc::Rc;
-
-// Single-threaded: use Rc for zero atomic overhead
-fn build_tree() -> Rc<Node> {
-    let root = Rc::new(Node::new("root"));
-    let child1 = Rc::new(Node::new("child1"));
-    let child2 = Rc::new(Node::new("child2"));
-    
-    root.add_child(child1.clone());
-    root.add_child(child2.clone());
-    root
-}
-
-// Compiler enforces single-thread: Rc is !Send + !Sync
-// Attempting to send across threads = compile error
-```
-
-## Decision Guide
-
-| Scenario | Use |
-|----------|-----|
-| Single-threaded, shared ownership | `Rc<T>` |
-| Multi-threaded, shared ownership | `Arc<T>` |
-| Single owner, might need multiple later | Start with `Rc`, upgrade if needed |
-| Library code, unknown threading model | `Arc<T>` (safer default) |
-
-## Evidence
-
-The Rust standard library itself uses `Rc` extensively in single-threaded contexts like the `std::rc` module documentation examples.
+- `Rc` in types that may cross thread boundaries
+- defaulting to reference counting before simpler ownership models are considered
+- pairing `Rc` with mutation without a deliberate interior mutability story
 
 ## See Also
 
-- [own-arc-shared](./own-arc-shared.md) - When you need thread-safe sharing
-- [own-refcell-interior](./own-refcell-interior.md) - Combining Rc with interior mutability
+- [own-arc-shared](./own-arc-shared.md) - Use `Arc` for cross-thread ownership
+- [own-refcell-interior](./own-refcell-interior.md) - Add single-threaded interior mutability intentionally

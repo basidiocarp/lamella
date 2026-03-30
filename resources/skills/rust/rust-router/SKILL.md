@@ -35,14 +35,14 @@ Answer through the narrowest Rust skill that matches the failure mode. When the 
 |-------------|-------------|-----------|-------------|
 | E0xxx error | Language mechanics | Start focused | See error table below |
 | Compile error | Layer 1 | Trace UP ↑ | Error table below |
-| "How should I design..." | Design trade-off | Start broad | `rust-advanced` |
-| "Compare..." or "best practice..." | Multi-perspective | Synthesize | `meta-cognition-parallel` |
+| "How should I design..." | API or crate design | Start focused | `rust-api-design` |
+| "Compare..." or "best practice..." | Focused trade-off first | Synthesize only if needed | Matching routed skill, then `meta-cognition-parallel` |
 | Latest crate, docs, or release info | Research | Look up | `rust-learner` |
 | Domain-heavy question | Mixed | Combine | Rust skill + relevant domain skill |
 
 ## INSTRUCTIONS FOR CLAUDE
 
-Use `meta-cognition-parallel` when the user asks for comparison, best practices, or a domain-sensitive architectural trade-off. Use a direct focused skill for concrete compiler errors and specific API questions.
+Use a direct focused skill first for concrete compiler errors, specific API questions, and category-specific best-practice questions. Add `rust-advanced` or `meta-cognition-parallel` only when the question spans multiple Rust layers or needs explicit comparison across competing approaches.
 
 ## Default Project Settings
 
@@ -72,10 +72,16 @@ pedantic = "warn"
 | mut, interior mutability, E0499, E0502, E0596 | `mutability` |
 | generic, trait, impl, dyn, monomorphization | `zero-cost` |
 | Send, Sync, thread, async, channel, tokio | `concurrency` |
+| `select!`, `JoinSet`, channels, shutdown, runtime choice | `rust-async-patterns` |
+| public API shape, builders, naming, newtypes, `#[non_exhaustive]` | `rust-api-design` |
+| doctest, integration test, proptest, criterion, test structure | `rust-testing-patterns` |
+| benchmark, profiling, allocation, cache, SIMD, LTO, PGO | `rust-performance` |
+| rustdoc, docs, clippy, lint policy, public docs | `rust-docs-quality` |
+| workspace, crate layout, module structure, visibility | `rust-project-layout` |
 | RAII, Drop, connection lifecycle, OnceLock | `lifecycle` |
 | unsafe, FFI, extern, raw pointer, transmute | **unsafe-checker** |
-| broad implementation or design guidance | `rust-advanced` |
-| comparative or cross-layer reasoning | `meta-cognition-parallel` |
+| broad implementation guidance across multiple Rust layers | `rust-advanced` |
+| comparative or cross-layer reasoning after a focused skill is insufficient | `meta-cognition-parallel` |
 | latest crate, docs, versions, editions | `rust-learner` |
 
 ---
@@ -107,8 +113,11 @@ pedantic = "warn"
 | Pattern | Route To | Action |
 |---------|----------|--------|
 | latest version, what's new | **rust-learner** | Use agents |
-| API, docs, documentation | **rust-learner** | Browse official docs |
-| code style, naming, clippy | **rust-advanced** | Apply project conventions |
+| code style, naming, API ergonomics | **rust-api-design** | Apply caller-facing conventions |
+| API docs for a crate, latest docs.rs surface, version-specific docs | **rust-learner** | Browse official docs |
+| lint policy or rustdoc quality | **rust-docs-quality** | Align docs and tooling quality |
+| project structure or workspace shape | **rust-project-layout** | Review crate boundaries and visibility |
+| benchmarking or optimization | **rust-performance** | Measure before tuning |
 | unsafe code, FFI | **unsafe-checker** | Read skill |
 | code review or deeper audit | **unsafe-checker** or **rust-advanced** | Add `/audit` guidance when useful |
 
@@ -116,11 +125,12 @@ pedantic = "warn"
 
 ## Priority Order
 
-1. **Identify cognitive layer** (L1/L2/L3)
+1. **Identify the concrete Rust topic first**
 2. **Load the narrowest matching skill**
-3. **Add `rust-advanced` or `meta-cognition-parallel` only if needed**
-4. **Cross-reference another plugin only when the domain truly matters**
-5. **Answer with reasoning chain**
+3. **Add `rust-advanced` only when the question spans multiple Rust design layers**
+4. **Add `meta-cognition-parallel` only for explicit comparisons or unresolved trade-offs**
+5. **Cross-reference another plugin only when the domain truly matters**
+6. **Answer with reasoning chain**
 
 ## Keyword Conflict Resolution
 
@@ -136,10 +146,11 @@ pedantic = "warn"
 
 ```
 1. Error codes (E0xxx) → Direct lookup, highest priority
-2. Comparative or best-practice questions → `meta-cognition-parallel`
+2. Topic-specific questions → focused routed skill
 3. Domain keywords + Rust failure mode → combine the Rust skill with the relevant domain skill
 4. Specific crate keywords → `rust-learner`
-5. General implementation questions → `rust-advanced`
+5. General implementation questions across multiple Rust layers → `rust-advanced`
+6. Comparative or unresolved trade-off questions → `meta-cognition-parallel`
 ```
 
 ---

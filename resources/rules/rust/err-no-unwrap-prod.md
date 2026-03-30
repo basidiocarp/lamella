@@ -1,115 +1,22 @@
 # err-no-unwrap-prod
 
-> Avoid `unwrap()` in production code; use `?`, `expect()`, or handle errors
+> Avoid `unwrap` in production paths
 
-## Why It Matters
+Do not rely on `unwrap` in code that should fail gracefully.
 
-`unwrap()` panics on `None` or `Err` without any context about what went wrong. In production, this creates cryptic crash messages that are hard to debug. Either propagate errors with `?`, use `expect()` with a message explaining the invariant, or handle the error explicitly.
+## Prefer
 
-## Bad
+- `?`, `match`, or explicit fallback handling in production code
+- `expect` only for genuine invariants with a clear message
+- `unwrap` in tests and short prototypes where panic is acceptable
 
-```rust
-fn process_request(req: Request) -> Response {
-    let user_id = req.headers.get("X-User-Id").unwrap();  // Why did it fail?
-    let user = database.find_user(user_id).unwrap();       // Which operation?
-    let data = user.preferences.get("theme").unwrap();     // No context
-    
-    Response::new(data)
-}
+## Avoid
 
-// Crash message: "called `Option::unwrap()` on a `None` value"
-// Where? Why? No idea.
-```
-
-## Good
-
-```rust
-// Option 1: Propagate with ?
-fn process_request(req: Request) -> Result<Response, AppError> {
-    let user_id = req.headers
-        .get("X-User-Id")
-        .ok_or(AppError::MissingHeader("X-User-Id"))?;
-    
-    let user = database.find_user(user_id)?;
-    
-    let data = user.preferences
-        .get("theme")
-        .ok_or(AppError::MissingPreference("theme"))?;
-    
-    Ok(Response::new(data))
-}
-
-// Option 2: expect() for invariants (not user input)
-fn get_config_value(&self, key: &str) -> &str {
-    self.config
-        .get(key)
-        .expect("BUG: required config key missing after validation")
-}
-
-// Option 3: Provide defaults
-fn get_theme(user: &User) -> &str {
-    user.preferences
-        .get("theme")
-        .unwrap_or(&"default")
-}
-
-// Option 4: Match for complex handling
-fn process_optional(value: Option<Data>) -> ProcessedData {
-    match value {
-        Some(data) => process(data),
-        None => {
-            log::warn!("No data provided, using fallback");
-            ProcessedData::default()
-        }
-    }
-}
-```
-
-## `expect()` vs `unwrap()`
-
-```rust
-// Bad: no context
-let port = config.get("port").unwrap();
-
-// Better: explains the invariant
-let port = config.get("port")
-    .expect("config must contain 'port' after validation");
-
-// Best: propagate if it's not truly an invariant
-let port = config.get("port")
-    .ok_or_else(|| ConfigError::MissingKey("port"))?;
-```
-
-## Alternatives to unwrap()
-
-| Situation | Use Instead |
-|-----------|-------------|
-| Can propagate error | `?` operator |
-| Has sensible default | `unwrap_or()`, `unwrap_or_default()` |
-| Default requires computation | `unwrap_or_else(\|\| ...)` |
-| Internal invariant | `expect("explanation")` |
-| Need to handle both cases | `match` or `if let` |
-
-## Clippy Lints
-
-```toml
-# Cargo.toml
-[lints.clippy]
-unwrap_used = "warn"      # Warn on unwrap()
-expect_used = "warn"       # Also warn on expect() (stricter)
-```
-
-```rust
-// Allow in specific places where it's justified
-#[allow(clippy::unwrap_used)]
-fn definitely_safe() {
-    // Unwrap is safe here because...
-    let x = Some(5).unwrap();
-}
-```
+- `unwrap` on I/O, parsing, env vars, or external input in shipped code
+- defending `unwrap` with “this should never fail” when the invariant is not local and obvious
+- silent panic paths in libraries
 
 ## See Also
 
-- [err-result-over-panic](./err-result-over-panic.md) - Return Result instead of panicking
-- [err-expect-bugs-only](./err-expect-bugs-only.md) - When expect() is appropriate
-- [anti-unwrap-abuse](./anti-unwrap-abuse.md) - Patterns for avoiding unwrap
+- [err-expect-bugs-only](./err-expect-bugs-only.md) - Use `expect` only for invariants
+- [err-result-over-panic](./err-result-over-panic.md) - Prefer recoverable failure

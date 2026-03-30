@@ -2,77 +2,20 @@
 
 > Don't suffix crate names with `-rs` or `-rust`
 
-## Why It Matters
+Crate names should describe the library, not the language.
 
-Adding `-rs` or `-rust` to crate names is redundant—you're already on crates.io, it's obviously Rust. These suffixes waste characters, clutter the namespace, and can make crate names harder to type. The Rust community discourages this pattern.
+## Prefer
 
-## Bad
+- short domain-oriented crate names
+- names that remain useful outside one ecosystem label
+- language qualifiers only when a cross-language family truly requires them
 
-```toml
-# Cargo.toml
-[package]
-name = "json-parser-rs"    # Redundant -rs
-name = "my-lib-rust"       # Redundant -rust
-name = "http-client-rs"    # We know it's Rust
-name = "rust-sqlite"       # rust- prefix equally bad
-```
+## Avoid
 
-## Good
-
-```toml
-# Cargo.toml
-[package]
-name = "json-parser"
-name = "my-lib"
-name = "http-client"
-name = "sqlite-wrapper"
-
-# Real crate examples (no -rs):
-# serde (not serde-rs)
-# tokio (not tokio-rs)
-# reqwest (not reqwest-rs)
-# clap (not clap-rs)
-```
-
-## When Context Is Needed
-
-```toml
-# If you're porting a library from another language:
-name = "python-ast"        # Describes what it's for, not what it's written in
-
-# If you're providing bindings:
-name = "openssl"           # The Rust crate IS the Rust interface
-
-# Platform-specific:
-name = "windows-sys"       # Platform, not language
-```
-
-## Repository Naming
-
-```
-# GitHub repos don't need -rs either
-github.com/user/my-library      # Good
-github.com/user/my-library-rs   # Unnecessary
-
-# Though some do for disambiguation from other language versions
-github.com/rust-lang/rust       # The rust repo itself uses "rust"
-```
-
-## Exceptions
-
-```toml
-# Rare cases where disambiguation matters:
-# - If there's a widely-known non-Rust project with the same name
-# - Official Rust project repositories (rust-lang org)
-
-# But even then, consider alternatives:
-name = "fancy-lib"           # Instead of fancy-rs
-name = "better-json"         # Instead of json-rust
-name = "my-serde-impl"       # Instead of serde-rs-fork
-```
+- `-rs` or `-rust` suffixes as a default naming habit
+- names that signal implementation language instead of purpose
 
 ## See Also
 
-- [proj-workspace-deps](./proj-workspace-deps.md) - Cargo configuration
-- [doc-cargo-metadata](./doc-cargo-metadata.md) - Package metadata
-- [name-funcs-snake](./name-funcs-snake.md) - Naming conventions
+- [proj-workspace-large](./proj-workspace-large.md) - Crate boundaries should stay meaningful
+- [lint-cargo-metadata](./lint-cargo-metadata.md) - Package identity is part of the surface

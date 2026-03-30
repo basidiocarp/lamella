@@ -1,29 +1,11 @@
-# Testing Requirements
+# Testing
 
-## Minimum Test Coverage: 80%
+Test behavior changes with the cheapest evidence that proves the claim.
 
-Test Types (ALL required):
-1. **Unit Tests** - Individual functions, utilities, components
-2. **Integration Tests** - API endpoints, database operations
-3. **E2E Tests** - Critical user flows (framework chosen per language)
+## Rules
 
-## Test-Driven Development
-
-MANDATORY workflow:
-1. Write test first (RED)
-2. Run test - it should FAIL
-3. Write minimal implementation (GREEN)
-4. Run test - it should PASS
-5. Refactor (IMPROVE)
-6. Verify coverage (80%+)
-
-## Troubleshooting Test Failures
-
-1. Use **tdd-guide** agent
-2. Check test isolation
-3. Verify mocks are correct
-4. Fix implementation, not tests (unless tests are wrong)
-
-## Agent Support
-
-- **tdd-guide** - Use PROACTIVELY for new features, enforces write-tests-first
+- prefer failing-test-first or regression-test-first when changing behavior
+- choose the narrowest test level that proves the change
+- add integration or end-to-end coverage only when unit tests cannot prove the requirement
+- fix broken expectations only when the test is actually wrong
+- use the `tdd-guide` skill or equivalent when the workflow matters

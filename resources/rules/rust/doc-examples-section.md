@@ -1,161 +1,23 @@
 # doc-examples-section
 
-> Include `# Examples` with runnable code
+> Use `# Examples` sections when examples materially improve API understanding
 
-## Why It Matters
+Include examples where the call pattern or expected output is easier to show
+than to explain abstractly.
 
-Examples are the most valuable part of documentation. They show users exactly how to use your API. Rust's doc tests ensure examples stay correct as code evolves.
+## Prefer
 
-## Bad
+- examples for non-obvious construction, chaining, or common use cases
+- short runnable snippets that a caller can adapt quickly
+- examples that complement, rather than duplicate, the prose
 
-```rust
-/// Parses a string into a Foo.
-pub fn parse(s: &str) -> Result<Foo, Error> {
-    // No examples - users have to guess usage
-}
+## Avoid
 
-/// A widget for doing things.
-/// 
-/// This widget is very useful.
-pub struct Widget {
-    // Still no examples
-}
-```
-
-## Good
-
-```rust
-/// Parses a string into a Foo.
-///
-/// # Examples
-///
-/// ```
-/// use my_crate::parse;
-///
-/// let foo = parse("hello").unwrap();
-/// assert_eq!(foo.name(), "hello");
-/// ```
-///
-/// Handles empty strings:
-///
-/// ```
-/// use my_crate::parse;
-///
-/// let foo = parse("").unwrap();
-/// assert!(foo.is_empty());
-/// ```
-pub fn parse(s: &str) -> Result<Foo, Error> {
-    // ...
-}
-```
-
-## Use ? Not unwrap()
-
-```rust
-/// Loads configuration from a file.
-///
-/// # Examples
-///
-/// ```
-/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
-/// use my_crate::Config;
-///
-/// let config = Config::load("config.toml")?;
-/// println!("Port: {}", config.port);
-/// # Ok(())
-/// # }
-/// ```
-pub fn load(path: &str) -> Result<Config, Error> {
-    // ...
-}
-```
-
-## Hide Setup Code
-
-```rust
-/// Processes items from a database.
-///
-/// # Examples
-///
-/// ```
-/// # use my_crate::{Database, Item};
-/// # fn get_db() -> Database { Database::mock() }
-/// let db = get_db();
-/// let items = db.process_items()?;
-/// assert!(!items.is_empty());
-/// # Ok::<(), my_crate::Error>(())
-/// ```
-pub fn process_items(&self) -> Result<Vec<Item>, Error> {
-    // ...
-}
-```
-
-## Multiple Examples
-
-```rust
-/// Creates a new buffer with the specified capacity.
-///
-/// # Examples
-///
-/// Basic usage:
-///
-/// ```
-/// use my_crate::Buffer;
-///
-/// let buf = Buffer::with_capacity(1024);
-/// assert_eq!(buf.capacity(), 1024);
-/// ```
-///
-/// Zero capacity creates an empty buffer:
-///
-/// ```
-/// use my_crate::Buffer;
-///
-/// let buf = Buffer::with_capacity(0);
-/// assert!(buf.is_empty());
-/// ```
-pub fn with_capacity(cap: usize) -> Self {
-    // ...
-}
-```
-
-## Show Error Cases
-
-```rust
-/// Divides two numbers.
-///
-/// # Examples
-///
-/// ```
-/// use my_crate::divide;
-///
-/// assert_eq!(divide(10, 2), Ok(5));
-/// ```
-///
-/// Division by zero returns an error:
-///
-/// ```
-/// use my_crate::{divide, MathError};
-///
-/// assert_eq!(divide(10, 0), Err(MathError::DivisionByZero));
-/// ```
-pub fn divide(a: i32, b: i32) -> Result<i32, MathError> {
-    // ...
-}
-```
-
-## Running Doc Tests
-
-```bash
-# Run all doc tests
-cargo test --doc
-
-# Run doc tests for specific item
-cargo test --doc my_function
-```
+- example sections that only restate the signature
+- giant examples that belong in guides or integration tests
+- stale examples that are not validated
 
 ## See Also
 
-- [doc-question-mark](doc-question-mark.md) - Use ? in examples
-- [doc-hidden-setup](doc-hidden-setup.md) - Hide setup code with #
-- [doc-errors-section](doc-errors-section.md) - Document error conditions
+- [test-doctest-examples](./test-doctest-examples.md) - Keep examples executable
+- [doc-hidden-setup](./doc-hidden-setup.md) - Hide only the setup that harms readability

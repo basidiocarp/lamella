@@ -49,11 +49,29 @@ from the built plugin output rather than from `resources/rules/`.
 
 ## Rules vs Skills
 
-- Rules define short, broadly applicable standards and checklists.
-- Skills provide deeper, task-specific reference material and workflows.
+- Rules should be short, normative, and easy to scan in the middle of work.
+- Skills should hold the deeper workflow, reference material, setup steps, and
+  extended examples.
 
 Rules tell Claude what should broadly hold. Skills tell Claude how to execute a
 specific task well.
+
+Use a rule when the guidance can stay compact:
+
+- a high-leverage default or constraint
+- a sharp anti-pattern to avoid
+- a short checklist that reduces common regressions
+- a repo-specific standard that should hold across many tasks
+
+Move content into a skill or adjacent reference when it needs:
+
+- step-by-step workflow
+- setup instructions or installation details
+- long `Bad` / `Good` walkthroughs
+- multiple API variations, edge-case catalogs, or framework tutorials
+
+If a rule starts reading like a mini guide, compress the rule and move the
+teaching material out of the rule corpus.
 
 ## Adding or Updating Rule Sets
 

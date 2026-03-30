@@ -2,129 +2,21 @@
 
 > Enable LTO in release builds
 
-## Why It Matters
+Use LTO when the shipped binary benefits enough to justify slower builds.
 
-Link-Time Optimization (LTO) enables optimizations across crate boundaries that aren't possible during normal compilation. This includes cross-crate inlining, dead code elimination, and devirtualization. Typically provides 5-20% performance improvement.
+## Prefer
 
-## Bad
+- LTO in release profiles for performance-sensitive binaries and libraries
+- measuring binary size and runtime impact before standardizing the setting
+- documenting the chosen LTO mode in the project profile
 
-```toml
-# Cargo.toml - default release profile
-[profile.release]
-opt-level = 3
-# No LTO = missed optimization opportunities
-```
+## Avoid
 
-## Good
-
-```toml
-# Cargo.toml - optimized release profile
-[profile.release]
-opt-level = 3
-lto = "fat"          # Maximum optimization
-codegen-units = 1    # Better optimization (single codegen unit)
-panic = "abort"      # Smaller binary, no unwind tables
-strip = true         # Remove symbols for smaller binary
-```
-
-## LTO Options Explained
-
-```toml
-# No LTO (default)
-lto = false
-
-# Thin LTO - fast compilation, most benefits
-lto = "thin"
-
-# Fat LTO - slowest compilation, maximum optimization
-lto = "fat"
-# Equivalent to:
-lto = true
-
-# Thin-local - LTO within each crate only
-lto = "off"
-```
-
-## Trade-offs
-
-| Setting | Compile Time | Binary Size | Performance |
-|---------|--------------|-------------|-------------|
-| `lto = false` | Fast | Larger | Baseline |
-| `lto = "thin"` | Medium | Smaller | +5-15% |
-| `lto = "fat"` | Slow | Smallest | +10-20% |
-
-## Evidence from Production
-
-```toml
-# From Anchor (Solana framework)
-# https://github.com/solana-foundation/anchor/blob/master/cli/src/rust_template.rs
-[profile.release]
-overflow-checks = true
-lto = "fat"
-codegen-units = 1
-
-# From sol-trade-sdk
-# https://github.com/0xfnzero/sol-trade-sdk
-[profile.release]
-opt-level = 3
-lto = "fat"
-codegen-units = 1
-panic = "abort"
-```
-
-## Complete Optimized Profile
-
-```toml
-[profile.release]
-opt-level = 3        # Maximum optimization
-lto = "fat"          # Link-time optimization
-codegen-units = 1    # Single codegen unit for better optimization
-panic = "abort"      # Remove panic unwinding code
-strip = true         # Strip symbols
-debug = false        # No debug info
-
-# For benchmarking (need some debug info for profiling)
-[profile.bench]
-inherits = "release"
-debug = true
-strip = false
-
-# Fast dev builds with optimized dependencies
-[profile.dev]
-opt-level = 0
-debug = true
-
-[profile.dev.package."*"]
-opt-level = 3        # Optimize dependencies even in dev
-```
-
-## When to Use Each
-
-| Situation | LTO Setting |
-|-----------|-------------|
-| Development | `false` (fast compiles) |
-| CI builds | `"thin"` (balance) |
-| Release binaries | `"fat"` (max perf) |
-| Libraries (crates.io) | `false` (users choose) |
-
-## Measuring Impact
-
-```bash
-# Build without LTO
-cargo build --release
-hyperfine ./target/release/myapp
-
-# Build with LTO
-# (after adding lto = "fat" to Cargo.toml)
-cargo build --release
-hyperfine ./target/release/myapp
-
-# Compare binary sizes
-ls -la target/release/myapp
-```
+- assuming LTO is always worth the compile-time cost
+- copying full-fat release profiles into every crate without validation
+- treating LTO as a substitute for algorithmic or allocation fixes
 
 ## See Also
 
-- [opt-codegen-units](opt-codegen-units.md) - Use codegen-units = 1
-- [opt-pgo-profile](opt-pgo-profile.md) - Profile-guided optimization
-- [perf-release-profile](perf-release-profile.md) - Full release profile settings
+- [opt-codegen-units](./opt-codegen-units.md) - Tune codegen units intentionally
+- [perf-release-profile](./perf-release-profile.md) - Keep release profile policy coherent

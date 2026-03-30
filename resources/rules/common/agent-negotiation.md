@@ -1,56 +1,24 @@
 # Agent Negotiation
 
-## Core Principle
+Treat sub-agent output as input to evaluate, not authority to repeat.
 
-Treat every sub-agent response as a negotiation, not a final answer. Evaluate against the original intent before using it.
+## Use Negotiation When
 
-## When to Enable Negotiation
+- the task needs comparison, synthesis, or cross-domain judgment
+- the first answer only partially addresses the user request
+- multiple agents or sources disagree
 
-| Query Type | Example | Why |
-|------------|---------|-----|
-| Comparative | "Compare X and Y" | Needs data from multiple sources |
-| Cross-domain | "Auth error in payment flow" | Needs both technical and domain context |
-| Ambiguous scope | "React performance" | Unclear what aspect matters |
-| Synthesis | "Best practices for X" | Requires aggregation |
+Skip it for simple factual lookups or narrow single-step tasks.
 
-Skip negotiation for single lookups, error definitions, and simple factual questions.
+## Acceptance Rules
 
-## Confidence Levels
+- accept only answers that address the actual user question
+- distinguish blocking gaps from acceptable omissions
+- rerun with tighter scope before broadening the search
+- if three rounds still fail, synthesize the confirmed parts and state the gaps plainly
 
-Agents should report confidence honestly:
+## Confidence Handling
 
-| Level | Meaning | Action |
-|-------|---------|--------|
-| HIGH | Primary source found, data complete, no conflicts | Accept |
-| MEDIUM | Partial data, minor gaps, some assumptions | Accept if gaps don't block intent; otherwise refine |
-| LOW | Minimal sources, significant gaps | Refine query with more context |
-| UNCERTAIN | No reliable sources, contradictions, or failures | Try alternative agent or source |
-
-## 3-Strike Refinement
-
-```
-Strike 1: LOW/UNCERTAIN response
-  → Narrow scope, provide additional context, re-query same agent
-
-Strike 2: Still insufficient
-  → Try alternative agent or different source
-
-Strike 3: Still insufficient
-  → Synthesize best-effort answer from all rounds
-  → List remaining gaps explicitly
-  → Disclose confidence level to user
-```
-
-## Orchestrator Checklist
-
-When evaluating an agent's response:
-1. Does this answer the user's actual question, or a related one?
-2. Are the gaps blocking or acceptable?
-3. Can another agent fill the gaps?
-4. Is a partial answer better than no answer?
-
-When synthesizing from multiple rounds:
-1. Combine confirmed facts from all rounds
-2. Note ruled-out options
-3. State confidence level
-4. Disclose remaining gaps
+- `high`: complete enough to use directly
+- `medium`: usable with explicit caveats
+- `low` or `uncertain`: refine, reroute, or disclose limits instead of over-claiming

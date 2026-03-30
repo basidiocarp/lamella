@@ -6,7 +6,7 @@
   "generated": "2026-03-29",
   "stats": {
     "totalPlugins": 52,
-    "totalSkills": 285,
+    "totalSkills": 292,
     "coverage": "98%"
   },
   "plugins": [
@@ -541,8 +541,8 @@
     {
       "name": "rust",
       "version": "1.0.0",
-      "skills": 11,
-      "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
+      "skills": 17,
+      "description": "Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout",
       "tags": [
         "rust",
         "systems",
@@ -551,8 +551,8 @@
         "memory-safety"
       ],
       "manifest": "rust.json",
-      "skillCount": 11,
-      "skills_count": 11
+      "skillCount": 17,
+      "skills_count": 17
     },
     {
       "name": "security-base",

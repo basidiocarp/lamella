@@ -1,6 +1,6 @@
 {
   "name": "rust",
-  "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
+  "description": "Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout",
   "source_plugin": "rust",
   "dependencies": [
     "core"
@@ -14,8 +14,14 @@
       "rust/ownership",
       "rust/resource-mgmt",
       "rust/rust-advanced",
+      "rust/rust-api-design",
+      "rust/rust-async-patterns",
+      "rust/rust-docs-quality",
       "rust/rust-learner",
+      "rust/rust-performance",
+      "rust/rust-project-layout",
       "rust/rust-router",
+      "rust/rust-testing-patterns",
       "rust/unsafe-checker",
       "rust/zero-cost"
     ],

@@ -20,6 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 BUILD_SCRIPT="$SCRIPT_DIR/build-plugin.sh"
 VERSION_FILE="$BASE_DIR/VERSION"
+VALIDATE_BUILD_SCRIPT="$BASE_DIR/scripts/ci/validate-build.js"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -451,6 +452,7 @@ build_marketplace() {
     generate_marketplace_json "$output_dir" "$plugin_entries"
     if ! $CATALOG_ONLY; then
         write_marketplace_index "$output_dir"
+        node "$VALIDATE_BUILD_SCRIPT"
     fi
 
     log_success "Generated marketplace.json"

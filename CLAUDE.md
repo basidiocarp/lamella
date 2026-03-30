@@ -119,7 +119,7 @@ make validate
 | Validator | Checks |
 |-----------|--------|
 | `validate-skills.js` | Skill directories, SKILL.md presence, frontmatter |
-| `validate-agents.js` | Agent frontmatter (name, description, model) |
+| `validate-subagents.js` | Shared subagent frontmatter and structure |
 | `validate-commands.js` | Command structure and skill references |
 | `validate-hooks.js` | Hook events, types, matchers |
 | `validate-manifests.js` | Manifest resources exist on disk |

@@ -149,35 +149,78 @@ After building, `dist/codex/skills/` contains portable skill folders and
 
 ## Plugins
 
+Lamella currently ships `52` Claude plugins covering `292` skills. Some plugin
+names are umbrella bundles with `0` direct skills because they group layered
+sub-plugins behind a stable install surface.
+
+### Product and language plugins
+
 | Plugin | Skills | Description |
 |--------|--------|-------------|
-| **devops** | 24 | Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns |
-| **developer-ops** | 5 | Incident command, release management, runbooks, tech debt tracking, and spec-driven execution |
-| **security** | 26 | Vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices |
-| **core** | 32 | Coding standards, testing, git workflow, debugging, and code review |
-| **tools** | 28 | CLI tools, shell and PowerShell scripting, analytics, MCP integration, and productivity utilities |
-| **atmos** | 20 | Cloud Posse Atmos stack orchestration |
-| **meta** | 17 | Framework internals, skill management, and plugin utilities |
-| **workflow** | 14 | Planning, git operations, decision records, and project workflows |
-| **ai-agents** | 9 | Multi-agent patterns, LLM evaluation, and Claude-specific tooling |
-| **python** | 10 | Django, FastAPI, async patterns, testing, and modern Python practices |
-| **collaboration** | 7 | Team facilitation, debate, project continuity, and expert synthesis |
-| **typescript** | 9 | React, Next.js, Node.js patterns, and frontend architecture |
-| **rust** | 11 | Ownership, concurrency, unsafe review, and idiomatic Rust practices |
-| **microservices** | 4 | Event sourcing, sagas, CQRS, and distributed systems |
-| **agile-pm** | 10 | Product planning and delivery artifacts |
-| **customer-insights** | 9 | JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language |
-| **executive** | 11 | Board updates, operating rhythms, executive coaching, and scenario planning |
-| **go-to-market** | 6 | Pricing, launch content, press releases, content strategy, and email programs |
-| **enterprise-it** | 5 | Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations |
-| **frontend** | 11 | Accessibility, design systems, 3D interfaces, responsive layouts, and performance |
-| **go** | 2 | Concurrency patterns, testing, and idiomatic Go |
-| **cpp** | 3 | Modern C++, testing, and embedded systems patterns |
-| **database** | 3 | Schema design, PostgreSQL, SQL optimization, and query tuning |
-| **rag** | 4 | Embeddings, hybrid search, vector optimization, and RAG architecture |
-| **writing** | 6 | Documentation, voice, style, changelogs, and poster workflows |
+| **agile-pm** | 10 | Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts |
+| **ai-agents** | 9 | AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling |
+| **atmos** | 20 | Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns |
+| **collaboration** | 7 | Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination |
+| **cpp** | 3 | C++ development: modern C++ patterns, coding standards, and testing practices |
+| **customer-insights** | 9 | Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language |
+| **database** | 3 | Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling |
+| **developer-ops** | 5 | Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution |
+| **enterprise-it** | 5 | Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations |
+| **executive** | 11 | Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning |
+| **go** | 2 | Go development: concurrency patterns, testing, and idiomatic Go practices |
+| **go-to-market** | 6 | Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs |
+| **microservices** | 4 | Microservices architecture, event sourcing, and distributed systems |
+| **python** | 10 | Python development: Django, FastAPI, async patterns, testing, and modern Python practices |
+| **rag** | 4 | Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture |
+| **rust** | 17 | Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout |
+| **typescript** | 9 | TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture |
+| **writing** | 6 | Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content |
 
-**Total: 286 skills across 25 plugins**
+### Layered umbrella plugins
+
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| **core** | 0 | Umbrella bundle for layered core development plugins and shared base resources |
+| **devops** | 0 | Umbrella bundle for layered DevOps plugins and shared infrastructure commands |
+| **frontend** | 0 | Umbrella bundle for layered frontend plugins and shared frontend commands |
+| **meta** | 0 | Umbrella bundle for layered Lamella authoring, routing, and governance plugins |
+| **security** | 0 | Umbrella bundle for layered security plugins and shared security commands |
+| **tools** | 0 | Umbrella bundle for layered tool plugins and shared research/setup commands |
+| **workflow** | 0 | Umbrella bundle for layered workflow plugins and shared workflow commands |
+
+### Layered sub-plugins
+
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| **core-architecture** | 10 | Architecture and design guidance for refactors, interfaces, patterns, and modernization |
+| **core-base** | 6 | Foundational development workflow: planning, debugging, and test discipline |
+| **core-operations** | 7 | Operational development support: onboarding, memory, git cleanup, planning, and continuity |
+| **core-quality** | 9 | Code quality and verification: reviews, tests, fidelity checks, and implementation gates |
+| **devops-cloud** | 5 | Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore |
+| **devops-kubernetes** | 4 | Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows |
+| **devops-observability** | 7 | Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems |
+| **devops-platform** | 8 | Platform automation: Docker, Terraform, Ansible, CI validation, and deployments |
+| **frontend-3d** | 2 | 3D frontend experiences for Spline and advanced Three.js workflows |
+| **frontend-base** | 5 | Core frontend guidance for accessibility, components, responsiveness, and performance |
+| **frontend-visual** | 4 | Visual frontend work for motion, design systems, screenshots, and slides |
+| **meta-authoring** | 8 | Lamella authoring tools for skills, hooks, commands, plugins, and workflow design |
+| **meta-governance** | 5 | Meta governance for curation, audits, stocktakes, and task capture |
+| **meta-routing** | 4 | Meta routing and orchestration for skill discovery, composition, and team coordination |
+| **security-base** | 7 | Core security practices: auth, secrets, defaults, reviews, and safe APIs |
+| **security-compliance** | 5 | Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations |
+| **security-crypto** | 3 | Applied crypto security: constant-time analysis, vectors, and malware signatures |
+| **security-fuzzing** | 4 | Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz |
+| **security-scanning** | 6 | Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection |
+| **tools-browser** | 3 | Browser automation and realtime web tooling for interactive surfaces |
+| **tools-cli** | 8 | CLI and shell tooling: generators, validators, terminals, and command ergonomics |
+| **tools-diagrams** | 2 | Diagramming workflows for Mermaid and Excalidraw artifacts |
+| **tools-documents** | 5 | Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion |
+| **tools-integration** | 10 | Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores |
+| **workflow-execution** | 4 | Execution workflows for handoffs, conductor, plan execution, and branch finishing |
+| **workflow-git** | 4 | Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution |
+| **workflow-planning** | 6 | Planning workflows for specs, decisions, edge cases, and continuous improvement |
+
+**Total: 292 skills across 52 plugins**
 
 ## Directory Structure
 

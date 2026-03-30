@@ -96,17 +96,15 @@ When you add a new skill, agent, or command, update the relevant manifest so it 
 
 ## Validation
 
-Run all validators before submitting a PR:
+Run the full validation suite before submitting a PR:
 
 ```bash
-node scripts/ci/validate-skills.js
-node scripts/ci/validate-agents.js
-node scripts/ci/validate-commands.js
-node scripts/ci/validate-hooks.js
-node scripts/ci/validate-rules.js
+make validate
 ```
 
-Fix any reported errors — CI will block merges with validation failures.
+If you need to run validators directly, use the current scripts in `scripts/ci/`, including `validate-subagents.js` instead of the removed `validate-agents.js`.
+
+Fix any reported errors. CI will block merges with validation failures.
 
 ## Building & Testing Plugins
 

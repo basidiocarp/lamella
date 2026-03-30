@@ -34,7 +34,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/scripts/doc-file-warning.js\""
+            "command": "node \"$HOME/.claude/hooks/scripts/pre-write-doc-warn.js\""
           }
         ]
       },

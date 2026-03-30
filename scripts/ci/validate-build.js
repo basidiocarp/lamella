@@ -21,6 +21,40 @@ function reportError(message) {
   errors++;
 }
 
+function collectCommands(node, commands = []) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectCommands(item, commands);
+    return commands;
+  }
+
+  if (node && typeof node === 'object') {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === 'command' && typeof value === 'string') {
+        commands.push(value);
+      }
+      collectCommands(value, commands);
+    }
+  }
+
+  return commands;
+}
+
+function validateHookScriptRefs(name, pluginDir, hooksJsonPath) {
+  const hooks = JSON.parse(fs.readFileSync(hooksJsonPath, 'utf-8'));
+  const commands = collectCommands(hooks.hooks || hooks);
+  const scriptPattern = /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/hooks\/([A-Za-z0-9._-]+)/g;
+
+  for (const command of commands) {
+    for (const match of command.matchAll(scriptPattern)) {
+      const scriptName = match[1];
+      const scriptPath = path.join(pluginDir, 'scripts', 'hooks', scriptName);
+      if (!fs.existsSync(scriptPath)) {
+        reportError(`ERROR: ${name} — hooks.json references missing script ${scriptName}`);
+      }
+    }
+  }
+}
+
 function validateLspServerMap(name, sourceLabel, value) {
   if (!value || Array.isArray(value) || typeof value !== 'object') {
     reportError(`ERROR: ${name} — ${sourceLabel} must be an object mapping server names to configs`);
@@ -172,6 +206,12 @@ function validatePlugin(pluginDir) {
     if (!fs.existsSync(hooksJson)) {
       console.warn(`WARN: ${name} — hooks/ directory exists but no hooks.json`);
       warnings++;
+    } else {
+      try {
+        validateHookScriptRefs(name, pluginDir, hooksJson);
+      } catch (e) {
+        reportError(`ERROR: ${name} — invalid hooks.json: ${e.message}`);
+      }
     }
   }
 

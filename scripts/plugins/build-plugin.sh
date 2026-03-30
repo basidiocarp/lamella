@@ -194,8 +194,13 @@ copy_hooks() {
             | sed 's|${CLAUDE_PLUGIN_ROOT}/scripts/hooks/||' | sort -u || true)
         while IFS= read -r script; do
             [[ -z "$script" ]] && continue
-            local src="$BASE_DIR/resources/hooks/$script"
-            if [[ -f "$src" ]] && [[ ! -f "$output_dir/scripts/hooks/$script" ]]; then
+            local src=""
+            if [[ -f "$BASE_DIR/scripts/hooks/$script" ]]; then
+                src="$BASE_DIR/scripts/hooks/$script"
+            elif [[ -f "$BASE_DIR/resources/hooks/$script" ]]; then
+                src="$BASE_DIR/resources/hooks/$script"
+            fi
+            if [[ -n "$src" ]] && [[ ! -f "$output_dir/scripts/hooks/$script" ]]; then
                 cp "$src" "$output_dir/scripts/hooks/"
                 ((count++))
             fi

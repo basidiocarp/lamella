@@ -16,7 +16,9 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const HOOKS_FILE = path.join(__dirname, '../../resources/hooks/hooks.json');
+const HOOKS_ROOT = path.join(__dirname, '../../resources/hooks');
+const HOOK_SCRIPTS_DIR = path.join(__dirname, '../../scripts/hooks');
+const HOOK_CONFIG_FILENAMES = new Set(['hooks.json', 'settings.json', 'hooks-minimal.json']);
 const VALID_EVENTS = [
   'SessionStart', 'UserPromptSubmit', 'PreToolUse', 'PermissionRequest',
   'PostToolUse', 'PostToolUseFailure', 'Notification',
@@ -27,6 +29,86 @@ const VALID_EVENTS = [
   'Elicitation', 'ElicitationResult', 'SessionEnd',
 ];
 const VALID_HOOK_TYPES = ['command', 'http', 'prompt', 'agent'];
+let errors = 0;
+
+function reportError(message) {
+  console.error(message);
+  errors++;
+}
+
+function collectCommands(node, commands = []) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectCommands(item, commands);
+    return commands;
+  }
+
+  if (node && typeof node === 'object') {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === 'command' && typeof value === 'string') {
+        commands.push(value);
+      }
+      collectCommands(value, commands);
+    }
+  }
+
+  return commands;
+}
+
+function getCommandScriptCandidates(filePath, relativeScriptPath) {
+  if (relativeScriptPath.startsWith('scripts/hooks/')) {
+    return [path.join(HOOK_SCRIPTS_DIR, relativeScriptPath.slice('scripts/hooks/'.length))];
+  }
+
+  if (relativeScriptPath.startsWith('hooks/scripts/')) {
+    const bundleDir = path.dirname(filePath);
+    const scriptName = relativeScriptPath.slice('hooks/scripts/'.length);
+    return [
+      path.join(bundleDir, 'scripts', scriptName),
+      path.join(bundleDir, scriptName),
+    ];
+  }
+
+  if (relativeScriptPath.startsWith('project-scripts/')) {
+    const bundleDir = path.dirname(filePath);
+    const scriptName = relativeScriptPath.slice('project-scripts/'.length);
+    return [path.join(bundleDir, 'project-scripts', scriptName)];
+  }
+
+  return [];
+}
+
+function validateReferencedScripts(commands, filePath, label) {
+  const scriptPattern = /\$\{CLAUDE_PLUGIN_ROOT\}\/((?:scripts\/hooks|hooks\/scripts|project-scripts)\/[A-Za-z0-9._/-]+\.(?:js|sh|py))|\$HOME\/\.claude\/hooks\/(scripts\/[A-Za-z0-9._/-]+\.(?:js|sh|py))/g;
+
+  for (const command of commands) {
+    for (const match of command.matchAll(scriptPattern)) {
+      const relativeScriptPath = match[1] || match[2];
+      const normalizedPath = relativeScriptPath.startsWith('scripts/hooks/')
+        ? relativeScriptPath
+        : relativeScriptPath.replace(/^scripts\//, 'scripts/hooks/');
+      const candidates = getCommandScriptCandidates(filePath, normalizedPath);
+      if (!candidates.some(candidate => fs.existsSync(candidate))) {
+        reportError(`ERROR: ${label} references missing hook script '${relativeScriptPath}'`);
+      }
+    }
+  }
+}
+
+function findHookConfigFiles(dir, files = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      findHookConfigFiles(fullPath, files);
+      continue;
+    }
+
+    if (HOOK_CONFIG_FILENAMES.has(entry.name)) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
 
 /**
  * Validate a single hook entry has required fields based on its type.
@@ -104,24 +186,20 @@ function validateHookEntry(hook, label) {
   return hasErrors;
 }
 
-function validateHooks() {
-  if (!fs.existsSync(HOOKS_FILE)) {
-    console.log('No hooks.json found, skipping validation');
-    process.exit(0);
-  }
-
+function validateHookConfig(filePath, label) {
   let data;
   try {
-    data = JSON.parse(fs.readFileSync(HOOKS_FILE, 'utf-8'));
+    data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   } catch (e) {
-    console.error(`ERROR: Invalid JSON in hooks.json: ${e.message}`);
-    process.exit(1);
+    console.error(`ERROR: Invalid JSON in ${label}: ${e.message}`);
+    return { hasErrors: true, totalMatchers: 0 };
   }
 
   // Support both object format { hooks: {...} } and array format
   const hooks = data.hooks || data;
   let hasErrors = false;
   let totalMatchers = 0;
+  const startingErrors = errors;
 
   if (typeof hooks === 'object' && !Array.isArray(hooks)) {
     // Object format: { EventType: [matchers] }
@@ -182,8 +260,35 @@ function validateHooks() {
       totalMatchers++;
     }
   } else {
-    console.error('ERROR: hooks.json must be an object or array');
-    process.exit(1);
+    console.error(`ERROR: ${label} must be an object or array`);
+    return { hasErrors: true, totalMatchers };
+  }
+
+  validateReferencedScripts(collectCommands(hooks), filePath, label);
+  if (errors > startingErrors) {
+    hasErrors = true;
+  }
+
+  return { hasErrors, totalMatchers };
+}
+
+function validateHooks() {
+  const files = findHookConfigFiles(HOOKS_ROOT)
+    .sort((a, b) => a.localeCompare(b))
+    .map(filePath => [filePath, path.relative(path.join(__dirname, '../..'), filePath)]);
+
+  let totalMatchers = 0;
+  let hasErrors = false;
+
+  for (const [filePath, label] of files) {
+    if (!fs.existsSync(filePath)) {
+      console.log(`No ${label} found, skipping`);
+      continue;
+    }
+
+    const result = validateHookConfig(filePath, label);
+    totalMatchers += result.totalMatchers;
+    hasErrors = hasErrors || result.hasErrors;
   }
 
   if (hasErrors) {

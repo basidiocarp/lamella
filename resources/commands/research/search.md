@@ -30,7 +30,7 @@ Find notes in your Obsidian vault by title, content, or tags.
 /obsidian-vault:search rate limiting --limit 10
 ```
 
-Runs: `bash "${CLAUDE_PLUGIN_ROOT}/scripts/search-vault.sh" $ARGUMENTS`
+Runs: `node "${CLAUDE_PLUGIN_ROOT}/project-scripts/search-vault.js" $ARGUMENTS`
 
 ## Search Types
 

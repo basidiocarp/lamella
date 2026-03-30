@@ -6,7 +6,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "command -v bun >/dev/null 2>&1 && bun ${CLAUDE_PLUGIN_ROOT}/hooks/src/index.ts Stop || true"
+                        "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.js\" Stop"
                     }
                 ]
             }
@@ -17,7 +17,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "command -v bun >/dev/null 2>&1 && bun ${CLAUDE_PLUGIN_ROOT}/hooks/src/index.ts UserPromptSubmit || true"
+                        "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.js\" UserPromptSubmit"
                     }
                 ]
             }

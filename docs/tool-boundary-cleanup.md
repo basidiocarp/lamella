@@ -60,7 +60,7 @@ These files still match Lamella's product boundary and should remain here.
 | `scripts/hooks/post-edit-format.js` | Keep | Edit-time UX. |
 | `scripts/hooks/post-edit-typecheck.js` | Keep | Edit-time UX. |
 | `scripts/hooks/post-edit-console-warn.js` | Keep | Edit-time UX. |
-| `scripts/hooks/comment-style-check.sh` | Keep | Authoring style guidance. |
+| `scripts/hooks/comment-style-check.sh` | Keep as supported Bash variant alongside `comment-style-check.js` | Authoring style guidance; default shipped path is now Node-based. |
 | `scripts/hooks/check-console-log.js` | Keep | Local quality reminder. |
 
 ## Move To Cortina

@@ -2,7 +2,11 @@
 
 Runs when Claude finishes a task and prints a repo-focused summary of the current diff.
 
-This folder contains a **standalone Bash example**. The main Lamella catalog uses the shared hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) plus Cortina for the primary lifecycle runtime instead of this one-file shell bundle.
+This folder contains both:
+- a standalone cross-platform Node example in [change-summary.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/change-summary/change-summary.js)
+- a standalone Bash variant in [change-summary.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/change-summary/change-summary.sh)
+
+The main Lamella catalog uses the shared hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) plus Cortina for the primary lifecycle runtime instead of this one-file bundle.
 
 ## What It Does
 
@@ -41,11 +45,19 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 ## Installation
 
-### Standalone example
+### Standalone Node example
+
+macOS / Linux:
 
 ```bash
-cp change-summary.sh ~/.claude/hooks/change-summary.sh
-chmod +x ~/.claude/hooks/change-summary.sh
+cp change-summary.js ~/.claude/hooks/change-summary.js
+chmod +x ~/.claude/hooks/change-summary.js
+```
+
+PowerShell:
+
+```powershell
+Copy-Item .\change-summary.js "$HOME\.claude\hooks\change-summary.js"
 ```
 
 Add to `~/.claude/settings.json`:
@@ -59,7 +71,7 @@ Add to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/change-summary.sh"
+            "command": "node \"$HOME/.claude/hooks/change-summary.js\""
           }
         ]
       }
@@ -68,11 +80,21 @@ Add to `~/.claude/settings.json`:
 }
 ```
 
+### Standalone Bash variant
+
+```bash
+cp change-summary.sh ~/.claude/hooks/change-summary.sh
+chmod +x ~/.claude/hooks/change-summary.sh
+```
+
 ## Platform Notes
 
-This standalone hook is Bash-based. Use it on macOS, Linux, or Windows via Git Bash or WSL.
+Both variants are supported.
 
-If you want the Lamella default on Windows, prefer the shared catalog:
+- Use `change-summary.js` for the most portable Windows, macOS, and Linux path.
+- Use `change-summary.sh` if you prefer a Bash-based setup on macOS, Linux, or Windows via Git Bash or WSL.
+
+If you want the Lamella default instead of this standalone example, prefer the shared catalog:
 - [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
 - [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
 - `cortina adapter claude-code post-tool-use`, which owns the shared capture runtime for errors, validations, corrections, and export or ingest signals

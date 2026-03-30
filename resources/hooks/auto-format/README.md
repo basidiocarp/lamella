@@ -2,11 +2,15 @@
 
 Automatically formats files after Claude edits them.
 
-This folder contains a **standalone Bash example**. The Lamella plugin's shared catalog uses the Node-based [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js) hook instead.
+This folder contains both:
+- a standalone cross-platform Node example in [auto-format.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/auto-format/auto-format.js)
+- a standalone Bash variant in [auto-format.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/auto-format/auto-format.sh)
+
+The Lamella plugin's shared catalog uses the Node-based [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js) hook instead.
 
 ## Behavior
 
-The standalone script:
+The standalone Node example:
 - formats Python with `ruff format` and `ruff check --fix`
 - formats Go with `goimports`
 - formats other supported files with `prettier`
@@ -14,9 +18,12 @@ The standalone script:
 
 ## Platform Notes
 
-Because `auto-format.sh` is Bash-based, it is best on macOS, Linux, or Windows via Git Bash or WSL.
+Both variants are supported.
 
-If you want the cross-platform Lamella default on Windows, prefer the plugin-bundled Node hook:
+- Use `auto-format.js` for the most portable Windows, macOS, and Linux path.
+- Use `auto-format.sh` if you prefer a Bash-based setup on macOS, Linux, or Windows via Git Bash or WSL.
+
+If you want the cross-platform Lamella default instead of the standalone example, prefer the plugin-bundled Node hook:
 
 ```json
 {
@@ -40,11 +47,19 @@ npm install -g prettier
 
 ## Installation
 
-### Standalone example
+### Standalone Node example
+
+macOS / Linux:
 
 ```bash
-cp auto-format.sh ~/.claude/hooks/auto-format.sh
-chmod +x ~/.claude/hooks/auto-format.sh
+cp auto-format.js ~/.claude/hooks/auto-format.js
+chmod +x ~/.claude/hooks/auto-format.js
+```
+
+PowerShell:
+
+```powershell
+Copy-Item .\auto-format.js "$HOME\.claude\hooks\auto-format.js"
 ```
 
 Add to `~/.claude/settings.json`:
@@ -58,13 +73,20 @@ Add to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/auto-format.sh"
+            "command": "node \"$HOME/.claude/hooks/auto-format.js\""
           }
         ]
       }
     ]
   }
 }
+```
+
+### Standalone Bash variant
+
+```bash
+cp auto-format.sh ~/.claude/hooks/auto-format.sh
+chmod +x ~/.claude/hooks/auto-format.sh
 ```
 
 ## Troubleshooting
@@ -75,7 +97,7 @@ The hook skips missing formatters. Check that they are in your `PATH`.
 
 ### Wrong formatter version
 
-The script activates `mise` when available and also checks common local binary paths. If your tools are installed elsewhere, add those paths to the script.
+The Node example relies on your normal `PATH` plus `npx` for prettier. If your tools are installed elsewhere, update your shell or PowerShell environment before running Claude.
 
 ## Related Hooks
 

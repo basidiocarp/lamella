@@ -116,6 +116,8 @@ cat /tmp/hyphae-hook-errors.log
 
 Hooks are installed automatically by Lamella or Stipe. The shared Claude catalog registers Cortina for the main lifecycle capture path and keeps Lamella-owned hooks for packaging, evaluation, wrappers, and local workflow behavior.
 
+The default Lamella-owned hook entrypoints are now Node-based, so the shipped path works on Windows, macOS, and Linux. Bash variants still exist and are still supported for users who prefer Unix-style hook setups, but they are no longer the primary install surface.
+
 To verify installation:
 
 ```bash

@@ -2,7 +2,11 @@
 
 Improves context preservation during compaction.
 
-This folder contains a **standalone Bash example**. The Lamella plugin's shared catalog uses the Node-based [`pre-compact.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/pre-compact.js) hook for its default behavior.
+This folder contains both:
+- a standalone cross-platform Node example in [pre-compact.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/compaction/pre-compact.js)
+- a standalone Bash variant in [pre-compact.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/compaction/pre-compact.sh)
+
+The Lamella plugin's shared catalog uses the Node-based [`pre-compact.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/pre-compact.js) hook for its default behavior.
 
 ## The Problem
 
@@ -21,12 +25,21 @@ The bundled `compaction-strategy.md` emphasizes:
 
 ## Installation
 
-### Standalone example
+### Standalone Node example
+
+macOS / Linux:
 
 ```bash
-cp pre-compact.sh ~/.claude/hooks/pre-compact.sh
-chmod +x ~/.claude/hooks/pre-compact.sh
+cp pre-compact.js ~/.claude/hooks/pre-compact.js
 cp compaction-strategy.md ~/.claude/compaction-strategy.md
+chmod +x ~/.claude/hooks/pre-compact.js
+```
+
+PowerShell:
+
+```powershell
+Copy-Item .\pre-compact.js "$HOME\.claude\hooks\pre-compact.js"
+Copy-Item .\compaction-strategy.md "$HOME\.claude\compaction-strategy.md"
 ```
 
 Add the hook to `~/.claude/settings.json`:
@@ -40,7 +53,7 @@ Add the hook to `~/.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/pre-compact.sh"
+            "command": "node \"$HOME/.claude/hooks/pre-compact.js\""
           }
         ]
       }
@@ -49,11 +62,22 @@ Add the hook to `~/.claude/settings.json`:
 }
 ```
 
+### Standalone Bash variant
+
+```bash
+cp pre-compact.sh ~/.claude/hooks/pre-compact.sh
+chmod +x ~/.claude/hooks/pre-compact.sh
+cp compaction-strategy.md ~/.claude/compaction-strategy.md
+```
+
 ## Platform Notes
 
-The standalone script is Bash-based. Use it on macOS, Linux, or Windows via Git Bash or WSL.
+Both variants are supported.
 
-If you want the Lamella default on Windows, prefer the shared plugin hook:
+- Use `pre-compact.js` for the most portable Windows, macOS, and Linux path.
+- Use `pre-compact.sh` if you prefer a Bash-based setup on macOS, Linux, or Windows via Git Bash or WSL.
+
+If you want the Lamella default instead of this standalone example, prefer the shared plugin hook:
 
 ```json
 {

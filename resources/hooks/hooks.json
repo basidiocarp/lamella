@@ -57,7 +57,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/skills/core/continuous-learning/hooks/observe.sh pre",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/observe.js\" pre",
             "async": true,
             "timeout": 10
           }
@@ -147,7 +147,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/comment-style-check.sh\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/comment-style-check.js\""
           }
         ],
         "description": "Warn about inline-dash comment style, suggest boxed style"
@@ -181,7 +181,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/skills/core/continuous-learning/hooks/observe.sh post",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/observe.js\" post",
             "async": true,
             "timeout": 10
           }

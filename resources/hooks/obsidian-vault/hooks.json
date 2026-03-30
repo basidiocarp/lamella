@@ -6,12 +6,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-commit.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-commit.js\"",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-component-creation.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-component-creation.js\"",
             "timeout": 10
           }
         ]
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-component-creation.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-component-creation.js\"",
             "timeout": 10
           }
         ]
@@ -32,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-task-completion.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-task-completion.js\"",
             "timeout": 15
           }
         ]
@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-session-summary.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-session-summary.js\"",
             "timeout": 20
           }
         ]
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-session-summary.sh",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/capture-session-summary.js\"",
             "timeout": 20
           }
         ]

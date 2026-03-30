@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh pre",
+            "command": "node \"$HOME/.claude/hooks/scripts/observe.js\" pre",
             "timeout": 10,
             "async": true
           }
@@ -76,7 +76,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bash/claudemd-scanner.sh",
+            "command": "node \"$HOME/.claude/hooks/scripts/claudemd-scanner.js\"",
             "timeout": 10
           }
         ]
@@ -86,7 +86,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bash/rtk-baseline.sh",
+            "command": "node \"$HOME/.claude/hooks/scripts/rtk-baseline.js\"",
             "timeout": 5
           }
         ]
@@ -165,7 +165,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bash/output-validator.sh",
+            "command": "node \"$HOME/.claude/hooks/scripts/output-validator.js\"",
             "timeout": 10
           }
         ]
@@ -175,7 +175,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bash/session-logger.sh",
+            "command": "node \"$HOME/.claude/hooks/scripts/session-logger.js\"",
             "timeout": 5,
             "async": true
           }
@@ -186,7 +186,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/skills/core/continuous-learning/hooks/observe.sh post",
+            "command": "node \"$HOME/.claude/hooks/scripts/observe.js\" post",
             "timeout": 10,
             "async": true
           }
@@ -199,7 +199,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/bash/subagent-stop.sh",
+            "command": "node \"$HOME/.claude/hooks/scripts/subagent-stop.js\"",
             "timeout": 10,
             "async": true
           }

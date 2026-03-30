@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/persist-session-id.sh\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/persist-session-id.js\""
           }
         ]
       }
@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/intercept-github-fetch.sh\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/intercept-github-fetch.js\""
           }
         ]
       },
@@ -27,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/intercept-github-curl.sh\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/intercept-github-curl.js\""
           }
         ]
       }
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/cleanup-clones.sh\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/cleanup-clones.js\""
           }
         ]
       }

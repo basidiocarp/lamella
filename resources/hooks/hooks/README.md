@@ -8,7 +8,8 @@ This directory contains Lamella's shared hook catalog plus a few standalone exam
 - [`../hooks-minimal.json`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/hooks-minimal.json): a smaller install profile
 - `../auto-format/`, `../change-summary/`, and `../compaction/`: standalone examples for local installation
 - `../gh-cli/`, `../hookify/`, `../reflexion/`, `../obsidian-vault/`, `../security-guidance/`, and related folders: specialized hook bundles
-- [`../../../scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks): the shared Node and Bash implementations used by the main catalog
+  `obsidian-vault` now ships supported Node and Bash variants for both its hook entrypoints and its vault-management scripts
+- [`../../../scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks): the shared cross-platform Node implementations used by the main catalog, plus a few Bash-only examples
 
 ## Main Catalog Overview
 
@@ -53,17 +54,17 @@ The shared Lamella catalog no longer owns the primary lifecycle capture runtime.
 
 ## Cross-Platform Notes
 
-Most shared hooks use Node.js and work across Windows, macOS, and Linux.
+The shipped Lamella hook catalog now uses Node.js entrypoints for the default shared path, so it works across Windows, macOS, and Linux.
 
-Two important exceptions:
+Two important exceptions remain:
 - the tmux-related warnings are intentionally gated to non-Windows platforms
-- [`comment-style-check.sh`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/comment-style-check.sh) is a Bash script, so Windows users should run it through Git Bash or WSL if they enable the shared catalog outside the default plugin environment
+- the standalone example bundles under `resources/hooks/*` still include supported Bash variants for manual copy-and-paste installs alongside the newer Node variants
 
 ## Standalone Examples vs Shared Catalog
 
 The standalone folders are examples you can copy into `~/.claude/hooks/` for manual installation.
 
-They are not a complete mirror of the main catalog, and they may be more shell-specific than the shared implementations in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks).
+They are not a complete mirror of the main catalog, and many of them remain more shell-specific than the shared implementations in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks).
 
 Prefer the shared catalog when:
 - you want the Lamella plugin defaults

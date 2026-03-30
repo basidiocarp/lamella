@@ -1,0 +1,29 @@
+{
+  "$schema": "./schema.json",
+  "name": "tools-documents",
+  "version": "1.0.0",
+  "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "tools",
+    "documents",
+    "pdf",
+    "docx",
+    "xlsx"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/docx-word-documents",
+      "tools/markitdown-converter",
+      "tools/pdf-manipulation",
+      "tools/pptx-presentations",
+      "tools/xlsx-spreadsheets"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

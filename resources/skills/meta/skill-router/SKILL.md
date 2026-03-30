@@ -1,6 +1,6 @@
 ---
 name: skill-router
-description: "Routes questions to the right skill, plugin, or agent. Use when a question spans multiple domains, when it is unclear which skill applies, or when a problem needs multi-layer reasoning."
+description: "Routes questions to the right skill, plugin, or agent."
 ---
 
 # Skill Router

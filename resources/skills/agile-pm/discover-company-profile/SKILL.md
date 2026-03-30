@@ -1,6 +1,6 @@
 ---
 name: discover-company-profile
-description: Builds a company profile from public sources with executive signals, product strategy, transformation themes, and org context. Use when preparing for interviews, partnerships, market research, or a deep single-company briefing.
+description: "Builds company profiles from public signals and strategy context."
 ---
 # Discover Company Profile
 

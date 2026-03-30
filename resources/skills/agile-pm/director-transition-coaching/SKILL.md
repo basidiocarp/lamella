@@ -1,6 +1,6 @@
 ---
 name: director-transition-coaching
-description: Coaches the transition from PM to Director through readiness, interviews, first-month recalibration, and leadership scope shifts. Use when a product leader is preparing for Director scope, evaluating readiness gaps, or struggling after the move.
+description: "Coaches transitions from PM to Director roles."
 ---
 # Director Transition Coaching
 

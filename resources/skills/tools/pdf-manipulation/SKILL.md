@@ -1,6 +1,6 @@
 ---
 name: pdf-manipulation
-description: Extracts text and tables from PDFs, creates PDFs, merges or splits documents, and fills forms. Use when users need to extract content from PDFs, create new PDFs, merge or split documents, or fill PDF forms programmatically.
+description: "Extracts, creates, merges, splits, and fills PDF documents."
 ---
 
 # PDF Processing Guide

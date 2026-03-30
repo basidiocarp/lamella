@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "Explores design options collaboratively before implementation. Use when starting creative work, building new features, designing components, or planning functionality changes that need requirements clarification."
+description: "Explores design options collaboratively before implementation."
 ---
 
 # Brainstorming Ideas Into Designs

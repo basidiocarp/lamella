@@ -1,6 +1,6 @@
 ---
 name: pandas-pro
-description: Applies pandas patterns for DataFrame manipulation, cleaning, aggregation, merging, and time series analysis. Use when working with pandas data pipelines, missing-value handling, groupby operations, joins, or performance optimization.
+description: "Applies pandas patterns for DataFrame manipulation, cleaning, aggregation, merging, and time series analysis."
 ---
 
 # Pandas Pro

@@ -21,3 +21,6 @@ Each manifest describes the portable resources that should become Codex skills:
 
 The builder exports profile-specific bundles to `dist/codex/profiles/<name>/`
 and an aggregated installable skill set to `dist/codex/skills/`.
+
+For the planned broad-plugin split into narrower layered manifests, see
+`../../docs/plans/plugin-layering-migration.md`.

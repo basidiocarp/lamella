@@ -1,6 +1,6 @@
 ---
 name: code-review-pro
-description: Reviews code for security vulnerabilities, performance bottlenecks, maintainability issues, and refactoring opportunities. Use when the user requests code review, a security audit, or performance analysis.
+description: "Reviews code for security vulnerabilities, performance bottlenecks, maintainability issues, and refactoring opportunities."
 ---
 
 # Code Review Pro

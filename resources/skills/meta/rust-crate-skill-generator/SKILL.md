@@ -1,6 +1,6 @@
 ---
 name: rust-crate-skill-generator
-description: "Orchestrates on-demand generation of crate-specific skills from docs.rs `llms.txt` data and project dependencies. Use when entering a Rust project with `Cargo.toml`, syncing crate documentation as skills, or managing on-demand skill generation."
+description: "Orchestrates on-demand generation of crate-specific skills from docs.rs `llms.txt` data and project dependencies."
 metadata:
   argument-hint: "[--force] | <crate_name>"
 ---

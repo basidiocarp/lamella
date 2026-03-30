@@ -1,6 +1,6 @@
 ---
 name: terraform-patterns
-description: Implements infrastructure as code with Terraform across AWS, Azure, or GCP. Use when developing Terraform modules, managing state, configuring providers, setting up multi-environment workflows, or testing infrastructure code.
+description: "Implements infrastructure as code with Terraform across AWS, Azure, or GCP."
 ---
 
 # Terraform Patterns

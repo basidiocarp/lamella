@@ -1,8 +1,6 @@
 ---
 name: develop-spike-summary
-description: >-
-  Documents the results of a time-boxed technical or design exploration.
-  Use when summarizing a completed spike, capturing learnings, or turning research into next-step recommendations.
+description: "Documents the results of a time-boxed technical or design exploration."
 ---
 # Spike Summary
 

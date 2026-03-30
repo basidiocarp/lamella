@@ -1,6 +1,6 @@
 ---
 name: atmos-ansible
-description: "Orchestrates Ansible playbook execution, variable passing, inventory management, and stack-based configuration through Atmos. Use when orchestrating Ansible with Atmos, executing playbooks via stacks, or managing inventory through Atmos configuration."
+description: "Orchestrates Ansible playbook execution, variable passing, inventory management, and stack-based configuration through Atmos."
 ---
 
 # Atmos Ansible Orchestration

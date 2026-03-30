@@ -1,6 +1,6 @@
 ---
 name: microsoft-365-tenant-admin
-description: Administers Microsoft 365 tenants for identity, user lifecycle, conditional access, licensing, and security baseline work. Use when setting up or auditing Microsoft 365, Entra ID, Exchange Online, or tenant-wide admin controls.
+description: "Administers Microsoft 365 tenants, identities, licensing, and security baselines."
 ---
 # Microsoft 365 Tenant Admin
 

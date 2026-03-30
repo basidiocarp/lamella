@@ -1,6 +1,6 @@
 ---
 name: config-curator
-description: "Curates insights from reflections and critiques into `CLAUDE.md` using Agentic Context Engineering. Use when consolidating session learnings, capturing insights from reflections, or updating `CLAUDE.md` with new patterns."
+description: "Curates insights from reflections and critiques into `CLAUDE.md` using Agentic Context Engineering."
 metadata:
   argument-hint: "Optional source specification (last, selection, chat:<id>) or --dry-run for preview"
 ---

@@ -1,8 +1,6 @@
 ---
 name: sql-pro
-description: >-
-  Optimizes SQL queries and database design across PostgreSQL, MySQL, SQL Server, and Oracle.
-  Use when working with complex queries, window functions, CTEs, indexing strategies, or query plan analysis.
+description: "Optimizes SQL queries and database design across PostgreSQL, MySQL, SQL Server, and Oracle."
 ---
 
 # SQL Pro

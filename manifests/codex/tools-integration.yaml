@@ -1,0 +1,29 @@
+{
+  "name": "tools-integration",
+  "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
+  "source_plugin": "tools-integration",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/analytics-tracking",
+      "tools/api-design-principles",
+      "tools/aws-mcp-setup",
+      "tools/devcontainer-setup",
+      "tools/graphql-patterns",
+      "tools/mcp-integration",
+      "tools/mcp-server-builder",
+      "tools/obsidian",
+      "tools/openapi-spec-generation",
+      "tools/rclone"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

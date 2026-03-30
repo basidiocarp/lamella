@@ -1,6 +1,6 @@
 ---
 name: external-llm-review
-description: "Runs external LLM code reviews (OpenAI Codex or Google Gemini CLI) on uncommitted changes, branch diffs, or specific commits. Use when the user asks for a second opinion, external review, codex review, gemini review, or mentions /external-llm-review."
+description: "Runs external Codex or Gemini code reviews."
 allowed-tools:
   - Bash
   - Read

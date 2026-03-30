@@ -1,21 +1,15 @@
 {
   "name": "frontend",
-  "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
+  "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
   "source_plugin": "frontend",
+  "dependencies": [
+    "typescript",
+    "frontend-base",
+    "frontend-visual",
+    "frontend-3d"
+  ],
   "resources": {
-    "skills": [
-      "frontend/accessibility",
-      "frontend/component-architecture",
-      "frontend/css-animation-creator",
-      "frontend/design-systems",
-      "frontend/frontend-patterns",
-      "frontend/frontend-performance",
-      "frontend/frontend-slides",
-      "frontend/responsive-design",
-      "frontend/screenshot-to-code",
-      "frontend/spline-3d-integration",
-      "frontend/threejs-advanced"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

@@ -1,6 +1,6 @@
 ---
 name: code-review-process
-description: Runs an end-to-end code review workflow with subagent feedback and technical evaluation. Use when completing features, before merging, or when receiving review feedback.
+description: "Runs an end-to-end code review workflow with subagent feedback and technical evaluation."
 ---
 # Code Review Process
 

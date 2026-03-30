@@ -2,6 +2,9 @@
   "name": "python",
   "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
   "source_plugin": "python",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "python/django-patterns",

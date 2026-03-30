@@ -1,6 +1,6 @@
 ---
 name: fidelity-review
-description: Compares implementation against a plan or specification to identify deviations. Use after completing a feature, phase, or PR to verify what was built matches what was planned. Produces compliance reports with severity-rated deviations.
+description: "Compares implementation against a plan or specification to identify deviations."
 ---
 
 # Fidelity Review

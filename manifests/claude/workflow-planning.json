@@ -1,0 +1,30 @@
+{
+  "$schema": "./schema.json",
+  "name": "workflow-planning",
+  "version": "1.0.0",
+  "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "workflow",
+    "planning",
+    "adr",
+    "kaizen",
+    "specs"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "workflow/create-plans",
+      "workflow/deliver-edge-cases",
+      "workflow/develop-adr",
+      "workflow/develop-spike-summary",
+      "workflow/kaizen",
+      "workflow/mental-models"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

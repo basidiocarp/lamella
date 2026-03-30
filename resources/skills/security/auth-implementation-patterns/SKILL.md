@@ -1,6 +1,6 @@
 ---
 name: auth-implementation-patterns
-description: Provides authentication and authorization patterns for JWT, OAuth2, sessions, RBAC, and permission-based access control. Use when implementing auth, securing APIs, or debugging auth issues.
+description: "Provides authentication and authorization patterns for JWT, OAuth2, sessions, RBAC, and permission-based access control."
 ---
 
 # Authentication & Authorization Patterns

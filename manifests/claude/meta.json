@@ -2,35 +2,21 @@
   "name": "meta",
   "version": "1.0.0",
   "author": "William Newton",
-  "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+  "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
   "tags": [
     "meta",
-    "framework",
-    "internal",
-    "skills",
-    "plugins"
+    "bundle",
+    "authoring",
+    "routing",
+    "governance"
   ],
-  "dependencies": [],
+  "dependencies": [
+    "meta-authoring",
+    "meta-governance",
+    "meta-routing"
+  ],
   "resources": {
-    "skills": [
-      "meta/agent-development",
-      "meta/command-development",
-      "meta/config-curator",
-      "meta/create-hook",
-      "meta/create-skill",
-      "meta/create-workflow-command",
-      "meta/designing-workflow-skills",
-      "meta/file-todos",
-      "meta/plugin-settings",
-      "meta/plugin-structure",
-      "meta/rust-crate-skill-generator",
-      "meta/skill-best-practices",
-      "meta/skill-composer-studio",
-      "meta/skill-router",
-      "meta/skill-stocktake",
-      "meta/task-observer",
-      "meta/team-communication-protocols"
-    ],
+    "skills": [],
     "agents": [],
     "commands": [
       "meta/clean-crate-skills.md",

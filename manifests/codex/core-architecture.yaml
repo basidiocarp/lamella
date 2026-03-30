@@ -1,0 +1,27 @@
+{
+  "name": "core-architecture",
+  "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
+  "source_plugin": "core-architecture",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/architecture-decision-records",
+      "core/context-engineering",
+      "core/deep-module-review",
+      "core/dependency-upgrade",
+      "core/design-patterns",
+      "core/duplicate-detection",
+      "core/interface-design-variants",
+      "core/legacy-modernizer",
+      "core/monorepo-management",
+      "core/type-driven-design"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

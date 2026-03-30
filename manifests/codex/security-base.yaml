@@ -1,0 +1,26 @@
+{
+  "name": "security-base",
+  "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
+  "source_plugin": "security-base",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/api-footgun-detector",
+      "security/auth-implementation-patterns",
+      "security/dependency-auditor",
+      "security/insecure-defaults",
+      "security/memory-safety-patterns",
+      "security/secrets-management",
+      "security/security-review"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

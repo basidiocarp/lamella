@@ -1,8 +1,6 @@
 ---
 name: plugin-settings
-description: >-
-  Documents the `.claude/plugin-name.local.md` pattern for plugin-specific configuration. Use when the user asks about plugin
-  settings, `.local.md` files, plugin state files, YAML frontmatter, or per-project configuration for plugin behavior.
+description: "Documents the `.claude/plugin-name.local.md` pattern for plugin-specific configuration."
 ---
 # Plugin Settings Pattern for Claude Code Plugins
 

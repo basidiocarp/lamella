@@ -1,8 +1,6 @@
 ---
 name: markitdown-converter
-description: >-
-  Converts files and office documents to Markdown. Use when extracting text from PDF, DOCX, PPTX, XLSX, images, audio, or other formats
-  for LLM processing or documentation.
+description: "Converts files and office documents to Markdown."
 ---
 
 # MarkItDown - File to Markdown Conversion

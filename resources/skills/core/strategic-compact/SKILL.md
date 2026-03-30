@@ -1,6 +1,6 @@
 ---
 name: strategic-compact
-description: Suggests manual context compaction at logical intervals to preserve context through task phases. Use when approaching context limits, switching between multi-step task phases, or when auto-compaction would disrupt continuity.
+description: "Suggests manual context compaction at logical intervals to preserve context through task phases."
 ---
 
 # Strategic Compact Skill

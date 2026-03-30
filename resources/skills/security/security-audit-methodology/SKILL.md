@@ -1,9 +1,6 @@
 ---
 name: security-audit-methodology
-description: >-
-  Provides an end-to-end security audit methodology covering codebase preparation, scope definition, and ultra-granular
-  context building. Use when preparing a codebase for security review, performing deep code comprehension before vulnerability
-  hunting, or running a full audit lifecycle.
+description: "Guides end-to-end security audits, scoping, and deep code review."
 ---
 
 # Security Audit Methodology

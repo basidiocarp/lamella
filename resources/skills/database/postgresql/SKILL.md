@@ -1,6 +1,6 @@
 ---
 name: postgresql
-description: "Designs PostgreSQL schemas and database patterns. Use when creating tables, adding indexes and constraints, optimizing queries, or implementing row-level security."
+description: "Designs PostgreSQL schemas and database patterns."
 ---
 
 # PostgreSQL Table Design

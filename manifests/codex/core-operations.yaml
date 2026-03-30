@@ -1,0 +1,24 @@
+{
+  "name": "core-operations",
+  "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
+  "source_plugin": "core-operations",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/codebase-onboarding",
+      "core/continuous-learning",
+      "core/error-memory",
+      "core/git-cleanup",
+      "core/parallel-debugging",
+      "core/plan-fleet",
+      "core/strategic-compact"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "./schema.json",
+  "name": "devops-cloud",
+  "version": "1.0.0",
+  "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
+  "author": "lamella",
+  "license": "MIT",
+  "tags": [
+    "devops",
+    "cloud",
+    "aws",
+    "serverless",
+    "cdk"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/aws-agentic-ai",
+      "devops/aws-cdk-development",
+      "devops/aws-cost-operations",
+      "devops/aws-serverless-eda",
+      "devops/modal-serverless"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

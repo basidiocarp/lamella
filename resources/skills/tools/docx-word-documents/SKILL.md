@@ -1,6 +1,6 @@
 ---
 name: docx-word-documents
-description: Creates, reads, and edits Word documents (.docx). Covers formatting, TOC, headers, images, tracked changes, find-replace, and document templates. Use when users need to create, modify, or extract content from Word documents programmatically.
+description: "Creates, reads, and edits Word documents (.docx)."
 ---
 
 # DOCX creation, editing, and analysis

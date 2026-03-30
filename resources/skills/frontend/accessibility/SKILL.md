@@ -1,6 +1,6 @@
 ---
 name: accessibility
-description: "Implements and audits accessible frontend experiences. Use when working on WCAG 2.2 compliance, ARIA patterns, keyboard navigation, screen reader support, or accessibility reviews."
+description: "Implements and audits accessible frontend experiences."
 ---
 
 # Accessibility

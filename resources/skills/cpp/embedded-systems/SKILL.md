@@ -1,6 +1,6 @@
 ---
 name: embedded-systems
-description: "Builds embedded and firmware systems in C and C++. Use when developing for microcontrollers, implementing RTOS applications, optimizing power consumption, or working on real-time systems."
+description: "Builds embedded and firmware systems in C and C++."
 ---
 
 # Embedded Systems Engineer

@@ -1,8 +1,6 @@
 ---
 name: define-jtbd-canvas
-description: >-
-  Creates a Jobs to be Done canvas capturing the functional, emotional, and social dimensions of a customer job. Use when
-  deeply understanding customer motivations, designing for jobs, or reframing product positioning.
+description: "Creates Jobs to be Done canvases for customer motivations."
 ---
 # Jobs to be Done Canvas
 

@@ -1,6 +1,6 @@
 ---
 name: typescript
-description: Applies TypeScript code style, type-safety patterns, and project conventions. Use when writing TypeScript code, reviewing code quality, implementing type-safe patterns, or establishing project typing conventions.
+description: "Applies TypeScript code style, type-safety patterns, and project conventions."
 ---
 
 # TypeScript Code Style Guide

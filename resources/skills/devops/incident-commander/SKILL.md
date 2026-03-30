@@ -1,6 +1,6 @@
 ---
 name: incident-commander
-description: Coordinates live incident response with severity classification, role separation, communication cadence, and timeline reconstruction. Use when an outage or degradation needs structured command, stakeholder updates, or a clean incident timeline.
+description: "Coordinates live incident response with severity classification, role separation, communication cadence, and timeline reconstruction."
 ---
 
 # Incident Commander

@@ -1,6 +1,6 @@
 ---
 name: expert-panel
-description: Assembles 2-3 complementary experts to collaboratively analyze a topic. Use when analyzing complex topics that need multiple domain perspectives, comprehensive recommendations, or cross-disciplinary synthesis.
+description: "Assembles 2-3 complementary experts to collaboratively analyze a topic."
 ---
 
 # Expert Panel

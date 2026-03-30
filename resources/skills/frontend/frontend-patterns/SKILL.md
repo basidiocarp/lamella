@@ -1,6 +1,6 @@
 ---
 name: frontend-patterns
-description: "Applies modern frontend architecture patterns. Use when implementing React or Next.js components, managing state, designing UI structure, validating visual quality, planning when 3D belongs in the interface, or improving frontend performance and maintainability."
+description: "Applies modern frontend architecture patterns."
 ---
 
 # Frontend Development Patterns

@@ -2,6 +2,9 @@
   "name": "rag",
   "description": "Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture",
   "source_plugin": "rag",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "rag/embedding-strategies",

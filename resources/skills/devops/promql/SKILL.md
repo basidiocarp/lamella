@@ -1,6 +1,6 @@
 ---
 name: promql
-description: Generates, validates, lints, and optimizes PromQL queries, alerting rules, and recording rules. Use when writing PromQL, creating alerting rules, validating syntax, detecting anti-patterns, or optimizing expressions.
+description: "Generates, validates, lints, and optimizes PromQL queries, alerting rules, and recording rules."
 ---
 
 # PromQL

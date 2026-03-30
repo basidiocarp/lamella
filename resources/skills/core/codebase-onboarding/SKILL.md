@@ -1,6 +1,6 @@
 ---
 name: codebase-onboarding
-description: Analyzes a repository and drafts onboarding material for engineers, contractors, or handoff docs. Use when onboarding contributors, rebuilding stale setup docs, or creating a quick codebase orientation pack.
+description: "Analyzes a repository and drafts onboarding material for engineers, contractors, or handoff docs."
 ---
 
 # Codebase Onboarding

@@ -1,6 +1,6 @@
 ---
 name: create-hook
-description: "Creates and configures Claude Code hooks, and helps pair them with repo-level guardrails when the workflow should apply outside Claude. Use when setting up formatting, linting, testing, safety, or automation hooks."
+description: "Creates Claude Code hooks and matching repo guardrails."
 metadata:
   argument-hint: Optional hook type or description of desired behavior
 ---

@@ -1,6 +1,6 @@
 ---
 name: mermaid-diagrams
-description: "Creates software diagrams using Mermaid syntax. Use when asked to diagram, visualize, model, or map out systems. Covers class diagrams, sequence diagrams, flowcharts, ERDs, C4 architecture diagrams (system context, container, component, deployment, dynamic), state diagrams, git graphs, gantt charts. Triggers: \"diagram\", \"visualize\", \"C4 diagram\", \"system context\", \"container diagram\", \"component diagram\", \"deployment diagram\", \"architecture diagram\", \"show the flow\", \"document architecture\"."
+description: "Creates software diagrams using Mermaid syntax."
 ---
 
 # Mermaid Diagramming

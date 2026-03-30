@@ -3,10 +3,10 @@
   "name": "lamella-plugin-index",
   "version": "1.0.0",
   "description": "Index of all available Lamella source plugin manifests",
-  "generated": "2026-03-26",
+  "generated": "2026-03-29",
   "stats": {
-    "totalPlugins": 25,
-    "totalSkills": 286,
+    "totalPlugins": 52,
+    "totalSkills": 285,
     "coverage": "98%"
   },
   "plugins": [
@@ -77,20 +77,84 @@
       "skills_count": 7
     },
     {
-      "name": "core",
+      "name": "core-architecture",
       "version": "1.0.0",
-      "skills": 32,
-      "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
+      "skills": 10,
+      "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
       "tags": [
-        "essential",
-        "workflow",
-        "standards",
+        "core",
+        "architecture",
+        "design",
+        "refactor",
+        "patterns"
+      ],
+      "manifest": "core-architecture.json",
+      "skillCount": 10,
+      "skills_count": 10
+    },
+    {
+      "name": "core-base",
+      "version": "1.0.0",
+      "skills": 6,
+      "description": "Foundational development workflow: planning, debugging, and test discipline",
+      "tags": [
+        "core",
+        "base",
+        "debugging",
         "testing",
+        "planning"
+      ],
+      "manifest": "core-base.json",
+      "skillCount": 6,
+      "skills_count": 6
+    },
+    {
+      "name": "core-operations",
+      "version": "1.0.0",
+      "skills": 7,
+      "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
+      "tags": [
+        "core",
+        "operations",
+        "onboarding",
+        "memory",
         "git"
       ],
+      "manifest": "core-operations.json",
+      "skillCount": 7,
+      "skills_count": 7
+    },
+    {
+      "name": "core-quality",
+      "version": "1.0.0",
+      "skills": 9,
+      "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
+      "tags": [
+        "core",
+        "quality",
+        "reviews",
+        "verification",
+        "testing"
+      ],
+      "manifest": "core-quality.json",
+      "skillCount": 9,
+      "skills_count": 9
+    },
+    {
+      "name": "core",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered core development plugins and shared base resources",
+      "tags": [
+        "core",
+        "bundle",
+        "workflow",
+        "quality",
+        "architecture"
+      ],
       "manifest": "core.json",
-      "skillCount": 32,
-      "skills_count": 32
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "cpp",
@@ -156,22 +220,84 @@
       "skills_count": 5
     },
     {
-      "name": "devops",
+      "name": "devops-cloud",
       "version": "1.0.0",
-      "skills": 24,
-      "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+      "skills": 5,
+      "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
       "tags": [
         "devops",
-        "docker",
-        "kubernetes",
-        "terraform",
+        "cloud",
         "aws",
-        "ci-cd",
-        "infrastructure"
+        "serverless",
+        "cdk"
+      ],
+      "manifest": "devops-cloud.json",
+      "skillCount": 5,
+      "skills_count": 5
+    },
+    {
+      "name": "devops-kubernetes",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
+      "tags": [
+        "devops",
+        "kubernetes",
+        "helm",
+        "gitops",
+        "manifests"
+      ],
+      "manifest": "devops-kubernetes.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "devops-observability",
+      "version": "1.0.0",
+      "skills": 7,
+      "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
+      "tags": [
+        "devops",
+        "observability",
+        "tracing",
+        "metrics",
+        "slo"
+      ],
+      "manifest": "devops-observability.json",
+      "skillCount": 7,
+      "skills_count": 7
+    },
+    {
+      "name": "devops-platform",
+      "version": "1.0.0",
+      "skills": 8,
+      "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
+      "tags": [
+        "devops",
+        "platform",
+        "docker",
+        "terraform",
+        "ansible"
+      ],
+      "manifest": "devops-platform.json",
+      "skillCount": 8,
+      "skills_count": 8
+    },
+    {
+      "name": "devops",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
+      "tags": [
+        "devops",
+        "bundle",
+        "cloud",
+        "kubernetes",
+        "platform"
       ],
       "manifest": "devops.json",
-      "skillCount": 24,
-      "skills_count": 24
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "enterprise-it",
@@ -206,36 +332,68 @@
       "skills_count": 11
     },
     {
-      "name": "frontend",
-      "version": "1.0.0",
-      "skills": 11,
-      "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
-      "tags": [
-        "frontend",
-        "ui",
-        "ux",
-        "design",
-        "css",
-        "documents"
-      ],
-      "manifest": "frontend.json",
-      "skillCount": 11,
-      "skills_count": 11
-    },
-    {
-      "name": "go",
+      "name": "frontend-3d",
       "version": "1.0.0",
       "skills": 2,
-      "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
+      "description": "3D frontend experiences for Spline and advanced Three.js workflows",
       "tags": [
-        "go",
-        "golang",
-        "concurrency",
-        "backend"
+        "frontend",
+        "3d",
+        "spline",
+        "threejs",
+        "webgl"
       ],
-      "manifest": "go.json",
+      "manifest": "frontend-3d.json",
       "skillCount": 2,
       "skills_count": 2
+    },
+    {
+      "name": "frontend-base",
+      "version": "1.0.0",
+      "skills": 5,
+      "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
+      "tags": [
+        "frontend",
+        "base",
+        "accessibility",
+        "components",
+        "performance"
+      ],
+      "manifest": "frontend-base.json",
+      "skillCount": 5,
+      "skills_count": 5
+    },
+    {
+      "name": "frontend-visual",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Visual frontend work for motion, design systems, screenshots, and slides",
+      "tags": [
+        "frontend",
+        "visual",
+        "animation",
+        "design-systems",
+        "slides"
+      ],
+      "manifest": "frontend-visual.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "frontend",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
+      "tags": [
+        "frontend",
+        "bundle",
+        "ui",
+        "visual",
+        "3d"
+      ],
+      "manifest": "frontend.json",
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "go-to-market",
@@ -254,20 +412,83 @@
       "skills_count": 6
     },
     {
-      "name": "meta",
+      "name": "go",
       "version": "1.0.0",
-      "skills": 17,
-      "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+      "skills": 2,
+      "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
+      "tags": [
+        "go",
+        "golang",
+        "concurrency",
+        "backend"
+      ],
+      "manifest": "go.json",
+      "skillCount": 2,
+      "skills_count": 2
+    },
+    {
+      "name": "meta-authoring",
+      "version": "1.0.0",
+      "skills": 8,
+      "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
       "tags": [
         "meta",
-        "framework",
-        "internal",
+        "authoring",
         "skills",
-        "plugins"
+        "plugins",
+        "hooks"
+      ],
+      "manifest": "meta-authoring.json",
+      "skillCount": 8,
+      "skills_count": 8
+    },
+    {
+      "name": "meta-governance",
+      "version": "1.0.0",
+      "skills": 5,
+      "description": "Meta governance for curation, audits, stocktakes, and task capture",
+      "tags": [
+        "meta",
+        "governance",
+        "audit",
+        "curation",
+        "todos"
+      ],
+      "manifest": "meta-governance.json",
+      "skillCount": 5,
+      "skills_count": 5
+    },
+    {
+      "name": "meta-routing",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
+      "tags": [
+        "meta",
+        "routing",
+        "composition",
+        "coordination",
+        "discovery"
+      ],
+      "manifest": "meta-routing.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "meta",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
+      "tags": [
+        "meta",
+        "bundle",
+        "authoring",
+        "routing",
+        "governance"
       ],
       "manifest": "meta.json",
-      "skillCount": 17,
-      "skills_count": 17
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "microservices",
@@ -334,39 +555,196 @@
       "skills_count": 11
     },
     {
-      "name": "security",
+      "name": "security-base",
       "version": "1.0.0",
-      "skills": 26,
-      "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
+      "skills": 7,
+      "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
       "tags": [
         "security",
-        "audit",
-        "vulnerability",
-        "fuzzing",
+        "base",
+        "auth",
+        "secrets",
+        "secure-coding"
+      ],
+      "manifest": "security-base.json",
+      "skillCount": 7,
+      "skills_count": 7
+    },
+    {
+      "name": "security-compliance",
+      "version": "1.0.0",
+      "skills": 5,
+      "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
+      "tags": [
+        "security",
+        "compliance",
+        "pci",
+        "soc2",
         "threat-modeling"
       ],
+      "manifest": "security-compliance.json",
+      "skillCount": 5,
+      "skills_count": 5
+    },
+    {
+      "name": "security-crypto",
+      "version": "1.0.0",
+      "skills": 3,
+      "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
+      "tags": [
+        "security",
+        "crypto",
+        "constant-time",
+        "wycheproof",
+        "yara"
+      ],
+      "manifest": "security-crypto.json",
+      "skillCount": 3,
+      "skills_count": 3
+    },
+    {
+      "name": "security-fuzzing",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
+      "tags": [
+        "security",
+        "fuzzing",
+        "asan",
+        "libfuzzer",
+        "oss-fuzz"
+      ],
+      "manifest": "security-fuzzing.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "security-scanning",
+      "version": "1.0.0",
+      "skills": 6,
+      "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
+      "tags": [
+        "security",
+        "scanning",
+        "sast",
+        "codeql",
+        "semgrep"
+      ],
+      "manifest": "security-scanning.json",
+      "skillCount": 6,
+      "skills_count": 6
+    },
+    {
+      "name": "security",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered security plugins and shared security commands",
+      "tags": [
+        "security",
+        "bundle",
+        "audit",
+        "fuzzing",
+        "compliance"
+      ],
       "manifest": "security.json",
-      "skillCount": 26,
-      "skills_count": 26
+      "skillCount": 0,
+      "skills_count": 0
+    },
+    {
+      "name": "tools-browser",
+      "version": "1.0.0",
+      "skills": 3,
+      "description": "Browser automation and realtime web tooling for interactive surfaces",
+      "tags": [
+        "tools",
+        "browser",
+        "playwright",
+        "websocket",
+        "automation"
+      ],
+      "manifest": "tools-browser.json",
+      "skillCount": 3,
+      "skills_count": 3
+    },
+    {
+      "name": "tools-cli",
+      "version": "1.0.0",
+      "skills": 8,
+      "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
+      "tags": [
+        "tools",
+        "cli",
+        "shell",
+        "bash",
+        "tmux"
+      ],
+      "manifest": "tools-cli.json",
+      "skillCount": 8,
+      "skills_count": 8
+    },
+    {
+      "name": "tools-diagrams",
+      "version": "1.0.0",
+      "skills": 2,
+      "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
+      "tags": [
+        "tools",
+        "diagrams",
+        "mermaid",
+        "excalidraw",
+        "visualization"
+      ],
+      "manifest": "tools-diagrams.json",
+      "skillCount": 2,
+      "skills_count": 2
+    },
+    {
+      "name": "tools-documents",
+      "version": "1.0.0",
+      "skills": 5,
+      "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
+      "tags": [
+        "tools",
+        "documents",
+        "pdf",
+        "docx",
+        "xlsx"
+      ],
+      "manifest": "tools-documents.json",
+      "skillCount": 5,
+      "skills_count": 5
+    },
+    {
+      "name": "tools-integration",
+      "version": "1.0.0",
+      "skills": 10,
+      "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
+      "tags": [
+        "tools",
+        "integration",
+        "mcp",
+        "api",
+        "analytics"
+      ],
+      "manifest": "tools-integration.json",
+      "skillCount": 10,
+      "skills_count": 10
     },
     {
       "name": "tools",
       "version": "1.0.0",
-      "skills": 28,
-      "description": "CLI tools, shell and PowerShell scripting, analytics implementation, MCP integration, API design, and productivity utilities",
+      "skills": 0,
+      "description": "Umbrella bundle for layered tool plugins and shared research/setup commands",
       "tags": [
+        "tools",
+        "bundle",
         "cli",
-        "shell",
-        "powershell",
-        "bash",
-        "mcp",
-        "api",
-        "productivity",
-        "automation"
+        "automation",
+        "integration"
       ],
       "manifest": "tools.json",
-      "skillCount": 28,
-      "skills_count": 28
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "typescript",
@@ -386,20 +764,68 @@
       "skills_count": 9
     },
     {
-      "name": "workflow",
+      "name": "workflow-execution",
       "version": "1.0.0",
-      "skills": 14,
-      "description": "Development workflows: planning, git operations, decision records, continuous improvement, mental models, and Conductor project management",
+      "skills": 4,
+      "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
+      "tags": [
+        "workflow",
+        "execution",
+        "handoff",
+        "conductor",
+        "delivery"
+      ],
+      "manifest": "workflow-execution.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "workflow-git",
+      "version": "1.0.0",
+      "skills": 4,
+      "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
+      "tags": [
+        "workflow",
+        "git",
+        "pull-requests",
+        "worktrees",
+        "review"
+      ],
+      "manifest": "workflow-git.json",
+      "skillCount": 4,
+      "skills_count": 4
+    },
+    {
+      "name": "workflow-planning",
+      "version": "1.0.0",
+      "skills": 6,
+      "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
       "tags": [
         "workflow",
         "planning",
+        "adr",
         "kaizen",
+        "specs"
+      ],
+      "manifest": "workflow-planning.json",
+      "skillCount": 6,
+      "skills_count": 6
+    },
+    {
+      "name": "workflow",
+      "version": "1.0.0",
+      "skills": 0,
+      "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
+      "tags": [
+        "workflow",
+        "bundle",
+        "planning",
         "git",
-        "conductor"
+        "execution"
       ],
       "manifest": "workflow.json",
-      "skillCount": 14,
-      "skills_count": 14
+      "skillCount": 0,
+      "skills_count": 0
     },
     {
       "name": "writing",
@@ -417,49 +843,5 @@
       "skillCount": 6,
       "skills_count": 6
     }
-  ],
-  "categories": {
-    "core-development": [
-      "core",
-      "python",
-      "typescript",
-      "rust",
-      "go",
-      "cpp"
-    ],
-    "infrastructure": [
-      "devops",
-      "database",
-      "microservices",
-      "atmos"
-    ],
-    "ai-and-agents": [
-      "ai-agents",
-      "rag"
-    ],
-    "product-and-business": [
-      "agile-pm",
-      "customer-insights",
-      "executive",
-      "go-to-market",
-      "enterprise-it",
-      "workflow",
-      "collaboration"
-    ],
-    "frontend-and-design": [
-      "frontend",
-      "writing"
-    ],
-    "security-and-compliance": [
-      "security"
-    ],
-    "tools-and-utilities": [
-      "tools",
-      "meta"
-    ],
-    "operational-engineering": [
-      "developer-ops"
-    ]
-  },
-  "totalSkills": 286
+  ]
 }

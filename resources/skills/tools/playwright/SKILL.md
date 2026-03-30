@@ -1,8 +1,6 @@
 ---
 name: playwright
-description: >-
-  Automates browsers and Playwright end-to-end tests. Use when automating browsers with playwright-cli, writing E2E tests (.spec.ts),
-  fixing flaky tests, testing local web apps, or designing Page Object Models.
+description: "Automates browsers and Playwright end-to-end tests."
 ---
 # Playwright
 

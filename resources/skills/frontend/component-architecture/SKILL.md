@@ -1,6 +1,6 @@
 ---
 name: component-architecture
-description: "Designs reusable frontend component architectures. Use when building UI libraries, shaping component APIs, choosing composition patterns, or evaluating React, Vue, or Svelte component structure."
+description: "Designs reusable frontend component architectures."
 ---
 
 # Component Architecture

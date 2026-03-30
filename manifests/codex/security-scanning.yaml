@@ -1,0 +1,25 @@
+{
+  "name": "security-scanning",
+  "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
+  "source_plugin": "security-scanning",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/agentic-actions-auditor",
+      "security/codeql",
+      "security/pii-redactor",
+      "security/sast-configuration",
+      "security/semgrep",
+      "security/supply-chain-risk-auditor"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

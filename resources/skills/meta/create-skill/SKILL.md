@@ -1,6 +1,6 @@
 ---
 name: create-skill
-description: Guides effective skill creation. Use when creating a new skill or updating an existing skill that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
+description: "Guides effective skill creation."
 ---
 
 # Create Skill Command

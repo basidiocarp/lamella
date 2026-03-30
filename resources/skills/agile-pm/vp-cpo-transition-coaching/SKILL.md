@@ -1,6 +1,6 @@
 ---
 name: vp-cpo-transition-coaching
-description: Coaches the transition from Director to VP or CPO through role evaluation, executive alignment, early-role recalibration, and executive-scope leadership shifts. Use when a senior product leader is preparing for, entering, or repairing an executive product role.
+description: "Coaches transitions into VP and CPO leadership roles."
 ---
 # VP CPO Transition Coaching
 

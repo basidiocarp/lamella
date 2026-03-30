@@ -1,0 +1,32 @@
+{
+  "$schema": "./schema.json",
+  "name": "devops-platform",
+  "version": "1.0.0",
+  "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
+  "author": "lamella",
+  "license": "MIT",
+  "tags": [
+    "devops",
+    "platform",
+    "docker",
+    "terraform",
+    "ansible"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/ansible",
+      "devops/deployment",
+      "devops/docker-patterns",
+      "devops/docker-troubleshoot",
+      "devops/github-actions-validator",
+      "devops/makefile",
+      "devops/terraform-patterns",
+      "devops/turborepo-caching"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

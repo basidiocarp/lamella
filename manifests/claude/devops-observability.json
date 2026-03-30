@@ -1,0 +1,31 @@
+{
+  "$schema": "./schema.json",
+  "name": "devops-observability",
+  "version": "1.0.0",
+  "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
+  "author": "lamella",
+  "license": "MIT",
+  "tags": [
+    "devops",
+    "observability",
+    "tracing",
+    "metrics",
+    "slo"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/chaos-engineering",
+      "devops/distributed-tracing",
+      "devops/grafana-dashboards",
+      "devops/postmortem-writing",
+      "devops/prometheus-configuration",
+      "devops/promql",
+      "devops/slo-implementation"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

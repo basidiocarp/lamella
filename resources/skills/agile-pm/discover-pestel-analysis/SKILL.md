@@ -1,6 +1,6 @@
 ---
 name: discover-pestel-analysis
-description: Analyzes political, economic, social, technological, environmental, and legal forces affecting a product or market. Use when external shifts could materially change strategy, market entry, or roadmap risk.
+description: "Analyzes political, economic, social, technological, environmental, and legal forces affecting a product or market."
 ---
 # Discover PESTEL Analysis
 

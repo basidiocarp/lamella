@@ -1,6 +1,6 @@
 ---
 name: slo-implementation
-description: Defines and implements Service Level Indicators (SLIs) and Service Level Objectives (SLOs) with error budgets and alerting. Use when establishing reliability targets, implementing SRE practices, or measuring service performance.
+description: "Defines SLIs, SLOs, error budgets, and alerting."
 ---
 
 # SLO Implementation

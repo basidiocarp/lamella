@@ -1,9 +1,6 @@
 ---
 name: python-patterns
-description: >-
-  Applies Pythonic idioms, PEP 8, the type system, async and await patterns,
-  standard library, and best practices for robust, efficient Python. Use when writing,
-  reviewing, or refactoring Python code, designing packages, or applying Pythonic idioms.
+description: "Applies Python idioms, typing, async patterns, and standard library."
 ---
 
 # Python Development Patterns

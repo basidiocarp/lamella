@@ -1,6 +1,6 @@
 ---
 name: define-pricing-strategy
-description: Designs SaaS pricing strategy across packaging, value metrics, price points, and price-change plans. Use when defining or redesigning pricing, choosing tiers, auditing pricing pages, or planning a price increase.
+description: "Designs SaaS pricing strategy across packaging, value metrics, price points, and price-change plans."
 ---
 # Define Pricing Strategy
 

@@ -1,8 +1,6 @@
 ---
 name: rust-learner
-description: >-
-  Retrieves Rust release, crate, and documentation information. Use when checking the latest Rust version, reading changelogs,
-  looking up crates, comparing editions, finding API docs, or reviewing crate features and dependencies.
+description: "Retrieves Rust release, crate, and documentation information."
 ---
 # Rust Learner
 

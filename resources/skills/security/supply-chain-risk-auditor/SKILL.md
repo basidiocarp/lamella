@@ -1,9 +1,6 @@
 ---
 name: supply-chain-risk-auditor
-description: >-
-  Identifies dependencies at heightened risk of exploitation or takeover, and provides practical dependency audit workflows
-  (npm audit, outdated checks, unused detection, bundle analysis). Use when assessing supply chain attack surface, evaluating
-  dependency health, auditing for vulnerabilities, or scoping security engagements.
+description: "Audits dependency supply-chain risk, staleness, and takeover exposure."
 ---
 # Supply Chain Risk Auditor
 

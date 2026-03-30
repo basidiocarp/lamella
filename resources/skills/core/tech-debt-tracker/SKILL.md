@@ -1,6 +1,6 @@
 ---
 name: tech-debt-tracker
-description: Scans codebases for technical debt, prioritizes remediation work, and tracks debt trends over time. Use when planning cleanup work, sizing debt paydown, or turning code health findings into an actionable backlog.
+description: "Scans codebases for technical debt, prioritizes remediation work, and tracks debt trends over time."
 ---
 
 # Tech Debt Tracker

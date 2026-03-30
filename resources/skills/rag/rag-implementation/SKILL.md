@@ -1,6 +1,6 @@
 ---
 name: rag-implementation
-description: "Builds Retrieval-Augmented Generation systems for LLM applications. Use when implementing knowledge-grounded AI, building document question-answering systems, integrating external knowledge bases, or designing RAG architecture."
+description: "Builds Retrieval-Augmented Generation systems for LLM applications."
 ---
 
 # RAG Implementation

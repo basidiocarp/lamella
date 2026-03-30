@@ -1,6 +1,6 @@
 ---
 name: soc2-compliance
-description: "Plans SOC 2 readiness, control mapping, and audit evidence collection. Use when preparing for a SOC 2 Type I or Type II audit, building a control matrix, evaluating trust service criteria scope, or organizing evidence for an auditor."
+description: "Plans SOC 2 readiness, control mapping, and audit evidence collection."
 ---
 
 # SOC 2 Compliance

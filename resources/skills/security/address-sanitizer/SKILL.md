@@ -1,8 +1,6 @@
 ---
 name: address-sanitizer
-description: >-
-  Detects memory errors with AddressSanitizer during fuzzing. Use when fuzzing C or C++ code to find buffer overflows,
-  use-after-free bugs, and related memory issues.
+description: "Detects memory errors with AddressSanitizer during fuzzing."
 ---
 # AddressSanitizer (ASan)
 

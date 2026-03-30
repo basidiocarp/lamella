@@ -1,6 +1,6 @@
 ---
 name: mcp-integration
-description: Integrates Model Context Protocol servers into Claude Code plugins for external tool and service integration. Use when adding MCP servers, configuring .mcp.json, connecting external services, or setting up SSE/stdio/HTTP/WebSocket server types.
+description: "Integrates MCP servers into Claude Code plugins and tools."
 ---
 
 # MCP Integration for Claude Code Plugins

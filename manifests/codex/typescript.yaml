@@ -2,6 +2,9 @@
   "name": "typescript",
   "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
   "source_plugin": "typescript",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "typescript/backend-patterns",

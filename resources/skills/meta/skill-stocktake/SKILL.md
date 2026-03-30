@@ -1,6 +1,6 @@
 ---
 name: skill-stocktake
-description: "Audits Claude skills and commands for quality. Supports Quick Scan for changed files and Full Stocktake for sequential subagent batch evaluation."
+description: "Audits Claude skills and commands for quality."
 ---
 
 # skill-stocktake

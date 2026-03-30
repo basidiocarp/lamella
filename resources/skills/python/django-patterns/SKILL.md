@@ -1,10 +1,6 @@
 ---
 name: django-patterns
-description: >-
-  Guides Django development with architecture patterns, REST API design with DRF,
-  ORM best practices, authentication, testing, caching, signals, middleware, and
-  production-grade Django apps. Use when building Django web apps, designing DRF APIs,
-  implementing models, views, serializers, or authentication.
+description: "Guides Django architecture, DRF APIs, ORM patterns, and testing."
 ---
 
 # Django Development Patterns

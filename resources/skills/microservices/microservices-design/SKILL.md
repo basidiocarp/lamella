@@ -1,9 +1,6 @@
 ---
 name: microservices-design
-description: >-
-  Designs microservices architectures with service boundaries, event-driven communication, and resilience patterns.
-  Use when decomposing monoliths, designing distributed systems, or evaluating service boundaries, CQRS, sagas,
-  event sourcing, service mesh choices, or distributed tracing.
+description: "Designs microservices architectures with service boundaries, event-driven communication, and resilience patterns."
 ---
 
 # Microservices Architect

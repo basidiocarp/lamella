@@ -1,6 +1,6 @@
 ---
 name: ubiquitous-language
-description: Builds a shared domain glossary with canonical terms, ambiguities, and usage rules. Use when defining product or system terminology, resolving inconsistent naming, or formalizing a bounded context before planning or implementation.
+description: "Builds a shared domain glossary with canonical terms, ambiguities, and usage rules."
 ---
 
 # Ubiquitous Language

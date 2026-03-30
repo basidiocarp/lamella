@@ -1,0 +1,32 @@
+{
+  "$schema": "./schema.json",
+  "name": "core-architecture",
+  "version": "1.0.0",
+  "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "core",
+    "architecture",
+    "design",
+    "refactor",
+    "patterns"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/architecture-decision-records",
+      "core/context-engineering",
+      "core/deep-module-review",
+      "core/dependency-upgrade",
+      "core/design-patterns",
+      "core/duplicate-detection",
+      "core/interface-design-variants",
+      "core/legacy-modernizer",
+      "core/monorepo-management",
+      "core/type-driven-design"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

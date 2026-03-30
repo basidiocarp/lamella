@@ -1,0 +1,26 @@
+{
+  "$schema": "./schema.json",
+  "name": "frontend-3d",
+  "version": "1.0.0",
+  "description": "3D frontend experiences for Spline and advanced Three.js workflows",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "frontend",
+    "3d",
+    "spline",
+    "threejs",
+    "webgl"
+  ],
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/spline-3d-integration",
+      "frontend/threejs-advanced"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

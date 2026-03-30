@@ -1,0 +1,29 @@
+{
+  "$schema": "./schema.json",
+  "name": "frontend-base",
+  "version": "1.0.0",
+  "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "frontend",
+    "base",
+    "accessibility",
+    "components",
+    "performance"
+  ],
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/accessibility",
+      "frontend/component-architecture",
+      "frontend/frontend-patterns",
+      "frontend/frontend-performance",
+      "frontend/responsive-design"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

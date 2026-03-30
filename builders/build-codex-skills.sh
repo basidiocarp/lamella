@@ -62,6 +62,10 @@ manifest_description() {
     jq -r '.description // ""' "$1"
 }
 
+manifest_dependencies() {
+    jq -r '.dependencies // [] | .[]' "$1"
+}
+
 json_array() {
     jq -r "$2 // [] | .[]" "$1"
 }
@@ -230,13 +234,55 @@ copy_skill() {
     fi
 }
 
+collect_manifest_closure() {
+    local manifest="$1"
+    local manifests_dir="$2"
+    local dep dep_path
+
+    for dep in $(manifest_dependencies "$manifest"); do
+        dep_path="$manifests_dir/$dep.yaml"
+        if [[ ! -f "$dep_path" ]]; then
+            log_warn "Missing dependent Codex manifest: $dep (required by $(basename "$manifest"))"
+            continue
+        fi
+        collect_manifest_closure "$dep_path" "$manifests_dir"
+    done
+
+    local existing
+    for existing in "${RESOLVED_MANIFESTS[@]:-}"; do
+        [[ "$existing" == "$manifest" ]] && return 0
+    done
+
+    RESOLVED_MANIFESTS+=("$manifest")
+}
+
+resolved_resource_items() {
+    local resource_type="$1"
+    shift
+
+    local seen=""
+    local manifest item
+    for manifest in "$@"; do
+        while IFS= read -r item; do
+            [[ -z "$item" ]] && continue
+            if ! printf '%s' "$seen" | grep -Fqx "$item"; then
+                seen="${seen}${item}"$'\n'
+                printf '%s\n' "$item"
+            fi
+        done < <(json_array "$manifest" ".resources.\"$resource_type\"")
+    done
+}
+
 build_manifest() {
     local manifest="$1"
     local output_dir="$2"
     local all_skills_dir="$output_dir/skills"
     local profiles_dir="$output_dir/profiles"
+    local manifests_dir
     local name description profile_dir profile_skills_dir
     local skill_count=0 workflow_count=0 template_count=0 script_count=0 subagent_count=0
+    local dependency_names=""
+    local resolved_name=""
 
     name=$(manifest_name "$manifest")
     description=$(manifest_description "$manifest")
@@ -248,35 +294,51 @@ build_manifest() {
 
     profile_dir="$profiles_dir/$name"
     profile_skills_dir="$profile_dir/skills"
+    manifests_dir="$(dirname "$manifest")"
 
     rm -rf "$profile_dir"
     mkdir -p "$profile_skills_dir" "$all_skills_dir"
 
     log_info "Building Codex profile: $name"
 
+    RESOLVED_MANIFESTS=()
+    collect_manifest_closure "$manifest" "$manifests_dir"
+
+    local resolved_manifest
+    for resolved_manifest in "${RESOLVED_MANIFESTS[@]}"; do
+        resolved_name="$(manifest_name "$resolved_manifest")"
+        if [[ "$resolved_name" != "$name" ]]; then
+            if [[ -z "$dependency_names" ]]; then
+                dependency_names="\"$resolved_name\""
+            else
+                dependency_names="$dependency_names,\"$resolved_name\""
+            fi
+        fi
+    done
+
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
         copy_skill "$item" "$profile_skills_dir" "$all_skills_dir"
         skill_count=$((skill_count + 1))
-    done < <(json_array "$manifest" '.resources.skills')
+    done < <(resolved_resource_items skills "${RESOLVED_MANIFESTS[@]}")
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
         create_workflow_wrapper "$item" "$profile_skills_dir" "$all_skills_dir"
         workflow_count=$((workflow_count + 1))
-    done < <(json_array "$manifest" '.resources.workflows')
+    done < <(resolved_resource_items workflows "${RESOLVED_MANIFESTS[@]}")
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
         create_template_wrapper "$item" "$profile_skills_dir" "$all_skills_dir"
         template_count=$((template_count + 1))
-    done < <(json_array "$manifest" '.resources.templates')
+    done < <(resolved_resource_items templates "${RESOLVED_MANIFESTS[@]}")
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
         create_script_wrapper "$item" "$profile_skills_dir" "$all_skills_dir"
         script_count=$((script_count + 1))
-    done < <(json_array "$manifest" '.resources.scripts')
+    done < <(resolved_resource_items scripts "${RESOLVED_MANIFESTS[@]}")
 
     subagent_count=$(node "$COPY_SHARED_SUBAGENTS_SCRIPT" codex "$name" "$profile_dir" | awk '/^Emitted / {print $2}')
     [[ -n "$subagent_count" && "$subagent_count" != "0" ]] && log_success "  shared-subagents: $subagent_count files"
@@ -286,6 +348,7 @@ build_manifest() {
         --arg description "$description" \
         --arg manifest "$(basename "$manifest")" \
         --arg output "./profiles/$name" \
+        --argjson dependencies "[${dependency_names}]" \
         --argjson skills "$skill_count" \
         --argjson workflows "$workflow_count" \
         --argjson templates "$template_count" \
@@ -296,6 +359,7 @@ build_manifest() {
             description: $description,
             manifest: $manifest,
             output: $output,
+            dependencies: $dependencies,
             resources: {
                 skills: $skills,
                 workflow_wrappers: $workflows,

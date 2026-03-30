@@ -1,8 +1,6 @@
 ---
 name: mental-models
-description: >-
-  Applies decision-making frameworks such as first-principles decomposition, inversion, pre-mortems, and second-order thinking.
-  Use when facing complex decisions, evaluating risks, or challenging assumptions.
+description: "Applies decision-making frameworks such as first-principles decomposition, inversion, pre-mortems, and second-order thinking."
 ---
 
 # Mental Models for Decision Making

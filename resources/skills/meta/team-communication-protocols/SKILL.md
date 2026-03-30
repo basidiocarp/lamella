@@ -1,7 +1,6 @@
 ---
 name: team-communication-protocols
-description: >-
-  Defines messaging protocols for agent team communication, including message types, plan approval, and shutdown procedures. Use when coordinating multi-agent workflows, implementing team broadcasts, handling graceful shutdowns, or setting up negotiation protocols.
+description: "Defines agent team messaging, approvals, and shutdown protocols."
 ---
 # Team Communication Protocols
 

@@ -1,8 +1,6 @@
 ---
 name: deliver-edge-cases
-description: >-
-  Documents edge cases, error states, boundary conditions, and recovery paths for a feature.
-  Use when specifying a feature or planning QA coverage for complex behavior.
+description: "Documents edge cases, error states, boundary conditions, and recovery paths for a feature."
 ---
 # Edge Cases
 

@@ -1,6 +1,6 @@
 ---
 name: release-manager
-description: Plans releases, derives changelogs, recommends semantic version bumps, and checks release readiness. Use when coordinating a release, preparing release notes, selecting a version bump, or planning a hotfix.
+description: "Plans releases, derives changelogs, recommends semantic version bumps, and checks release readiness."
 ---
 
 # Release Manager

@@ -2,6 +2,9 @@
   "name": "ai-agents",
   "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
   "source_plugin": "ai-agents",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "ai-agents/agent-evaluation",

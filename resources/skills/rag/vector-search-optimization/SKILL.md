@@ -1,6 +1,6 @@
 ---
 name: vector-search-optimization
-description: "Optimizes vector search infrastructure and retrieval quality. Use when building semantic search, tuning HNSW parameters, selecting quantization strategies, or scaling vector databases."
+description: "Optimizes vector search infrastructure and retrieval quality."
 ---
 
 # Vector Search Optimization

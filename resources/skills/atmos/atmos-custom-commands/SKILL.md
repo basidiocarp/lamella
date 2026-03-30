@@ -1,6 +1,6 @@
 ---
 name: atmos-custom-commands
-description: "Defines custom Atmos CLI commands in atmos.yaml, including arguments, flags, steps, and environment variables. Use when defining custom Atmos CLI commands, adding arguments or flags, or automating multi-step operations."
+description: "Defines custom Atmos CLI commands in atmos.yaml, including arguments, flags, steps, and environment variables."
 ---
 
 # Atmos Custom Commands

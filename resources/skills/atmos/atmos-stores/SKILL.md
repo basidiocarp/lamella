@@ -1,6 +1,6 @@
 ---
 name: atmos-stores
-description: "Configures Atmos store backends, secret-manager integrations, hook usage, and cross-component data sharing. Use when configuring Atmos store backends, integrating with secret managers, or sharing data across components."
+description: "Configures Atmos store backends, secret-manager integrations, hook usage, and cross-component data sharing."
 ---
 
 # Atmos External Stores

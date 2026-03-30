@@ -1,0 +1,21 @@
+{
+  "name": "frontend-3d",
+  "description": "3D frontend experiences for Spline and advanced Three.js workflows",
+  "source_plugin": "frontend-3d",
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/spline-3d-integration",
+      "frontend/threejs-advanced"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

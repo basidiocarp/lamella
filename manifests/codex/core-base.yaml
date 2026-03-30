@@ -1,0 +1,34 @@
+{
+  "name": "core-base",
+  "description": "Foundational development workflow: planning, debugging, and test discipline",
+  "source_plugin": "core-base",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/brainstorming",
+      "core/clarify-requirements",
+      "core/systematic-debugging",
+      "core/test-debugging",
+      "core/test-driven-development",
+      "core/test-writing"
+    ],
+    "workflows": [
+      "development/TDD.md",
+      "development/SEARCH-FIRST.md",
+      "development/COMMIT.md",
+      "quality/VERIFICATION.md",
+      "quality/DO-AND-JUDGE.md",
+      "quality/CRITIQUE.md"
+    ],
+    "templates": [
+      "claude/CLAUDE-MD-TEMPLATE.md",
+      "docs/SKILL-MD-TEMPLATE.md",
+      "session/SESSION-HANDOFF-TEMPLATE.md"
+    ],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

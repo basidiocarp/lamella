@@ -1,6 +1,6 @@
 ---
 name: dependency-upgrade
-description: Manages major dependency upgrades with compatibility analysis, staged rollout, and testing. Use when upgrading framework versions, updating major dependencies, or managing breaking changes in libraries.
+description: "Manages major dependency upgrades with compatibility analysis, staged rollout, and testing."
 ---
 
 # Dependency Upgrade

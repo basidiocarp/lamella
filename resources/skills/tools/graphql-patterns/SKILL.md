@@ -1,7 +1,6 @@
 ---
 name: graphql-patterns
-description: Designs GraphQL schemas, resolvers, federation layouts, and subscriptions. Use when building or reviewing GraphQL
-  APIs, Apollo Federation setups, DataLoader usage, or query optimization.
+description: "Designs GraphQL schemas, resolvers, federation layouts, and subscriptions."
 ---
 # GraphQL Patterns
 

@@ -1,8 +1,6 @@
 ---
 name: jira-project-operations
-description: >-
-  Operates Jira projects through JQL, workflow design, automation rules, dashboards, and issue hygiene. Use when shaping
-  Jira boards, queries, reports, or workflow behavior inside an existing Jira project.
+description: "Operates Jira projects through JQL, workflow design, automation rules, dashboards, and issue hygiene."
 ---
 # Jira Project Operations
 

@@ -1,9 +1,6 @@
 ---
 name: stride-analysis-patterns
-description: >-
-  Applies the STRIDE methodology to threat identification, attack tree construction, and security requirement extraction.
-  Use when building threat models, analyzing system security, constructing attack trees, identifying attack vectors,
-  deriving security requirements, or creating security user stories and test cases.
+description: "Applies the STRIDE methodology to threat identification, attack tree construction, and security requirement extraction."
 ---
 
 # STRIDE Analysis Patterns

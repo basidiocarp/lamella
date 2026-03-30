@@ -1,7 +1,6 @@
 ---
 name: latex-posters
-description: >-
-  Creates professional research posters in LaTeX using beamerposter, tikzposter, or baposter. Use when creating research posters for conferences, academic presentations, or scientific communication in LaTeX format.
+description: "Creates professional research posters in LaTeX using beamerposter, tikzposter, or baposter."
 ---
 # LaTeX Research Posters
 

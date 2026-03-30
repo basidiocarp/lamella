@@ -1,6 +1,6 @@
 ---
 name: kubernetes-manifest-generator
-description: Creates production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets. Use when generating Kubernetes YAML, creating K8s resources, or implementing production-grade Kubernetes configurations.
+description: "Creates production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets."
 ---
 
 # Kubernetes Manifest Generator

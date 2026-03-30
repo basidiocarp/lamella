@@ -1,6 +1,6 @@
 ---
 name: xlsx-spreadsheets
-description: Creates, edits, and analyzes Excel spreadsheets and CSV files. Covers formulas, formatting, visualization, and recalculation for spreadsheet processing workflows. Use when users need to create, modify, or analyze Excel spreadsheets and CSV files programmatically.
+description: "Creates, edits, and analyzes Excel spreadsheets and CSV files."
 ---
 
 # XLSX Creation, Editing, and Analysis

@@ -1,6 +1,6 @@
 ---
 name: atmos-devcontainer
-description: "Manages Atmos devcontainer lifecycle operations, instance configuration, and VS Code integration. Use when managing Atmos devcontainers, starting or stopping instances, or integrating with VS Code development environments."
+description: "Manages Atmos devcontainer lifecycle operations, instance configuration, and VS Code integration."
 ---
 
 # Atmos Devcontainer

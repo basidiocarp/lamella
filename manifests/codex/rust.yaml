@@ -2,6 +2,9 @@
   "name": "rust",
   "description": "Rust development: async patterns, testing, compiler analysis, and idiomatic Rust practices with 180 curated rules",
   "source_plugin": "rust",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "rust/concurrency",

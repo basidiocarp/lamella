@@ -1,6 +1,6 @@
 ---
 name: resolve-pr-parallel
-description: "Resolves pull request comments using parallel processing. Use when addressing PR review feedback, resolving review threads, or batch-fixing pull request comments."
+description: "Resolves pull request comments using parallel processing."
 argument-hint: "[optional: PR number or current PR]"
 disable-model-invocation: true
 ---

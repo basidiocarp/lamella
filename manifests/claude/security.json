@@ -2,50 +2,27 @@
   "$schema": "./schema.json",
   "name": "security",
   "version": "1.0.0",
-  "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
+  "description": "Umbrella bundle for layered security plugins and shared security commands",
   "author": "William Newton",
   "license": "MIT",
   "tags": [
     "security",
+    "bundle",
     "audit",
-    "vulnerability",
     "fuzzing",
-    "threat-modeling"
+    "compliance"
   ],
   "dependencies": [
-    "core"
+    "core",
+    "security-base",
+    "security-scanning",
+    "security-fuzzing",
+    "security-crypto",
+    "security-compliance"
   ],
   "resources": {
-    "skills": [
-      "security/address-sanitizer",
-      "security/agentic-actions-auditor",
-      "security/api-footgun-detector",
-      "security/auth-implementation-patterns",
-      "security/cargo-fuzz",
-      "security/codeql",
-      "security/constant-time-crypto",
-      "security/dependency-auditor",
-      "security/fuzz-harness-writing",
-      "security/insecure-defaults",
-      "security/memory-safety-patterns",
-      "security/ossfuzz",
-      "security/pci-compliance",
-      "security/pii-redactor",
-      "security/sast-configuration",
-      "security/seatbelt-sandboxer",
-      "security/secrets-management",
-      "security/security-audit-methodology",
-      "security/security-review",
-      "security/soc2-compliance",
-      "security/semgrep",
-      "security/stride-analysis-patterns",
-      "security/supply-chain-risk-auditor",
-      "security/threat-mitigation-mapping",
-      "security/wycheproof",
-      "security/yara-rule-authoring"
-    ],
-    "agents": [
-    ],
+    "skills": [],
+    "agents": [],
     "commands": [
       "audit/audit-context.md",
       "audit/audit.md",

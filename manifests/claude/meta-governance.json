@@ -1,0 +1,27 @@
+{
+  "$schema": "./schema.json",
+  "name": "meta-governance",
+  "version": "1.0.0",
+  "description": "Meta governance for curation, audits, stocktakes, and task capture",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "meta",
+    "governance",
+    "audit",
+    "curation",
+    "todos"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/config-curator",
+      "meta/file-todos",
+      "meta/skill-best-practices",
+      "meta/skill-stocktake",
+      "meta/task-observer"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

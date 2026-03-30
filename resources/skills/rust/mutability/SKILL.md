@@ -1,6 +1,6 @@
 ---
 name: mutability
-description: "Analyzes Rust mutability and interior mutability issues. Use when encountering mutable borrow errors, interior mutability patterns, RefCell, Cell, or borrow conflicts such as E0596, E0499, and E0502."
+description: "Analyzes Rust mutability and interior mutability issues."
 ---
 
 # Mutability & Interior Mutability

@@ -1,6 +1,6 @@
 ---
 name: mcp-server-builder
-description: Builds MCP server scaffolds from OpenAPI contracts and validates tool manifests before publishing. Use when exposing an API through MCP, bootstrapping a new server, or checking manifest quality.
+description: "Builds MCP server scaffolds from OpenAPI contracts and validates tool manifests before publishing."
 ---
 
 # MCP Server Builder

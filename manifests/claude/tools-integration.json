@@ -1,0 +1,34 @@
+{
+  "$schema": "./schema.json",
+  "name": "tools-integration",
+  "version": "1.0.0",
+  "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "tools",
+    "integration",
+    "mcp",
+    "api",
+    "analytics"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/analytics-tracking",
+      "tools/api-design-principles",
+      "tools/aws-mcp-setup",
+      "tools/devcontainer-setup",
+      "tools/graphql-patterns",
+      "tools/mcp-integration",
+      "tools/mcp-server-builder",
+      "tools/obsidian",
+      "tools/openapi-spec-generation",
+      "tools/rclone"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

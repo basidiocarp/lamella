@@ -1,6 +1,6 @@
 ---
 name: threejs-advanced
-description: "Implements advanced Three.js animation, post-processing, and shader workflows. Use when building custom Three.js scenes, playing GLTF animations, adding screen-space effects, or writing shader-based visual effects."
+description: "Implements advanced Three.js animation, post-processing, and shader workflows."
 ---
 
 # Three.js Advanced

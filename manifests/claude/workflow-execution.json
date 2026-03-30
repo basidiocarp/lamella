@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "workflow-execution",
+  "version": "1.0.0",
+  "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "workflow",
+    "execution",
+    "handoff",
+    "conductor",
+    "delivery"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "workflow/conductor",
+      "workflow/context-handoff",
+      "workflow/executing-plans",
+      "workflow/finishing-a-development-branch"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

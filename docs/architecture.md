@@ -124,7 +124,7 @@ node scripts/ci/validate-build.js
 
 Lamella currently documents and packages:
 
-- **25 plugins**
+- **52 plugins**
 - **286 skills**
 - manifest-driven Claude plugin builds
 - Codex skill and agent exports

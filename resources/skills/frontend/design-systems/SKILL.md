@@ -1,6 +1,6 @@
 ---
 name: design-systems
-description: "Builds frontend design systems and visual foundations. Use when defining design tokens, theming, typography, color systems, spacing, iconography, or component-library standards."
+description: "Builds frontend design systems and visual foundations."
 ---
 
 # Design Systems

@@ -1,6 +1,6 @@
 ---
 name: lifecycle
-description: "Designs Rust resource lifecycle patterns. Use when working with RAII, Drop, resource acquisition and release, connection pools, lazy initialization, OnceLock, or transaction lifetimes."
+description: "Designs Rust resource lifecycle patterns."
 ---
 
 # Resource Lifecycle & RAII

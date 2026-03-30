@@ -1,6 +1,6 @@
 ---
 name: seatbelt-sandboxer
-description: "Generates minimal macOS Seatbelt sandbox configurations. Use when sandboxing, isolating, or restricting macOS applications with allowlist-based profiles."
+description: "Generates minimal macOS Seatbelt sandbox configurations."
 allowed-tools:
   - Read
   - Write

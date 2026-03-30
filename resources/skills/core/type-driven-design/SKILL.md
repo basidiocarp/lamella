@@ -1,6 +1,6 @@
 ---
 name: type-driven-design
-description: Uses the type system to prevent bugs at compile time. Covers newtype patterns, typestate, builder patterns, and making invalid states unrepresentable across typed languages.
+description: "Uses the type system to prevent bugs at compile time."
 ---
 
 # Type-Driven Design

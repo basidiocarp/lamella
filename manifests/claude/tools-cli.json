@@ -1,0 +1,32 @@
+{
+  "$schema": "./schema.json",
+  "name": "tools-cli",
+  "version": "1.0.0",
+  "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "tools",
+    "cli",
+    "shell",
+    "bash",
+    "tmux"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/bash-script-generator",
+      "tools/bash-script-validator",
+      "tools/cli-developer",
+      "tools/gh-cli-patterns",
+      "tools/php-pro",
+      "tools/regex-debugger",
+      "tools/tmux-interactive-runner",
+      "tools/token-reduction-optimizer"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

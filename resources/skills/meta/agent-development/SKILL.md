@@ -1,8 +1,6 @@
 ---
 name: agent-development
-description: >-
-  Guides agent development for Claude Code plugins. Use when the user asks to create an agent, add a subagent, define agent
-  frontmatter, choose tools or colors, or structure system prompts and triggering conditions.
+description: "Guides agent development for Claude Code plugins."
 ---
 # Agent Development for Claude Code Plugins
 

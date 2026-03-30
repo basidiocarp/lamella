@@ -1,6 +1,6 @@
 ---
 name: atmos-components
-description: "Designs Atmos component architectures with Terraform root modules, abstract components, inheritance, versioning, mixins, and catalogs. Use when creating Atmos components, defining Terraform modules, setting up inheritance, or designing catalog patterns."
+description: "Designs Atmos components with inheritance, mixins, catalogs, and versioning."
 ---
 
 # Atmos Component Architecture

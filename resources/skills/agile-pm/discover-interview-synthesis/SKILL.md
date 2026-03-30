@@ -1,7 +1,6 @@
 ---
 name: discover-interview-synthesis
-description: >-
-  Synthesizes user research interviews into actionable insights, patterns, and recommendations. Use after conducting user interviews, customer calls, or usability sessions.
+description: "Synthesizes user research interviews into actionable insights, patterns, and recommendations."
 ---
 # Interview Synthesis
 

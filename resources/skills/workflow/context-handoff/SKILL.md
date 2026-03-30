@@ -1,10 +1,6 @@
 ---
 name: context-handoff
-description:
-  Creates a structured session handoff document for continuity across sessions.
-  Use when ending a work session, switching contexts, or before a break.
-  Captures decisions, progress, code changes, and next steps so a future session
-  can pick up where you left off without losing context.
+description: "Creates a structured session handoff document for continuity across sessions."
 ---
 
 # Session Handoff Skill

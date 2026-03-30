@@ -1,7 +1,6 @@
 ---
 name: cli-developer
-description: Builds CLI tools with clear command design, argument parsing, prompts, progress indicators, and shell completions.
-  Use when creating or refining cross-platform command-line interfaces.
+description: "Builds CLI tools with commands, prompts, parsing, and completions."
 ---
 # CLI Developer
 

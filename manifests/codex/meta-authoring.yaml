@@ -1,0 +1,25 @@
+{
+  "name": "meta-authoring",
+  "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
+  "source_plugin": "meta-authoring",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/agent-development",
+      "meta/command-development",
+      "meta/create-hook",
+      "meta/create-skill",
+      "meta/create-workflow-command",
+      "meta/designing-workflow-skills",
+      "meta/plugin-settings",
+      "meta/plugin-structure"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

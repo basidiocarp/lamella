@@ -1,9 +1,6 @@
 ---
 name: debate-evaluator
-description: >-
-  Evaluates solutions through multi-round debate between independent judges until consensus.
-  Use when comparing solution approaches, needing rigorous evaluation with diverse perspectives,
-  or requiring evidence-based assessment.
+description: "Evaluates solutions through multi-round debate between independent judges until consensus."
 ---
 
 # Debate Evaluator

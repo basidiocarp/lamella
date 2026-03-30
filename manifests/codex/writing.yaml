@@ -2,6 +2,9 @@
   "name": "writing",
   "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
   "source_plugin": "writing",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "writing/docs-style",

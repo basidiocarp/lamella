@@ -1,6 +1,6 @@
 ---
 name: golang-testing
-description: "Implements idiomatic Go testing patterns. Use when writing Go tests, adding coverage, creating benchmarks, implementing fuzz tests, or following table-driven and TDD workflows."
+description: "Implements idiomatic Go testing patterns."
 ---
 
 # Go Testing Patterns

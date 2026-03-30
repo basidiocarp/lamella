@@ -1,6 +1,6 @@
 ---
 name: atmos-stacks
-description: "Configures Atmos stacks with imports, inheritance, deep merging, locals, vars, settings, metadata, and overrides. Use when configuring Atmos stacks, setting up inheritance hierarchies, defining variables, or troubleshooting merge conflicts."
+description: "Configures Atmos stacks with imports, inheritance, deep merging, locals, vars, settings, metadata, and overrides."
 ---
 
 # Atmos Stack Configuration

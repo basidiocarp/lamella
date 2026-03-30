@@ -1,7 +1,6 @@
 ---
 name: design-patterns
-description: >-
-  Analyzes codebases for GoF design patterns, refactoring opportunities, and stack-aware adaptations. Use when auditing code for patterns, suggesting refactoring improvements, or evaluating existing pattern implementations.
+description: "Analyzes codebases for GoF design patterns, refactoring opportunities, and stack-aware adaptations."
 ---
 # Design Patterns
 

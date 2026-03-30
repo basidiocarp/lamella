@@ -2,6 +2,7 @@
   "name": "enterprise-it",
   "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
   "source_plugin": "enterprise-it",
+  "dependencies": [],
   "resources": {
     "skills": [
       "agile-pm/atlassian-workspace-admin",

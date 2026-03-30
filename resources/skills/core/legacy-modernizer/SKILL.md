@@ -1,6 +1,6 @@
 ---
 name: legacy-modernizer
-description: Modernizes legacy systems incrementally with strangler fig, branch by abstraction, and zero-downtime migration strategies. Use when modernizing legacy systems, implementing incremental migration, or reducing technical debt.
+description: "Modernizes legacy systems incrementally with strangler fig, branch by abstraction, and zero-downtime migration strategies."
 ---
 
 # Legacy Modernizer

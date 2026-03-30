@@ -1,8 +1,6 @@
 ---
 name: confluence-knowledge-ops
-description: >-
-  Designs and audits Confluence spaces, page hierarchies, templates, labels, and embedded reporting. Use when creating team
-  spaces, standardizing documentation, or reviewing knowledge-base health.
+description: "Designs and audits Confluence spaces, page hierarchies, templates, labels, and embedded reporting."
 ---
 # Confluence Knowledge Operations
 

@@ -1,6 +1,6 @@
 ---
 name: discover-market-sizing
-description: Estimates TAM, SAM, and SOM with explicit assumptions, segment logic, and sizing math. Use when sizing an opportunity, evaluating market entry, or pressure-testing growth potential.
+description: "Estimates TAM, SAM, and SOM with explicit assumptions, segment logic, and sizing math."
 ---
 # Discover Market Sizing
 

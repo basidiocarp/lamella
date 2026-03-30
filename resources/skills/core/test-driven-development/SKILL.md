@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Enforces test-driven development by requiring a failing test before implementation. Use when implementing features, bug fixes, refactors, or behavior changes.
+description: "Enforces test-driven development by requiring a failing test before implementation."
 ---
 
 # Test-Driven Development (TDD)

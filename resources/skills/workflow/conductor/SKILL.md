@@ -1,8 +1,6 @@
 ---
 name: conductor
-description: >-
-  Organizes project context, track-based work management, and TDD execution with the Conductor system.
-  Use when setting up project context, creating or managing tracks, or following a TDD task lifecycle.
+description: "Organizes project context, track-based work management, and TDD execution with the Conductor system."
 ---
 
 # Conductor

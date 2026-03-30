@@ -1,55 +1,17 @@
 {
   "name": "core",
-  "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
+  "description": "Umbrella bundle for layered core development plugins and shared base resources",
   "source_plugin": "core",
+  "dependencies": [
+    "core-base",
+    "core-quality",
+    "core-architecture",
+    "core-operations"
+  ],
   "resources": {
-    "skills": [
-      "core/api-test-suite-builder",
-      "core/architecture-decision-records",
-      "core/brainstorming",
-      "core/clarify-requirements",
-      "core/code-maturity-assessor",
-      "core/code-review-pro",
-      "core/code-review-process",
-      "core/context-engineering",
-      "core/continuous-learning",
-      "core/codebase-onboarding",
-      "core/dependency-upgrade",
-      "core/deep-module-review",
-      "core/design-patterns",
-      "core/duplicate-detection",
-      "core/e2e-testing",
-      "core/error-memory",
-      "core/fidelity-review",
-      "core/git-cleanup",
-      "core/interface-design-variants",
-      "core/legacy-modernizer",
-      "core/monorepo-management",
-      "core/parallel-debugging",
-      "core/plan-fleet",
-      "core/property-based-testing",
-      "core/strategic-compact",
-      "core/structured-review",
-      "core/systematic-debugging",
-      "core/test-debugging",
-      "core/test-driven-development",
-      "core/test-writing",
-      "core/type-driven-design",
-      "core/verified-implementer"
-    ],
-    "workflows": [
-      "development/TDD.md",
-      "development/SEARCH-FIRST.md",
-      "development/COMMIT.md",
-      "quality/VERIFICATION.md",
-      "quality/DO-AND-JUDGE.md",
-      "quality/CRITIQUE.md"
-    ],
-    "templates": [
-      "claude/CLAUDE-MD-TEMPLATE.md",
-      "docs/SKILL-MD-TEMPLATE.md",
-      "session/SESSION-HANDOFF-TEMPLATE.md"
-    ],
+    "skills": [],
+    "workflows": [],
+    "templates": [],
     "scripts": []
   },
   "options": {

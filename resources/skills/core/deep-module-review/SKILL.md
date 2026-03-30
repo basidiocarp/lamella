@@ -1,6 +1,6 @@
 ---
 name: deep-module-review
-description: Reviews architecture for shallow modules, brittle seams, and deep-module refactor candidates. Use when improving codebase structure, consolidating tightly coupled logic, or planning architecture improvements that should increase testability.
+description: "Reviews architecture for shallow modules, brittle seams, and deep-module refactor candidates."
 ---
 
 # Deep Module Review

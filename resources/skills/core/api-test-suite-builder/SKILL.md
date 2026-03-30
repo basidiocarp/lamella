@@ -1,6 +1,6 @@
 ---
 name: api-test-suite-builder
-description: Generates API test scaffolds for route handlers, auth flows, validation rules, and contract edges. Use when building or backfilling API test coverage, especially for REST endpoints, pagination, uploads, and auth-heavy handlers.
+description: "Generates API test scaffolds for route handlers, auth flows, validation rules, and contract edges."
 ---
 
 # API Test Suite Builder

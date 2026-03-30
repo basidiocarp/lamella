@@ -1,6 +1,6 @@
 ---
 name: pptx-presentations
-description: Creates, edits, and analyzes PowerPoint presentations (.pptx). Covers slides, layouts, content, speaker notes, and comments for programmatic presentation workflows. Use when users need to create, modify, or analyze PowerPoint presentations programmatically.
+description: "Creates, edits, and analyzes PowerPoint presentations (.pptx)."
 ---
 
 # PPTX creation, editing, and analysis

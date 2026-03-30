@@ -1,6 +1,6 @@
 ---
 name: content-writer
-description: Creates, researches, and repurposes content across platforms and formats. Use when writing articles, social posts, newsletters, or adapting existing content for new audiences and channels.
+description: "Creates, researches, and repurposes content across platforms and formats."
 ---
 
 # Content Writer

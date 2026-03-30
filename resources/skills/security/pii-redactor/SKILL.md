@@ -1,6 +1,6 @@
 ---
 name: pii-redactor
-description: Detects and redacts PII from text files. Supports 15 categories including credit cards, SSNs, emails, API keys, addresses, and more. Use when scanning files for sensitive data, preparing code for public sharing, or auditing data exposure.
+description: "Detects and redacts PII from text files."
 compatibility: Requires python3
 ---
 

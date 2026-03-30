@@ -1,0 +1,24 @@
+{
+  "name": "frontend-base",
+  "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
+  "source_plugin": "frontend-base",
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/accessibility",
+      "frontend/component-architecture",
+      "frontend/frontend-patterns",
+      "frontend/frontend-performance",
+      "frontend/responsive-design"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

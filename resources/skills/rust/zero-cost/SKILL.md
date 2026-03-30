@@ -1,6 +1,6 @@
 ---
 name: zero-cost
-description: "Explains Rust generics, traits, and zero-cost abstraction trade-offs. Use when working with trait bounds, static versus dynamic dispatch, monomorphization, object safety, or errors such as E0277, E0308, E0599, and E0038."
+description: "Explains Rust generics, traits, and zero-cost abstraction trade-offs."
 ---
 
 # Generics, Traits & Zero-Cost Abstractions

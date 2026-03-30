@@ -1,6 +1,6 @@
 ---
 name: interface-design-variants
-description: Designs multiple materially different interfaces before implementation. Use when comparing module boundaries, exploring API shapes, or the user asks to design a component or interface twice before building it.
+description: "Designs multiple materially different interfaces before implementation."
 ---
 
 # Interface Design Variants

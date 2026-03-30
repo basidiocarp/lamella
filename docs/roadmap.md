@@ -2,7 +2,7 @@
 
 Current documented shape:
 
-- **25 plugins**
+- **52 plugins**
 - **286 skills**
 - official Claude plugin builds
 - Codex skill exports
@@ -24,12 +24,15 @@ reliable as the library continues to evolve.
 - Repo-root marketplace metadata and hosted marketplace publishing support.
 - Dependency-aware Claude install flow through the wrapper command surface.
 - The Lamella audit and naming pass is complete, with the docs now aligned to
-  the current 25-plugin product story.
+  the current 52-plugin layered product story.
 - The remaining Claude host-maintenance scripts moved to `stipe`, and Lamella
   dropped the leftover personal config-sync and stale release helper scripts.
 
 ## Next
 
+- Execute the staged plugin-layering plan in
+  [plans/plugin-layering-migration.md](plans/plugin-layering-migration.md) so
+  oversized plugin bundles can split without breaking install compatibility.
 - Finish dependency resolution and installation behavior anywhere it still
   diverges between local source validation, local install, and built outputs.
 - Keep the thin `./lamella` wrapper as the primary user-facing interface for:

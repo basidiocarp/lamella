@@ -2,6 +2,9 @@
   "name": "atmos",
   "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
   "source_plugin": "atmos",
+  "dependencies": [
+    "devops"
+  ],
   "resources": {
     "skills": [
       "atmos/atmos-ansible",

@@ -1,6 +1,6 @@
 ---
 name: docs-style
-description: "Defines style guidelines for writing and updating documentation. Use when writing new docs, READMEs, JSDoc comments, code comments, or reviewing docs for quality."
+description: "Defines style guidelines for writing and updating documentation."
 ---
 
 # Docs Style

@@ -1,0 +1,22 @@
+{
+  "name": "tools-browser",
+  "description": "Browser automation and realtime web tooling for interactive surfaces",
+  "source_plugin": "tools-browser",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/agent-browser",
+      "tools/playwright",
+      "tools/websocket-patterns"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

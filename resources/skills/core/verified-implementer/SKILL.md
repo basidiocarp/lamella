@@ -1,6 +1,6 @@
 ---
 name: verified-implementer
-description: Implements tasks with automated LLM-as-Judge verification for critical steps. Use when work requires automated quality checks, LLM-as-Judge validation, or multi-step verification gates.
+description: "Implements tasks with automated LLM-as-Judge verification for critical steps."
 metadata:
   argument-hint: "Task file [options] (e.g., \"add-validation.feature.md --continue --human-in-the-loop\")"
 ---

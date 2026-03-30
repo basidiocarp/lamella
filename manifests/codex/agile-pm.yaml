@@ -2,6 +2,7 @@
   "name": "agile-pm",
   "description": "Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts",
   "source_plugin": "agile-pm",
+  "dependencies": [],
   "resources": {
     "skills": [
       "agile-pm/define-hypothesis",

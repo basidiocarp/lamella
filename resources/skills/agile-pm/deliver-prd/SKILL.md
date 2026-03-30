@@ -1,8 +1,6 @@
 ---
 name: deliver-prd
-description: >-
-  Creates a comprehensive Product Requirements Document that aligns stakeholders on what to build, why, and how success will
-  be measured. Use when specifying features, epics, or product initiatives for engineering handoff.
+description: "Creates product requirements documents with scope, rationale, and success metrics."
 ---
 # Product Requirements Document (PRD)
 

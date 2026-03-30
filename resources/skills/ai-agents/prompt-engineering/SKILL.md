@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Improves prompts for commands, hooks, skills, agents, and other LLM interactions. Use when writing or refining prompts for Claude Code components or sub-agents.
+description: "Improves prompts for commands, hooks, skills, agents, and other LLM interactions."
 ---
 
 # Prompt Engineering Patterns

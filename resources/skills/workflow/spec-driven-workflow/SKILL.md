@@ -1,6 +1,6 @@
 ---
 name: spec-driven-workflow
-description: Creates implementation-ready specs before code, validates spec structure, and extracts test cases from acceptance criteria. Use when a feature needs a formal spec, explicit scope boundaries, or a spec-first delivery workflow.
+description: "Creates implementation-ready specs and derives tests from acceptance criteria."
 ---
 
 # Spec-Driven Workflow

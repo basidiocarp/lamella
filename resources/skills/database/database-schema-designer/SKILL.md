@@ -1,6 +1,6 @@
 ---
 name: database-schema-designer
-description: Designs relational schemas from product or system requirements and maps them to migrations, indexes, policies, and ERDs. Use when creating new tables, reviewing schema shape, or planning a database change before implementation.
+description: "Designs relational schemas, migrations, indexes, policies, and ERDs."
 ---
 
 # Database Schema Designer

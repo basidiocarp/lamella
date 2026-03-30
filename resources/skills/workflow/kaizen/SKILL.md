@@ -1,8 +1,6 @@
 ---
 name: kaizen
-description: >-
-  Applies Kaizen continuous-improvement methods such as 5 Whys, Fishbone, PDCA, and A3 problem documentation.
-  Use when investigating issues, improving processes, or applying structured problem-solving.
+description: "Applies Kaizen continuous-improvement methods such as 5 Whys, Fishbone, PDCA, and A3 problem documentation."
 ---
 
 # Kaizen: Continuous Improvement

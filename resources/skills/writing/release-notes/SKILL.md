@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: Generates changelogs and user-facing release notes from commits and pull requests. Use when automating releases, writing update announcements, or standardizing commit conventions.
+description: "Generates changelogs and user-facing release notes from commits and pull requests."
 ---
 
 # Release Notes

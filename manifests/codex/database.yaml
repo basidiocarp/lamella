@@ -2,6 +2,9 @@
   "name": "database",
   "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
   "source_plugin": "database",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "database/database-schema-designer",

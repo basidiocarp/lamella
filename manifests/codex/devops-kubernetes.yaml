@@ -1,0 +1,23 @@
+{
+  "name": "devops-kubernetes",
+  "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
+  "source_plugin": "devops-kubernetes",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/gitops-workflow",
+      "devops/helm-charts",
+      "devops/kubernetes-manifest-generator",
+      "devops/kubernetes-security-policies"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

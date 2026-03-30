@@ -1,6 +1,6 @@
 ---
 name: concurrency
-description: "Analyzes Rust concurrency and async issues. Use when encountering Send or Sync errors, thread-safety problems, async runtime issues, channels, mutexes, RwLocks, deadlocks, or race conditions."
+description: "Analyzes Rust concurrency and async issues."
 ---
 
 # Concurrency & Async

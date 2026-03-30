@@ -1,8 +1,6 @@
 ---
 name: atlassian-workspace-admin
-description: >-
-  Administers Jira, Confluence, and Atlassian Cloud workspaces for access, permission schemes, security controls, and lifecycle
-  operations. Use when managing Atlassian users, groups, SSO, app reviews, permission audits, or governance checks.
+description: "Administers Atlassian workspaces, permissions, security controls, and lifecycle operations."
 ---
 # Atlassian Workspace Admin
 

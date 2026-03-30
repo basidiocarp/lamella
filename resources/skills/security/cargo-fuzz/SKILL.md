@@ -1,7 +1,6 @@
 ---
 name: cargo-fuzz
-description: >-
-  Uses cargo-fuzz for Rust projects that need libFuzzer-based fuzzing. Use when fuzzing Rust code with a Cargo workflow.
+description: "Uses cargo-fuzz for Rust projects that need libFuzzer-based fuzzing."
 ---
 # cargo-fuzz
 

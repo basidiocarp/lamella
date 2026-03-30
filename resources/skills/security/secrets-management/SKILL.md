@@ -1,6 +1,6 @@
 ---
 name: secrets-management
-description: Implements secure secrets management for CI/CD pipelines using Vault, AWS Secrets Manager, or native platform solutions. Use when handling sensitive credentials, rotating secrets, or securing CI/CD environments.
+description: "Implements secure secrets management for CI/CD and cloud platforms."
 ---
 
 # Secrets Management

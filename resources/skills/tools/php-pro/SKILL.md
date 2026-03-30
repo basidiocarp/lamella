@@ -1,7 +1,6 @@
 ---
 name: php-pro
-description: Builds modern PHP applications with strict typing, Symfony patterns, static analysis, and PSR conventions. Use
-  when working on PHP 8.3+, Symfony, Doctrine, Composer, or PHPStan-heavy codebases.
+description: "Builds modern PHP applications with strict typing, Symfony patterns, static analysis, and PSR conventions."
 ---
 # PHP Pro
 

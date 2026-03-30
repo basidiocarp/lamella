@@ -1,6 +1,6 @@
 ---
 name: duplicate-detection
-description: Detects semantic duplication in codebases, including functions that do the same thing under different names or implementations. Use when auditing for duplication, especially in LLM-generated codebases.
+description: "Finds semantically duplicated code despite different names or implementations."
 ---
 
 # Duplicate Detection

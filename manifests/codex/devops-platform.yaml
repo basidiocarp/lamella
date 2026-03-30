@@ -1,0 +1,27 @@
+{
+  "name": "devops-platform",
+  "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
+  "source_plugin": "devops-platform",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/ansible",
+      "devops/deployment",
+      "devops/docker-patterns",
+      "devops/docker-troubleshoot",
+      "devops/github-actions-validator",
+      "devops/makefile",
+      "devops/terraform-patterns",
+      "devops/turborepo-caching"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

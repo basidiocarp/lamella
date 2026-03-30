@@ -3,7 +3,7 @@
 Lamella is a portable resource system for AI coding environments with
 first-class Claude plugin builds and Codex skill exports.
 
-The current library ships **286 curated skills** across **25 plugins**, plus
+The current library ships **286 curated skills** across **52 plugins**, plus
 shared agents, commands, hooks, workflows, and templates that are bundled into
 installable outputs.
 
@@ -17,35 +17,22 @@ installable outputs.
 - Validation and build tooling that checks source files, manifests, cross-file
   references, and built output.
 
-## Plugin Catalog
+## Plugin Families
 
-| Plugin | Skills | Description |
+Lamella now uses a layered plugin model. Broad umbrella bundles still exist for
+compatibility, and several large domains now also expose narrower capability
+plugins.
+
+| Family | Broad Bundle | Layered Plugins |
 |--------|--------|-------------|
-| **devops** | 24 | Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns |
-| **developer-ops** | 5 | Incident command, release management, runbooks, tech debt tracking, and spec-driven execution |
-| **security** | 26 | Vulnerability scanning, threat modeling, fuzzing, auditing, and secure coding practices |
-| **core** | 32 | Coding standards, testing, git workflow, debugging, and code review |
-| **tools** | 28 | CLI tools, shell and PowerShell scripting, analytics, MCP integration, and productivity utilities |
-| **atmos** | 20 | Cloud Posse Atmos stack orchestration |
-| **meta** | 17 | Framework internals, skill management, and plugin utilities |
-| **workflow** | 14 | Planning, git operations, decision records, and project workflows |
-| **ai-agents** | 9 | Multi-agent patterns, LLM evaluation, and agent tooling |
-| **python** | 10 | Django, FastAPI, async patterns, testing, and modern Python practices |
-| **collaboration** | 7 | Team facilitation, debate, project continuity, and expert synthesis |
-| **typescript** | 9 | React, Next.js, Node.js patterns, and frontend architecture |
-| **rust** | 11 | Ownership, concurrency, unsafe review, and idiomatic Rust practices |
-| **microservices** | 4 | Event sourcing, sagas, CQRS, and distributed systems |
-| **agile-pm** | 10 | Product planning and delivery artifacts |
-| **customer-insights** | 9 | JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language |
-| **executive** | 11 | Board updates, operating rhythms, executive coaching, and scenario planning |
-| **go-to-market** | 6 | Pricing, launch content, press releases, content strategy, and email programs |
-| **enterprise-it** | 5 | Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations |
-| **frontend** | 11 | Accessibility, design systems, responsive layouts, performance, and UI generation |
-| **go** | 2 | Concurrency patterns, testing, and idiomatic Go |
-| **cpp** | 3 | Modern C++, testing, and embedded systems patterns |
-| **database** | 3 | Schema design, PostgreSQL, SQL optimization, and query tuning |
-| **rag** | 4 | Embeddings, hybrid search, vector optimization, and RAG architecture |
-| **writing** | 6 | Documentation, voice, style, changelogs, and poster workflows |
+| Core | `core` | `core-base`, `core-quality`, `core-architecture`, `core-operations` |
+| Security | `security` | `security-base`, `security-scanning`, `security-fuzzing`, `security-crypto`, `security-compliance` |
+| DevOps | `devops` | `devops-cloud`, `devops-platform`, `devops-kubernetes`, `devops-observability` |
+| Tools | `tools` | `tools-cli`, `tools-browser`, `tools-documents`, `tools-diagrams`, `tools-integration` |
+| Meta | `meta` | `meta-authoring`, `meta-governance`, `meta-routing` |
+| Frontend | `frontend` | `frontend-base`, `frontend-visual`, `frontend-3d` |
+| Workflow | `workflow` | `workflow-planning`, `workflow-git`, `workflow-execution` |
+| Stable Single-Bundle Domains | `agile-pm`, `ai-agents`, `atmos`, `collaboration`, `cpp`, `customer-insights`, `database`, `developer-ops`, `enterprise-it`, `executive`, `go`, `go-to-market`, `microservices`, `python`, `rag`, `rust`, `typescript`, `writing` | No layered split yet |
 
 ## Quick Start
 
@@ -72,4 +59,5 @@ installable outputs.
 | [Reference](reference/plugins.md) | Claude Code reference snapshots plus Lamella-specific marketplace and packaging context |
 | [Architecture](architecture.md) | Build pipeline, packaging model, and validation flow |
 | [Roadmap](roadmap.md) | Current priorities and shipped milestones |
+| [Plugin Layering Migration Plan](plans/plugin-layering-migration.md) | Proposed plugin split, naming, and rollout plan for narrower bundles |
 | [Tool Cleanup Plan](tool-boundary-cleanup.md) | Per-file keep, migrate, retire, and sequencing decisions for Lamella tooling |

@@ -1,6 +1,6 @@
 ---
 name: atmos-workflows
-description: "Automates Atmos workflows with multi-step execution, Go template support, and cross-component orchestration. Use when creating Atmos workflows, automating multi-step operations, or orchestrating actions across components."
+description: "Automates Atmos workflows with multi-step execution, Go template support, and cross-component orchestration."
 ---
 
 # Atmos Workflows

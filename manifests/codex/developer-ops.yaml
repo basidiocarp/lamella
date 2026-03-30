@@ -2,6 +2,9 @@
   "name": "developer-ops",
   "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
   "source_plugin": "developer-ops",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "devops/incident-commander",

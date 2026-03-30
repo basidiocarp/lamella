@@ -1,0 +1,23 @@
+{
+  "name": "security-fuzzing",
+  "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
+  "source_plugin": "security-fuzzing",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/address-sanitizer",
+      "security/cargo-fuzz",
+      "security/fuzz-harness-writing",
+      "security/ossfuzz"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

@@ -1,13 +1,6 @@
 ---
 name: task-observer
-description: >
-  Monitors task execution for skill improvement opportunities. Use during any
-  multi-step task, agentic workflow, or substantive work session where Claude is
-  using tools and producing deliverables. Captures patterns, user corrections,
-  workflow insights, and methodology worth preserving as reusable skills. Also
-  triggers during post-task feedback, when the user mentions skill observations,
-  improvements, the observation log, or asks Claude to watch for skill
-  opportunities. Also known as "One Skill to Rule Them All."
+description: "Monitors task execution for skill improvement opportunities."
 ---
 
 # Task Observer — Continuous Skill Discovery & Improvement

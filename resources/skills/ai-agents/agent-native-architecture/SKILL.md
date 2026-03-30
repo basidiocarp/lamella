@@ -1,6 +1,6 @@
 ---
 name: agent-native-architecture
-description: Builds applications where agents are first-class citizens. Use when designing autonomous agents, creating MCP tools, implementing self-modifying systems, or building apps where features are outcomes achieved by agents operating in a loop.
+description: "Builds applications where agents are first-class citizens."
 ---
 
 <why_now>

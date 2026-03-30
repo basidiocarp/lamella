@@ -1,6 +1,6 @@
 ---
 name: git-worktrees
-description: Manages Git worktrees for parallel development across multiple branches and working directories. Use when working on multiple branches simultaneously, context switching without stashing, reviewing pull requests while developing, testing in isolation, or comparing implementations across branches.
+description: "Manages Git worktrees for parallel development across multiple branches and working directories."
 ---
 
 # Git Worktrees

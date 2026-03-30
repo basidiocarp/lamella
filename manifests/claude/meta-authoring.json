@@ -1,0 +1,30 @@
+{
+  "$schema": "./schema.json",
+  "name": "meta-authoring",
+  "version": "1.0.0",
+  "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "meta",
+    "authoring",
+    "skills",
+    "plugins",
+    "hooks"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/agent-development",
+      "meta/command-development",
+      "meta/create-hook",
+      "meta/create-skill",
+      "meta/create-workflow-command",
+      "meta/designing-workflow-skills",
+      "meta/plugin-settings",
+      "meta/plugin-structure"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

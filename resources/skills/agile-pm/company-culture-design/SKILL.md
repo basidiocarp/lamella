@@ -1,6 +1,6 @@
 ---
 name: company-culture-design
-description: Designs company culture as observable behaviors, rituals, and reinforcement systems. Use when defining values, building culture codes, diagnosing culture drift, or translating stated principles into daily operating behavior.
+description: "Designs company culture as observable behaviors, rituals, and reinforcement systems."
 ---
 # Company Culture Design
 

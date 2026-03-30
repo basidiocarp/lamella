@@ -31,6 +31,7 @@ build_manifest() {
         name,
         description: (.description // ""),
         source_plugin: .name,
+        dependencies: (.dependencies // []),
         resources: {
             skills: (.resources.skills // []),
             workflows: (.resources.workflows // []),

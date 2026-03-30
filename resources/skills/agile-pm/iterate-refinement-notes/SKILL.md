@@ -1,7 +1,6 @@
 ---
 name: iterate-refinement-notes
-description: >-
-  Documents backlog refinement session outcomes including stories refined, estimates, questions raised, and decisions made. Use when capturing results to share with absent team members.
+description: "Documents backlog refinement session outcomes including stories refined, estimates, questions raised, and decisions made."
 ---
 # Refinement Notes
 

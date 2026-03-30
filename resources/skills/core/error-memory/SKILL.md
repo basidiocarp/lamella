@@ -1,6 +1,6 @@
 ---
 name: error-memory
-description: "Error memory system — recognize errors, search past solutions, and log new resolutions for future reference. Use when encountering errors during development, debugging issues, or building an error knowledge base."
+description: "Finds past error resolutions and records new ones."
 ---
 # Error Memory
 

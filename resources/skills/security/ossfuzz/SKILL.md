@@ -1,8 +1,6 @@
 ---
 name: ossfuzz
-description: >
-  Sets up OSS-Fuzz for continuous fuzzing of open source projects.
-  Use when enrolling projects in OSS-Fuzz or building continuous fuzzing infrastructure.
+description: "Sets up OSS-Fuzz for continuous fuzzing of open source projects."
 ---
 
 # OSS-Fuzz

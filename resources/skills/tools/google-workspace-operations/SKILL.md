@@ -1,8 +1,6 @@
 ---
 name: google-workspace-operations
-description: >-
-  Operates Google Workspace with the `gws` CLI for authentication checks, Gmail, Drive, Calendar, Sheets, and workspace
-  audits. Use when setting up `gws`, automating workspace tasks, or reviewing Google Workspace access and sharing.
+description: "Operates Google Workspace with Gmail, Drive, Calendar, and Sheets."
 ---
 # Google Workspace Operations
 

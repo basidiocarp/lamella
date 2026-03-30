@@ -1,6 +1,6 @@
 ---
 name: monorepo-management
-description: Manages monorepos with Turborepo, Nx, and pnpm workspaces. Use when setting up or optimizing builds, code sharing, and CI/CD in a monorepo.
+description: "Manages monorepos with Turborepo, Nx, and pnpm workspaces."
 ---
 
 # Monorepo Management

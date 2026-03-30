@@ -1,6 +1,6 @@
 ---
 name: board-update-decks
-description: Builds board and investor update decks with a clear narrative, disciplined metrics, and explicit asks. Use when preparing quarterly board packs, investor updates, fundraising progress reviews, or leadership update decks.
+description: "Builds board and investor update decks with metrics and asks."
 ---
 # Board Update Decks
 

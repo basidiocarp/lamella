@@ -1,6 +1,6 @@
 ---
 name: rust-advanced
-description: "Guides advanced Rust implementation work. Use when building memory-safe systems, designing trait-heavy APIs, structuring async Rust code, or balancing ownership, lifetimes, and performance."
+description: "Guides advanced Rust implementation work."
 ---
 
 # Advanced Rust Development

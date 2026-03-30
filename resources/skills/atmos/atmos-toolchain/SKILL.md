@@ -1,6 +1,6 @@
 ---
 name: atmos-toolchain
-description: "Manages the Atmos toolchain with install, exec, search, and environment commands, including Aqua-based version pinning. Use when managing the Atmos toolchain, installing tools via Aqua, pinning versions, or executing commands across tools."
+description: "Manages Atmos tool installation, execution, search, and version pinning."
 ---
 
 # Atmos Toolchain

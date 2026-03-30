@@ -1,6 +1,6 @@
 ---
 name: iterative-retrieval
-description: Refines context retrieval iteratively to solve the subagent context problem. Use when spawning subagents that need codebase context they cannot predict upfront, or when initial context retrieval is insufficient.
+description: "Refines context retrieval iteratively to solve the subagent context problem."
 ---
 
 # Iterative Retrieval Pattern

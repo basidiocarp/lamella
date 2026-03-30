@@ -1,6 +1,6 @@
 ---
 name: django-verification
-description: "Verifies Django projects with migrations, linting, coverage-backed tests, security scans, and deployment-readiness checks. Use when preparing Django pull requests, verifying migrations, running pre-deployment checks, or validating test coverage."
+description: "Verifies Django projects with migrations, linting, coverage-backed tests, security scans, and deployment-readiness checks."
 ---
 
 # Django Verification Loop

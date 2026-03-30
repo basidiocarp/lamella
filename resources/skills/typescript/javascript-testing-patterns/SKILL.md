@@ -1,6 +1,6 @@
 ---
 name: javascript-testing-patterns
-description: Applies non-obvious testing patterns for Jest and Vitest. Use when writing Jest or Vitest tests, mocking modules, testing async code, or setting up test factories with Faker. Standard testing syntax is assumed knowledge.
+description: "Applies non-obvious testing patterns for Jest and Vitest."
 ---
 
 # JavaScript Testing Patterns

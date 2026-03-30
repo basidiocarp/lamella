@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "workflow-git",
+  "version": "1.0.0",
+  "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "workflow",
+    "git",
+    "pull-requests",
+    "worktrees",
+    "review"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "workflow/git-analyze-issue",
+      "workflow/git-create-pr",
+      "workflow/git-worktrees",
+      "workflow/resolve-pr-parallel"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

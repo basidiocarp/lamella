@@ -1,6 +1,6 @@
 ---
 name: cpp-testing
-description: "Implements C++ testing workflows with GoogleTest and CTest. Use when writing or fixing C++ tests, configuring test runners, diagnosing flaky failures, or adding coverage and sanitizers."
+description: "Implements C++ testing workflows with GoogleTest and CTest."
 ---
 
 # C++ Testing

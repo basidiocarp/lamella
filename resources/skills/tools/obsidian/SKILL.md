@@ -1,6 +1,6 @@
 ---
 name: obsidian
-description: "Manages Obsidian vaults and Obsidian Flavored Markdown. Use when managing notes, searching vaults, creating/moving/deleting notes, automating Obsidian workflows, auto-capturing commits/tasks, or writing Obsidian-specific syntax (wikilinks, callouts, embeds, properties, tags)."
+description: "Manages Obsidian vaults and Obsidian Flavored Markdown."
 ---
 
 # Obsidian

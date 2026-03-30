@@ -1,9 +1,6 @@
 ---
 name: aws-cost-operations
-description: >-
-  Analyzes AWS costs, monitoring, and operational health. Use when analyzing AWS bills, estimating costs, setting up
-  CloudWatch alarms, querying logs, auditing CloudTrail activity, or assessing security posture. Triggers include AWS costs,
-  spending, billing, budget, pricing, CloudWatch, observability, monitoring, alerting, CloudTrail, and audit workflows.
+description: "Analyzes AWS costs, monitoring, and operational health."
 metadata:
   context: fork
   skills:

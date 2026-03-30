@@ -1,6 +1,6 @@
 ---
 name: deliver-working-backwards-press-release
-description: Creates an Amazon-style Working Backwards press release to define customer value before building. Use when aligning stakeholders on a new product, major feature, or strategic bet.
+description: "Creates an Amazon-style Working Backwards press release to define customer value before building."
 ---
 # Deliver Working Backwards Press Release
 

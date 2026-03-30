@@ -1,0 +1,22 @@
+{
+  "name": "security-crypto",
+  "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
+  "source_plugin": "security-crypto",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/constant-time-crypto",
+      "security/wycheproof",
+      "security/yara-rule-authoring"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

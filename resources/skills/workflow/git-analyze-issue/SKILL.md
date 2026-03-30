@@ -1,6 +1,6 @@
 ---
 name: git-analyze-issue
-description: Analyzes a GitHub issue and creates a detailed technical specification. Use when starting work on a GitHub issue, creating technical specs from issues, or planning implementation.
+description: "Analyzes a GitHub issue and creates a detailed technical specification."
 argument-hint: Issue number (e.g., 42)
 ---
 

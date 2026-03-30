@@ -1,6 +1,6 @@
 ---
 name: organizational-health-diagnostic
-description: Builds a cross-functional organizational health review using financial, product, engineering, people, operations, security, and market signals. Use when preparing leadership reviews, board updates, or targeted health checks across the business.
+description: "Builds organizational health reviews across product, people, operations, and finance."
 ---
 # Organizational Health Diagnostic
 

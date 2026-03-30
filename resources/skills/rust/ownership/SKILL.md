@@ -1,6 +1,6 @@
 ---
 name: ownership
-description: "Analyzes Rust ownership, borrowing, and lifetime issues. Use when encountering moved-value errors, borrow-checker failures, lifetime problems, clone versus borrow trade-offs, or errors such as E0382, E0597, E0506, E0507, E0515, E0716, and E0106."
+description: "Analyzes Rust ownership, borrowing, and lifetime issues."
 ---
 
 # Ownership, Borrowing & Lifetimes

@@ -1,6 +1,6 @@
 ---
 name: atmos-introspection
-description: "Queries Atmos configuration, workspace state, dependency graphs, and filtered stack data. Use when querying Atmos configuration, listing stacks or components, generating dependency graphs, or debugging stack resolution."
+description: "Queries Atmos configuration, workspace state, dependency graphs, and filtered stack data."
 ---
 
 # Atmos Introspection

@@ -1,7 +1,6 @@
 ---
 name: token-reduction-optimizer
-description: Reduces token-heavy command output with RTK. Use when git, test, build, or file commands produce verbose output
-  and a compact summary is more useful than raw logs.
+description: "Reduces token-heavy command output with RTK."
 ---
 
 # Token Reduction Optimizer

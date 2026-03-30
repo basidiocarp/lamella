@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "security-fuzzing",
+  "version": "1.0.0",
+  "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "security",
+    "fuzzing",
+    "asan",
+    "libfuzzer",
+    "oss-fuzz"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/address-sanitizer",
+      "security/cargo-fuzz",
+      "security/fuzz-harness-writing",
+      "security/ossfuzz"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "tools-documents",
+  "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
+  "source_plugin": "tools-documents",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/docx-word-documents",
+      "tools/markitdown-converter",
+      "tools/pdf-manipulation",
+      "tools/pptx-presentations",
+      "tools/xlsx-spreadsheets"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

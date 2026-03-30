@@ -1,6 +1,6 @@
 ---
 name: github-actions-validator
-description: Validates, lints, audits, and fixes GitHub Actions workflows in `.github/workflows`. Use when validating GitHub Actions workflows, linting YAML syntax, auditing workflow security, or fixing CI/CD errors.
+description: "Validates, lints, audits, and fixes GitHub Actions workflows in `.github/workflows`."
 ---
 
 # GitHub Actions Validator

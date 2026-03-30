@@ -1,8 +1,6 @@
 ---
 name: define-problem-statement
-description: >-
-  Creates a clear problem framing document with user impact, business context, and success criteria. Use when starting a new
-  initiative, realigning a drifted project, or communicating up to leadership.
+description: "Creates a clear problem framing document with user impact, business context, and success criteria."
 ---
 # Problem Statement
 

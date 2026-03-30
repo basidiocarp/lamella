@@ -1,6 +1,6 @@
 ---
 name: email-sequence
-description: Designs lifecycle email sequences with triggers, timing, message progression, and ready-to-send drafts. Use when building onboarding, nurture, re-engagement, launch, or post-purchase email flows.
+description: "Designs lifecycle email sequences with triggers, timing, message progression, and ready-to-send drafts."
 ---
 # Email Sequence
 

@@ -1,6 +1,6 @@
 ---
 name: atmos-config
-description: "Configures atmos.yaml structure, discovery, merging, base paths, settings, imports, and profiles. Use when configuring atmos.yaml, setting up project structure, defining base paths, or troubleshooting configuration merging."
+description: "Configures atmos.yaml structure, discovery, merging, base paths, settings, imports, and profiles."
 ---
 
 # Atmos Project Configuration

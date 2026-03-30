@@ -1,6 +1,6 @@
 ---
 name: atmos-auth
-description: "Configures Atmos authentication and identity management across providers, cloud identities, keyring usage, and chained sessions. Use when configuring Atmos authentication, setting up SSO/SAML/OIDC, managing cloud identities, or troubleshooting login issues."
+description: "Configures Atmos authentication, identities, keyrings, and chained sessions."
 ---
 
 # Atmos Authentication and Identity Management

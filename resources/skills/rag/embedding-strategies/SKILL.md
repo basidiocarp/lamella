@@ -1,6 +1,6 @@
 ---
 name: embedding-strategies
-description: "Selects and optimizes embedding models for RAG systems. Use when choosing embedding models, refining chunking strategies, or improving embedding quality for semantic search and domain-specific retrieval."
+description: "Selects and optimizes embedding models for RAG systems."
 ---
 
 # Embedding Strategies

@@ -1,0 +1,27 @@
+{
+  "name": "tools-cli",
+  "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
+  "source_plugin": "tools-cli",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/bash-script-generator",
+      "tools/bash-script-validator",
+      "tools/cli-developer",
+      "tools/gh-cli-patterns",
+      "tools/php-pro",
+      "tools/regex-debugger",
+      "tools/tmux-interactive-runner",
+      "tools/token-reduction-optimizer"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

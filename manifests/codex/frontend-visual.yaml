@@ -1,0 +1,23 @@
+{
+  "name": "frontend-visual",
+  "description": "Visual frontend work for motion, design systems, screenshots, and slides",
+  "source_plugin": "frontend-visual",
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/css-animation-creator",
+      "frontend/design-systems",
+      "frontend/frontend-slides",
+      "frontend/screenshot-to-code"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

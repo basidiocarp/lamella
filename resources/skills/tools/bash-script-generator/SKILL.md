@@ -1,6 +1,6 @@
 ---
 name: bash-script-generator
-description: Generates bash and shell scripts for automation and CLI workflows. Use when creating new bash scripts, converting CLI steps to automation, building text-processing scripts with grep/awk/sed, or applying defensive bash patterns (strict mode, error trapping, safe variables).
+description: "Generates bash and shell scripts for automation and CLI workflows."
 ---
 
 # Bash Script Generator

@@ -2,6 +2,9 @@
   "name": "go",
   "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
   "source_plugin": "go",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "go/golang-patterns",

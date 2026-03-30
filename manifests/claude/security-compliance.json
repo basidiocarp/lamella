@@ -1,0 +1,29 @@
+{
+  "$schema": "./schema.json",
+  "name": "security-compliance",
+  "version": "1.0.0",
+  "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "security",
+    "compliance",
+    "pci",
+    "soc2",
+    "threat-modeling"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/pci-compliance",
+      "security/soc2-compliance",
+      "security/stride-analysis-patterns",
+      "security/threat-mitigation-mapping",
+      "security/seatbelt-sandboxer"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

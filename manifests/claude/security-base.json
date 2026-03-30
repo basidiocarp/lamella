@@ -1,0 +1,31 @@
+{
+  "$schema": "./schema.json",
+  "name": "security-base",
+  "version": "1.0.0",
+  "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "security",
+    "base",
+    "auth",
+    "secrets",
+    "secure-coding"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/api-footgun-detector",
+      "security/auth-implementation-patterns",
+      "security/dependency-auditor",
+      "security/insecure-defaults",
+      "security/memory-safety-patterns",
+      "security/secrets-management",
+      "security/security-review"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

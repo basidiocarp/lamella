@@ -1,9 +1,6 @@
 ---
 name: develop-adr
-description: >-
-  Creates an Architecture Decision Record following the Nygard format to document significant technical decisions, their context,
-  and consequences. Use when making technical choices that affect system architecture, technology selection, or development
-  patterns.
+description: "Creates Architecture Decision Records using the Nygard format."
 ---
 # Architecture Decision Record (ADR)
 

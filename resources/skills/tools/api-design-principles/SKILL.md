@@ -1,6 +1,6 @@
 ---
 name: api-design-principles
-description: Designs REST and GraphQL APIs with clear contracts and maintainable patterns. Use when designing new APIs, reviewing API specifications, or establishing API design standards.
+description: "Designs REST and GraphQL APIs with clear contracts and maintainable patterns."
 ---
 
 # API Design Principles

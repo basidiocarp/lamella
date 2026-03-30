@@ -1,0 +1,29 @@
+{
+  "$schema": "./schema.json",
+  "name": "core-operations",
+  "version": "1.0.0",
+  "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "core",
+    "operations",
+    "onboarding",
+    "memory",
+    "git"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/codebase-onboarding",
+      "core/continuous-learning",
+      "core/error-memory",
+      "core/git-cleanup",
+      "core/parallel-debugging",
+      "core/plan-fleet",
+      "core/strategic-compact"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

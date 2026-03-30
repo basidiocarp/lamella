@@ -1,6 +1,6 @@
 ---
 name: skill-best-practices
-description: "Applies Anthropic's official best practices for skill development. Use when creating new skills, reviewing skill structure, or checking whether skills follow the official guidance."
+description: "Applies Anthropic's official best practices for skill development."
 metadata:
   argument-hint: Optional skill name or path to skill being reviewed
 ---

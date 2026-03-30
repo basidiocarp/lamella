@@ -1,6 +1,6 @@
 ---
 name: react-patterns
-description: Applies React and Next.js component patterns for performance, accessibility, and animation work. Use when building components, optimizing re-renders, managing data fetching, improving bundle size, or reviewing React or Next.js code.
+description: "Applies React and Next.js component patterns for performance, accessibility, and animation work."
 ---
 
 # React Patterns

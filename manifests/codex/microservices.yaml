@@ -2,6 +2,7 @@
   "name": "microservices",
   "description": "Microservices architecture, event sourcing, and distributed systems",
   "source_plugin": "microservices",
+  "dependencies": [],
   "resources": {
     "skills": [
       "microservices/cqrs-implementation",

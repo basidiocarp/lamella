@@ -1,6 +1,6 @@
 ---
 name: cpp-pro
-description: "Applies modern C++ development patterns. Use when building C++20 or C++23 systems, working with concepts, coroutines, templates, memory management, or performance-critical code."
+description: "Applies modern C++ development patterns."
 ---
 
 # C++ Pro

@@ -1,6 +1,6 @@
 ---
 name: agent-browser
-description: Automates browser interactions with Vercel's agent-browser CLI. Use when interacting with web pages, filling forms, taking screenshots, or scraping data. Alternative to Playwright MCP; uses CLI commands with ref-based element selection. Triggers on "browse website", "fill form", "click button", "take screenshot", "scrape page", or "web automation".
+description: "Automates browser interactions with Vercel's agent-browser CLI."
 ---
 
 # agent-browser: CLI Browser Automation

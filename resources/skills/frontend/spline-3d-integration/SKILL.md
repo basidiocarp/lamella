@@ -1,6 +1,6 @@
 ---
 name: spline-3d-integration
-description: "Integrates Spline scenes into web projects with React, Next.js, or vanilla HTML. Use when embedding a Spline scene, adding runtime interaction, debugging load failures, or planning mobile and fallback behavior."
+description: "Integrates Spline scenes into web projects with React, Next.js, or vanilla HTML."
 ---
 
 # Spline 3D Integration

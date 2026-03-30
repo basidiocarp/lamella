@@ -1,11 +1,6 @@
 ---
 name: agentic-actions-auditor
-description: >-
-  Audits GitHub Actions workflows for security vulnerabilities in AI agent integrations including coding assistants, CLI
-  agents, and AI inference tools. Detects attack vectors where attacker-controlled input reaches AI agents running in CI/CD
-  pipelines, including env var intermediary patterns, direct expression injection, dangerous sandbox configurations, and
-  wildcard user allowlists. Use when reviewing workflow files that invoke AI coding agents, auditing CI/CD pipeline security
-  for prompt injection risks, or evaluating agentic action configurations.
+description: "Audits agent-integrated GitHub Actions for prompt-injection security risks."
 allowed-tools:
   - Read
   - Grep

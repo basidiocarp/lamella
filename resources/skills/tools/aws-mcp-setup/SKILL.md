@@ -1,9 +1,6 @@
 ---
 name: aws-mcp-setup
-description: >-
-  Configures AWS MCP servers for documentation search and API access. Use when setting up AWS MCP, configuring AWS documentation
-  tools, troubleshooting MCP connectivity, or when the user mentions aws-mcp, awsdocs, uvx setup, or MCP server configuration.
-  Covers both Full AWS MCP Server (with uvx + credentials) and lightweight Documentation MCP (no auth required).
+description: "Configures AWS MCP servers for documentation search and API access."
 ---
 # AWS MCP Server Configuration Guide
 

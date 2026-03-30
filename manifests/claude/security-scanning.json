@@ -1,0 +1,30 @@
+{
+  "$schema": "./schema.json",
+  "name": "security-scanning",
+  "version": "1.0.0",
+  "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "security",
+    "scanning",
+    "sast",
+    "codeql",
+    "semgrep"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/agentic-actions-auditor",
+      "security/codeql",
+      "security/pii-redactor",
+      "security/sast-configuration",
+      "security/semgrep",
+      "security/supply-chain-risk-auditor"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

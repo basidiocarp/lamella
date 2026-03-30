@@ -1,7 +1,6 @@
 ---
 name: coding-tutor
-description: >-
-  Creates personalized coding tutorials that build on existing knowledge and use the current codebase for examples. Use when learning new programming concepts, preparing for technical interviews, onboarding to a new codebase, or implementing spaced repetition learning.
+description: "Creates codebase-aware coding tutorials for learning and onboarding."
 ---
 
 # Coding Tutor

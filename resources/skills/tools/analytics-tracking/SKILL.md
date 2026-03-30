@@ -1,6 +1,6 @@
 ---
 name: analytics-tracking
-description: Plans, audits, and debugs analytics tracking with GA4, GTM, event taxonomies, and conversion instrumentation. Use when setting up tracking from scratch, cleaning up broken analytics, or diagnosing missing or duplicated events.
+description: "Plans, audits, and debugs analytics tracking with GA4, GTM, event taxonomies, and conversion instrumentation."
 ---
 # Analytics Tracking
 

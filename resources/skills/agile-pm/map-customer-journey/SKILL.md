@@ -1,6 +1,6 @@
 ---
 name: map-customer-journey
-description: Maps a customer journey across stages, touchpoints, actions, emotions, KPIs, and team ownership. Use when diagnosing a broken experience or aligning teams on the full customer lifecycle.
+description: "Maps a customer journey across stages, touchpoints, actions, emotions, KPIs, and team ownership."
 ---
 # Map Customer Journey
 

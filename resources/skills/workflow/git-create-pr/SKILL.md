@@ -1,6 +1,6 @@
 ---
 name: git-create-pr
-description: Creates pull requests with GitHub CLI using proper templates and formatting. Use when ready to submit changes for review, preparing code for merge, or creating pull requests programmatically.
+description: "Creates pull requests with GitHub CLI using proper templates and formatting."
 ---
 
 # How to Create a Pull Request Using GitHub CLI

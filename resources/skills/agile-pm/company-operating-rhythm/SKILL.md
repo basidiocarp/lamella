@@ -1,6 +1,6 @@
 ---
 name: company-operating-rhythm
-description: Designs a company operating rhythm with ownership, scorecards, meeting cadence, and quarterly priorities. Use when selecting or refining operating systems such as EOS, Scaling Up, or OKR-driven planning.
+description: "Designs a company operating rhythm with ownership, scorecards, meeting cadence, and quarterly priorities."
 ---
 # Company Operating Rhythm
 

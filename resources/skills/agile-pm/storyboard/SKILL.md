@@ -1,6 +1,6 @@
 ---
 name: storyboard
-description: Creates a six-frame storyboard that shows one user narrative from problem to outcome. Use when aligning stakeholders on customer value, pitching a concept, or testing whether a solution story is compelling before building.
+description: "Creates a six-frame storyboard that shows one user narrative from problem to outcome."
 ---
 # Storyboard
 

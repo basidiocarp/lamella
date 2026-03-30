@@ -1,6 +1,6 @@
 ---
 name: rust-router
-description: "Routes Rust questions to the right local skill. Use when triaging Rust compile errors, ownership and lifetime problems, async issues, unsafe code, or crate and release lookups."
+description: "Routes Rust questions to the right local skill."
 metadata:
   globs:
     - '**/Cargo.toml'

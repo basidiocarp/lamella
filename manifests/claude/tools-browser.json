@@ -1,0 +1,27 @@
+{
+  "$schema": "./schema.json",
+  "name": "tools-browser",
+  "version": "1.0.0",
+  "description": "Browser automation and realtime web tooling for interactive surfaces",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "tools",
+    "browser",
+    "playwright",
+    "websocket",
+    "automation"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/agent-browser",
+      "tools/playwright",
+      "tools/websocket-patterns"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

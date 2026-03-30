@@ -1,0 +1,23 @@
+{
+  "name": "workflow-execution",
+  "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
+  "source_plugin": "workflow-execution",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "workflow/conductor",
+      "workflow/context-handoff",
+      "workflow/executing-plans",
+      "workflow/finishing-a-development-branch"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

@@ -1,6 +1,6 @@
 ---
 name: cost-aware-llm-pipeline
-description: Optimizes LLM API usage with model routing, budget tracking, retry logic, and prompt caching patterns. Use when building LLM applications, optimizing API costs, implementing model routing, or managing usage budgets.
+description: "Optimizes LLM API usage with routing, budgets, retries, and caching."
 ---
 
 # Cost-Aware LLM Pipeline

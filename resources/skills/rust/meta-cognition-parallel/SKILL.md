@@ -1,6 +1,6 @@
 ---
 name: meta-cognition-parallel
-description: "Applies an experimental three-layer Rust analysis workflow. Use when a Rust question needs parallel reasoning across language mechanics, design trade-offs, and domain constraints."
+description: "Applies an experimental three-layer Rust analysis workflow."
 argument-hint: <rust_question>
 ---
 # Meta-Cognition Parallel Analysis

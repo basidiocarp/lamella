@@ -1,9 +1,6 @@
 ---
 name: aws-agentic-ai
-description: >-
-  Deploys and manages AWS Bedrock AgentCore services. Use when working with Gateway, Runtime, Memory, Identity, or other
-  AgentCore components. Covers MCP target deployment, credential management, schema optimization, runtime configuration,
-  memory management, and identity services.
+description: "Deploys and manages AWS Bedrock AgentCore services."
 metadata:
   aliases:
   - bedrock-agentcore

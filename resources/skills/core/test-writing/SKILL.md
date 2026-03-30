@@ -1,6 +1,6 @@
 ---
 name: test-writing
-description: "Systematically write tests for new code or fix failing tests after refactoring. Use when adding test coverage for changes, fixing broken tests, or orchestrating test-writing agents."
+description: "Systematically write tests for new code or fix failing tests after refactoring."
 metadata:
   argument-hint: what tests or modules to focus on
 ---

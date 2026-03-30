@@ -1,6 +1,6 @@
 ---
 name: manage-change-rollout
-description: Plans organizational change rollouts with stakeholder messaging, enablement, and reinforcement. Use when introducing new tools, reorganizations, strategy pivots, or behavior changes that need adoption rather than announcement.
+description: "Plans organizational change rollouts with stakeholder messaging, enablement, and reinforcement."
 ---
 # Manage Change Rollout
 

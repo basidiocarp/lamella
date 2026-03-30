@@ -1,6 +1,6 @@
 ---
 name: prometheus-configuration
-description: Sets up Prometheus for metric collection, storage, and monitoring of infrastructure and applications. Use when implementing metrics collection, setting up monitoring infrastructure, or configuring alerting systems.
+description: "Sets up Prometheus for metric collection, storage, and monitoring of infrastructure and applications."
 ---
 
 # Prometheus Configuration

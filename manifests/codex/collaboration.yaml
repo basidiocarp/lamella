@@ -2,6 +2,9 @@
   "name": "collaboration",
   "description": "Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination",
   "source_plugin": "collaboration",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "collaboration/coding-tutor",

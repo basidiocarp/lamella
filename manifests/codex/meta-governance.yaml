@@ -1,0 +1,22 @@
+{
+  "name": "meta-governance",
+  "description": "Meta governance for curation, audits, stocktakes, and task capture",
+  "source_plugin": "meta-governance",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/config-curator",
+      "meta/file-todos",
+      "meta/skill-best-practices",
+      "meta/skill-stocktake",
+      "meta/task-observer"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

@@ -1,9 +1,6 @@
 ---
 name: modern-python
-description: >-
-  Configures Python projects with modern tooling (uv, ruff, ty). Use when creating
-  projects, managing dependencies with uv, writing standalone scripts, or migrating
-  from pip/Poetry/mypy/black.
+description: "Configures Python projects with modern tooling (uv, ruff, ty)."
 ---
 
 # Modern Python

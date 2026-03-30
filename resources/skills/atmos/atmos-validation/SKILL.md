@@ -1,6 +1,6 @@
 ---
 name: atmos-validation
-description: "Validates Atmos configuration with OPA and Rego policies, JSON Schema, schema manifests, and IDE integration patterns. Use when validating Atmos configuration with OPA or Rego policies, enforcing JSON Schema compliance, configuring IDE auto-completion for stack manifests, or debugging validation failures."
+description: "Validates Atmos configs with Rego, JSON Schema, and manifests."
 ---
 
 # Atmos Validation Framework

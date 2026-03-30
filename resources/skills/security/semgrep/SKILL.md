@@ -1,10 +1,6 @@
 ---
 name: semgrep
-description: >-
-  Runs Semgrep static analysis scans and helps create custom Semgrep rules. Supports "run all" and "important only" scan
-  modes with automatic Semgrep Pro detection. Includes taint-mode workflows, pattern matching, AST analysis, and
-  cross-language rule porting. Use when scanning for vulnerabilities, writing custom Semgrep rules, building detections,
-  or performing static analysis.
+description: "Runs Semgrep static analysis scans and helps create custom Semgrep rules."
 ---
 
 # Semgrep Security Scan

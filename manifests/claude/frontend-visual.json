@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "frontend-visual",
+  "version": "1.0.0",
+  "description": "Visual frontend work for motion, design systems, screenshots, and slides",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "frontend",
+    "visual",
+    "animation",
+    "design-systems",
+    "slides"
+  ],
+  "dependencies": [
+    "typescript"
+  ],
+  "resources": {
+    "skills": [
+      "frontend/css-animation-creator",
+      "frontend/design-systems",
+      "frontend/frontend-slides",
+      "frontend/screenshot-to-code"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

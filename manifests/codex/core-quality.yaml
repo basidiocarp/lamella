@@ -1,0 +1,26 @@
+{
+  "name": "core-quality",
+  "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
+  "source_plugin": "core-quality",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/api-test-suite-builder",
+      "core/code-maturity-assessor",
+      "core/code-review-pro",
+      "core/code-review-process",
+      "core/e2e-testing",
+      "core/fidelity-review",
+      "core/property-based-testing",
+      "core/structured-review",
+      "core/verified-implementer"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

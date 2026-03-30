@@ -1,0 +1,26 @@
+{
+  "$schema": "./schema.json",
+  "name": "meta-routing",
+  "version": "1.0.0",
+  "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "meta",
+    "routing",
+    "composition",
+    "coordination",
+    "discovery"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/rust-crate-skill-generator",
+      "meta/skill-composer-studio",
+      "meta/skill-router",
+      "meta/team-communication-protocols"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

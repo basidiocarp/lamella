@@ -1,6 +1,6 @@
 ---
 name: atmos-packer
-description: "Orchestrates Packer initialization, builds, validation, inspection, outputs, and image source management through Atmos. Use when building machine images with Atmos and Packer, validating templates, or managing image sources across environments."
+description: "Orchestrates Packer initialization, builds, validation, inspection, outputs, and image source management through Atmos."
 ---
 
 # Atmos Packer Orchestration

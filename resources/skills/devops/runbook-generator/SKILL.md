@@ -1,6 +1,6 @@
 ---
 name: runbook-generator
-description: Generates operational runbooks for services, deployments, maintenance, and rollback flows. Use when a service lacks a runbook, runbooks are inconsistent, or on-call onboarding needs a baseline document.
+description: "Generates operational runbooks for services, deployments, maintenance, and rollback flows."
 ---
 
 # Runbook Generator

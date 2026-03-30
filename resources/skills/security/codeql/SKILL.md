@@ -1,9 +1,6 @@
 ---
 name: codeql
-description: >-
-  Scans codebases for security vulnerabilities using CodeQL's interprocedural data flow and taint tracking analysis.
-  Use when running CodeQL scans, building CodeQL databases, finding vulnerabilities, or processing CodeQL SARIF output.
-  Supports security-and-quality suite and high-precision security findings scan modes.
+description: "Scans codebases for security vulnerabilities using CodeQL's interprocedural data flow and taint tracking analysis."
 ---
 # CodeQL Analysis
 

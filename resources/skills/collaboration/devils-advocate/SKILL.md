@@ -1,6 +1,6 @@
 ---
 name: devils-advocate
-description: Challenges ideas, plans, decisions, or proposals using structured critical reasoning. Use when playing devil's advocate, running a pre-mortem, red-teaming a proposal, or auditing evidence and assumptions.
+description: "Challenges ideas, plans, decisions, or proposals using structured critical reasoning."
 ---
 
 # Devil's Advocate

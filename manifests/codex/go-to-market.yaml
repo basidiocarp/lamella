@@ -2,6 +2,7 @@
   "name": "go-to-market",
   "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
   "source_plugin": "go-to-market",
+  "dependencies": [],
   "resources": {
     "skills": [
       "agile-pm/define-pricing-strategy",

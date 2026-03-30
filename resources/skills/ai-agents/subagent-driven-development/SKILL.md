@@ -1,6 +1,6 @@
 ---
 name: subagent-driven-development
-description: Executes implementation plans with fresh subagents for independent tasks and built-in review gates. Use when carrying out a plan with separable tasks in the current session or when facing 3 or more independent issues that can be investigated without shared state.
+description: "Executes implementation plans with fresh subagents for independent tasks and built-in review gates."
 ---
 
 # Subagent-Driven Development

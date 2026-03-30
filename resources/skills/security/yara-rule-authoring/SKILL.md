@@ -1,10 +1,6 @@
 ---
 name: yara-rule-authoring
-description: >
-  Guides authoring of high-quality YARA-X detection rules for malware identification.
-  Use when writing, reviewing, or optimizing YARA rules. Covers naming conventions,
-  string selection, performance optimization, migration from legacy YARA, and false
-  positive reduction.
+description: "Guides authoring of high-quality YARA-X detection rules for malware identification."
 ---
 
 # YARA-X Rule Authoring

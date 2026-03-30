@@ -1,34 +1,16 @@
 {
   "name": "devops",
-  "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+  "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
   "source_plugin": "devops",
+  "dependencies": [
+    "core",
+    "devops-cloud",
+    "devops-platform",
+    "devops-kubernetes",
+    "devops-observability"
+  ],
   "resources": {
-    "skills": [
-      "devops/ansible",
-      "devops/aws-agentic-ai",
-      "devops/aws-cdk-development",
-      "devops/aws-cost-operations",
-      "devops/aws-serverless-eda",
-      "devops/chaos-engineering",
-      "devops/deployment",
-      "devops/distributed-tracing",
-      "devops/docker-patterns",
-      "devops/docker-troubleshoot",
-      "devops/github-actions-validator",
-      "devops/gitops-workflow",
-      "devops/grafana-dashboards",
-      "devops/helm-charts",
-      "devops/kubernetes-manifest-generator",
-      "devops/kubernetes-security-policies",
-      "devops/makefile",
-      "devops/modal-serverless",
-      "devops/postmortem-writing",
-      "devops/prometheus-configuration",
-      "devops/promql",
-      "devops/slo-implementation",
-      "devops/terraform-patterns",
-      "devops/turborepo-caching"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

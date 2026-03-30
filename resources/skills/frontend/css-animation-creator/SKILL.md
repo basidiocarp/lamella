@@ -1,6 +1,6 @@
 ---
 name: css-animation-creator
-description: "Creates frontend motion and animation patterns. Use when adding CSS animations, transitions, micro-interactions, loading states, page transitions, scroll effects, or gesture-driven motion."
+description: "Creates frontend motion and animation patterns."
 ---
 
 # CSS Animation Creator

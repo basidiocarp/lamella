@@ -1,8 +1,6 @@
 ---
 name: command-development
-description: >-
-  Guides slash command development for Claude Code. Use when the user asks to create a slash command, add a command, define
-  command arguments, use command frontmatter, organize commands, add file references, or build interactive command flows.
+description: "Guides slash command development for Claude Code."
 ---
 # Command Development for Claude Code
 

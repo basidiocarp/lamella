@@ -1,6 +1,6 @@
 ---
 name: stress-test-design
-description: Stress-tests a plan or design through sequential challenge questions and recommended answers. Use when the user wants to be grilled on a proposal, uncover unresolved branches, or pressure-test a design before committing.
+description: "Stress-tests a plan or design through sequential challenge questions and recommended answers."
 ---
 
 # Stress Test Design

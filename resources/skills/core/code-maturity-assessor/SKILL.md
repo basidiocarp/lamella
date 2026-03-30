@@ -1,6 +1,6 @@
 ---
 name: code-maturity-assessor
-description: Assesses code maturity with Trail of Bits' nine-category framework. Use when evaluating codebase quality, assessing technical debt, preparing for security audits, or reviewing contract code maturity.
+description: "Assesses code maturity with Trail of Bits' nine-category framework."
 ---
 
 # Code Maturity Assessor

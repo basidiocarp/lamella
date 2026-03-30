@@ -1,6 +1,6 @@
 ---
 name: golang-patterns
-description: "Applies idiomatic Go development patterns. Use when writing, reviewing, or refactoring Go code, or when working on error handling, interfaces, concurrency, generics, and project structure."
+description: "Applies idiomatic Go development patterns."
 ---
 
 # Go Development Patterns

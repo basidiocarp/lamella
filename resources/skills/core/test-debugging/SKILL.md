@@ -1,6 +1,6 @@
 ---
 name: test-debugging
-description: Applies a five-phase workflow for debugging test failures. Use when tests fail and the cause is unclear. Covers investigation, hypothesis formation, context gathering, external consultation, and verified fixes.
+description: "Applies a five-phase workflow for debugging test failures."
 ---
 
 # Test Debugging

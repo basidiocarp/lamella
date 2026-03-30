@@ -1,7 +1,6 @@
 ---
 name: websocket-patterns
-description: Designs real-time systems with WebSockets or Socket.IO. Use when building or reviewing bidirectional messaging,
-  presence tracking, room management, reconnection behavior, or horizontal scaling.
+description: "Designs real-time systems with WebSockets or Socket.IO."
 ---
 # WebSocket Patterns
 

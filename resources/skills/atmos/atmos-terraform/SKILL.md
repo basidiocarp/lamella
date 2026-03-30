@@ -1,6 +1,6 @@
 ---
 name: atmos-terraform
-description: "Orchestrates Terraform planning, apply workflows, workspace management, backend configuration, and varfile generation through Atmos. Use when running Terraform through Atmos, managing workspaces, configuring backends, or debugging plan and apply operations."
+description: "Orchestrates Terraform planning, apply workflows, workspace management, backend configuration, and varfile generation through Atmos."
 ---
 
 # Atmos Terraform Orchestration

@@ -1,6 +1,6 @@
 ---
 name: evaluate-feature-investment
-description: Evaluates whether a feature deserves investment using revenue connection, cost structure, ROI, and strategic value. Use when pressure-testing a roadmap item or making a build versus defer decision.
+description: "Evaluates feature investment using ROI, costs, and strategic value."
 ---
 # Evaluate Feature Investment
 

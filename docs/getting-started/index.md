@@ -1,7 +1,7 @@
 # Getting Started
 
 Welcome to Lamella. This guide is the shortest path to using the current
-library of **286 skills** across **25 plugins**.
+library of **286 skills** across **52 plugins**.
 
 ## Prerequisites
 

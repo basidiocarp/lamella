@@ -1,0 +1,23 @@
+{
+  "name": "workflow-git",
+  "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
+  "source_plugin": "workflow-git",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "workflow/git-analyze-issue",
+      "workflow/git-create-pr",
+      "workflow/git-worktrees",
+      "workflow/resolve-pr-parallel"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

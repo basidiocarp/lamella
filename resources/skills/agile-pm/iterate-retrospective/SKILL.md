@@ -1,7 +1,6 @@
 ---
 name: iterate-retrospective
-description: >-
-  Facilitates and documents team retrospectives capturing what went well, what to improve, and action items. Use at the end of sprints, projects, milestones, or after incidents.
+description: "Facilitates retrospectives with outcomes, improvements, and action items."
 ---
 # Retrospective
 

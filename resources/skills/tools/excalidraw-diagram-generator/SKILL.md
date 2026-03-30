@@ -1,6 +1,6 @@
 ---
 name: excalidraw-diagram-generator
-description: "Generates Excalidraw diagrams as .excalidraw JSON files. Use when asked to create an Excalidraw file, generate a visual diagram in Excalidraw format, or when the user specifically wants .excalidraw output (not Mermaid). Supports flowcharts, relationship diagrams, mind maps, architecture diagrams, class diagrams, sequence diagrams, ER diagrams, swimlanes, DFDs."
+description: "Generates Excalidraw diagrams as .excalidraw JSON files."
 ---
 
 # Excalidraw Diagram Generator

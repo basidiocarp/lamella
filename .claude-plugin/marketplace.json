@@ -60,7 +60,51 @@
         "path": "plugins/core",
         "ref": "gh-pages"
       },
-      "description": "Essential development fundamentals: coding standards, testing, git workflow, debugging, and code review",
+      "description": "Umbrella bundle for layered core development plugins and shared base resources",
+      "version": "0.5.4"
+    },
+    {
+      "name": "core-architecture",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/core-architecture",
+        "ref": "gh-pages"
+      },
+      "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
+      "version": "0.5.4"
+    },
+    {
+      "name": "core-base",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/core-base",
+        "ref": "gh-pages"
+      },
+      "description": "Foundational development workflow: planning, debugging, and test discipline",
+      "version": "0.5.4"
+    },
+    {
+      "name": "core-operations",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/core-operations",
+        "ref": "gh-pages"
+      },
+      "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
+      "version": "0.5.4"
+    },
+    {
+      "name": "core-quality",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/core-quality",
+        "ref": "gh-pages"
+      },
+      "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
       "version": "0.5.4"
     },
     {
@@ -115,7 +159,51 @@
         "path": "plugins/devops",
         "ref": "gh-pages"
       },
-      "description": "DevOps and infrastructure: Docker, Kubernetes, Terraform, AWS, CI/CD, and deployment patterns",
+      "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
+      "version": "0.5.4"
+    },
+    {
+      "name": "devops-cloud",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/devops-cloud",
+        "ref": "gh-pages"
+      },
+      "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
+      "version": "0.5.4"
+    },
+    {
+      "name": "devops-kubernetes",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/devops-kubernetes",
+        "ref": "gh-pages"
+      },
+      "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
+      "version": "0.5.4"
+    },
+    {
+      "name": "devops-observability",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/devops-observability",
+        "ref": "gh-pages"
+      },
+      "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
+      "version": "0.5.4"
+    },
+    {
+      "name": "devops-platform",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/devops-platform",
+        "ref": "gh-pages"
+      },
+      "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
       "version": "0.5.4"
     },
     {
@@ -148,7 +236,40 @@
         "path": "plugins/frontend",
         "ref": "gh-pages"
       },
-      "description": "Frontend development: accessibility, design systems, 3D interfaces, responsive layouts, performance, and UI generation",
+      "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
+      "version": "0.5.4"
+    },
+    {
+      "name": "frontend-3d",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/frontend-3d",
+        "ref": "gh-pages"
+      },
+      "description": "3D frontend experiences for Spline and advanced Three.js workflows",
+      "version": "0.5.4"
+    },
+    {
+      "name": "frontend-base",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/frontend-base",
+        "ref": "gh-pages"
+      },
+      "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
+      "version": "0.5.4"
+    },
+    {
+      "name": "frontend-visual",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/frontend-visual",
+        "ref": "gh-pages"
+      },
+      "description": "Visual frontend work for motion, design systems, screenshots, and slides",
       "version": "0.5.4"
     },
     {
@@ -181,7 +302,40 @@
         "path": "plugins/meta",
         "ref": "gh-pages"
       },
-      "description": "Framework internals: skill management, task tracking, plugin configuration, and system utilities",
+      "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
+      "version": "0.5.4"
+    },
+    {
+      "name": "meta-authoring",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/meta-authoring",
+        "ref": "gh-pages"
+      },
+      "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
+      "version": "0.5.4"
+    },
+    {
+      "name": "meta-governance",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/meta-governance",
+        "ref": "gh-pages"
+      },
+      "description": "Meta governance for curation, audits, stocktakes, and task capture",
+      "version": "0.5.4"
+    },
+    {
+      "name": "meta-routing",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/meta-routing",
+        "ref": "gh-pages"
+      },
+      "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
       "version": "0.5.4"
     },
     {
@@ -236,7 +390,62 @@
         "path": "plugins/security",
         "ref": "gh-pages"
       },
-      "description": "Security analysis: vulnerability scanning, threat modeling, fuzzing, auditing, compliance readiness, and secure coding practices",
+      "description": "Umbrella bundle for layered security plugins and shared security commands",
+      "version": "0.5.4"
+    },
+    {
+      "name": "security-base",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/security-base",
+        "ref": "gh-pages"
+      },
+      "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
+      "version": "0.5.4"
+    },
+    {
+      "name": "security-compliance",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/security-compliance",
+        "ref": "gh-pages"
+      },
+      "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
+      "version": "0.5.4"
+    },
+    {
+      "name": "security-crypto",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/security-crypto",
+        "ref": "gh-pages"
+      },
+      "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
+      "version": "0.5.4"
+    },
+    {
+      "name": "security-fuzzing",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/security-fuzzing",
+        "ref": "gh-pages"
+      },
+      "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
+      "version": "0.5.4"
+    },
+    {
+      "name": "security-scanning",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/security-scanning",
+        "ref": "gh-pages"
+      },
+      "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
       "version": "0.5.4"
     },
     {
@@ -247,7 +456,62 @@
         "path": "plugins/tools",
         "ref": "gh-pages"
       },
-      "description": "CLI tools, shell and PowerShell scripting, analytics implementation, MCP integration, API design, and productivity utilities",
+      "description": "Umbrella bundle for layered tool plugins and shared research/setup commands",
+      "version": "0.5.4"
+    },
+    {
+      "name": "tools-browser",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/tools-browser",
+        "ref": "gh-pages"
+      },
+      "description": "Browser automation and realtime web tooling for interactive surfaces",
+      "version": "0.5.4"
+    },
+    {
+      "name": "tools-cli",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/tools-cli",
+        "ref": "gh-pages"
+      },
+      "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
+      "version": "0.5.4"
+    },
+    {
+      "name": "tools-diagrams",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/tools-diagrams",
+        "ref": "gh-pages"
+      },
+      "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
+      "version": "0.5.4"
+    },
+    {
+      "name": "tools-documents",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/tools-documents",
+        "ref": "gh-pages"
+      },
+      "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
+      "version": "0.5.4"
+    },
+    {
+      "name": "tools-integration",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/tools-integration",
+        "ref": "gh-pages"
+      },
+      "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
       "version": "0.5.4"
     },
     {
@@ -269,7 +533,40 @@
         "path": "plugins/workflow",
         "ref": "gh-pages"
       },
-      "description": "Development workflows: planning, git operations, decision records, continuous improvement, mental models, and Conductor project management",
+      "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
+      "version": "0.5.4"
+    },
+    {
+      "name": "workflow-execution",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/workflow-execution",
+        "ref": "gh-pages"
+      },
+      "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
+      "version": "0.5.4"
+    },
+    {
+      "name": "workflow-git",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/workflow-git",
+        "ref": "gh-pages"
+      },
+      "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
+      "version": "0.5.4"
+    },
+    {
+      "name": "workflow-planning",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/workflow-planning",
+        "ref": "gh-pages"
+      },
+      "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
       "version": "0.5.4"
     },
     {

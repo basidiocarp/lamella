@@ -1,6 +1,6 @@
 ---
 name: screenshot-to-code
-description: "Converts UI screenshots into working frontend code. Use when users provide website, app, or design screenshots and want responsive HTML, CSS, React, or Vue implementations."
+description: "Converts UI screenshots into working frontend code."
 ---
 
 # Screenshot to Code

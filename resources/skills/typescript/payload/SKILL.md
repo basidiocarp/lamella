@@ -1,6 +1,6 @@
 ---
 name: payload
-description: Guides development in Payload CMS projects, including config, collections, fields, hooks, access control, and the Payload API. Use when debugging validation errors, security issues, relationship queries, transactions, or hook behavior.
+description: "Guides Payload CMS collections, hooks, access control, and APIs."
 ---
 
 # Payload CMS Application Development

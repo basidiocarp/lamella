@@ -1,6 +1,6 @@
 ---
 name: content-strategy
-description: Plans content strategy with pillars, topic clusters, buyer-stage coverage, and distribution intent. Use when deciding what content to create, how topics connect, or how content should support product and growth goals.
+description: "Plans content strategy with pillars, topic clusters, buyer-stage coverage, and distribution intent."
 ---
 # Content Strategy
 

@@ -2,6 +2,7 @@
   "name": "customer-insights",
   "description": "Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language",
   "source_plugin": "customer-insights",
+  "dependencies": [],
   "resources": {
     "skills": [
       "agile-pm/define-jtbd-canvas",

@@ -1,6 +1,6 @@
 ---
 name: frontend-performance
-description: "Profiles and improves frontend performance. Use when debugging slow page loads, analyzing bundle size, optimizing React rendering, or improving Core Web Vitals."
+description: "Profiles and improves frontend performance."
 ---
 
 # Frontend Performance

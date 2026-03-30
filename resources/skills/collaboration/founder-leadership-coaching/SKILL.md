@@ -1,6 +1,6 @@
 ---
 name: founder-leadership-coaching
-description: Helps founders identify bottlenecks in delegation, energy, leadership style, and operating focus as the company grows. Use when a founder feels overloaded, struggles to delegate, or needs to shift from maker behavior to executive leadership.
+description: "Helps founders improve delegation, leadership focus, and operating cadence."
 ---
 # Founder Leadership Coaching
 

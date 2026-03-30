@@ -1,7 +1,6 @@
 ---
 name: deliver-launch-checklist
-description: >-
-  Creates a comprehensive pre-launch checklist covering engineering, design, marketing, support, legal, and operations readiness. Use when preparing to release features, products, or major updates.
+description: "Creates a comprehensive pre-launch checklist covering engineering, design, marketing, support, legal, and operations readiness."
 ---
 # Launch Checklist
 

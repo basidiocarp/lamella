@@ -1,6 +1,6 @@
 ---
 name: helm-charts
-description: Creates, validates, lints, and tests Helm charts for Kubernetes applications. Use when scaffolding Helm charts, validating templates, linting `values.yaml`, checking CRDs, or auditing chart security.
+description: "Creates, validates, lints, and tests Helm charts for Kubernetes applications."
 ---
 
 # Helm Charts

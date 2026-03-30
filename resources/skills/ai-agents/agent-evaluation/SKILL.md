@@ -1,9 +1,6 @@
 ---
 name: agent-evaluation
-description: >-
-  Evaluates and improves Claude Code commands, skills, and agents. Use when testing prompt effectiveness,
-  validating context engineering choices, measuring improvement quality, or launching a judge sub-agent
-  for independent assessment of work produced in the current session.
+description: "Evaluates and improves Claude Code commands, skills, and agents."
 ---
 
 # Evaluation Methods for Claude Code Agents

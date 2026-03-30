@@ -1,6 +1,6 @@
 ---
 name: python-testing
-description: Applies pytest patterns and configuration for Python test suites. Use when configuring pytest, setting up fixtures, parametrized tests, mocking, or async testing in Python.
+description: "Applies pytest patterns and configuration for Python test suites."
 ---
 
 # Python Testing Patterns

@@ -1,0 +1,24 @@
+{
+  "name": "devops-cloud",
+  "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
+  "source_plugin": "devops-cloud",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/aws-agentic-ai",
+      "devops/aws-cdk-development",
+      "devops/aws-cost-operations",
+      "devops/aws-serverless-eda",
+      "devops/modal-serverless"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

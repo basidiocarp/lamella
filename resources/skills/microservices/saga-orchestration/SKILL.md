@@ -1,6 +1,6 @@
 ---
 name: saga-orchestration
-description: "Implements saga orchestration patterns for distributed transactions. Use when coordinating multi-step business processes, handling compensating transactions, or managing long-running cross-service workflows."
+description: "Implements saga orchestration patterns for distributed transactions."
 ---
 
 # Saga Orchestration

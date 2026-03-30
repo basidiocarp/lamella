@@ -1,6 +1,6 @@
 ---
 name: hybrid-search-implementation
-description: "Combines vector and keyword retrieval strategies. Use when implementing RAG systems, building search engines, or improving recall beyond pure semantic or pure keyword search."
+description: "Combines vector and keyword retrieval strategies."
 ---
 
 # Hybrid Search Implementation

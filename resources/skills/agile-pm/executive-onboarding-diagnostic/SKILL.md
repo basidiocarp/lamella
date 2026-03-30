@@ -1,6 +1,6 @@
 ---
 name: executive-onboarding-diagnostic
-description: Plans the first 90 days of a VP or CPO transition as a diagnostic process. Use when a new executive product leader needs to understand the organization before making structural, staffing, or strategy changes.
+description: "Plans executive transition diagnostics for the first 90 days."
 ---
 # Executive Onboarding Diagnostic
 

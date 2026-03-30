@@ -1,0 +1,24 @@
+{
+  "name": "security-compliance",
+  "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
+  "source_plugin": "security-compliance",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/pci-compliance",
+      "security/soc2-compliance",
+      "security/stride-analysis-patterns",
+      "security/threat-mitigation-mapping",
+      "security/seatbelt-sandboxer"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

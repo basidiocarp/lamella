@@ -1,24 +1,15 @@
 {
   "name": "workflow",
-  "description": "Development workflows: planning, git operations, decision records, continuous improvement, mental models, and Conductor project management",
+  "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
   "source_plugin": "workflow",
+  "dependencies": [
+    "core",
+    "workflow-planning",
+    "workflow-git",
+    "workflow-execution"
+  ],
   "resources": {
-    "skills": [
-      "workflow/conductor",
-      "workflow/context-handoff",
-      "workflow/resolve-pr-parallel",
-      "workflow/create-plans",
-      "workflow/deliver-edge-cases",
-      "workflow/develop-adr",
-      "workflow/develop-spike-summary",
-      "workflow/executing-plans",
-      "workflow/finishing-a-development-branch",
-      "workflow/git-analyze-issue",
-      "workflow/git-create-pr",
-      "workflow/git-worktrees",
-      "workflow/kaizen",
-      "workflow/mental-models"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

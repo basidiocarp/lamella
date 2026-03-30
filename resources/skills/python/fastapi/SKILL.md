@@ -1,6 +1,6 @@
 ---
 name: fastapi
-description: Applies FastAPI best practices and conventions for APIs and Pydantic models. Use when working with FastAPI services, writing new code, or refactoring existing code to current patterns.
+description: "Applies FastAPI best practices and conventions for APIs and Pydantic models."
 ---
 
 # FastAPI

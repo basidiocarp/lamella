@@ -1,0 +1,26 @@
+{
+  "$schema": "./schema.json",
+  "name": "tools-diagrams",
+  "version": "1.0.0",
+  "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "tools",
+    "diagrams",
+    "mermaid",
+    "excalidraw",
+    "visualization"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/excalidraw-diagram-generator",
+      "tools/mermaid-diagrams"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

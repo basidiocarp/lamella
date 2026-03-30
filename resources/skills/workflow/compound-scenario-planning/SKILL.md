@@ -1,6 +1,6 @@
 ---
 name: compound-scenario-planning
-description: Models compound scenarios that cascade across revenue, people, product, operations, and cash. Use when pressure-testing strategic decisions, planning contingencies, or evaluating what happens if multiple adverse events hit at once.
+description: "Models compound scenarios that cascade across revenue, people, product, operations, and cash."
 ---
 # Compound Scenario Planning
 

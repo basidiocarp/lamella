@@ -1,0 +1,28 @@
+{
+  "$schema": "./schema.json",
+  "name": "devops-kubernetes",
+  "version": "1.0.0",
+  "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
+  "author": "lamella",
+  "license": "MIT",
+  "tags": [
+    "devops",
+    "kubernetes",
+    "helm",
+    "gitops",
+    "manifests"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "devops/gitops-workflow",
+      "devops/helm-charts",
+      "devops/kubernetes-manifest-generator",
+      "devops/kubernetes-security-policies"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

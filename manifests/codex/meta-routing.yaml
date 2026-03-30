@@ -1,0 +1,21 @@
+{
+  "name": "meta-routing",
+  "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
+  "source_plugin": "meta-routing",
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "meta/rust-crate-skill-generator",
+      "meta/skill-composer-studio",
+      "meta/skill-router",
+      "meta/team-communication-protocols"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

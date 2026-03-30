@@ -1,6 +1,6 @@
 ---
 name: parallel-debugging
-description: Debugs complex issues with competing hypotheses, parallel investigation, evidence collection, and root cause arbitration. Use when bugs have multiple plausible causes, initial debugging failed, or issues span multiple modules.
+description: "Debugs complex issues with competing hypotheses, parallel investigation, evidence collection, and root cause arbitration."
 ---
 
 # Parallel Debugging

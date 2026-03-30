@@ -1,6 +1,6 @@
 ---
 name: unsafe-checker
-description: "Reviews unsafe Rust and FFI code for soundness risks. Use when auditing unsafe blocks, raw pointers, extern functions, transmute usage, SAFETY comments, or potential undefined behavior."
+description: "Reviews unsafe Rust and FFI code for soundness risks."
 allowed-tools: Read Grep Glob
 metadata:
   globs: "**/*.rs"

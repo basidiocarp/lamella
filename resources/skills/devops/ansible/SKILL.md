@@ -1,6 +1,6 @@
 ---
 name: ansible
-description: Generates, validates, lints, and tests Ansible playbooks, roles, inventories, and tasks. Use when creating Ansible automation, validating syntax, running ansible-lint, debugging configurations, or testing with Molecule.
+description: "Generates, validates, lints, and tests Ansible playbooks, roles, inventories, and tasks."
 ---
 
 # Ansible

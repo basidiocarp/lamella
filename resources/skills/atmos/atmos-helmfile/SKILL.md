@@ -1,6 +1,6 @@
 ---
 name: atmos-helmfile
-description: "Orchestrates Helmfile operations, Kubernetes deployments, varfile generation, EKS integration, and source management through Atmos. Use when orchestrating Helmfile with Atmos, deploying to Kubernetes, or managing Helm releases via stacks."
+description: "Orchestrates Helmfile operations, Kubernetes deployments, varfile generation, EKS integration, and source management through Atmos."
 ---
 
 # Atmos Helmfile Orchestration

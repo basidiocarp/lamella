@@ -1,6 +1,6 @@
 ---
 name: strategy-execution-alignment
-description: Checks whether company strategy, team goals, and execution are aligned. Use when cascading OKRs, diagnosing siloed priorities, or repairing drift between leadership direction and team work.
+description: "Checks whether company strategy, team goals, and execution are aligned."
 ---
 # Strategy Execution Alignment
 

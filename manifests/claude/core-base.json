@@ -1,0 +1,41 @@
+{
+  "$schema": "./schema.json",
+  "name": "core-base",
+  "version": "1.0.0",
+  "description": "Foundational development workflow: planning, debugging, and test discipline",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "core",
+    "base",
+    "debugging",
+    "testing",
+    "planning"
+  ],
+  "dependencies": [],
+  "resources": {
+    "skills": [
+      "core/brainstorming",
+      "core/clarify-requirements",
+      "core/systematic-debugging",
+      "core/test-debugging",
+      "core/test-driven-development",
+      "core/test-writing"
+    ],
+    "agents": [],
+    "commands": [],
+    "workflows": [
+      "development/TDD.md",
+      "development/SEARCH-FIRST.md",
+      "development/COMMIT.md",
+      "quality/VERIFICATION.md",
+      "quality/DO-AND-JUDGE.md",
+      "quality/CRITIQUE.md"
+    ],
+    "templates": [
+      "claude/CLAUDE-MD-TEMPLATE.md",
+      "docs/SKILL-MD-TEMPLATE.md",
+      "session/SESSION-HANDOFF-TEMPLATE.md"
+    ]
+  }
+}

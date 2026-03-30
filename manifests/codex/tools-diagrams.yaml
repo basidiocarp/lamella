@@ -1,0 +1,21 @@
+{
+  "name": "tools-diagrams",
+  "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
+  "source_plugin": "tools-diagrams",
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "tools/excalidraw-diagram-generator",
+      "tools/mermaid-diagrams"
+    ],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

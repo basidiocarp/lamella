@@ -1,0 +1,27 @@
+{
+  "$schema": "./schema.json",
+  "name": "security-crypto",
+  "version": "1.0.0",
+  "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
+  "author": "William Newton",
+  "license": "MIT",
+  "tags": [
+    "security",
+    "crypto",
+    "constant-time",
+    "wycheproof",
+    "yara"
+  ],
+  "dependencies": [
+    "core"
+  ],
+  "resources": {
+    "skills": [
+      "security/constant-time-crypto",
+      "security/wycheproof",
+      "security/yara-rule-authoring"
+    ],
+    "agents": [],
+    "commands": []
+  }
+}

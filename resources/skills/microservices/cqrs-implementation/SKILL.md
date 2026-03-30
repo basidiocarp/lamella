@@ -1,6 +1,6 @@
 ---
 name: cqrs-implementation
-description: "Implements Command Query Responsibility Segregation patterns for distributed systems. Use when separating read and write models, building projections, optimizing query performance, or working with event-sourced services."
+description: "Implements Command Query Responsibility Segregation patterns for distributed systems."
 ---
 
 # CQRS Implementation

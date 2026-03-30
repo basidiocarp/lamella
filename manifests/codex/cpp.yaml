@@ -2,6 +2,9 @@
   "name": "cpp",
   "description": "C++ development: modern C++ patterns, coding standards, and testing practices",
   "source_plugin": "cpp",
+  "dependencies": [
+    "core"
+  ],
   "resources": {
     "skills": [
       "cpp/cpp-pro",

@@ -1,6 +1,6 @@
 ---
 name: dependency-auditor
-description: Audits project dependencies for vulnerabilities, license risk, stale packages, and upgrade planning across multiple ecosystems. Use when reviewing dependency health, preparing supply-chain cleanup work, or checking whether a dependency set is safe to ship.
+description: "Audits dependencies for vulnerabilities, licenses, staleness, and upgrades."
 ---
 
 # Dependency Auditor

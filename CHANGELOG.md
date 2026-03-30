@@ -4,6 +4,18 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.6] - 2026-03-30
+
+### Added
+
+- **Routed Rust skill packs**: Added focused Rust skills for API design, async patterns, docs quality, performance, project layout, and testing so deeper guidance can be loaded on demand instead of living in the always-on rule surface.
+
+### Changed
+
+- **Rust plugin core surface**: Reduced the Rust plugin to 15 core rules and routed broader topic coverage through focused skills and updated router guidance.
+- **Rule corpus format**: Compressed the common rules and the Rust rules corpus into short normative guidance instead of long tutorial-style mini references.
+- **Rust plugin metadata**: Synced the Claude and Codex manifests, marketplace metadata, and plugin index with the reduced core rule set and expanded skill routing surface.
+
 ## [0.5.5] - 2026-03-30
 
 ### Added

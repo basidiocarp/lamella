@@ -4,6 +4,21 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-03-29
+
+### Added
+
+- **Layered plugin manifests**: Added 27 narrower plugin manifests across the `core`, `security`, `devops`, `tools`, `meta`, `frontend`, and `workflow` families while keeping the broad plugin names as compatibility umbrellas.
+
+### Changed
+
+- **Plugin taxonomy**: Split overloaded bundles into capability-based slices such as `security-scanning`, `devops-cloud`, `tools-cli`, and `workflow-planning`, and regenerated the Claude and Codex marketplace indexes for the expanded 52-plugin catalog.
+- **Skill metadata**: Tightened all 286 skill frontmatter descriptions to concise action-led summaries to reduce token usage across the packaged skill surface.
+
+### Fixed
+
+- **Codex dependency handling**: Updated manifest sync and Codex profile build steps to preserve and resolve manifest dependencies so umbrella profiles still export their dependent resources correctly.
+
 ## [0.5.3] - 2026-03-29
 
 ### Added

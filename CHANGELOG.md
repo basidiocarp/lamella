@@ -4,6 +4,19 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.7] - 2026-03-30
+
+### Changed
+
+- **Hook validator coverage**: Expanded `validate-hooks.js` to cover all shipped hook config files under `resources/hooks/`, including standalone bundles and the minimal hook template, so bundle-local script drift is caught before release.
+- **Validator docs**: Updated contributor and authoring docs to reference the current validation surface, including `validate-subagents.js` instead of the removed `validate-agents.js`.
+
+### Fixed
+
+- **Shared hook packaging**: Corrected Lamella's plugin build logic so hook scripts referenced from the main shared hook catalog are copied from `scripts/hooks/` into built plugins instead of being omitted at package time.
+- **Manual hook template**: Fixed the manual settings template to point at `pre-write-doc-warn.js` instead of the removed `doc-file-warning.js` entrypoint.
+- **Post-build hook validation**: Tightened `validate-build.js` and marketplace builds so packaged hook command references are checked against the actual built plugin payload.
+
 ## [0.5.6] - 2026-03-30
 
 ### Added

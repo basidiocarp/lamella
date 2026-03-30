@@ -18,8 +18,8 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Validate agents
-        run: node scripts/ci/validate-agents.js
+      - name: Validate subagents
+        run: node scripts/ci/validate-subagents.js
 
       - name: Validate commands
         run: node scripts/ci/validate-commands.js

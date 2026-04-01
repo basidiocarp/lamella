@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
 
 const RULES_DIR = path.join(__dirname, '../../resources/rules');
 
@@ -30,6 +31,14 @@ function validateRules() {
         console.error(`ERROR: ${file} - Empty rule file`);
         hasErrors = true;
         continue;
+      }
+
+      const frontmatter = loadMarkdownFrontmatter(filePath);
+      if (frontmatter) {
+        validateRequiresValue(file, frontmatter.requires, (message) => {
+          console.error(`ERROR: ${message}`);
+          hasErrors = true;
+        });
       }
       validatedCount++;
     } catch (err) {

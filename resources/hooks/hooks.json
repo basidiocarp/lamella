@@ -157,6 +157,9 @@
         "hooks": [
           {
             "type": "command",
+            "requires": [
+              "cortina"
+            ],
             "command": "cortina adapter claude-code post-tool-use",
             "async": true,
             "timeout": 10
@@ -169,6 +172,9 @@
         "hooks": [
           {
             "type": "command",
+            "requires": [
+              "hyphae"
+            ],
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-pr-reviews.js\"",
             "async": true,
             "timeout": 10

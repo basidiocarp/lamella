@@ -15,6 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+const { validateRequiresValue } = require('../lib/requires');
 
 const HOOKS_ROOT = path.join(__dirname, '../../resources/hooks');
 const HOOK_SCRIPTS_DIR = path.join(__dirname, '../../scripts/hooks');
@@ -143,6 +144,9 @@ function validateHookEntry(hook, label) {
   }
   if ('timeout' in hook && (typeof hook.timeout !== 'number' || hook.timeout < 0)) {
     console.error(`ERROR: ${label} 'timeout' must be a non-negative number`);
+    hasErrors = true;
+  }
+  if (!validateRequiresValue(label, hook.requires, (message) => console.error(`ERROR: ${message}`))) {
     hasErrors = true;
   }
 

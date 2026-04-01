@@ -1,5 +1,7 @@
 ---
 description: "Check hyphae for relevant context before implementing. Recalls past errors, corrections, and learned patterns."
+requires:
+  - hyphae
 ---
 
 # Hyphae Context Recall

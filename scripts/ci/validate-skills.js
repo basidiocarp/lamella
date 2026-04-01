@@ -10,36 +10,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
 
 const SKILLS_DIR = path.join(__dirname, '../../resources/skills');
-
-function extractFrontmatter(content) {
-  const cleanContent = content.replace(/^\uFEFF/, '');
-  const match = cleanContent.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  if (!match) return null;
-
-  const frontmatter = {};
-  const lines = match[1].split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const colonIdx = line.indexOf(':');
-    if (colonIdx > 0 && !line.startsWith(' ') && !line.startsWith('\t')) {
-      const key = line.slice(0, colonIdx).trim();
-      let value = line.slice(colonIdx + 1).trim();
-      // Handle YAML multiline scalars (indented continuation lines)
-      if (!value) {
-        const parts = [];
-        while (i + 1 < lines.length && /^\s/.test(lines[i + 1])) {
-          i++;
-          parts.push(lines[i].trim());
-        }
-        value = parts.join(' ');
-      }
-      frontmatter[key] = value;
-    }
-  }
-  return frontmatter;
-}
 
 function validateSkills() {
   if (!fs.existsSync(SKILLS_DIR)) {
@@ -83,13 +56,19 @@ function validateSkills() {
       }
 
       // Validate frontmatter
-      const frontmatter = extractFrontmatter(content);
+      const frontmatter = loadMarkdownFrontmatter(skillMd);
       if (!frontmatter) {
         console.warn(`WARN: ${skillName}/SKILL.md - Missing frontmatter (should have at least 'description')`);
         warnCount++;
-      } else if (!frontmatter.description || !frontmatter.description.trim()) {
-        console.warn(`WARN: ${skillName}/SKILL.md - Missing 'description' in frontmatter`);
-        warnCount++;
+      } else {
+        if (!frontmatter.description || !frontmatter.description.trim()) {
+          console.warn(`WARN: ${skillName}/SKILL.md - Missing 'description' in frontmatter`);
+          warnCount++;
+        }
+        validateRequiresValue(`${skillName}/SKILL.md`, frontmatter.requires, (message) => {
+          console.error(`ERROR: ${message}`);
+          hasErrors = true;
+        });
       }
 
       validCount++;

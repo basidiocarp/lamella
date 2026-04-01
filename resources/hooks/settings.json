@@ -154,6 +154,9 @@
         "hooks": [
           {
             "type": "command",
+            "requires": [
+              "cortina"
+            ],
             "command": "cortina adapter claude-code post-tool-use",
             "timeout": 10,
             "async": true

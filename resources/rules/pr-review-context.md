@@ -1,5 +1,7 @@
 ---
 description: "Check hyphae for past PR review feedback before creating PRs. Helps avoid repeating mistakes that reviewers previously flagged."
+requires:
+  - hyphae
 ---
 
 # PR Review Context

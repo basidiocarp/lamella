@@ -34,6 +34,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 DRY_RUN=false
 LIST_ONLY=false
 INSTALL_ALL=false
+REFRESH=false
 PLUGINS=()
 
 usage() {
@@ -47,6 +48,7 @@ ${BOLD}OPTIONS${NC}
     -a, --all         Install every available plugin
     -l, --list        List available plugins
     -n, --dry-run     Show the resolved build/install order
+    --refresh         Re-detect tools and re-evaluate installed plugins
     -h, --help        Show this help
 
 ${BOLD}EXAMPLES${NC}
@@ -180,6 +182,7 @@ parse_args() {
             -a|--all) INSTALL_ALL=true; shift ;;
             -l|--list) LIST_ONLY=true; shift ;;
             -n|--dry-run) DRY_RUN=true; shift ;;
+            --refresh) REFRESH=true; shift ;;
             -h|--help) usage ;;
             -*) log_error "Unknown option: $1"; usage ;;
             *) PLUGINS+=("$1"); shift ;;
@@ -202,6 +205,16 @@ main() {
             [[ -z "$plugin" ]] && continue
             PLUGINS+=("$plugin")
         done < <(list_plugin_names)
+    fi
+
+    if $REFRESH && [[ ${#PLUGINS[@]} -eq 0 ]] && ! $INSTALL_ALL; then
+        local installed_dir="${CLAUDE_HOME:-$HOME/.claude}/plugins/lamella"
+        if [[ -d "$installed_dir" ]]; then
+            while IFS= read -r plugin; do
+                [[ -z "$plugin" ]] && continue
+                PLUGINS+=("$plugin")
+            done < <(find "$installed_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+        fi
     fi
 
     if [[ ${#PLUGINS[@]} -eq 0 ]]; then
@@ -233,7 +246,10 @@ EOF
 
     echo ""
     log_info "Installing ${#ordered_plugins[@]} plugin(s)..."
-    bash "$INSTALL_SCRIPT" --force "${ordered_plugins[@]}"
+    install_args=(--force)
+    $REFRESH && install_args+=(--refresh)
+    $INSTALL_ALL && install_args+=(--ignore-requires)
+    bash "$INSTALL_SCRIPT" "${install_args[@]}" "${ordered_plugins[@]}"
 
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

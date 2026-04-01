@@ -4,6 +4,21 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.8] - 2026-04-01
+
+### Added
+
+- **Debugging model guidance**: Expanded `systematic-debugging` with model-selection and escalation guidance for debugging and validator handoff flows.
+
+### Changed
+
+- **Requires-aware installs**: Lamella now validates optional `requires` metadata, preserves it in Claude subagent exports, detects installed ecosystem tools, and filters plugin content at install time when requirements are unmet.
+- **Install refresh flow**: `lamella install --refresh` and the underlying Claude plugin installer now re-detect tools, re-evaluate installed content, and update standalone resources accordingly.
+
+### Fixed
+
+- **Ecosystem-coupled Lamella defaults**: Hyphae- and Cortina-specific rules and hook entries are now skipped automatically on installs where those tools are unavailable, instead of shipping as unconditional guidance.
+
 ## [0.5.7] - 2026-03-30
 
 ### Changed

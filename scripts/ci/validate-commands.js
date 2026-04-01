@@ -7,6 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const { findSubagentFiles, loadSubagent } = require('../lib/subagents');
+const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
 
 const ROOT_DIR = path.join(__dirname, '../..');
 const COMMANDS_DIR = path.join(ROOT_DIR, 'resources', 'commands');
@@ -94,6 +95,14 @@ function validateCommands() {
       console.error(`ERROR: ${relPath} - Empty command file`);
       hasErrors = true;
       continue;
+    }
+
+    const frontmatter = loadMarkdownFrontmatter(filePath);
+    if (frontmatter) {
+      validateRequiresValue(relPath, frontmatter.requires, (message) => {
+        console.error(`ERROR: ${message}`);
+        hasErrors = true;
+      });
     }
 
     // Strip fenced code blocks before checking cross-references.

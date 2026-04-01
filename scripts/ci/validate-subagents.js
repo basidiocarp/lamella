@@ -8,6 +8,7 @@ const {
   loadSubagent,
   normalizeDistributionTargets,
 } = require('../lib/subagents');
+const { validateRequiresValue } = require('../lib/requires');
 
 const CLAUDE_MODELS = new Set(['inherit', 'haiku', 'sonnet', 'opus']);
 const CLAUDE_COLORS = new Set(['blue', 'cyan', 'green', 'yellow', 'magenta', 'red']);
@@ -23,6 +24,7 @@ const CODEX_SANDBOX = new Set(['read-only', 'workspace-write', 'danger-full-acce
 const TOP_LEVEL_FIELDS = new Set([
   'name',
   'description',
+  'requires',
   'category',
   'capability_profile',
   'execution_profile',
@@ -167,6 +169,8 @@ function validateSubagent(subagent) {
   if (typeof data.description === 'string' && data.description.length > 1024) {
     reportError(`${relPath} - description exceeds 1024 characters`);
   }
+
+  validateRequiresValue(relPath, data.requires, reportError);
 
   if (data.capability_profile && !CAPABILITY_PROFILES.has(data.capability_profile)) {
     reportError(`${relPath} - Invalid capability_profile '${data.capability_profile}'`);

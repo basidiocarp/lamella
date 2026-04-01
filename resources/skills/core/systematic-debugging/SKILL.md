@@ -63,6 +63,32 @@ Use for ANY technical issue:
 If the user wants an issue-ready fix plan after debugging, package the findings
 using the behavior-level template in `references/issue-triage.md`.
 
+## Model Selection for Debugging
+
+Match model to bug complexity. Escalate models alongside abstraction levels.
+
+| Bug Type | Model | Why |
+|----------|-------|-----|
+| Typos, missing imports, syntax errors | **Haiku** | Obvious fixes, cheap verification |
+| Stack traces, logic bugs, test failures | **Sonnet** | Best coding model, traces data flow |
+| Race conditions, architectural bugs, subtle concurrency | **Opus** | Deep reasoning across multiple files |
+
+Map to the 3-strike escalation:
+
+```
+Strike 1-2 (Implementation): Sonnet — fix at code level
+Strike 3   (Design/Requirements): Escalate to Opus — rethink the approach
+Post-fix   (Validation): Haiku — run tests, confirm green
+```
+
+When orchestrating multi-agent debugging:
+
+```
+Sonnet debugger → fix attempt → Haiku validator (run tests)
+  ├── passes → done
+  └── fails 3x → Opus for root cause analysis → back to Sonnet
+```
+
 ## The Four Phases
 
 complete each phase before proceeding to the next.

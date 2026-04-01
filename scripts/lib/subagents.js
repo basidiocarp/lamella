@@ -240,6 +240,9 @@ function toClaudeMarkdown(subagent) {
 
   appendYamlField(frontmatter, 'name', data.name);
   appendYamlField(frontmatter, 'description', data.description);
+  if (Array.isArray(data.requires) && data.requires.length > 0) {
+    appendYamlField(frontmatter, 'requires', data.requires);
+  }
   if (claude.model) appendYamlField(frontmatter, 'model', claude.model);
   if (claude.color) appendYamlField(frontmatter, 'color', claude.color);
   if (Array.isArray(claude.tools) && claude.tools.length > 0) {

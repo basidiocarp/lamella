@@ -28,6 +28,9 @@ DIST_DIR="$BASE_DIR/dist/claude/plugins"
 MANIFESTS_DIR="$BASE_DIR/manifests/claude"
 CLAUDE_DIR="${CLAUDE_HOME:-$HOME/.claude}"
 PLUGINS_DIR="$CLAUDE_DIR/plugins/lamella"
+FILTER_PLUGIN_SCRIPT="$BASE_DIR/scripts/plugins/filter-plugin-install.js"
+LAMELLA_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/lamella"
+DETECTED_TOOLS_CACHE="$LAMELLA_CONFIG_DIR/detected-tools.json"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -47,8 +50,12 @@ FORCE=false
 UNINSTALL=false
 LIST_ONLY=false
 INSTALL_ALL=false
+IGNORE_REQUIRES=false
 PRINT_ORDER=false
+REFRESH=false
 PLUGINS=()
+DETECTED_TOOLS_JSON='[]'
+DETECTED_TOOLS_CSV=''
 
 usage() {
     cat <<EOF
@@ -63,6 +70,8 @@ ${BOLD}OPTIONS${NC}
     -u, --uninstall   Uninstall specified plugins
     -n, --dry-run     Show what would be done
     -f, --force       Overwrite existing files
+    --refresh         Re-detect tools and re-evaluate installed plugins
+    --ignore-requires Install selected plugins without filtering by requires
     --print-order     Print the dependency-resolved install order
     -h, --help        Show this help
 
@@ -84,6 +93,88 @@ ${BOLD}NOTES${NC}
 
 EOF
     exit 0
+}
+
+get_installed_plugins() {
+    [[ ! -d "$PLUGINS_DIR" ]] && return
+    for dir in "$PLUGINS_DIR"/*; do
+        [[ ! -d "$dir" ]] && continue
+        basename "$dir"
+    done | sort
+}
+
+write_detected_tools_cache() {
+    local tools_json="$1"
+    mkdir -p "$LAMELLA_CONFIG_DIR"
+    jq -n \
+        --arg detected_at "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+        --argjson tools "$tools_json" \
+        '{detected_at: $detected_at, tools: $tools}' > "$DETECTED_TOOLS_CACHE"
+}
+
+detect_available_tools() {
+    local tools=()
+
+    if command -v spore >/dev/null 2>&1; then
+        local discovered
+        discovered=$(spore discover --json 2>/dev/null \
+            | jq -r '
+                (
+                  if type == "array" then .
+                  elif (.tools? | type) == "array" then .tools
+                  else []
+                  end
+                )[]
+                | if type == "string" then .
+                  elif (.name? | type) == "string" then .name
+                  elif (.tool? | type) == "string" then .tool
+                  elif (.id? | type) == "string" then .id
+                  else empty
+                  end
+              ' 2>/dev/null || true)
+        if [[ -n "$discovered" ]]; then
+            while IFS= read -r tool; do
+                [[ -z "$tool" ]] && continue
+                case "$tool" in
+                    mycelium|hyphae|rhizome|cortina|canopy|spore|stipe)
+                        tools+=("$tool")
+                        ;;
+                esac
+            done <<< "$discovered"
+        fi
+    fi
+
+    local candidate
+    for candidate in mycelium hyphae rhizome cortina canopy spore stipe; do
+        if command -v "$candidate" >/dev/null 2>&1; then
+            tools+=("$candidate")
+        fi
+    done
+
+    if [[ ${#tools[@]} -eq 0 ]]; then
+        echo '[]'
+        return 0
+    fi
+
+    printf '%s\n' "${tools[@]}" | awk '!seen[$0]++' | jq -R . | jq -s .
+}
+
+remove_plugin_standalone_targets() {
+    local plugin="$1"
+    local src="$DIST_DIR/$plugin"
+
+    for resource_type in rules workflows templates; do
+        local standalone_dir="$src/_standalone/$resource_type"
+        local claude_dst="$CLAUDE_DIR/$resource_type"
+        [[ ! -d "$standalone_dir" ]] && continue
+
+        for item in "$standalone_dir"/*; do
+            [[ ! -e "$item" ]] && continue
+            local target="$claude_dst/$(basename "$item")"
+            [[ ! -e "$target" ]] && continue
+            rm -rf "$target"
+        done
+    done
 }
 
 get_available_plugins() {
@@ -285,6 +376,17 @@ install_plugin() {
     log_info "Installing ${BOLD}$plugin${NC}..."
 
     local installed=0
+    local filtered_src="$src"
+    local filter_summary='{"copied":0,"skipped":[]}'
+
+    if ! $DRY_RUN; then
+        local temp_dir
+        temp_dir=$(mktemp -d)
+        filter_summary=$(LAMELLA_DETECTED_TOOLS="$DETECTED_TOOLS_CSV" \
+            LAMELLA_IGNORE_REQUIRES="$([[ "$IGNORE_REQUIRES" == true ]] && echo 1 || echo 0)" \
+            node "$FILTER_PLUGIN_SCRIPT" "$src" "$temp_dir/plugin")
+        filtered_src="$temp_dir/plugin"
+    fi
 
     # 1. Install plugin directory (agents, commands, skills, hooks)
     local dst="$PLUGINS_DIR/$plugin"
@@ -292,7 +394,7 @@ install_plugin() {
     if $DRY_RUN; then
         echo "  [dry-run] Would install plugin to: $dst"
     else
-        if [[ -d "$dst" ]] && ! $FORCE; then
+        if [[ -d "$dst" ]] && ! $FORCE && ! $REFRESH; then
             log_warn "Already installed: $plugin (use --force to overwrite)"
             return 0
         fi
@@ -302,21 +404,25 @@ install_plugin() {
         mkdir -p "$dst"
 
         # Copy official plugin structure
-        cp -r "$src/.claude-plugin" "$dst/"
-        [[ -d "$src/agents" ]] && cp -r "$src/agents" "$dst/"
-        [[ -d "$src/commands" ]] && cp -r "$src/commands" "$dst/"
-        [[ -d "$src/skills" ]] && cp -r "$src/skills" "$dst/"
-        [[ -d "$src/hooks" ]] && cp -r "$src/hooks" "$dst/"
-        [[ -d "$src/scripts" ]] && cp -r "$src/scripts" "$dst/"
+        cp -r "$filtered_src/.claude-plugin" "$dst/"
+        [[ -d "$filtered_src/agents" ]] && cp -r "$filtered_src/agents" "$dst/"
+        [[ -d "$filtered_src/commands" ]] && cp -r "$filtered_src/commands" "$dst/"
+        [[ -d "$filtered_src/skills" ]] && cp -r "$filtered_src/skills" "$dst/"
+        [[ -d "$filtered_src/hooks" ]] && cp -r "$filtered_src/hooks" "$dst/"
+        [[ -d "$filtered_src/scripts" ]] && cp -r "$filtered_src/scripts" "$dst/"
 
         log_success "Plugin installed: $dst"
         ((installed++))
     fi
 
     # 2. Install standalone resources (rules, workflows, templates)
-    if [[ -d "$src/_standalone" ]]; then
+    if [[ -d "$filtered_src/_standalone" ]]; then
+        if ! $DRY_RUN && { $FORCE || $REFRESH; }; then
+            remove_plugin_standalone_targets "$plugin"
+        fi
+
         for resource_type in rules workflows templates; do
-            local standalone_dir="$src/_standalone/$resource_type"
+            local standalone_dir="$filtered_src/_standalone/$resource_type"
             [[ ! -d "$standalone_dir" ]] && continue
             [[ -z "$(ls -A "$standalone_dir" 2>/dev/null)" ]] && continue
 
@@ -331,7 +437,7 @@ install_plugin() {
                 if $DRY_RUN; then
                     echo "  [dry-run] Would copy $resource_type/$name to $target"
                 else
-                    if [[ -e "$target" ]] && ! $FORCE; then
+                    if [[ -e "$target" ]] && ! $FORCE && ! $REFRESH; then
                         log_warn "Exists: $resource_type/$name (use --force)"
                         continue
                     fi
@@ -347,6 +453,21 @@ install_plugin() {
                 [[ "$count" -gt 0 ]] && log_success "  Standalone $resource_type: $count items → $claude_dst"
             fi
         done
+    fi
+
+    if ! $DRY_RUN; then
+        local skipped_count
+        skipped_count=$(jq '.skipped | length' <<< "$filter_summary")
+        if [[ "$skipped_count" -gt 0 ]]; then
+            while IFS= read -r skipped; do
+                [[ -z "$skipped" ]] && continue
+                log_warn "Skipped $skipped"
+            done < <(jq -r '.skipped[] | "\(.kind): \(.path) (requires: \(.requires))"' <<< "$filter_summary")
+        fi
+
+        if [[ "$filtered_src" != "$src" ]]; then
+            rm -rf "${filtered_src%/plugin}"
+        fi
     fi
 
     return 0
@@ -419,6 +540,7 @@ EOF
     fi
 
     if $INSTALL_ALL; then
+        IGNORE_REQUIRES=true
         PLUGINS=()
         while IFS= read -r plugin; do
             [[ -z "$plugin" ]] && continue
@@ -426,10 +548,24 @@ EOF
         done < <(get_available_plugins)
     fi
 
+    if $REFRESH; then
+        FORCE=true
+        if [[ ${#PLUGINS[@]} -eq 0 && "$INSTALL_ALL" == false ]]; then
+            while IFS= read -r plugin; do
+                [[ -z "$plugin" ]] && continue
+                PLUGINS+=("$plugin")
+            done < <(get_installed_plugins)
+        fi
+    fi
+
     if [[ ${#PLUGINS[@]} -eq 0 ]]; then
         log_error "No plugins specified"
         usage
     fi
+
+    DETECTED_TOOLS_JSON=$(detect_available_tools)
+    write_detected_tools_cache "$DETECTED_TOOLS_JSON"
+    DETECTED_TOOLS_CSV=$(jq -r 'join(",")' <<< "$DETECTED_TOOLS_JSON")
 
     ordered_output=$(resolve_plugin_order "${PLUGINS[@]}")
     ordered_plugins=()
@@ -509,6 +645,8 @@ parse_args() {
             -u|--uninstall) UNINSTALL=true; shift ;;
             -n|--dry-run) DRY_RUN=true; shift ;;
             -f|--force) FORCE=true; shift ;;
+            --refresh) REFRESH=true; shift ;;
+            --ignore-requires) IGNORE_REQUIRES=true; shift ;;
             --print-order) PRINT_ORDER=true; shift ;;
             -h|--help) usage ;;
             -*) log_error "Unknown option: $1"; usage ;;

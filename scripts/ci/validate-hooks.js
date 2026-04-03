@@ -16,8 +16,9 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const { validateRequiresValue } = require('../lib/requires');
+const { CONTENT_ROOT } = require('../lib/content-root');
 
-const HOOKS_ROOT = path.join(__dirname, '../../resources/hooks');
+const HOOKS_ROOT = path.join(CONTENT_ROOT, 'hooks');
 const HOOK_SCRIPTS_DIR = path.join(__dirname, '../../scripts/hooks');
 const HOOK_CONFIG_FILENAMES = new Set(['hooks.json', 'settings.json', 'hooks-minimal.json']);
 const VALID_EVENTS = [

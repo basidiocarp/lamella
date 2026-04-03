@@ -1,0 +1,34 @@
+# Preset: full-ecosystem
+# All ecosystem tools enabled for maximum capability.
+
+[preset]
+name = "full-ecosystem"
+description = "Everything enabled with full ecosystem integration"
+requires = ["mycelium", "hyphae", "rhizome", "cortina"]
+
+[models]
+exploration = "haiku"
+coding = "sonnet"
+architecture = "opus"
+
+[tools]
+prefer_rhizome = true
+prefer_mycelium = true
+
+[skills]
+activate = [
+  "codebase-onboarding",
+  "context-engineering",
+  "code-review-pro",
+  "verified-implementer",
+  "test-driven-development",
+  "systematic-debugging",
+  "error-memory",
+  "strategic-compact",
+]
+
+[agents]
+default_explorer = { subagent_type = "Explore", model = "haiku" }
+default_coder = { subagent_type = "code", model = "sonnet" }
+default_reviewer = { subagent_type = "review", model = "sonnet" }
+default_architect = { subagent_type = "architect", model = "opus" }

@@ -1,0 +1,27 @@
+# Preset: debug-issue
+# Systematic debugging with model escalation and error memory.
+
+[preset]
+name = "debug-issue"
+description = "Systematic debugging with model escalation"
+requires = ["mycelium"]
+
+[models]
+triage = "haiku"
+investigation = "sonnet"
+root_cause = "opus"
+
+[tools]
+prefer_mycelium = true
+
+[skills]
+activate = [
+  "systematic-debugging",
+  "parallel-debugging",
+  "test-debugging",
+  "error-memory",
+]
+
+[agents]
+default_debugger = { subagent_type = "debug", model = "sonnet" }
+default_analyst = { subagent_type = "analyze", model = "opus" }

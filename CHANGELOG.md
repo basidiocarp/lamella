@@ -4,6 +4,24 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.9] - 2026-04-03
+
+### Added
+
+- **Workflow presets**: New preset system for reusable workflow configurations
+- **Create-handoff skill**: New skill for structured agent handoff creation
+- **Capture-observation skill**: New workflow skill for observation capture
+- **Skill inventory**: Comprehensive skill catalog documentation
+- **Content-root split**: New content-root library for resolving resource paths
+- **Preset validation**: CI validator for preset manifests
+- **Migration docs**: Added migration documentation
+
+### Changed
+
+- **Requires tagging (phases 1-3)**: Complete requires metadata implementation across skills, agents, and build pipeline
+- Updated manifests, build scripts, and CI validators for requires-aware content
+- Updated documentation across CLAUDE.md, CONTRIBUTING.md, architecture, authoring guides, and getting-started
+
 ## [0.5.8] - 2026-04-01
 
 ### Added

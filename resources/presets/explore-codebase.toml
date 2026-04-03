@@ -1,0 +1,30 @@
+# Preset: explore-codebase
+# Deep codebase exploration with code intelligence and token-efficient navigation.
+
+[preset]
+name = "explore-codebase"
+description = "Deep codebase exploration with code intelligence"
+requires = ["rhizome", "mycelium"]
+
+[models]
+exploration = "haiku"
+analysis = "sonnet"
+decisions = "opus"
+
+[tools]
+prefer_rhizome = true
+prefer_mycelium = true
+
+[skills]
+activate = [
+  "codebase-onboarding",
+  "context-engineering",
+  "code-review-pro",
+  "deep-module-review",
+  "design-patterns",
+  "architecture-decision-records",
+]
+
+[agents]
+default_explorer = { subagent_type = "Explore", model = "haiku" }
+default_architect = { subagent_type = "architect", model = "sonnet" }

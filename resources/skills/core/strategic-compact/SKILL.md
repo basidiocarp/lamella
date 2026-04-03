@@ -1,6 +1,8 @@
 ---
 name: strategic-compact
 description: "Suggests manual context compaction at logical intervals to preserve context through task phases."
+requires:
+  - hyphae
 ---
 
 # Strategic Compact Skill

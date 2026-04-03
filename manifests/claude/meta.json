@@ -16,7 +16,9 @@
     "meta-routing"
   ],
   "resources": {
-    "skills": [],
+    "skills": [
+      "meta/create-handoff"
+    ],
     "agents": [],
     "commands": [
       "meta/clean-crate-skills.md",

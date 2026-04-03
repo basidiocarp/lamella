@@ -11,15 +11,10 @@ and telemetry views belong in `cap`.
 
 ## Scope
 
-This cleanup plan covers:
-
-- `tools/`
-- `scripts/hooks/`
-- `scripts/maintenance/`
-- the wrapper and build surfaces that should remain Lamella-owned
-
-It does not attempt to redesign skills, manifests, or plugin boundaries beyond
-what is needed to clarify ownership.
+This cleanup plan covers `tools/`, `scripts/hooks/`, `scripts/maintenance/`,
+and the wrapper and build surfaces that should remain Lamella-owned. It does
+not attempt to redesign skills, manifests, or plugin boundaries beyond what is
+needed to clarify ownership.
 
 ## Canonical Ownership
 
@@ -148,9 +143,8 @@ only if you deliberately create a separate home for them.
 
 ## Done Means
 
-- Lamella is left with packaging, validators, hook templates, and intentional
-  workflow helpers.
-- `cortina` is the only owner of reusable lifecycle capture runtime.
-- `stipe` is the only owner of Claude install, repair, and doctor flows.
-- `cap` owns any retained session analytics UX.
-- `tools/` no longer acts as a miscellaneous holding area inside Lamella.
+Lamella is left with packaging, validators, hook templates, and intentional
+workflow helpers. `cortina` is the only owner of reusable lifecycle capture
+runtime. `stipe` is the only owner of Claude install, repair, and doctor
+flows. `cap` owns any retained session analytics UX. `tools/` no longer acts
+as a miscellaneous holding area inside Lamella.

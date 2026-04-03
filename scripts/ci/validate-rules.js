@@ -6,8 +6,9 @@
 const fs = require('fs');
 const path = require('path');
 const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
+const { CONTENT_ROOT } = require('../lib/content-root');
 
-const RULES_DIR = path.join(__dirname, '../../resources/rules');
+const RULES_DIR = path.join(CONTENT_ROOT, 'rules');
 
 function validateRules() {
   if (!fs.existsSync(RULES_DIR)) {

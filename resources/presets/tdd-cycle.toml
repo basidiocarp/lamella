@@ -1,0 +1,26 @@
+# Preset: tdd-cycle
+# Universal test-driven development -- no ecosystem dependencies required.
+
+[preset]
+name = "tdd-cycle"
+description = "Universal TDD workflow with no ecosystem dependencies"
+requires = []
+
+[models]
+test_writing = "sonnet"
+implementation = "sonnet"
+refactoring = "sonnet"
+
+[tools]
+
+[skills]
+activate = [
+  "test-driven-development",
+  "test-writing",
+  "property-based-testing",
+  "api-test-suite-builder",
+  "e2e-testing",
+]
+
+[agents]
+default_tester = { subagent_type = "test", model = "sonnet" }

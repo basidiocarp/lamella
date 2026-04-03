@@ -1,6 +1,6 @@
 # Contributing to Skill-Issue
 
-A modular plugin system for Claude Code with 230+ curated skills across 21 plugins. This guide covers how to add skills, agents, commands, and submit changes.
+A modular plugin system for Claude Code with 230+ curated skills across 21 plugins. This guide covers how to add skills, agents, and commands, and how to submit changes.
 
 ## Project Structure
 
@@ -26,7 +26,7 @@ resources/skills/my-category/my-skill/
 └── templates/        # Optional templates
 ```
 
-**SKILL.md frontmatter** (required fields: `description`):
+SKILL.md frontmatter (required fields: `description`):
 
 ```yaml
 ---
@@ -43,7 +43,7 @@ After creating the skill directory, register it in the appropriate plugin manife
 
 Create a markdown file under `resources/agents/<category>/` with the required YAML frontmatter.
 
-**Required fields:** `name`, `description`
+Required fields: `name`, `description`
 
 ```yaml
 ---
@@ -62,7 +62,7 @@ If the agent belongs to a plugin, add it to the plugin manifest's `resources.age
 
 Create a markdown file under `resources/commands/<category>/` with YAML frontmatter.
 
-**Required field:** `description`
+Required field: `description`
 
 ```yaml
 ---
@@ -124,11 +124,11 @@ Verify the installed plugin works as expected before submitting.
 
 ## Code Style
 
-- **Keep files focused.** One skill, agent, or command per file.
-- **Use descriptive names.** Filenames and directory names should clearly convey purpose.
-- **Frontmatter first.** Every skill, agent, and command file must start with valid YAML frontmatter.
-- **Markdown body.** Instructions, prompts, and documentation go in the markdown body after frontmatter.
-- **No hardcoded paths.** Use relative paths in manifests and references.
+- Keep files focused. One skill, agent, or command per file.
+- Use descriptive names. Filenames and directory names should clearly convey purpose.
+- Frontmatter first. Every skill, agent, and command file must start with valid YAML frontmatter.
+- Markdown body. Instructions, prompts, and documentation go in the markdown body after frontmatter.
+- No hardcoded paths. Use relative paths in manifests and references.
 
 ## PR Process
 

@@ -7,12 +7,11 @@ takes about 10 minutes.
 
 ## What You'll Experience
 
-The Brainstorm skill demonstrates key skill concepts:
-
-- **Structured workflow** — Guided session start, middle, and end
-- **Collaborative partnership** — Claude pushes back and asks hard questions
-- **Versioned documents** — Your ideas are captured and organized
-- **Session continuity** — Pick up where you left off days or weeks later
+The Brainstorm skill demonstrates key skill concepts: a structured workflow
+that guides session start, middle, and end; collaborative partnership where
+Claude pushes back and asks hard questions; versioned documents that capture
+and organize your ideas; and session continuity so you can pick up days or
+weeks later.
 
 ---
 
@@ -86,28 +85,26 @@ Confirm or clarify as needed.
 
 ## Step 3: Brainstorm
 
-Now the real work begins. Notice how Claude:
-
-**Asks probing questions:**
+Now the real work begins. Claude asks probing questions:
 
 ```
 "Who specifically is the target user? A freelancer working from coffee shops
 or a corporate employee in a home office?"
 ```
 
-**Suggests frameworks when helpful:**
+It suggests frameworks when helpful:
 
 ```
 "We're generating lots of ideas—want to try affinity grouping to organize them?"
 ```
 
-**Pushes back on weak reasoning:**
+It pushes back on weak reasoning:
 
 ```
 "I'm not convinced that feature solves the core problem. Here's why..."
 ```
 
-**Marks decision points:**
+And it marks decision points:
 
 ```
 "This feels like a decision point. Should we log: 'Target user is freelancers
@@ -124,16 +121,9 @@ When you're ready to wrap up, say:
 Let's wrap up for today.
 ```
 
-Claude will provide:
-
-### Exit Summary
-
-A crisp recap of:
-
-- Current state of the project
-- Key decisions made (with reasoning)
-- Open questions remaining
-- Suggested next steps
+Claude will provide an exit summary with the current state of the project,
+key decisions made (with reasoning), open questions remaining, and suggested
+next steps. It also poses the overnight test:
 
 ### The Overnight Test
 
@@ -226,11 +216,7 @@ In this tutorial, you experienced:
 
 ## Next Steps
 
-Now that you've experienced a skill in action:
-
-- [:octicons-arrow-right-24: Explore the Brainstorm skill](../skills/brainstorm/index.md)
-  — Full documentation
-- [:octicons-arrow-right-24: Browse all skills](../skills/index.md) — Find
-  skills for your needs
-- [:octicons-arrow-right-24: Learn about pipelines](../concepts/PIPELINES.MD) —
-  Skills that work together
+Now that you've experienced a skill in action, explore the [Brainstorm skill](../skills/brainstorm/index.md)
+in full, [browse all skills](../skills/index.md) to find ones that match your
+work, or [learn about pipelines](../concepts/PIPELINES.MD) to see how skills
+chain together.

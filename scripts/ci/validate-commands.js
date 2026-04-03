@@ -8,10 +8,10 @@ const fs = require('fs');
 const path = require('path');
 const { findSubagentFiles, loadSubagent } = require('../lib/subagents');
 const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
+const { CONTENT_ROOT, BASE_DIR: ROOT_DIR } = require('../lib/content-root');
 
-const ROOT_DIR = path.join(__dirname, '../..');
-const COMMANDS_DIR = path.join(ROOT_DIR, 'resources', 'commands');
-const SKILLS_DIR = path.join(ROOT_DIR, 'resources', 'skills');
+const COMMANDS_DIR = path.join(CONTENT_ROOT, 'commands');
+const SKILLS_DIR = path.join(CONTENT_ROOT, 'skills');
 
 /** Recursively find all .md files (excluding README.md) */
 function findMdFiles(dir) {

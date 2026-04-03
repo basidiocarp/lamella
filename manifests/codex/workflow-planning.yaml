@@ -7,6 +7,7 @@
   ],
   "resources": {
     "skills": [
+      "workflow/capture-observation",
       "workflow/create-plans",
       "workflow/deliver-edge-cases",
       "workflow/develop-adr",

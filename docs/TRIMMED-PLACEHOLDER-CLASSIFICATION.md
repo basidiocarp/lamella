@@ -5,22 +5,17 @@ Classifies the remaining Lamella reference files that still contain literal
 
 ## Recommendation
 
-Do not blindly undo every placeholder.
+Do not blindly undo every placeholder. Many remaining files are large
+handbook-style references where abbreviated examples are still a reasonable
+tradeoff. The better policy has three cases:
 
-That would not be beneficial for the whole repo because many remaining files are
-large handbook-style references where abbreviated examples are still a
-reasonable tradeoff. The better policy is:
-
-1. **Expand now**
-   Use when the file is short, dense with placeholders, and the omitted lines
-   likely hide the core example or template.
-2. **Normalize concise**
-   Use when the file is medium-sized and still useful in principle, but it needs
-   tighter, complete examples instead of many partial ones.
-3. **Leave abbreviated for now**
-   Use when the file is a large reference handbook with many sections and the
-   placeholders mostly compress repetitive example detail rather than the core
-   guidance.
+1. Expand now: use when the file is short, dense with placeholders, and the
+   omitted lines likely hide the core example or template.
+2. Normalize concise: use when the file is medium-sized and still useful in
+   principle but needs tighter, complete examples instead of many partial ones.
+3. Leave abbreviated for now: use when the file is a large reference handbook
+   with many sections and the placeholders compress repetitive example detail
+   rather than the core guidance.
 
 ## Remaining Counts
 
@@ -116,11 +111,9 @@ choosing expand versus normalize.
 
 ## Practical Rule Set
 
-- Expand if the file is short and the placeholders are swallowing the primary
-  example or template.
-- Normalize concise if the file is medium-sized and should teach a pattern with
-  fewer, complete examples.
-- Leave abbreviated if the file is effectively a large catalog or handbook and
-  the surrounding structure still carries the guidance.
-- Review manually if the file sits between reference and workflow, or if it is
-  used as a template for other generated artifacts.
+Expand if the file is short and the placeholders are swallowing the primary
+example or template. Normalize concise if the file is medium-sized and should
+teach a pattern with fewer, complete examples. Leave abbreviated if the file
+is effectively a large catalog or handbook and the surrounding structure still
+carries the guidance. Review manually if the file sits between reference and
+workflow, or if it is used as a template for other generated artifacts.

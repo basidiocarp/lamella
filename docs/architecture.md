@@ -9,16 +9,13 @@ installable outputs for Claude Code and Codex.
 
 Lamella has three layers:
 
-1. **Source resources**
-   Skills, subagents, commands, hooks, rules, templates, workflows, scripts,
-   protocols, and MCP configs live under `resources/`.
-2. **Manifest selection**
-   Plugin manifests in `manifests/claude/*.json` define which resources belong
-   to each plugin and what dependencies exist between them.
-3. **Built outputs**
-   Builders transform source resources into:
-   - Claude Code plugins and a local marketplace under `dist/claude/`
-   - Codex skill exports, custom agents, and profiles under `dist/codex/`
+1. Source resources: skills, subagents, commands, hooks, rules, templates,
+   workflows, scripts, protocols, and MCP configs live under `resources/`.
+2. Manifest selection: plugin manifests in `manifests/claude/*.json` define
+   which resources belong to each plugin and what dependencies exist between them.
+3. Built outputs: builders transform source resources into Claude Code plugins
+   and a local marketplace under `dist/claude/`, and Codex skill exports,
+   custom agents, and profiles under `dist/codex/`.
 
 ## Build Pipeline
 
@@ -102,15 +99,10 @@ bash builders/build-codex-skills.sh
 
 Lamella has two validation layers:
 
-1. **Source validation**
-   - resource structure
-   - manifest references
-   - cross-file references
-   - command and subagent frontmatter
-2. **Built-output validation**
-   - plugin directory integrity
-   - marketplace output correctness
-   - flattened resource packaging
+1. Source validation: resource structure, manifest references, cross-file
+   references, and command and subagent frontmatter.
+2. Built-output validation: plugin directory integrity, marketplace output
+   correctness, and flattened resource packaging.
 
 Primary commands:
 
@@ -122,13 +114,9 @@ node scripts/ci/validate-build.js
 
 ## Current Scope
 
-Lamella currently documents and packages:
-
-- **52 plugins**
-- **286 skills**
-- manifest-driven Claude plugin builds
-- Codex skill and agent exports
-- a local marketplace and hosted marketplace flow
+Lamella currently documents and packages 52 plugins, 286 skills,
+manifest-driven Claude plugin builds, Codex skill and agent exports, and a
+local and hosted marketplace flow.
 
 The main architectural work left is not “invent a build system.” It is keeping
 dependency resolution, validation, distribution, and host parity aligned as the

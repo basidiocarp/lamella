@@ -339,6 +339,7 @@ Keep `CHANGELOG.md` current with an `Unreleased` section. When you cut a release
 ## Environment Variables
 
 - `CLAUDE_HOME` — Installation directory (default: `~/.claude`)
+- `LAMELLA_CONTENT_ROOT` — Content directory for skills, commands, agents, rules, hooks, workflows, templates, and presets (default: `resources/` within the lamella repo). Set to an absolute path or a path relative to the repo root to read content from an external directory. This enables a future content/infrastructure split without changing any build scripts.
 
 ## Requirements
 

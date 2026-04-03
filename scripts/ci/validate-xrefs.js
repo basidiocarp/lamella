@@ -8,11 +8,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const { CONTENT_ROOT, BASE_DIR } = require('../lib/content-root');
 
-const BASE_DIR = path.join(__dirname, '../..');
-
-// Directories to scan for markdown files containing references
-const SCAN_DIRS = ['resources/subagents', 'resources/commands', 'resources/workflows', 'resources/templates'];
+// Directories to scan for markdown files containing references.
+// These are relative to CONTENT_ROOT (subagents, commands, etc.).
+const SCAN_DIRS = ['subagents', 'commands', 'workflows', 'templates'];
 
 // Files/directories to skip (reference docs with example paths, roadmap with future plans)
 const SKIP_PATHS = [
@@ -97,10 +97,17 @@ function referenceExists(ref) {
   candidatePaths.push(basePath);
   candidatePaths.push(`${basePath}.md`);
 
-  if (!ref.startsWith('resources/')) {
-    const resourcesPath = path.join(BASE_DIR, 'resources', ref);
-    candidatePaths.push(resourcesPath);
-    candidatePaths.push(`${resourcesPath}.md`);
+  // Strip the "resources/" prefix and resolve against CONTENT_ROOT.
+  // This supports both `resources/skills/...` references and bare `skills/...` references.
+  if (ref.startsWith('resources/')) {
+    const stripped = ref.slice('resources/'.length);
+    const contentPath = path.join(CONTENT_ROOT, stripped);
+    candidatePaths.push(contentPath);
+    candidatePaths.push(`${contentPath}.md`);
+  } else {
+    const contentPath = path.join(CONTENT_ROOT, ref);
+    candidatePaths.push(contentPath);
+    candidatePaths.push(`${contentPath}.md`);
   }
 
   for (const candidate of candidatePaths) {
@@ -119,9 +126,9 @@ function referenceExists(ref) {
   return false;
 }
 
-// Scan all target directories
+// Scan all target directories (relative to CONTENT_ROOT)
 for (const dir of SCAN_DIRS) {
-  const fullDir = path.join(BASE_DIR, dir);
+  const fullDir = path.join(CONTENT_ROOT, dir);
   const files = findMdFiles(fullDir);
   for (const file of files) {
     filesScanned++;

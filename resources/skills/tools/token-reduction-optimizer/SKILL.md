@@ -1,6 +1,8 @@
 ---
 name: token-reduction-optimizer
 description: "Reduces token-heavy command output with RTK."
+requires:
+  - mycelium
 ---
 
 # Token Reduction Optimizer

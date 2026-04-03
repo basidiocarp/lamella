@@ -23,6 +23,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
 COPY_SHARED_SUBAGENTS_SCRIPT="$BASE_DIR/scripts/build/copy-shared-subagents.js"
 
+# shellcheck source=../lib/content-root.sh
+source "$BASE_DIR/scripts/lib/content-root.sh"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -105,7 +108,7 @@ copy_commands() {
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/resources/commands/$item"
+        local src="$CONTENT_ROOT/commands/$item"
         local filename; filename=$(basename "$item")
         local dst="$output_dir/commands/$filename"
 
@@ -124,13 +127,15 @@ copy_commands() {
 }
 
 # Copy skills — flatten category/skill-name/ to skill-name/
+# Frontmatter (including requires metadata) is preserved via whole-file copy.
+# The install pipeline reads requires at install time to filter by detected tools.
 copy_skills() {
     local manifest="$1" output_dir="$2"
     local count=0 missing=0
 
     while IFS= read -r item; do
         [[ -z "$item" ]] && continue
-        local src="$BASE_DIR/resources/skills/$item"
+        local src="$CONTENT_ROOT/skills/$item"
         local skill_name; skill_name=$(basename "$item")
         local dst="$output_dir/skills/$skill_name"
 
@@ -151,7 +156,7 @@ copy_skills() {
 # Copy hooks — bundle hook scripts and generate hooks/hooks.json
 copy_hooks() {
     local manifest="$1" output_dir="$2"
-    local hooks_json="$BASE_DIR/resources/hooks/hooks.json"
+    local hooks_json="$CONTENT_ROOT/hooks/hooks.json"
     local count=0
 
     local hook_items
@@ -175,8 +180,8 @@ copy_hooks() {
         # Fall back to resources/hooks/ for older layouts that colocated the script files.
         if [[ -f "$BASE_DIR/scripts/hooks/$item" ]]; then
             src="$BASE_DIR/scripts/hooks/$item"
-        elif [[ -f "$BASE_DIR/resources/hooks/$item" ]]; then
-            src="$BASE_DIR/resources/hooks/$item"
+        elif [[ -f "$CONTENT_ROOT/hooks/$item" ]]; then
+            src="$CONTENT_ROOT/hooks/$item"
         fi
 
         if [[ -n "$src" ]]; then
@@ -197,8 +202,8 @@ copy_hooks() {
             local src=""
             if [[ -f "$BASE_DIR/scripts/hooks/$script" ]]; then
                 src="$BASE_DIR/scripts/hooks/$script"
-            elif [[ -f "$BASE_DIR/resources/hooks/$script" ]]; then
-                src="$BASE_DIR/resources/hooks/$script"
+            elif [[ -f "$CONTENT_ROOT/hooks/$script" ]]; then
+                src="$CONTENT_ROOT/hooks/$script"
             fi
             if [[ -n "$src" ]] && [[ ! -f "$output_dir/scripts/hooks/$script" ]]; then
                 cp "$src" "$output_dir/scripts/hooks/"
@@ -262,6 +267,7 @@ copy_hooks() {
 }
 
 # Copy standalone resources (rules, workflows, templates)
+# Frontmatter (including requires metadata) is preserved via whole-file copy.
 copy_standalone() {
     local manifest="$1" output_dir="$2" resource_type="$3" src_base="$4"
     local count=0 missing=0
@@ -359,9 +365,9 @@ build_plugin() {
     fi
 
     # Standalone resources (outside plugin spec)
-    copy_standalone "$manifest" "$output_dir" "rules" "$BASE_DIR/resources/rules" || ((total_missing += $?))
-    copy_standalone "$manifest" "$output_dir" "workflows" "$BASE_DIR/resources/workflows" || ((total_missing += $?))
-    copy_standalone "$manifest" "$output_dir" "templates" "$BASE_DIR/resources/templates" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "rules" "$CONTENT_ROOT/rules" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "workflows" "$CONTENT_ROOT/workflows" || ((total_missing += $?))
+    copy_standalone "$manifest" "$output_dir" "templates" "$CONTENT_ROOT/templates" || ((total_missing += $?))
 
     echo ""
     log_success "Built: $name v$version -> $output_dir"

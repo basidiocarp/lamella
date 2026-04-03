@@ -1,0 +1,29 @@
+# Preset: implement-feature
+# Feature implementation with TDD workflow and token-efficient commands.
+
+[preset]
+name = "implement-feature"
+description = "TDD workflow with token-efficient commands"
+requires = ["mycelium"]
+
+[models]
+planning = "sonnet"
+implementation = "sonnet"
+review = "opus"
+
+[tools]
+prefer_mycelium = true
+
+[skills]
+activate = [
+  "verified-implementer",
+  "test-driven-development",
+  "test-writing",
+  "clarify-requirements",
+  "code-review-process",
+  "fidelity-review",
+]
+
+[agents]
+default_coder = { subagent_type = "code", model = "sonnet" }
+default_reviewer = { subagent_type = "review", model = "opus" }

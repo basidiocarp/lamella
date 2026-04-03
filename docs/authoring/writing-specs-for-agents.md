@@ -4,9 +4,9 @@ Applies directly to writing skills, agent prompts, and commands in lamella.
 
 ## Core Insight
 
-Massive specs overwhelm models and waste context. Write "smart specs" that
+Massive specs overwhelm models and waste context. Write concise specs that
 guide agents clearly while staying within practical limits. Break large tasks
-into smaller ones. Plan first, then execute.
+into smaller ones and plan before executing.
 
 ## The Six Core Areas
 
@@ -26,12 +26,9 @@ to its scope. From GitHub's analysis of 2,500+ agent config files:
 
 The most effective specs use three tiers, not a flat rule list:
 
-- **Always Do** -- actions the agent takes without asking
-  (run tests, follow naming conventions, log errors)
-- **Ask First** -- actions requiring human approval
-  (schema changes, new dependencies, CI/CD config)
-- **Never Do** -- hard stops
-  (commit secrets, edit vendor dirs, remove failing tests without approval)
+- Always Do: actions the agent takes without asking (run tests, follow naming conventions, log errors)
+- Ask First: actions requiring human approval (schema changes, new dependencies, CI/CD config)
+- Never Do: hard stops (commit secrets, edit vendor dirs, remove failing tests without approval)
 
 ## The Curse of Instructions
 
@@ -39,21 +36,16 @@ Research shows that as you pile on more instructions, model performance in
 adhering to each one drops. Even top models struggle when satisfying many
 requirements simultaneously.
 
-**Implications for skill authors:**
-
-- Keep SKILL.md under 500 lines
-- Move detail into `references/` files (progressive disclosure)
-- Each section should focus on one concern
-- If presenting rules as a list, keep to 5-7 items max per list
+The implications for skill authors: keep SKILL.md under 500 lines, move detail
+into `references/` files for progressive disclosure, keep each section focused
+on one concern, and limit rule lists to 5-7 items.
 
 ## Modular Context, Not Monolithic Prompts
 
-Give agents one focused task at a time:
-
-- Split specs into phases or components (separate files or sections)
-- Don't feed frontend spec when working on backend
-- Use sub-agents with relevant slice of spec each
-- Refresh context per major task -- don't carry stale information
+Give agents one focused task at a time. Split specs into phases or components
+(separate files or sections), avoid feeding the frontend spec when working on
+the backend, use sub-agents with the relevant slice of spec, and refresh
+context per major task rather than carrying stale information.
 
 ### Extended TOC / Summaries for Large Specs
 
@@ -66,13 +58,10 @@ For skills with heavy reference material:
 
 ## Self-Verification
 
-Build checks into the spec itself:
-
-- "After implementing, compare result with spec and confirm all
-  requirements are met"
-- "List any spec items not addressed"
-- Include conformance criteria in a Success Criteria section
-- Use tests to clarify requirements (TDD approach)
+Build checks into the spec itself. Include a Success Criteria section with
+verifiable conformance criteria and use tests to clarify requirements (TDD
+approach). Prompts like "after implementing, compare result with spec and
+list any items not addressed" force the agent to close the loop.
 
 ### LLM-as-Judge for Subjective Checks
 
@@ -96,10 +85,9 @@ discovery, low freedom for severity classification.
 
 ## Spec as Living Document
 
-- Update when decisions are made or requirements change
-- Re-sync agents with changes explicitly
-- Keep version-controlled (commit the spec)
-- Spec remains single source of truth
+Update the spec when decisions are made or requirements change, re-sync agents
+explicitly, keep it version-controlled, and treat it as the single source of
+truth.
 
 ## Common Pitfalls
 

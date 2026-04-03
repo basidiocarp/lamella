@@ -11,8 +11,9 @@
 const fs = require('fs');
 const path = require('path');
 const { loadMarkdownFrontmatter, validateRequiresValue } = require('../lib/requires');
+const { CONTENT_ROOT } = require('../lib/content-root');
 
-const SKILLS_DIR = path.join(__dirname, '../../resources/skills');
+const SKILLS_DIR = path.join(CONTENT_ROOT, 'skills');
 
 function validateSkills() {
   if (!fs.existsSync(SKILLS_DIR)) {

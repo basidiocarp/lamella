@@ -17,12 +17,11 @@ resources/subagents/code-quality/code-reviewer/SUBAGENT.md
 
 ## Before You Start
 
-- Create a shared subagent only when the role is meaningful in both Claude and
-  Codex.
-- If the behavior is surface-specific, keep that logic inside `claude:` or
-  `codex:` instead of pushing it into the shared body.
-- If the workflow is really reference material or a reusable checklist, it may
-  belong in `resources/skills/` instead.
+Create a shared subagent only when the role is meaningful in both Claude and
+Codex. If the behavior is surface-specific, keep that logic inside `claude:`
+or `codex:` rather than pushing it into the shared body. If the workflow is
+really reference material or a reusable checklist, it may belong in
+`resources/skills/` instead.
 
 ## Required Frontmatter
 
@@ -53,14 +52,11 @@ codex:
   sandbox_mode: read-only
 ```
 
-Rules:
-
-- `name` must match the containing directory name.
-- `category` must match the category directory.
-- `distribution.claude_plugin` must match a manifest under `manifests/claude/`.
-- `distribution.codex_profile` must match a manifest under `manifests/codex/`.
-- Use arrays for `distribution.*` only when the same subagent should emit to
-  multiple plugin or profile outputs.
+`name` must match the containing directory name. `category` must match the
+category directory. `distribution.claude_plugin` must match a manifest under
+`manifests/claude/` and `distribution.codex_profile` must match one under
+`manifests/codex/`. Use arrays for `distribution.*` only when the same subagent
+should emit to multiple plugin or profile outputs.
 
 ## Supported Shared Profiles
 
@@ -75,16 +71,10 @@ Choose the closest existing value instead of inventing new ones.
 
 ## Required Body Sections
 
-The validator expects every shared subagent body to include:
-
-- `# <Title>`
-- `## Scope`
-- `## Workflow`
-- `## Boundaries`
-- `## Output Format`
-
-Keep the body portable. Put product-specific runtime settings in frontmatter,
-not in the shared instructions.
+The validator expects every shared subagent body to include `# <Title>`,
+`## Scope`, `## Workflow`, `## Boundaries`, and `## Output Format`. Keep the
+body portable and put product-specific runtime settings in frontmatter, not
+in the shared instructions.
 
 ## Optional Frontmatter
 

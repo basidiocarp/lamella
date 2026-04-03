@@ -16,13 +16,10 @@ Do not try to make one Claude Markdown subagent file serve both products
 directly. Claude and Codex use different runtime formats, different config
 surfaces, and different levels of support for metadata.
 
-Instead:
-
-- Use one shared canonical source model.
-- Generate Claude subagent Markdown from that model.
-- Generate Codex custom-agent TOML from that model.
-- Keep skills as a separate shared track because many current "agents" are
-  better expressed as Codex skills than Codex custom agents.
+The right approach is one shared canonical source model: generate Claude
+subagent Markdown from it, generate Codex custom-agent TOML from it, and keep
+skills as a separate shared track because many current "agents" are better
+expressed as Codex skills than Codex custom agents.
 
 ## Historical Audit Snapshot
 
@@ -70,19 +67,12 @@ Recommended canonical source path:
 resources/subagents/<category>/<name>/
 ```
 
-Why:
-
-- Claude documentation uses "subagents".
-- Codex documentation also frames these as subagent workflows with custom
-  agents.
-- `subagents` is clearer than `agents` because it distinguishes authored helper
-  workers from the top-level coding assistant itself.
-- It avoids implying that the Claude output shape is the canonical source of
-  truth.
-
-This is only clean if `subagents/` is the shared source directory. It becomes
-messy if we try to force both products to load directly from that directory
-without a build step.
+Both Claude and Codex documentation use the term "subagents" for spawned helper
+workers, which makes it a safer neutral term than "agents". It also distinguishes
+authored helper workers from the top-level coding assistant and avoids implying
+that the Claude output shape is the canonical source of truth. This naming only
+works cleanly when `subagents/` is the shared source directory; routing both
+products directly from that directory without a build step creates ambiguity.
 
 ## Canonical Layout
 
@@ -246,11 +236,9 @@ Examples:
 - Any future Claude or Codex subagent fields that are not yet validated and
   emitted by Lamella
 
-Rule:
-
-- If a field is not portable, keep it in `claude:` or `codex:`.
-- If the behavior itself is not portable, the subagent is not truly shared and
-  should be classified as Claude-only or Codex-only.
+If a field is not portable, keep it in `claude:` or `codex:`. If the behavior
+itself is not portable, the subagent is not truly shared and should be
+classified as Claude-only or Codex-only.
 
 ## Distribution Metadata
 
@@ -364,47 +352,32 @@ Examples likely to fit:
 
 ## Naming Recommendation
 
-Use these terms consistently:
-
-- **shared source**: `subagent`
-- **Claude output**: `agent` or `subagent`, matching Claude docs
-- **Codex output**: `custom agent` in docs, stored under `.codex/agents/`
-
-In code and repo layout:
-
-- `resources/subagents/` for canonical source
-- `dist/claude/.../agents/` for Claude output
-- `dist/codex/.../agents/` or installable `.codex/agents/` output for Codex
-
-This gives the repo one neutral vocabulary without fighting either product's
-official naming.
+Use these terms consistently: "subagent" for the shared source, "agent" or
+"subagent" for Claude output (matching Claude docs), and "custom agent" for
+Codex output (stored under `.codex/agents/`). In repo layout, use
+`resources/subagents/` for canonical source, `dist/claude/.../agents/` for
+Claude output, and `dist/codex/.../agents/` or installable `.codex/agents/`
+for Codex. This gives the repo one neutral vocabulary without fighting either
+product's official naming.
 
 ## Migration Outcome
 
-Lamella now has:
-
-1. A validator for `resources/subagents/**/SUBAGENT.md`.
-2. Claude and Codex emitters for shared subagents.
-3. Build-pipeline integration for shared subagent distribution.
-4. A fully migrated shared source catalog under `resources/subagents/`.
-5. Historical migration tracking in `docs/authoring/subagent-migration-audit.md`.
+Lamella now has a validator for `resources/subagents/**/SUBAGENT.md`, Claude
+and Codex emitters for shared subagents, build-pipeline integration for shared
+subagent distribution, a fully migrated shared source catalog under
+`resources/subagents/`, and historical migration tracking in
+`docs/authoring/subagent-migration-audit.md`.
 
 ## Naming And Consolidation Policy
 
-Do not rename aggressively during the pilot.
-
-Rules:
-
-- Keep the current stable `name` unless the existing name is clearly misleading,
-  collides with another worker, or blocks a clean cross-product mapping.
-- Prefer behavioral clarity over taxonomy purity. A slightly imperfect stable
-  name is better than a wave of churn that obscures the migration.
-- Record consolidation candidates during the pilot, but defer actual merges
-  until after the first shared-source model is validated.
-- Rename only when the role itself changes materially, not just because the new
-  folder structure offers a cleaner wording.
-
-For the first pilot wave, stability is more important than elegance.
+Do not rename aggressively during the pilot. Keep the current stable `name`
+unless it is clearly misleading, collides with another worker, or blocks a
+clean cross-product mapping. Prefer behavioral clarity over taxonomy purity: a
+slightly imperfect stable name is better than a wave of churn that obscures
+the migration. Record consolidation candidates during the pilot but defer
+actual merges until after the first shared-source model is validated, and
+rename only when the role itself changes materially. For the first pilot wave,
+stability is more important than elegance.
 
 ## Initial Pilot Set
 

@@ -65,8 +65,10 @@ flowchart TD
 
 ## Ownership
 
-- Cortina owns lifecycle capture semantics, policy, dedupe, attribution, and durable outcome storage.
-- Lamella owns packaging, installation templates, wrapper scripts, fallback glue, and continuous-learning or evaluation hooks that sit beside the shared runtime.
+Cortina owns lifecycle capture semantics, policy, dedupe, attribution, and
+durable outcome storage. Lamella owns packaging, installation templates,
+wrapper scripts, fallback glue, and continuous-learning or evaluation hooks
+that sit beside the shared runtime.
 
 ## Hook Details
 
@@ -74,14 +76,15 @@ flowchart TD
 
 Watches Bash, Edit, Write, and MultiEdit results through `cortina adapter claude-code post-tool-use`. Cortina normalizes the host envelope, applies capture policy, dedupes repeated outcomes, and stores structured lifecycle signals in Hyphae or Rhizome.
 
-**What it stores:**
-- `errors/active` — command and error output (medium importance)
-- `errors/resolved` — command, original error, and successful output (high importance)
-- `corrections` — file path, original change, correction (high importance)
+It stores:
+
+- `errors/active`: command and error output (medium importance)
+- `errors/resolved`: command, original error, and successful output (high importance)
+- `corrections`: file path, original change, correction (high importance)
 - validation outcomes for successful build or test commands
 - export and ingest outcomes for pending code or document batches, including Rhizome export and Hyphae ingest triggers that used to live in Lamella helpers
 
-**Training value:** Error/resolution pairs are natural SFT training data. "Given this error, here's the fix."
+Error/resolution pairs are natural SFT training data—"given this error, here's the fix."
 
 ```mermaid
 sequenceDiagram
@@ -97,10 +100,9 @@ sequenceDiagram
     Note over DB: topic: corrections<br/>importance: high
 ```
 
-The shipped lifecycle path uses Cortina instead:
-
-- `cortina adapter claude-code post-tool-use`
-- `scripts/hooks/session-end.js`, which delegates to `cortina adapter claude-code session-end` when Cortina is available
+The shipped lifecycle path uses Cortina: `cortina adapter claude-code post-tool-use`
+for tool events and `scripts/hooks/session-end.js`, which delegates to
+`cortina adapter claude-code session-end` when Cortina is available.
 
 ## Error Observability
 

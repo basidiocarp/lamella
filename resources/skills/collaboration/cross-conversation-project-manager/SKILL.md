@@ -1,6 +1,8 @@
 ---
 name: cross-conversation-project-manager
 description: "Maintains project state across multiple conversations over days or weeks."
+requires:
+  - hyphae
 ---
 
 # Cross-Conversation Project Manager

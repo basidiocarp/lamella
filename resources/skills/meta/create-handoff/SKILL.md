@@ -1,0 +1,142 @@
+---
+name: create-handoff
+description: Create a structured handoff document with verification script
+category: meta
+version: 0.1.0
+tags: [handoff, planning, delegation, verification]
+---
+
+# Create Handoff
+
+Create a handoff document following the ecosystem convention. Handoffs are
+structured task specifications that agents can execute independently, with
+machine-checkable verification gates.
+
+## Convention
+
+```
+.handoffs/
+├── TEMPLATE.md              # Reference format
+├── HANDOFFS.md              # Index (update after creating)
+├── <project>/               # One directory per project
+│   ├── <topic>.md           # Handoff document
+│   └── verify-<topic>.sh   # Verification script
+├── cross-project/           # Spans multiple projects
+└── completed/               # Archive of finished work
+```
+
+## Workflow
+
+### 1. Determine project and topic
+
+- Single project? → `.handoffs/<project>/<topic>.md`
+- Multiple projects? → `.handoffs/cross-project/<topic>.md`
+- Project directory must match an ecosystem project: canopy, mycelium,
+  hyphae, rhizome, cortina, lamella, spore, stipe, cap, volva
+
+### 2. Write the handoff
+
+Follow `.handoffs/TEMPLATE.md` exactly:
+
+- **Problem**: 1-3 sentences on what's broken or missing
+- **What exists**: Current state of relevant code/features
+- **Steps**: Each step has:
+  - Project, effort estimate, dependencies
+  - Files to modify with code snippets
+  - Verification section with paste-output markers
+  - Checklist of testable assertions
+- **Completion Protocol**: References the verify script
+
+Every step MUST have:
+```markdown
+#### Verification
+
+<!-- AGENT: Run the command and paste output between the markers -->
+```bash
+[specific verification command]
+```
+
+**Output:**
+<!-- PASTE START -->
+
+<!-- PASTE END -->
+```
+
+### 3. Create the verify script
+
+Create `verify-<topic>.sh` in the same directory as the handoff.
+
+Structure:
+```bash
+#!/bin/bash
+# Verification script for <topic>.md
+# Run: bash .handoffs/<project>/verify-<topic>.sh
+
+set -euo pipefail
+PASS=0
+FAIL=0
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+check() {
+  local desc="$1"
+  local cmd="$2"
+  if eval "$cmd" >/dev/null 2>&1; then
+    echo "  PASS: $desc"
+    ((PASS++))
+  else
+    echo "  FAIL: $desc"
+    ((FAIL++))
+  fi
+}
+
+echo "=== <TOPIC> Verification ==="
+echo ""
+
+# One check() call per checklist item from the handoff
+check "description of what to verify" \
+  "command that returns 0 on success"
+
+echo ""
+echo "================================"
+echo "Results: $PASS passed, $FAIL failed"
+[ "$FAIL" -eq 0 ] || exit 1
+```
+
+Rules for verify scripts:
+- One `check()` per checklist item in the handoff
+- Use `grep -q` for code presence checks
+- Use `test -f` for file existence checks
+- Use `cargo test --quiet` for build verification
+- Exit 1 on any failure
+- Print "Results: N passed, M failed" as the last line
+- Make executable: `chmod +x verify-<topic>.sh`
+
+### 4. Update the index
+
+Add an entry to `.handoffs/HANDOFFS.md` under the appropriate project section:
+
+```markdown
+| [Topic Name](project/topic.md) | Ready | Priority | Dependencies |
+```
+
+### 5. Validate
+
+Before considering the handoff complete:
+- [ ] File is at `.handoffs/<project>/<topic>.md`
+- [ ] Verify script is at `.handoffs/<project>/verify-<topic>.sh`
+- [ ] Verify script is executable
+- [ ] Verify script has one check per checklist item
+- [ ] HANDOFFS.md index updated
+- [ ] Handoff follows TEMPLATE.md format (paste-output markers, completion protocol)
+- [ ] Every step has specific files to modify
+- [ ] Every step has a verification section
+
+## Anti-Patterns
+
+- Do NOT create handoffs in the `.handoffs/` root — use project subdirectories
+- Do NOT use the `HANDOFF-` prefix — the directory provides context
+- Do NOT skip the verify script — it's the enforcement mechanism
+- Do NOT write vague checklists like "code works" — each item must be
+  checkable by grep, test, or a command
+- Do NOT forget to update HANDOFFS.md — agents reading the index need
+  to discover your handoff

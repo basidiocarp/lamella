@@ -1,6 +1,8 @@
 ---
 name: error-memory
 description: "Finds past error resolutions and records new ones."
+requires:
+  - hyphae
 ---
 # Error Memory
 

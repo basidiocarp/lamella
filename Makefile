@@ -29,6 +29,7 @@ validate: ## Run all CI validators
 	@node scripts/ci/validate-manifests.js
 	@node scripts/ci/validate-marketplace-catalog.js
 	@node scripts/ci/validate-xrefs.js
+	@node scripts/ci/validate-presets.js
 	@echo "All validators passed."
 
 build: ## Build all Claude plugins to dist/claude/plugins/
@@ -73,8 +74,8 @@ clean: ## Remove dist/ build output
 	@echo "Cleaned dist/"
 
 count: ## Show asset counts
-	@echo "Skills:   $$(find resources/skills -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | tr -d ' ')"
-	@echo "Subagents:$$(find resources/subagents -name 'SUBAGENT.md' 2>/dev/null | wc -l | tr -d ' ')"
-	@echo "Commands: $$(find resources/commands -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
-	@echo "Rules:    $$(find resources/rules -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Skills:   $$(find $${LAMELLA_CONTENT_ROOT:-resources}/skills -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Subagents:$$(find $${LAMELLA_CONTENT_ROOT:-resources}/subagents -name 'SUBAGENT.md' 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Commands: $$(find $${LAMELLA_CONTENT_ROOT:-resources}/commands -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
+	@echo "Rules:    $$(find $${LAMELLA_CONTENT_ROOT:-resources}/rules -name '*.md' 2>/dev/null | wc -l | tr -d ' ')"
 	@echo "Plugins:  $$(ls $(PLUGIN_DIR)/*.json 2>/dev/null | grep -v schema.json | grep -v index.json | wc -l | tr -d ' ')"

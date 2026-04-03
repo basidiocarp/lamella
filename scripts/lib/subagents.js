@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const { CONTENT_ROOT, BASE_DIR: ROOT_DIR } = require('./content-root');
 
-const ROOT_DIR = path.join(__dirname, '../..');
-const SUBAGENTS_DIR = path.join(ROOT_DIR, 'resources', 'subagents');
+const SUBAGENTS_DIR = path.join(CONTENT_ROOT, 'subagents');
 
 function stripBom(content) {
   return content.replace(/^\uFEFF/, '');

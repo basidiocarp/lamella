@@ -1,22 +1,16 @@
 # What Are Skills?
 
-Skills are modular packages that transform Claude from a general-purpose
+Skills are modular packages that extend Claude from a general-purpose
 assistant into a specialized collaborator for specific domains and workflows.
 
 ---
 
 ## The Problem Skills Solve
 
-Claude is incredibly capable out of the box, but for complex, domain-specific
-work, you often need to:
-
-- Explain your workflow every time
-- Remind Claude of best practices and frameworks
-- Provide templates for consistent output
-- Reference detailed documentation repeatedly
-
-Skills solve this by packaging all of that context into a reusable module that
-Claude can load on-demand.
+For complex, domain-specific work, you often need to explain your workflow
+each session, remind Claude of best practices, supply templates, and reference
+detailed documentation repeatedly. Skills solve this by packaging all of that
+context into a reusable module that Claude loads on demand.
 
 ---
 
@@ -26,30 +20,21 @@ Each skill contains three types of content:
 
 ### 1. Instructions (SKILL.MD)
 
-The core of every skill. This file contains:
-
-- **Workflow guidance** — How to approach the domain step-by-step
-- **Decision frameworks** — When to use different methods or approaches
-- **Quality standards** — What good output looks like
-- **Session patterns** — How to start, progress, and end sessions
+The core of every skill. This file contains workflow guidance for approaching
+the domain step-by-step, decision frameworks for when to use different methods,
+quality standards that define good output, and session patterns for starting,
+progressing, and ending sessions.
 
 ### 2. Reference Documentation (references/)
 
-Deep knowledge that Claude loads on-demand to preserve context:
-
-- Detailed method explanations
-- Domain-specific frameworks
-- Best practices and anti-patterns
-- Research and evidence
+Deep knowledge that Claude loads on demand to preserve context: method
+explanations, domain-specific frameworks, best practices and anti-patterns,
+and supporting research.
 
 ### 3. Templates (assets/)
 
-Structured formats for consistent output:
-
-- Project document templates
-- Tracker templates
-- Report formats
-- Handoff documents
+Structured formats for consistent output: project document templates, tracker
+templates, report formats, and handoff documents.
 
 ---
 
@@ -67,11 +52,10 @@ flowchart LR
     G --> H[Use Template]
 ```
 
-1. **Activation** — When your request matches a skill's domain, Claude loads the
-   skill
-2. **Workflow** — Claude follows the skill's prescribed approach
-3. **Progressive Disclosure** — Detailed references load only when needed
-4. **Structured Output** — Templates ensure consistent, useful deliverables
+1. Activation: when your request matches a skill's domain, Claude loads the skill
+2. Workflow: Claude follows the skill's prescribed approach
+3. Progressive disclosure: detailed references load only when needed
+4. Structured output: templates ensure consistent, useful deliverables
 
 ---
 
@@ -101,28 +85,22 @@ continuity and quality.
 
 ### Session Continuity
 
-Many skills support multi-session workflows spanning days or weeks. They do this
-through:
-
-- **Versioned documents** — Each session creates a new version (v1, v2, v3...)
-- **Session logs** — Track what happened when
-- **Decision logs** — Capture reasoning, not just conclusions
+Many skills support multi-session workflows spanning days or weeks through
+versioned documents (each session creates a new version: v1, v2, v3), session
+logs that track what happened when, and decision logs that capture reasoning,
+not just conclusions.
 
 ### Modes
 
-Some skills offer different operating modes:
-
-- **Connected mode** — Claude surfaces connections to other work
-- **Clean-slate mode** — Fresh thinking without prior context
-- **Quick mode** — Rapid progress vs. deep exploration
+Some skills offer different operating modes: connected mode (Claude surfaces
+connections to other work), clean-slate mode (fresh thinking without prior
+context), and quick mode (rapid progress over deep exploration).
 
 ### Handoffs
 
-Pipeline skills produce structured handoff documents that:
-
-- Summarize what was accomplished
-- Meet explicit readiness criteria
-- Provide everything the next skill needs
+Pipeline skills produce structured handoff documents that summarize what was
+accomplished, meet explicit readiness criteria, and provide everything the next
+skill needs.
 
 ---
 
@@ -140,7 +118,5 @@ Pipeline skills produce structured handoff documents that:
 
 ## Next Steps
 
-Ready to start using skills?
-
-- [:octicons-arrow-right-24: Your First Skill Tutorial](your-first-skill.md)
-- [:octicons-arrow-right-24: Categorizing Skills](categorizing-skills.md)
+To start using skills, see the [Your First Skill Tutorial](your-first-skill.md)
+and [Categorizing Skills](categorizing-skills.md).

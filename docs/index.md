@@ -9,19 +9,17 @@ installable outputs.
 
 ## What Lamella Provides
 
-- Claude Code plugins built in the official plugin format.
-- A local Claude marketplace under `dist/claude/`.
-- Codex skill exports under `dist/codex/`.
-- Manifest-driven packaging for skills, agents, commands, hooks, and standalone
-  resources.
-- Validation and build tooling that checks source files, manifests, cross-file
-  references, and built output.
+Lamella builds Claude Code plugins in the official plugin format, produces a
+local Claude marketplace under `dist/claude/`, and exports Codex skills under
+`dist/codex/`. Packaging is manifest-driven and covers skills, agents, commands,
+hooks, and standalone resources. Build tooling validates source files, manifests,
+cross-file references, and built output.
 
 ## Plugin Families
 
-Lamella now uses a layered plugin model. Broad umbrella bundles still exist for
-compatibility, and several large domains now also expose narrower capability
-plugins.
+Lamella uses a layered plugin model. Broad umbrella bundles still exist for
+compatibility, and several large domains expose narrower capability plugins
+as well.
 
 | Family | Broad Bundle | Layered Plugins |
 |--------|--------|-------------|

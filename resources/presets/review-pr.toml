@@ -1,0 +1,28 @@
+# Preset: review-pr
+# PR review with code intelligence for thorough analysis.
+
+[preset]
+name = "review-pr"
+description = "PR review with code intelligence"
+requires = ["rhizome"]
+
+[models]
+scan = "haiku"
+review = "sonnet"
+architecture = "opus"
+
+[tools]
+prefer_rhizome = true
+
+[skills]
+activate = [
+  "code-review-pro",
+  "code-review-process",
+  "structured-review",
+  "fidelity-review",
+  "security-review",
+]
+
+[agents]
+default_reviewer = { subagent_type = "review", model = "sonnet" }
+default_security = { subagent_type = "security", model = "sonnet" }

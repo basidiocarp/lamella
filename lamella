@@ -31,11 +31,15 @@ COMMANDS
     install-codex [args...]    Install Codex skills and agents
     uninstall [args...]        Remove installed Claude plugins
     update [claude|codex|all]  Refresh generated outputs
+    preset <subcommand>        Manage workflow presets (list, show, install)
 
 EXAMPLES
     ./lamella list
     ./lamella install core typescript
     ./lamella install --dry-run typescript
+    ./lamella install --preset explore-codebase
+    ./lamella preset list
+    ./lamella preset show tdd-cycle
     ./lamella build-repo-marketplace
     ./lamella install-codex --all
     ./lamella update
@@ -101,6 +105,30 @@ run_list() {
 }
 
 main() {
+    # Handle install --preset by routing to preset.sh install
+    if [[ "${1:-}" == "install" ]]; then
+        local preset_name=""
+        local other_args=()
+        shift
+        while [[ $# -gt 0 ]]; do
+            case "$1" in
+                --preset)
+                    shift
+                    preset_name="${1:-}"
+                    shift
+                    ;;
+                *)
+                    other_args+=("$1")
+                    shift
+                    ;;
+            esac
+        done
+        if [[ -n "$preset_name" ]]; then
+            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" install "$preset_name"
+        fi
+        exec bash "$SCRIPT_DIR/install.sh" "${other_args[@]}"
+    fi
+
     case "${1:-}" in
         ""|-h|--help|help)
             usage
@@ -127,10 +155,6 @@ main() {
             shift
             build_codex_exports "${1:-}"
             ;;
-        install)
-            shift
-            exec bash "$SCRIPT_DIR/install.sh" "$@"
-            ;;
         install-codex)
             shift
             exec bash "$SCRIPT_DIR/install-codex.sh" "$@"
@@ -138,6 +162,10 @@ main() {
         uninstall)
             shift
             exec bash "$SCRIPT_DIR/scripts/plugins/install-plugin.sh" --uninstall "$@"
+            ;;
+        preset)
+            shift
+            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" "$@"
             ;;
         update)
             shift

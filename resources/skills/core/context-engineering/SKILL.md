@@ -1,6 +1,8 @@
 ---
 name: context-engineering
 description: "Explains the components, mechanics, and constraints of context in agent systems."
+requires:
+  - hyphae
 ---
 
 # Context Engineering Fundamentals

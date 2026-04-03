@@ -12,6 +12,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
+
+# shellcheck source=../scripts/lib/content-root.sh
+source "$BASE_DIR/scripts/lib/content-root.sh"
+
 DEFAULT_MANIFEST_DIR="$BASE_DIR/manifests/codex"
 DEFAULT_OUTPUT_DIR="$BASE_DIR/dist/codex"
 COPY_SHARED_SUBAGENTS_SCRIPT="$BASE_DIR/scripts/build/copy-shared-subagents.js"
@@ -96,7 +100,7 @@ create_workflow_wrapper() {
     local source_rel="$1"
     local profile_skills_dir="$2"
     local all_skills_dir="$3"
-    local src="$BASE_DIR/resources/workflows/$source_rel"
+    local src="$CONTENT_ROOT/workflows/$source_rel"
     local skill_name="workflow-$(slugify "$source_rel")"
     local file_name
     file_name=$(basename "$source_rel")
@@ -137,7 +141,7 @@ create_template_wrapper() {
     local source_rel="$1"
     local profile_skills_dir="$2"
     local all_skills_dir="$3"
-    local src="$BASE_DIR/resources/templates/$source_rel"
+    local src="$CONTENT_ROOT/templates/$source_rel"
     local skill_name="template-$(slugify "$source_rel")"
     local file_name
     file_name=$(basename "$source_rel")
@@ -217,7 +221,7 @@ copy_skill() {
     local source_rel="$1"
     local profile_skills_dir="$2"
     local all_skills_dir="$3"
-    local src="$BASE_DIR/resources/skills/$source_rel"
+    local src="$CONTENT_ROOT/skills/$source_rel"
     local skill_name
     skill_name=$(basename "$source_rel")
 

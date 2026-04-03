@@ -9,21 +9,22 @@
 
 const fs = require('fs');
 const path = require('path');
+const { CONTENT_ROOT, BASE_DIR } = require('../lib/content-root');
 
-const BASE_DIR = path.join(__dirname, '../..');
 const MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
 
-// Map resource types to their base directories
+// Map resource types to their base directories.
+// Content resources resolve via CONTENT_ROOT; infrastructure resources stay under BASE_DIR.
 const RESOURCE_DIRS = {
-  skills: path.join(BASE_DIR, 'resources', 'skills'),
-  agents: path.join(BASE_DIR, 'resources', 'agents'),
-  commands: path.join(BASE_DIR, 'resources', 'commands'),
-  rules: path.join(BASE_DIR, 'resources', 'rules'),
+  skills: path.join(CONTENT_ROOT, 'skills'),
+  agents: path.join(CONTENT_ROOT, 'agents'),
+  commands: path.join(CONTENT_ROOT, 'commands'),
+  rules: path.join(CONTENT_ROOT, 'rules'),
   hooks: path.join(BASE_DIR, 'scripts', 'hooks'),
-  workflows: path.join(BASE_DIR, 'resources', 'workflows'),
-  templates: path.join(BASE_DIR, 'resources', 'templates'),
+  workflows: path.join(CONTENT_ROOT, 'workflows'),
+  templates: path.join(CONTENT_ROOT, 'templates'),
   scripts: path.join(BASE_DIR, 'scripts'),
-  'mcp-configs': path.join(BASE_DIR, 'resources', 'mcp-configs'),
+  'mcp-configs': path.join(CONTENT_ROOT, 'mcp-configs'),
 };
 
 let errors = 0;

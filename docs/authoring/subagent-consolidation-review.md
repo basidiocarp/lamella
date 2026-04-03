@@ -55,18 +55,16 @@ execution profile.
 
 ## Likely Future Consolidation Targets
 
-These are the best merge or re-home candidates once more usage data exists:
-
-- `source-researcher` into `researcher`
-- `fullstack-qa-orchestrator` into a workflow or command wrapper
-- parts of the collaboration `team-*` set into a smaller orchestration core if the distinctions are not used in practice
-- broad writing/content overlap once more of the content specialists migrate
+The best merge or re-home candidates once more usage data exists are
+`source-researcher` into `researcher`, `fullstack-qa-orchestrator` into a
+workflow or command wrapper, parts of the `team-*` collaboration set into a
+smaller orchestration core if the distinctions prove unused in practice, and
+broad writing/content overlap once more content specialists migrate.
 
 ## Review Rule
 
-Do not rename or merge a shared subagent unless at least one of these is true:
-
-- the current name is ambiguous enough to cause repeated routing mistakes
-- two subagents have materially overlapping triggers and near-identical workflows
-- the only difference is product-era packaging, not behavior
-- usage shows one worker is effectively never the right choice
+Do not rename or merge a shared subagent unless the current name is ambiguous
+enough to cause repeated routing mistakes, two subagents have materially
+overlapping triggers and near-identical workflows, the only difference is
+product-era packaging rather than behavior, or usage shows one worker is
+effectively never the right choice.

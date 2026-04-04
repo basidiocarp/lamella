@@ -22,6 +22,7 @@
       "tools/aws-mcp-setup",
       "tools/devcontainer-setup",
       "tools/graphql-patterns",
+      "tools/mcp-ecosystem-context",
       "tools/mcp-integration",
       "tools/mcp-server-builder",
       "tools/obsidian",

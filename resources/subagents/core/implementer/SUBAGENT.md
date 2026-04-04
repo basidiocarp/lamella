@@ -22,6 +22,9 @@ claude:
     - Grep
     - Glob
 
+  skills:
+    - mcp-ecosystem-context
+
 codex:
   model: gpt-5.4-mini
   model_reasoning_effort: medium

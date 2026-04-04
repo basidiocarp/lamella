@@ -20,6 +20,9 @@ claude:
     - Grep
     - Glob
 
+  skills:
+    - mcp-ecosystem-context
+
 codex:
   model: gpt-5.4
   model_reasoning_effort: high

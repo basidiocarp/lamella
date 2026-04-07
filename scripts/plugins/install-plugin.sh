@@ -177,6 +177,121 @@ remove_plugin_standalone_targets() {
     done
 }
 
+hook_command_stream() {
+    local json_path="$1"
+
+    [[ -f "$json_path" ]] || return 0
+
+    jq -r '
+        (.hooks // .) as $root
+        | if ($root | type) == "object" then
+            $root
+            | to_entries[]?.value[]?.hooks[]?.command? // empty
+          elif ($root | type) == "array" then
+            $root[]?.hooks[]?.command? // empty
+          else
+            empty
+          end
+    ' "$json_path" 2>/dev/null || true
+}
+
+extract_hook_refs() {
+    local command="$1"
+
+    grep -oE '\$\{CLAUDE_PLUGIN_ROOT\}/[^"'"'"'[:space:]]+|\$HOME/\.claude/[^"'"'"'[:space:]]+|~/.claude/[^"'"'"'[:space:]]+|/[^"'"'"'[:space:]]+\.(js|sh|py)' <<< "$command" | sort -u || true
+}
+
+resolve_hook_ref() {
+    local ref="$1"
+    local plugin_dir="$2"
+
+    case "$ref" in
+        '${CLAUDE_PLUGIN_ROOT}/'*)
+            printf '%s\n' "$plugin_dir/${ref#\$\{CLAUDE_PLUGIN_ROOT\}/}"
+            ;;
+        '$HOME/'*)
+            printf '%s\n' "$HOME/${ref#\$HOME/}"
+            ;;
+        '~/'*)
+            printf '%s\n' "$HOME/${ref#~/}"
+            ;;
+        *)
+            printf '%s\n' "$ref"
+            ;;
+    esac
+}
+
+ref_targets_plugin() {
+    local ref="$1"
+    local resolved="$2"
+    local plugin_dir="$3"
+
+    [[ "$ref" == '${CLAUDE_PLUGIN_ROOT}/'* ]] && return 0
+    [[ "$resolved" == "$plugin_dir/"* ]] && return 0
+    return 1
+}
+
+validate_packaged_hook_paths() {
+    local plugin_dir="$1"
+    local hooks_json="$plugin_dir/hooks/hooks.json"
+
+    [[ -f "$hooks_json" ]] || return 0
+
+    local command refs ref resolved
+    while IFS= read -r command; do
+        [[ -z "$command" ]] && continue
+
+        refs=$(extract_hook_refs "$command")
+        while IFS= read -r ref; do
+            [[ -z "$ref" ]] && continue
+            resolved=$(resolve_hook_ref "$ref" "$plugin_dir")
+
+            if [[ ! -e "$resolved" ]]; then
+                echo "WARNING: Bundled hook path not found after install: $resolved"
+                echo "  Run \`lamella install\` again or check your installation."
+            fi
+        done <<< "$refs"
+    done < <(hook_command_stream "$hooks_json")
+}
+
+settings_hook_paths() {
+    printf '%s\n' "$CLAUDE_DIR/settings.json"
+
+    local project_settings="$PWD/.claude/settings.json"
+    if [[ -f "$project_settings" ]]; then
+        printf '%s\n' "$project_settings"
+    fi
+}
+
+validate_registered_hook_paths() {
+    local plugin="$1"
+    local plugin_dir="$2"
+    local settings_path command refs ref resolved
+
+    while IFS= read -r settings_path; do
+        [[ -f "$settings_path" ]] || continue
+
+        while IFS= read -r command; do
+            [[ -z "$command" ]] && continue
+
+            refs=$(extract_hook_refs "$command")
+            while IFS= read -r ref; do
+                [[ -z "$ref" ]] && continue
+                resolved=$(resolve_hook_ref "$ref" "$plugin_dir")
+
+                if ! ref_targets_plugin "$ref" "$resolved" "$plugin_dir"; then
+                    continue
+                fi
+
+                if [[ ! -e "$resolved" ]]; then
+                    echo "WARNING: Registered hook path for plugin '$plugin' not found in $settings_path: $resolved"
+                    echo "  Remove the stale hook entry or reinstall the plugin before relying on it."
+                fi
+            done <<< "$refs"
+        done < <(hook_command_stream "$settings_path")
+    done < <(settings_hook_paths)
+}
+
 get_available_plugins() {
     [[ ! -d "$MANIFESTS_DIR" ]] && return
     for f in "$MANIFESTS_DIR"/*.json; do
@@ -412,6 +527,8 @@ install_plugin() {
         [[ -d "$filtered_src/scripts" ]] && cp -r "$filtered_src/scripts" "$dst/"
 
         log_success "Plugin installed: $dst"
+        validate_packaged_hook_paths "$dst"
+        validate_registered_hook_paths "$plugin" "$dst"
         ((installed++))
     fi
 

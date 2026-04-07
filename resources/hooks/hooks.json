@@ -72,9 +72,34 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-compact.js\""
+          },
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code pre-compact",
+            "timeout": 10
           }
         ],
         "description": "Save state before context compaction"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code user-prompt-submit",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Cortina runtime: capture submitted prompts into scoped lifecycle state"
       }
     ],
     "SessionStart": [

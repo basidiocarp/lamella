@@ -1,81 +1,81 @@
-# React Best Practices
+# React Pattern Agent Notes
 
-Use this file as the routing index for the focused React and Next.js performance rules in `rules/`. The detailed rule files are the source of truth; this overview exists so agents can pick the right category quickly.
+## Purpose
 
-## Priority Order
+This file is the routing index for the focused React and Next.js rule files in `rules/`. Use it to pick the right category fast, then read the specific rule file that matches the problem. The detailed rule files are the source of truth; this overview only tells you where to look first.
 
-1. Eliminate waterfalls.
-2. Reduce bundle size.
-3. Fix server-side fetch and caching mistakes.
-4. Reduce unnecessary client work and rerenders.
-5. Optimize rendering and low-level JavaScript only after the major issues are solved.
+---
 
-## Rule Groups
+## Source of Truth
 
-### Async and Waterfalls
+- `rules/`: authoritative focused guidance for React and Next.js performance work.
+- This file: routing order and category map.
 
-- `rules/async-defer-await.md`
-- `rules/async-dependencies.md`
-- `rules/async-api-routes.md`
-- `rules/async-parallel.md`
-- `rules/async-suspense-boundaries.md`
+When this overview and a specific rule file disagree, the specific rule file wins.
 
-### Bundle Size
+---
 
-- `rules/bundle-barrel-imports.md`
-- `rules/bundle-conditional.md`
-- `rules/bundle-defer-third-party.md`
-- `rules/bundle-dynamic-imports.md`
-- `rules/bundle-preload.md`
+## Before You Start
 
-### Server Performance
+Before changing code, verify:
 
-- `rules/server-cache-lru.md`
-- `rules/server-serialization.md`
-- `rules/server-parallel-fetching.md`
-- `rules/server-cache-react.md`
-- `rules/server-after-nonblocking.md`
+1. **Priority**: solve the biggest performance class first.
+2. **Category**: choose the rule group that matches the real bottleneck.
+3. **Specific rule**: read the focused rule file before writing code.
 
-### Client Data and Events
+---
 
-- `rules/client-event-listeners.md`
-- `rules/client-passive-event-listeners.md`
-- `rules/client-swr-dedup.md`
-- `rules/client-localstorage-schema.md`
+## Preferred Commands
 
-### Rerenders and Rendering
+Use these for most work:
 
-- `rules/rerender-defer-reads.md`
-- `rules/rerender-memo.md`
-- `rules/rerender-dependencies.md`
-- `rules/rerender-derived-state.md`
-- `rules/rerender-functional-setstate.md`
-- `rules/rerender-lazy-state-init.md`
-- `rules/rerender-transitions.md`
-- `rules/rendering-activity.md`
-- `rules/rendering-content-visibility.md`
-- `rules/rendering-hoist-jsx.md`
-- `rules/rendering-hydration-no-flicker.md`
-- `rules/rendering-conditional-render.md`
-- `rules/rendering-animate-svg-wrapper.md`
-- `rules/rendering-svg-precision.md`
+```bash
+rg "async-|bundle-|server-|client-|rerender-|rendering-|advanced-" rules
+fd . rules
+```
 
-### JavaScript Micro-Patterns
+For targeted work:
 
-- `rules/js-batch-dom-css.md`
-- `rules/js-index-maps.md`
-- `rules/js-cache-property-access.md`
-- `rules/js-cache-function-results.md`
-- `rules/js-cache-storage.md`
-- `rules/js-combine-iterations.md`
-- `rules/js-length-check-first.md`
-- `rules/js-early-exit.md`
-- `rules/js-hoist-regexp.md`
-- `rules/js-min-max-loop.md`
-- `rules/js-set-map-lookups.md`
-- `rules/js-tosorted-immutable.md`
+```bash
+sed -n '1,120p' rules/<rule-file>.md
+```
 
-### Advanced React Patterns
+---
 
-- `rules/advanced-event-handler-refs.md`
-- `rules/advanced-use-latest.md`
+## Repo Architecture
+
+This is a routing layer over a deeper rule set. The overview should stay short, ordered, and practical. The rule files should carry the real implementation guidance.
+
+Key boundaries:
+
+- this file: category order and routing
+- `rules/async-*`: waterfall and async guidance
+- `rules/bundle-*`, `rules/server-*`, `rules/client-*`, `rules/rerender-*`, `rules/rendering-*`, `rules/js-*`, `rules/advanced-*`: focused problem-specific rules
+
+Current direction:
+
+- Fix waterfalls before micro-optimizations
+- Fix bundle shape before low-level rerender tweaks
+- Use low-level JavaScript patterns last, not first
+
+---
+
+## Working Rules
+
+- Eliminate waterfalls first.
+- Reduce bundle size before tuning fine-grained rerender behavior.
+- Fix server fetch and caching mistakes before low-level client work.
+- Use JavaScript micro-patterns only after the bigger structural issues are gone.
+- Treat this file as an index, not the final word.
+
+---
+
+## Done Means
+
+A task is not complete until:
+
+- [ ] The bottleneck category was identified first
+- [ ] The focused rule file, not just this index, informed the change
+- [ ] The final recommendation or code change reflects the priority order in this file
+
+If you skipped the focused rule files, say so clearly and explain why.

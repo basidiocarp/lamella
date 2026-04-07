@@ -1,72 +1,76 @@
 # Lamella Roadmap
 
-Current documented shape:
+This page is the Lamella-specific backlog. The workspace [ROADMAP.md](../../docs/ROADMAP.md) keeps the ecosystem sequencing and cross-repo priorities.
 
-- **52 plugins**
-- **286 skills**
-- official Claude plugin builds
-- Codex skill exports
-- marketplace packaging and hosted distribution support
+Lamella is past the "prove the build works" stage. The backlog now centers on packaging, validation, dependency handling, host parity, and keeping the distribution story aligned with the actual shape of the library.
 
-Lamella is no longer in the “prove the build works” stage. The next work is
-about keeping packaging, validation, dependency resolution, and host parity
-reliable as the library continues to evolve.
+## Recently Shipped
 
-## Shipped
-
-- Official Claude plugin packaging with `.claude-plugin/plugin.json`.
-- Local Claude marketplace builds under `dist/claude/`.
-- Codex export pipeline under `dist/codex/`.
-- Manifest-driven packaging for skills, agents, commands, hooks, and support
-  resources.
-- Validation coverage for manifests, cross-references, source files, and built
-  output.
-- Repo-root marketplace metadata and hosted marketplace publishing support.
-- Dependency-aware Claude install flow through the wrapper command surface.
-- The Lamella audit and naming pass is complete, with the docs now aligned to
-  the current 52-plugin layered product story.
-- The remaining Claude host-maintenance scripts moved to `stipe`, and Lamella
-  dropped the leftover personal config-sync and stale release helper scripts.
+- Lamella now ships official Claude plugin packaging and local marketplace builds instead of a loose collection of source files. The Claude and Codex export paths are both part of the supported product surface.
+- Packaging is manifest-driven across skills, agents, commands, hooks, and support resources. That gives the build a clearer source of truth and makes validation much more useful.
+- Validation now covers manifests, cross-references, source files, and built output. The packaging story is far less guess-driven than the early versions.
+- Repo-root marketplace metadata, hosted publishing support, and dependency-aware Claude installs are in place. Lamella can now act like a distribution layer, not just a content repo.
+- The audit and naming pass is complete, and the remaining personal host-maintenance helpers were pushed out to Stipe. Lamella is carrying less boundary drift than it was before.
 
 ## Next
 
-- Execute the staged plugin-layering plan in
-  [plans/plugin-layering-migration.md](plans/plugin-layering-migration.md) so
-  oversized plugin bundles can split without breaking install compatibility.
-- Finish dependency resolution and installation behavior anywhere it still
-  diverges between local source validation, local install, and built outputs.
-- Keep the thin `./lamella` wrapper as the primary user-facing interface for:
-  - build
-  - install
-  - list
-  - update
-  - Codex export flows
-- Improve Claude/Codex parity in manifests, exports, profiles, and docs.
-- Keep source validators and post-build validators aligned as packaging changes
-  continue.
-- Hand off lifecycle and capture-hook ownership to Cortina wherever Lamella is
-  still carrying runtime responsibilities.
-- Execute the per-file cleanup plan in [tool-boundary-cleanup.md](tool-boundary-cleanup.md)
-  so Lamella stops carrying host-maintenance and miscellaneous utility scripts
-  that no longer match its packaging boundary.
+### Plugin layering migration
+
+Lamella needs to execute the staged split in [plans/plugin-layering-migration.md](plans/plugin-layering-migration.md). The goal is to break oversized bundles into cleaner layers without breaking install compatibility for people already using the current package names.
+
+### Dependency and install parity
+
+Install behavior still needs to line up everywhere it matters: source validation, local install, and built output. This is the work that keeps packaging semantics from drifting apart again as the library changes.
+
+### Wrapper-first CLI
+
+The thin `./lamella` wrapper should stay the main user-facing surface for build, install, list, update, and Codex export flows. Users should not need to know the internal script layout to do routine packaging work.
+
+### Claude and Codex parity
+
+Lamella should keep tightening parity across manifests, exports, profiles, and docs. The right standard is one content model with host-specific packaging details, not two divergent product stories.
+
+### Validation alignment
+
+Source validators and post-build validators need to keep moving together. Packaging changes are safer when both layers describe the same rules and fail for the same reasons.
+
+### Cortina and Stipe boundary cleanup
+
+Lamella still carries a few responsibilities that belong elsewhere. The cleanup plan in [tool-boundary-cleanup.md](tool-boundary-cleanup.md) should keep pushing runtime lifecycle work toward Cortina and host-maintenance work toward Stipe.
 
 ## Later
 
-- Prebuilt releases so local builds become optional for common installs.
-- Profile-based bundles and curated operating modes.
-- Better release-channel semantics for stable vs. snapshot content.
-- Quality scoring and more explicit package health reporting once install and
-  validation semantics settle down.
+### Prebuilt releases
+
+Local builds should become optional for common installs. Prebuilt releases matter because the ecosystem is easier to adopt when Lamella does not require a full source checkout and local toolchain.
+
+### Profile-based bundles
+
+Curated operating modes and profile bundles are the natural next step after plugin layering settles down. They let Lamella distribute working combinations instead of only individual plugin parts.
+
+### Release-channel semantics
+
+Stable and snapshot content needs a clearer story. This belongs after install and validation semantics settle, because release channels are only useful if the underlying package behavior is predictable.
+
+### Package health reporting
+
+Quality scoring and stronger package health signals make sense once build, install, and validation semantics are stable enough that a health score would mean something real.
 
 ## Research
 
-- Marketplace backend and richer distribution surfaces.
-- Offline and air-gapped bundle formats.
-- More host-agnostic package descriptors if future hosts justify them.
+### Marketplace backend
 
-## Notes
+Hosted distribution can go further than the current publishing path, but the open question is how much backend infrastructure Lamella should own versus how much should stay as static packaging and metadata.
 
-The Lamella audit pass is no longer the blocker. The next risk is letting
-packaging semantics drift again while content and manifests continue to evolve.
-The right response is to keep the package story, wrapper commands, and
-validation behavior aligned with the actual repo state.
+### Offline bundles
+
+Offline and air-gapped bundle formats are clearly useful for some environments. The design question is how to keep those formats simple without creating a second packaging system beside the online path.
+
+### More host-agnostic package descriptors
+
+Lamella may eventually need package descriptors that are less tied to today's hosts. That only moves up if future runtimes justify broader abstraction instead of thin export adapters.
+
+## Not Planned
+
+- Long-term ownership of runtime lifecycle capture: Cortina owns that boundary.
+- Long-term ownership of host repair and personal setup helpers: Stipe owns machine maintenance and recovery flows.

@@ -1,123 +1,203 @@
 # Lamella Architecture
 
-Lamella is a manifest-driven packaging system for AI coding resources. It takes
-skills, shared subagents, commands, hooks, templates, workflows, and related
-assets from `resources/`, maps them through plugin manifests, and emits
-installable outputs for Claude Code and Codex.
+Lamella is a manifest-driven packaging system for AI coding resources. It keeps
+skills, subagents, commands, hooks, templates, and support assets in one source
+tree, then builds them into Claude Code plugins and Codex exports. This
+document covers the packaging boundary, build flow, and the two output paths
+that matter most.
 
-## Core Model
+---
 
-Lamella has three layers:
+## Design Principles
 
-1. Source resources: skills, subagents, commands, hooks, rules, templates,
-   workflows, scripts, protocols, and MCP configs live under `resources/`.
-2. Manifest selection: plugin manifests in `manifests/claude/*.json` define
-   which resources belong to each plugin and what dependencies exist between them.
-3. Built outputs: builders transform source resources into Claude Code plugins
-   and a local marketplace under `dist/claude/`, and Codex skill exports,
-   custom agents, and profiles under `dist/codex/`.
+- **Source once, package many** — resource authors work in `resources/`; host
+  packaging logic lives elsewhere.
+- **Manifests decide scope** — builders do not guess what belongs to a plugin;
+  manifests make inclusion and dependency order explicit.
+- **Validation before distribution** — cross-reference checks and output
+  validation run before install and release flows.
+- **Host parity where it matters** — Claude and Codex exports can differ in
+  shape, but they should come from the same intent and inventory.
+- **Generated output stays disposable** — `dist/` is a build product, not the
+  authoring surface.
 
-## Build Pipeline
+---
 
-```mermaid
-flowchart LR
-    A["resources/\nskills/\nsubagents/\ncommands/\nhooks/\n..."] -->|selected by| B[manifests/claude/*.json]
-    B -->|Claude builders| C[dist/claude/plugins/<name>/]
-    B -->|Codex builders| D[dist/codex/skills/ + profiles/ + agents]
-    C --> E[dist/claude/.claude-plugin/marketplace.json]
-    C --> F[Claude plugin install flow]
-    D --> G[Codex skill and agent install flow]
-```
+## System Boundary
 
-## Directory Layout
+### Lamella owns
+
+- Source resources under `resources/`
+- Plugin and export manifests under `manifests/`
+- Build and install scripts for Claude and Codex outputs
+- Validation of resources, manifests, and generated artifacts
+- Marketplace metadata for local and hosted plugin distribution
+
+### Stipe owns
+
+- Host installation policy and ecosystem setup
+- Repair flows for installed tools and runtimes
+
+### Hyphae, Rhizome, and Mycelium own
+
+- Runtime memory, code intelligence, and shell filtering
+- The data and behavior Lamella may reference in docs, but does not package as
+  executable logic
+
+Lamella should stay focused on packaging and distribution. It should not become
+the source of truth for runtime coordination, memory, or host diagnostics.
+
+---
+
+## Workspace Structure
 
 ```text
 lamella/
-├── resources/
-│   ├── skills/          # Source skill directories with SKILL.md
-│   ├── subagents/       # Shared Claude/Codex subagent source
-│   ├── commands/        # Source slash commands
-│   ├── hooks/           # Hook definitions and docs
-│   ├── protocols/       # Shared protocol and rubric docs
-│   ├── rules/           # Standalone rule content
-│   ├── templates/       # Reusable templates
-│   ├── workflows/       # Workflow guides
-│   ├── mcp-configs/     # MCP configuration assets
-│   └── scripts/         # Helper scripts used by hooks and builds
-├── manifests/
-│   ├── claude/          # Claude plugin manifests, schema, and registry
-│   └── codex/           # Generated Codex export manifests
-├── builders/            # Claude and Codex build scripts
-├── scripts/
-│   ├── ci/              # Source and build validators
-│   ├── plugins/         # Plugin build/install helpers
-│   └── hooks/           # Hook support scripts
-├── dist/
-│   ├── claude/          # Built Claude marketplace and plugins
-│   └── codex/           # Built Codex skills, agents, and profiles
-└── docs/                # User, authoring, and reference docs
+├── resources/    # Source skills, subagents, commands, hooks, rules, templates
+├── manifests/    # Claude and Codex packaging manifests
+├── builders/     # Host-specific build scripts
+├── scripts/      # Validation, install, release, and audit helpers
+├── schemas/      # Structured content schemas used by some plugins
+├── docs/         # Authoring, migration, and reference docs
+└── dist/         # Generated Claude and Codex artifacts
 ```
 
-## Resource Packaging
+- **`resources/`**: The authoring surface. This is where reusable content
+  lives, grouped by kind and category.
+- **`manifests/`**: Declares plugin membership, dependencies, and export scope.
+- **`builders/`**: Host transforms. These scripts turn source resources into
+  installable Claude and Codex artifacts.
+- **`scripts/ci/`**: Validation layer for cross-references, manifest integrity,
+  and built-output checks.
+- **`dist/`**: Disposable output. Rebuild it rather than editing it.
 
-| Resource Type | Source | Claude Output | Codex Output |
-|---------------|--------|---------------|--------------|
-| Skills | `resources/skills/<category>/<name>/SKILL.md` | `dist/claude/plugins/<plugin>/skills/<name>/SKILL.md` | `dist/codex/skills/<name>/SKILL.md` |
-| Shared subagents | `resources/subagents/<category>/<name>/SUBAGENT.md` | `dist/claude/plugins/<plugin>/agents/<name>.md` | `dist/codex/profiles/<profile>/agents/<name>.toml` |
-| Commands | `resources/commands/<category>/<name>.md` | `dist/claude/plugins/<plugin>/commands/<name>.md` | Not a primary Codex export target |
-| Hooks | `resources/hooks/...` | `dist/claude/plugins/<plugin>/hooks/...` | N/A |
-| Protocols / Rules / Templates / Workflows | `resources/...` | copied as standalone support content where needed | optional support content |
+---
 
-Claude builds flatten category-oriented source paths into plugin-local names.
-Codex builds export portable skill directories, generated custom agents, and
-profile metadata.
+## Request Flow
 
-## Primary Commands
+When a build or install command arrives:
 
-Lamella’s preferred local entrypoint is `./lamella`.
+1. **Choose the entry point** (`./lamella` or `make`)
+   The shell wrapper is the preferred local interface; `make` groups common CI
+   and build targets.
+   Example: `./lamella build-marketplace` and `make validate`.
 
-```bash
-./lamella build-marketplace
-./lamella install core python typescript
-./lamella list
+2. **Resolve manifests** (`manifests/claude/*.json`, generated Codex manifests)
+   The selected plugin or export target determines which resources are in scope
+   and what dependencies must be included first.
+   Example: umbrella plugins pull in layered dependencies rather than copying
+   files ad hoc.
 
-./lamella build-codex
-./lamella install-codex --all
-./lamella update
-```
+3. **Stage resources** (`resources/`)
+   Builders collect source assets and flatten category-heavy paths into
+   host-appropriate output names.
+   Example: a source skill under `resources/skills/...` becomes a plugin-local
+   Claude skill path or a portable Codex skill directory.
 
-The lower-level builders still exist for focused debugging or CI:
+4. **Apply host transforms** (`builders/`, `scripts/plugins/`)
+   Claude builds emit plugin directories and marketplace metadata. Codex builds
+   emit skills, profiles, and generated agent artifacts.
+   Example: shared subagents become Markdown agents for Claude and TOML agent
+   definitions for Codex.
 
-```bash
-bash builders/build-claude-plugin.sh manifests/claude/core.json
-bash builders/build-claude-marketplace.sh
-bash builders/sync-codex-manifests.sh
-bash builders/build-codex-skills.sh
-```
+5. **Validate outputs** (`scripts/ci/*.js`)
+   Build integrity, cross-file references, command frontmatter, manifests, and
+   catalog structure are checked before release flows.
+   Example: `validate-marketplace-catalog.js` and `validate-xrefs.js`.
 
-## Validation
+6. **Install or publish** (`./lamella install`, `install-codex`, hosted catalog)
+   Artifacts are installed locally or emitted for marketplace distribution.
 
-Lamella has two validation layers:
+---
 
-1. Source validation: resource structure, manifest references, cross-file
-   references, and command and subagent frontmatter.
-2. Built-output validation: plugin directory integrity, marketplace output
-   correctness, and flattened resource packaging.
+## Claude Packaging
 
-Primary commands:
+File: `builders/build-claude-plugin.sh`
+
+### How It Works
+
+1. Read a Claude manifest from `manifests/claude/`.
+2. Collect the referenced resources and dependency set.
+3. Flatten source paths into plugin-local output names.
+4. Emit `dist/claude/plugins/<plugin>/`.
+5. Update the marketplace catalog under `dist/claude/`.
+
+### Output Matrix
+
+| Source | Claude Output | Notes |
+|--------|---------------|-------|
+| `resources/skills/.../SKILL.md` | `dist/claude/plugins/<plugin>/skills/...` | Primary reusable skill content |
+| `resources/subagents/.../SUBAGENT.md` | `dist/claude/plugins/<plugin>/agents/*.md` | Shared agent surface |
+| `resources/commands/*.md` | `dist/claude/plugins/<plugin>/commands/*.md` | Slash-command content |
+| `resources/hooks/...` | `dist/claude/plugins/<plugin>/hooks/...` | Hook docs and helper assets |
+
+### Adding a New Claude-Packaged Resource
+
+1. Create the source asset under `resources/`.
+2. Reference it from the right Claude manifest.
+3. Run `make validate`.
+4. Rebuild with `./lamella build-marketplace`.
+
+---
+
+## Codex Export
+
+File: `builders/build-codex-skills.sh`
+
+### How It Works
+
+1. Sync Codex-oriented manifest data from the Claude inventory where needed.
+2. Transform selected resources into portable skill directories and profile
+   metadata.
+3. Generate agent artifacts for Codex-specific install surfaces.
+4. Emit everything under `dist/codex/`.
+
+### Export Matrix
+
+| Source | Codex Output | Notes |
+|--------|--------------|-------|
+| Skills | `dist/codex/skills/<name>/SKILL.md` | Portable skill directory |
+| Shared subagents | `dist/codex/profiles/<profile>/agents/<name>.toml` | Generated agent artifact |
+| Support content | optional copied assets | Included only when the target needs it |
+
+### Adding a New Codex Export
+
+1. Confirm the source resource is portable outside the Claude plugin model.
+2. Sync or update the relevant manifest mapping.
+3. Run `./lamella build-codex`.
+4. Verify the result with `./lamella install-codex --all` if the export changes
+   install behavior.
+
+---
+
+## Testing
 
 ```bash
 make validate
-make build-marketplace
-node scripts/ci/validate-build.js
+./lamella build-marketplace
+./lamella build-codex
 ```
 
-## Current Scope
+| Category | Count | What's Tested |
+|----------|-------|---------------|
+| Source validators | 10+ | Commands, hooks, rules, skills, subagents, manifests, presets, and cross-references |
+| Build smoke tests | 2+ | Claude marketplace generation and Codex export generation |
+| Audit and maintenance scripts | several | Plugin scans, catalog checks, and release-oriented helper flows |
 
-Lamella currently documents and packages 52 plugins, 286 skills,
-manifest-driven Claude plugin builds, Codex skill and agent exports, and a
-local and hosted marketplace flow.
+Lamella relies more on validation scripts than on a single monolithic test
+binary. The practical standard is simple: if a packaging change touches
+resources, manifests, or builders, run the validators and rebuild both output
+paths.
 
-The main architectural work left is not “invent a build system.” It is keeping
-dependency resolution, validation, distribution, and host parity aligned as the
-content library evolves.
+---
+
+## Key Dependencies
+
+- **Bash build scripts** — the main packaging layer for Claude and Codex
+  transforms.
+- **Node-based validators** — manifest checks, cross-reference checks, and
+  generated-output validation all run through `scripts/ci/`.
+- **Manifest JSON** — plugin scope and dependency order live here, so manifest
+  drift is an architectural bug, not a cosmetic one.
+- **Claude and Codex host formats** — the builders are constrained by what each
+  host can install and discover.

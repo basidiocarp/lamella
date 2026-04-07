@@ -98,7 +98,7 @@ If you want the Lamella default instead of this standalone example, prefer the s
 - [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
 - [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
 - `cortina adapter claude-code post-tool-use`, which owns the shared capture runtime for errors, validations, corrections, and export or ingest signals
-- [`session-end.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/session-end.js), which remains wrapper glue and delegates to `cortina adapter claude-code session-end` when `cortina` is installed
+- `cortina adapter claude-code stop`, which owns the shared session-end summary runtime
 
 ## Customization
 

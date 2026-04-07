@@ -41,15 +41,15 @@ The main [`hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/re
 - session startup context and package-manager detection
 - pre-compaction state logging
 - stop-time `console.log` scan
-- Cortina-first session-end persistence plus Lamella evaluation fallback
+- Cortina stop capture plus Lamella session evaluation
 
 ## Cortina Boundary
 
 The shared Lamella catalog no longer owns the primary lifecycle capture runtime.
 
-- Cortina owns reusable capture behavior for `PostToolUse`, `Stop`, and `SessionEnd`
+- Cortina owns reusable capture behavior for `PostToolUse` and `Stop`
 - Lamella owns packaging, templates, docs, continuous-learning observation, and local workflow hooks
-- the bundled `session-end.js` remains as fallback glue when Cortina is unavailable, but the default shipped runtime is Cortina
+- the shipped Stop hook routes directly to Cortina, and Lamella keeps only the separate evaluation hook
 - the older Lamella JS capture helpers have been removed; the shipped lifecycle path is Cortina
 
 ## Cross-Platform Notes

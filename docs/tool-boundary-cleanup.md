@@ -3,6 +3,9 @@
 This document turns the March 2026 Lamella tool audit into a concrete cleanup
 plan.
 
+Status: Phase 2 is complete. Lamella now routes session-end summaries through
+Cortina Stop and no longer ships the fallback wrapper.
+
 Lamella should stay focused on packaging, validation, manifests, hook
 templates, and workflow distribution. Runtime lifecycle capture belongs in
 `cortina`. Host install, repair, and doctor flows belong in `stipe`. Session
@@ -70,14 +73,14 @@ their shipped runtime behavior.
 | `scripts/hooks/capture-corrections.js` | Deleted from Lamella | `cortina` post-tool-use runtime |
 | `scripts/hooks/capture-test-results.js` | Deleted from Lamella | `cortina` post-tool-use runtime |
 | `scripts/hooks/capture-code-changes.js` | Deleted from Lamella | `cortina` post-tool-use runtime |
-| `scripts/hooks/session-end.js` | Replace with Cortina-owned runtime, then delete wrapper when fallback is no longer needed | `cortina` session-end runtime |
+| `scripts/hooks/session-end.js` | Deleted from Lamella after Cortina Stop coverage was confirmed | `cortina` stop runtime |
 
 ### Cortina Cleanup Exit Criteria
 
 - `resources/hooks/hooks.json` no longer relies on Lamella-owned runtime logic
-  for lifecycle capture.
-- Lamella docs describe `cortina` as the only runtime owner for reusable
-  `PostToolUse` and `SessionEnd` capture behavior.
+  for session-end summary storage.
+- Lamella docs describe `cortina` as the runtime owner for reusable
+  `PostToolUse` and `Stop` capture behavior.
 - Legacy capture helpers are removed rather than kept as silent duplicates.
 
 ## Move To Stipe

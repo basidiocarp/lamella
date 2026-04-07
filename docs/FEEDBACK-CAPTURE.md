@@ -1,6 +1,6 @@
 # Feedback Capture Hooks
 
-Lamella ships the hook catalog, templates, wrappers, and related docs. Cortina owns the shared lifecycle runtime for `PostToolUse`, `Stop`, and `SessionEnd`.
+Lamella ships the hook catalog, templates, and related docs. Cortina owns the shared lifecycle runtime for `PostToolUse` and `Stop`.
 
 The older standalone JavaScript capture scripts have been removed from Lamella. They are not part of the shipped lifecycle path.
 
@@ -66,9 +66,8 @@ flowchart TD
 ## Ownership
 
 Cortina owns lifecycle capture semantics, policy, dedupe, attribution, and
-durable outcome storage. Lamella owns packaging, installation templates,
-wrapper scripts, fallback glue, and continuous-learning or evaluation hooks
-that sit beside the shared runtime.
+durable outcome storage. Lamella owns packaging, installation templates, and
+continuous-learning or evaluation hooks that sit beside the shared runtime.
 
 ## Hook Details
 
@@ -101,8 +100,8 @@ sequenceDiagram
 ```
 
 The shipped lifecycle path uses Cortina: `cortina adapter claude-code post-tool-use`
-for tool events and `scripts/hooks/session-end.js`, which delegates to
-`cortina adapter claude-code session-end` when Cortina is available.
+for tool events and `cortina adapter claude-code stop` for session-end
+summaries.
 
 ## Error Observability
 

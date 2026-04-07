@@ -230,18 +230,19 @@
           }
         ],
         "description": "Check for console.log in modified files after each response"
-      }
-    ],
-    "SessionEnd": [
+      },
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-end.js\""
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code stop"
           }
         ],
-        "description": "Persist session state on end, preferring Cortina when available"
+        "description": "Cortina runtime: capture session-end summaries into scoped lifecycle state"
       },
       {
         "matcher": "*",

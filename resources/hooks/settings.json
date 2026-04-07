@@ -66,6 +66,30 @@
           {
             "type": "command",
             "command": "node \"$HOME/.claude/hooks/scripts/pre-compact.js\""
+          },
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code pre-compact",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code user-prompt-submit",
+            "timeout": 10,
+            "async": true
           }
         ]
       }
@@ -218,15 +242,16 @@
             "command": "node \"$HOME/.claude/hooks/scripts/check-console-log.js\""
           }
         ]
-      }
-    ],
-    "SessionEnd": [
+      },
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/scripts/session-end.js\""
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code stop"
           }
         ]
       },

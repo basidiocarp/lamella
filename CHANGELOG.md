@@ -4,6 +4,21 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.5.10] - 2026-04-10
+
+### Added
+
+- **Claude plugin zip utility**: Added a maintenance script to package each
+  built Claude plugin directory under `dist/claude/plugins/` into individual
+  zip archives for distribution or manual testing.
+
+### Fixed
+
+- **Hosted marketplace validation**: `validate-build.js` now accepts hosted
+  `git-subdir` marketplace source objects instead of assuming every plugin
+  source is a local string path, which unblocks the `Publish Marketplace`
+  workflow on `main`.
+
 ## [0.5.9] - 2026-04-09
 
 ### Added

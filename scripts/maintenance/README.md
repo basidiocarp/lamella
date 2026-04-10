@@ -15,6 +15,7 @@ Personal `~/.claude` sync automation has been retired from Lamella.
 | `fix-skill-frontmatter.py` | Normalize skill frontmatter |
 | `haiku-friendly-rewrites.py` | Rewrite content for smaller-model clarity |
 | `sync-manifests-with-folders.py` | Keep manifests aligned with resource folders |
+| `zip-claude-plugins.sh` | Zip built Claude plugin folders from `dist/claude/plugins/` |
 | `zip-skills.sh` | Package skill exports for distribution |
 
 ## Usage
@@ -22,6 +23,9 @@ Personal `~/.claude` sync automation has been retired from Lamella.
 ```bash
 # Sync manifests with current folders
 ./scripts/maintenance/sync-manifests-with-folders.py
+
+# Zip built Claude plugins after a marketplace build
+./scripts/maintenance/zip-claude-plugins.sh
 ```
 
 ## Caution

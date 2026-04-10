@@ -21,6 +21,32 @@ function reportError(message) {
   errors++;
 }
 
+function validateMarketplaceSource(plugin, entry, distRoot) {
+  if (typeof entry.source === 'string') {
+    const srcPath = path.join(distRoot, entry.source);
+    if (!fs.existsSync(srcPath)) {
+      reportError(`ERROR: marketplace.json — plugin source not found: ${entry.source}`);
+    }
+    return;
+  }
+
+  if (!entry.source || Array.isArray(entry.source) || typeof entry.source !== 'object') {
+    reportError(`ERROR: marketplace.json — plugin '${plugin}' has invalid source entry`);
+    return;
+  }
+
+  if (entry.source.source === 'git-subdir') {
+    for (const field of ['url', 'path', 'ref']) {
+      if (typeof entry.source[field] !== 'string' || entry.source[field].trim() === '') {
+        reportError(`ERROR: marketplace.json — plugin '${plugin}' missing source.${field}`);
+      }
+    }
+    return;
+  }
+
+  reportError(`ERROR: marketplace.json — plugin '${plugin}' has unsupported source mode: ${entry.source.source ?? '<missing>'}`);
+}
+
 function collectCommands(node, commands = []) {
   if (Array.isArray(node)) {
     for (const item of node) collectCommands(item, commands);
@@ -246,13 +272,9 @@ if (fs.existsSync(marketplacePath)) {
       console.error('ERROR: marketplace.json missing "plugins" array');
       errors++;
     } else {
-      // Verify each plugin source path exists
+      // Verify each plugin source entry is valid for the selected marketplace mode.
       for (const p of marketplace.plugins) {
-        const srcPath = path.join(DIST_DIR, '..', p.source);
-        if (!fs.existsSync(srcPath)) {
-          console.error(`ERROR: marketplace.json — plugin source not found: ${p.source}`);
-          errors++;
-        }
+        validateMarketplaceSource(p.name ?? '<unknown>', p, path.join(DIST_DIR, '..'));
       }
       console.log(`Validated marketplace.json (${marketplace.plugins.length} plugins)`);
     }

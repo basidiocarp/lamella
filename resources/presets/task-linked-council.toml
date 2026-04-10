@@ -1,0 +1,26 @@
+# Preset: task-linked-council
+# Fixed two-role technical council for one bounded task.
+
+[preset]
+name = "task-linked-council"
+description = "Task-linked technical council using existing reviewer and architect lanes"
+requires = []
+
+[models]
+review = "sonnet"
+architecture = "opus"
+
+[tools]
+
+[skills]
+activate = [
+  "task-linked-council",
+  "structured-review",
+  "fidelity-review",
+  "context-engineering",
+]
+
+[agents]
+# `review` resolves through the shared Lamella review capability profile.
+default_reviewer = { subagent_type = "review", model = "sonnet" }
+default_architect = { subagent_type = "architect", model = "opus" }

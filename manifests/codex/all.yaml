@@ -278,6 +278,7 @@
       "workflow/mental-models",
       "workflow/resolve-pr-parallel",
       "workflow/spec-driven-workflow",
+      "workflow/task-linked-council",
       "workflow/strategy-execution-alignment",
       "writing/content-strategy",
       "writing/content-writer",

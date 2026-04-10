@@ -10,7 +10,8 @@
       "workflow/conductor",
       "workflow/context-handoff",
       "workflow/executing-plans",
-      "workflow/finishing-a-development-branch"
+      "workflow/finishing-a-development-branch",
+      "workflow/task-linked-council"
     ],
     "workflows": [],
     "templates": [],

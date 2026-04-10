@@ -43,12 +43,33 @@ ${BOLD}lamella preset${NC} - Manage workflow presets
 ${BOLD}USAGE${NC}
     lamella preset list              List available presets
     lamella preset show <name>       Show full preset details
-    lamella preset install <name>    Install with preset configuration
+    lamella preset install <name> [install-options]
+                                    Install the Lamella-owned preset surface
 
 ${BOLD}EXAMPLES${NC}
     lamella preset list
     lamella preset show explore-codebase
     lamella preset install tdd-cycle
+    lamella preset install stipe-package-repair
+    lamella preset install stipe-package-repair --dry-run
+EOF
+    exit 0
+}
+
+preset_install_usage() {
+    cat <<EOF
+${BOLD}lamella preset install${NC}
+
+${BOLD}USAGE${NC}
+    lamella preset install <name> [install-options]
+
+${BOLD}SUPPORTED INSTALL OPTIONS${NC}
+    -n, --dry-run     Show the resolved build/install order
+    --refresh         Re-detect tools and re-evaluate installed plugins
+
+${BOLD}NOTE${NC}
+    Preset surfaces are Lamella-owned. Pass install flags only; do not append
+    plugin names after the preset name.
 EOF
     exit 0
 }
@@ -327,6 +348,17 @@ cmd_show() {
         done <<< "$agents"
         echo ""
     fi
+
+    # Install surface
+    local install_plugins
+    install_plugins=$(toml_get_array "$preset_file" "install" "plugins")
+    if [[ -n "$install_plugins" ]]; then
+        echo -e "${BOLD}Install Surface:${NC}"
+        while IFS= read -r plugin; do
+            echo "  - $plugin"
+        done <<< "$install_plugins"
+        echo ""
+    fi
 }
 
 cmd_install() {
@@ -335,6 +367,26 @@ cmd_install() {
         log_error "Missing preset name. Usage: lamella preset install <name>"
         exit 1
     fi
+    shift || true
+
+    local install_args=("$@")
+    local arg
+    for arg in "${install_args[@]}"; do
+        case "$arg" in
+            -h|--help)
+                preset_install_usage
+                ;;
+            --refresh|-n|--dry-run)
+                ;;
+            -*)
+                ;;
+            *)
+                log_error "Preset install accepts install flags only, not plugin names: $arg"
+                log_info "Use 'lamella install <plugins...>' for ad-hoc installs"
+                exit 1
+                ;;
+        esac
+    done
 
     local preset_file="$PRESETS_DIR/${name}.toml"
     if [[ ! -f "$preset_file" ]]; then
@@ -375,9 +427,21 @@ cmd_install() {
         log_success "All required tools detected"
     fi
 
-    # Apply the preset by installing all plugins (the preset config is advisory)
-    log_info "Installing plugins with preset configuration..."
-    bash "$INSTALL_SCRIPT" --all
+    local install_plugins=()
+    while IFS= read -r plugin; do
+        [[ -z "$plugin" ]] && continue
+        install_plugins+=("$plugin")
+    done < <(toml_get_array "$preset_file" "install" "plugins")
+
+    # Apply the preset by installing the Lamella-owned install surface when one exists.
+    # Fall back to the legacy broad install behavior for workflow-only presets.
+    if [[ ${#install_plugins[@]} -gt 0 ]]; then
+        log_info "Installing preset surface: ${install_plugins[*]}"
+        bash "$INSTALL_SCRIPT" "${install_args[@]}" "${install_plugins[@]}"
+    else
+        log_info "Installing plugins with preset configuration..."
+        bash "$INSTALL_SCRIPT" "${install_args[@]}" --all
+    fi
 
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -407,6 +471,10 @@ cmd_install() {
 
     echo -e "${DIM}Preset configuration is advisory. The activated skills and model"
     echo -e "assignments guide agent behavior when referenced in session.${NC}"
+    if [[ ${#install_plugins[@]} -gt 0 ]]; then
+        echo -e "${DIM}The install surface is Lamella-owned and machine-callable via"
+        echo -e "\`./lamella install --preset $name\` or \`./lamella preset install $name\`.${NC}"
+    fi
 }
 
 # ---------------------------------------------------------------------------

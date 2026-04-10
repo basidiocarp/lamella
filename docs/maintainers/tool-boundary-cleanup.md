@@ -98,6 +98,9 @@ These are host-management scripts, not Lamella packaging.
   logic.
 - Lamella no longer ships standalone install or reinstall helpers for Claude
   itself.
+- Lamella exposes named install surfaces for Stipe to call directly, such as
+  `./lamella install --preset stipe-package-repair`, instead of pushing package
+  selection logic into Stipe.
 
 ## Migrate To Cap-Oriented Analytics
 

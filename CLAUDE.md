@@ -49,6 +49,7 @@ make build PLUGIN=core
 ./lamella build-codex
 ./lamella install-codex --all
 ./lamella install core python typescript
+./lamella install --preset stipe-package-repair
 ```
 
 ---
@@ -67,6 +68,7 @@ lamella/
 ```
 
 - **resources/**: the source of truth for packaged content.
+- **resources/presets/**: named install surfaces and workflow presets.
 - **manifests/**: plugin and export boundaries.
 - **scripts/ci/**: structural validation.
 - **builders/** and `./lamella`: the build pipeline and wrapper entry point.
@@ -97,6 +99,10 @@ lamella/
 ## Communication Contracts
 
 Lamella packages content and generated artifacts, but it is not a runtime transport boundary in the same way as Hyphae, Mycelium, or Rhizome. Most breaking changes here are packaging or build-shape changes rather than cross-tool wire-contract changes.
+
+Named install surfaces are the exception. Presets like
+`stipe-package-repair` are Lamella-owned contracts that other tools may call
+by name, but Lamella still owns the package composition.
 
 ---
 

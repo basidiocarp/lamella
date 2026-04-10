@@ -51,6 +51,7 @@ those outputs ordered and reproducible.
 # Claude marketplace build and install
 ./lamella build-marketplace
 ./lamella install core python typescript
+./lamella install --preset stipe-package-repair
 ./lamella list
 
 # Codex export and install
@@ -60,6 +61,11 @@ those outputs ordered and reproducible.
 
 The `install` flow resolves manifest dependencies before it builds or installs
 anything.
+
+Named install surfaces live in `resources/presets/*.toml`. The
+`stipe-package-repair` preset is the Lamella-owned repair surface that Stipe
+can call directly with `./lamella install --preset stipe-package-repair`
+without inventing its own package-selection rules.
 
 ---
 

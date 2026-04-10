@@ -1,0 +1,18 @@
+# Preset: stipe-package-repair
+# Lamella-owned install surface for Stipe-driven package repair and reinstall flows.
+
+[preset]
+name = "stipe-package-repair"
+description = "Lamella-owned install surface for Stipe-driven package repair"
+requires = ["stipe"]
+
+[install]
+plugins = [
+  "core-base",
+  "core-quality",
+  "core-architecture",
+  "core-operations",
+  "meta-routing",
+  "workflow-execution",
+  "tools-cli",
+]

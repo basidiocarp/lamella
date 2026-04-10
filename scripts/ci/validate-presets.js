@@ -13,10 +13,11 @@
 const fs = require('fs');
 const path = require('path');
 const { VALID_REQUIRED_TOOLS_SET, VALID_REQUIRED_TOOLS } = require('../lib/requires');
-const { CONTENT_ROOT } = require('../lib/content-root');
+const { CONTENT_ROOT, BASE_DIR } = require('../lib/content-root');
 
 const PRESETS_DIR = path.join(CONTENT_ROOT, 'presets');
 const SKILLS_DIR = path.join(CONTENT_ROOT, 'skills');
+const MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
 
 let hasErrors = false;
 
@@ -166,6 +167,20 @@ function collectSkillNames() {
   return names;
 }
 
+function collectPluginNames() {
+  const names = new Set();
+  if (!fs.existsSync(MANIFESTS_DIR)) return names;
+
+  for (const entry of fs.readdirSync(MANIFESTS_DIR, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.json')) continue;
+    const pluginName = entry.name.replace(/\.json$/, '');
+    if (pluginName === 'schema' || pluginName === 'index') continue;
+    names.add(pluginName);
+  }
+
+  return names;
+}
+
 function validatePresets() {
   if (!fs.existsSync(PRESETS_DIR)) {
     console.log('No presets directory found, skipping validation');
@@ -181,6 +196,7 @@ function validatePresets() {
   }
 
   const skillNames = collectSkillNames();
+  const pluginNames = collectPluginNames();
   let validCount = 0;
 
   for (const file of presetFiles) {
@@ -257,6 +273,28 @@ function validatePresets() {
           if (!skillNames.has(skill)) {
             reportError(`${file} - [skills].activate references unknown skill '${skill}' (not found in resources/skills/)`);
           }
+        }
+      }
+    }
+
+    // Validate install.plugins references existing plugin manifests
+    if (parsed.install && parsed.install.plugins !== undefined) {
+      const plugins = parsed.install.plugins;
+      if (!Array.isArray(plugins)) {
+        reportError(`${file} - [install].plugins must be an array`);
+      } else if (plugins.length === 0) {
+        reportError(`${file} - [install].plugins must not be empty`);
+      } else {
+        const seen = new Set();
+        for (const plugin of plugins) {
+          if (typeof plugin !== 'string' || plugin.trim() === '') {
+            reportError(`${file} - [install].plugins entries must be non-empty strings`);
+          } else if (!pluginNames.has(plugin)) {
+            reportError(`${file} - [install].plugins references unknown plugin '${plugin}' (not found in manifests/claude/)`);
+          } else if (seen.has(plugin)) {
+            reportError(`${file} - [install].plugins has duplicate entry '${plugin}'`);
+          }
+          seen.add(plugin);
         }
       }
     }

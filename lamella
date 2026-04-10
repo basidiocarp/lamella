@@ -38,11 +38,41 @@ EXAMPLES
     ./lamella install core typescript
     ./lamella install --dry-run typescript
     ./lamella install --preset explore-codebase
+    ./lamella install --preset stipe-package-repair
     ./lamella preset list
     ./lamella preset show tdd-cycle
     ./lamella build-repo-marketplace
     ./lamella install-codex --all
     ./lamella update
+EOF
+    exit 0
+}
+
+install_usage() {
+    cat <<EOF
+lamella install - install Claude plugins
+
+USAGE
+    ./lamella install [options] [plugin-names...]
+    ./lamella install --preset <name> [install-options]
+
+OPTIONS
+    -a, --all         Install every available plugin
+    -l, --list        List available plugins
+    -n, --dry-run     Show the resolved build/install order
+    --refresh         Re-detect tools and re-evaluate installed plugins
+    --preset <name>   Install a Lamella-owned preset surface by name
+    -h, --help        Show this help
+
+EXAMPLES
+    ./lamella install core python
+    ./lamella install --dry-run typescript
+    ./lamella install --preset stipe-package-repair
+    ./lamella install --preset stipe-package-repair --dry-run
+
+NOTE
+    Preset surfaces are Lamella-owned. Callers may select a named preset,
+    but Lamella remains the source of truth for package composition.
 EOF
     exit 0
 }
@@ -108,13 +138,22 @@ main() {
     # Handle install --preset by routing to preset.sh install
     if [[ "${1:-}" == "install" ]]; then
         local preset_name=""
+        local saw_preset=false
         local other_args=()
         shift
         while [[ $# -gt 0 ]]; do
             case "$1" in
+                -h|--help)
+                    install_usage
+                    ;;
                 --preset)
+                    saw_preset=true
                     shift
                     preset_name="${1:-}"
+                    if [[ -z "$preset_name" ]]; then
+                        echo "lamella: missing preset name for --preset" >&2
+                        exit 1
+                    fi
                     shift
                     ;;
                 *)
@@ -124,7 +163,11 @@ main() {
             esac
         done
         if [[ -n "$preset_name" ]]; then
-            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" install "$preset_name"
+            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" install "$preset_name" "${other_args[@]}"
+        fi
+        if [[ "$saw_preset" == true ]]; then
+            echo "lamella: missing preset name for --preset" >&2
+            exit 1
         fi
         exec bash "$SCRIPT_DIR/install.sh" "${other_args[@]}"
     fi

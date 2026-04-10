@@ -66,4 +66,4 @@ Show:
 | Version conflict | Inspect the relevant manifest or lockfile before changing code |
 | Build tool misconfiguration | Read the config file and compare it with the repo's normal conventions |
 
-Prefer minimal diffs over refactoring. Switch to [`/smart-fix`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/development/smart-fix.md) if the issue turns into a broader incident or design failure.
+Prefer minimal diffs over refactoring. Switch to [`/smart-fix`](smart-fix.md) if the issue turns into a broader incident or design failure.

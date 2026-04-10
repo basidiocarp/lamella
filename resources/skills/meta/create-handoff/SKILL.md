@@ -16,14 +16,14 @@ machine-checkable verification gates.
 
 ```
 .handoffs/
-├── TEMPLATE.md              # Reference format
-├── HANDOFFS.md              # Index (update after creating)
-├── <project>/               # One directory per project
-│   ├── <topic>.md           # Handoff document
-│   └── verify-<topic>.sh   # Verification script
-├── cross-project/           # Spans multiple projects
-└── completed/               # Archive of finished work
+├── HANDOFFS.md             # Active dashboard
+├── <project>/              # Active repo-owned handoffs
+├── cross-project/          # Active cross-repo handoffs
+├── campaigns/              # Multi-step programs
+└── archive/                # Completed work
 ```
+
+Templates for this workflow live in the repo-level handoff template folder.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ machine-checkable verification gates.
 
 ### 2. Write the handoff
 
-Follow `.handoffs/TEMPLATE.md` exactly:
+Follow the repo-level work-item handoff template:
 
 - **Problem**: 1-3 sentences on what's broken or missing
 - **What exists**: Current state of relevant code/features
@@ -127,7 +127,7 @@ Before considering the handoff complete:
 - [ ] Verify script is executable
 - [ ] Verify script has one check per checklist item
 - [ ] HANDOFFS.md index updated
-- [ ] Handoff follows TEMPLATE.md format (paste-output markers, completion protocol)
+- [ ] Handoff follows the work-item template format
 - [ ] Every step has specific files to modify
 - [ ] Every step has a verification section
 

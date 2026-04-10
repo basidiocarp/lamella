@@ -3,10 +3,10 @@
 Improves context preservation during compaction.
 
 This folder contains both:
-- a standalone cross-platform Node example in [pre-compact.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/compaction/pre-compact.js)
-- a standalone Bash variant in [pre-compact.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/compaction/pre-compact.sh)
+- a standalone cross-platform Node example in [pre-compact.js](pre-compact.js)
+- a standalone Bash variant in [pre-compact.sh](pre-compact.sh)
 
-The Lamella plugin's shared catalog uses the Node-based [`pre-compact.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/pre-compact.js) hook for its default behavior.
+The Lamella plugin's shared catalog uses the Node-based [`pre-compact.js`](../../../scripts/hooks/pre-compact.js) hook for its default behavior.
 
 ## The Problem
 

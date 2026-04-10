@@ -17,7 +17,7 @@
 #   - Lines of code written (via Edit/Write)
 #   - Model usage (requests, tokens, cache hit rate)
 #   - Estimated cost (via ccusage or pricing table fallback)
-#   - RTK token savings (if RTK installed, delta from session start)
+#   - Mycelium token savings (if Mycelium is installed, delta from session start)
 #   - Conversation ratio (interactive vs auto turns, avg time/turn)
 #   - Thinking blocks count (off by default)
 #   - Context window estimate (off by default)
@@ -25,7 +25,7 @@
 # Requirements:
 #   - jq (required for JSON parsing)
 #   - ccusage (optional, for accurate cost calculation)
-#   - rtk (optional, for token savings tracking)
+#   - mycelium (optional, for token savings tracking)
 #
 # Configuration priority: env vars > config file > defaults
 #   Config file: ~/.config/session-summary/config.sh
@@ -35,7 +35,7 @@
 #   SKIP=1          - Disable summary entirely
 #   LOG=<path>      - Override log directory (default: ~/.claude/logs)
 #   FILES=0|1       - Files section (default: 1)
-#   RTK=auto|1|0    - RTK savings (default: auto-detect)
+#   MYCELIUM=auto|1|0  - Mycelium savings (default: auto-detect)
 #   GIT=0|1         - Git diff summary (default: 1)
 #   ERRORS=0|1      - Error details (default: 1)
 #   LOC=0|1         - Lines of code (default: 1)
@@ -62,7 +62,7 @@ CONFIG_FILE="${HOME}/.config/session-summary/config.sh"
 _DEFAULT_LOG_DIR="$HOME/.claude/logs"
 _DEFAULT_SKIP=0
 _DEFAULT_FILES=1
-_DEFAULT_RTK=auto
+_DEFAULT_MYCELIUM=auto
 _DEFAULT_GIT=1
 _DEFAULT_ERRORS=1
 _DEFAULT_LOC=1
@@ -70,7 +70,7 @@ _DEFAULT_RATIO=1
 _DEFAULT_FEATURES=1
 _DEFAULT_THINKING=0
 _DEFAULT_CONTEXT=0
-_DEFAULT_SECTIONS="meta,duration,tools,errors,files,features,git,loc,models,cache,cost,rtk,ratio,thinking,context"
+_DEFAULT_SECTIONS="meta,duration,tools,errors,files,features,git,loc,models,cache,cost,mycelium,ratio,thinking,context"
 
 # Load config file (if exists), then overlay env vars
 load_config() {
@@ -78,7 +78,7 @@ load_config() {
     LOG_DIR="$_DEFAULT_LOG_DIR"
     SKIP="$_DEFAULT_SKIP"
     FILES_ENABLED="$_DEFAULT_FILES"
-    RTK_ENABLED="$_DEFAULT_RTK"
+    MYCELIUM_ENABLED="$_DEFAULT_MYCELIUM"
     GIT_ENABLED="$_DEFAULT_GIT"
     ERRORS_ENABLED="$_DEFAULT_ERRORS"
     LOC_ENABLED="$_DEFAULT_LOC"
@@ -91,12 +91,12 @@ load_config() {
     # Layer 2: config file
     if [[ -f "$CONFIG_FILE" ]]; then
         local val
-        val=$(bash -c "source '$CONFIG_FILE' 2>/dev/null && echo \"\${LOG_DIR:-}|\${SKIP:-}|\${FILES:-}|\${RTK:-}|\${GIT:-}|\${ERRORS:-}|\${LOC:-}|\${RATIO:-}|\${FEATURES:-}|\${THINKING:-}|\${CONTEXT:-}|\${SECTIONS:-}\"")
-        IFS='|' read -r _cf_log _cf_skip _cf_files _cf_rtk _cf_git _cf_errors _cf_loc _cf_ratio _cf_features _cf_thinking _cf_context _cf_sections <<< "$val"
+        val=$(bash -c "source '$CONFIG_FILE' 2>/dev/null && echo \"\${LOG_DIR:-}|\${SKIP:-}|\${FILES:-}|\${MYCELIUM:-}|\${GIT:-}|\${ERRORS:-}|\${LOC:-}|\${RATIO:-}|\${FEATURES:-}|\${THINKING:-}|\${CONTEXT:-}|\${SECTIONS:-}\"")
+        IFS='|' read -r _cf_log _cf_skip _cf_files _cf_mycelium _cf_git _cf_errors _cf_loc _cf_ratio _cf_features _cf_thinking _cf_context _cf_sections <<< "$val"
         [[ -n "$_cf_log" ]] && LOG_DIR="$_cf_log"
         [[ -n "$_cf_skip" ]] && SKIP="$_cf_skip"
         [[ -n "$_cf_files" ]] && FILES_ENABLED="$_cf_files"
-        [[ -n "$_cf_rtk" ]] && RTK_ENABLED="$_cf_rtk"
+        [[ -n "$_cf_mycelium" ]] && MYCELIUM_ENABLED="$_cf_mycelium"
         [[ -n "$_cf_git" ]] && GIT_ENABLED="$_cf_git"
         [[ -n "$_cf_errors" ]] && ERRORS_ENABLED="$_cf_errors"
         [[ -n "$_cf_loc" ]] && LOC_ENABLED="$_cf_loc"
@@ -111,7 +111,7 @@ load_config() {
     [[ -n "${SESSION_SUMMARY_LOG:-}" ]] && LOG_DIR="$SESSION_SUMMARY_LOG"
     [[ -n "${SESSION_SUMMARY_SKIP:-}" ]] && SKIP="$SESSION_SUMMARY_SKIP"
     [[ -n "${SESSION_SUMMARY_FILES:-}" ]] && FILES_ENABLED="$SESSION_SUMMARY_FILES"
-    [[ -n "${SESSION_SUMMARY_RTK:-}" ]] && RTK_ENABLED="$SESSION_SUMMARY_RTK"
+    [[ -n "${SESSION_SUMMARY_MYCELIUM:-}" ]] && MYCELIUM_ENABLED="$SESSION_SUMMARY_MYCELIUM"
     [[ -n "${SESSION_SUMMARY_GIT:-}" ]] && GIT_ENABLED="$SESSION_SUMMARY_GIT"
     [[ -n "${SESSION_SUMMARY_ERRORS:-}" ]] && ERRORS_ENABLED="$SESSION_SUMMARY_ERRORS"
     [[ -n "${SESSION_SUMMARY_LOC:-}" ]] && LOC_ENABLED="$SESSION_SUMMARY_LOC"
@@ -121,9 +121,9 @@ load_config() {
     [[ -n "${SESSION_SUMMARY_CONTEXT:-}" ]] && CONTEXT_ENABLED="$SESSION_SUMMARY_CONTEXT"
     [[ -n "${SESSION_SUMMARY_SECTIONS:-}" ]] && SECTION_ORDER="$SESSION_SUMMARY_SECTIONS"
 
-    # Auto-detect RTK availability
-    if [[ "$RTK_ENABLED" == "auto" ]]; then
-        command -v rtk &>/dev/null && RTK_ENABLED=1 || RTK_ENABLED=0
+    # Auto-detect Mycelium availability
+    if [[ "$MYCELIUM_ENABLED" == "auto" ]]; then
+        command -v mycelium &>/dev/null && MYCELIUM_ENABLED=1 || MYCELIUM_ENABLED=0
     fi
 }
 
@@ -131,7 +131,7 @@ load_config
 
 # Section enablement check
 # Always-on: meta, duration, tools, models, cache, cost
-# Configurable: files, git, errors, loc, rtk, ratio, features (default ON)
+# Configurable: files, git, errors, loc, mycelium, ratio, features (default ON)
 # Configurable: thinking, context (default OFF)
 is_section_enabled() {
     local section="$1"
@@ -141,7 +141,7 @@ is_section_enabled() {
         git)      [[ "$GIT_ENABLED" == "1" ]] ;;
         errors)   [[ "$ERRORS_ENABLED" == "1" ]] ;;
         loc)      [[ "$LOC_ENABLED" == "1" ]] ;;
-        rtk)      [[ "$RTK_ENABLED" == "1" ]] ;;
+        mycelium) [[ "$MYCELIUM_ENABLED" == "1" ]] ;;
         ratio)    [[ "$RATIO_ENABLED" == "1" ]] ;;
         features) [[ "$FEATURES_ENABLED" == "1" ]] ;;
         thinking) [[ "$THINKING_ENABLED" == "1" ]] ;;
@@ -256,75 +256,35 @@ shorten_model_name() {
     echo "$model" | sed -E 's/-(20[0-9]{6})$//'
 }
 
-# Parse a numeric value with K/M/B suffix from rtk gain text output
-parse_rtk_number() {
-    local text="$1"
-    local label="$2"
-
-    echo "$text" | awk -v label="$label" '
-        $0 ~ label {
-            for (i=1; i<=NF; i++) {
-                if ($i ~ /^[0-9]/) {
-                    val = $i
-                    gsub(/,/, "", val)
-                    if (val ~ /[Bb]$/) { sub(/[Bb]$/, "", val); printf "%.0f", val * 1000000000 }
-                    else if (val ~ /[Mm]$/) { sub(/[Mm]$/, "", val); printf "%.0f", val * 1000000 }
-                    else if (val ~ /[Kk]$/) { sub(/[Kk]$/, "", val); printf "%.0f", val * 1000 }
-                    else { printf "%.0f", val }
-                    exit
-                }
-            }
-        }
-    '
-}
-
-# Diff "By Command" tables from two rtk gain outputs, return commands with positive delta
+# Diff "by_command" arrays from two mycelium gain JSON snapshots, return commands with positive delta
 # Output: "git status(2), ls(3), git diff(1)"
-diff_rtk_commands() {
-    local baseline="$1"
-    local current="$2"
+diff_mycelium_commands() {
+    local baseline_file="$1"
+    local current_json="$2"
 
-    { echo "___BASELINE___"; echo "$baseline"; echo "___CURRENT___"; echo "$current"; echo "___END___"; } | awk '
-        /^___BASELINE___$/ { section="baseline"; next }
-        /^___CURRENT___$/ { section="current"; in_table=0; next }
-        /^___END___$/ {
-            for (cmd in cur) {
-                delta = cur[cmd] - (base[cmd] + 0)
-                if (delta > 0) {
-                    short = cmd
-                    sub(/^rtk /, "", short)
-                    # Truncate long commands
-                    if (length(short) > 20) short = substr(short, 1, 17) "..."
-                    if (length(out) > 0) out = out ", "
-                    out = out short "(" delta ")"
-                }
-            }
-            print out
-            exit
-        }
-        /^By Command:/ { in_table=1; next }
-        /^─/ { next }
-        /^Command/ { next }
-        in_table && /^$/ { in_table=0; next }
-        in_table && NF >= 5 {
-            count = $(NF-3)
-            if (count ~ /^[0-9,]+$/) {
-                gsub(/,/, "", count)
-                cmd = ""
-                for (i=1; i<=NF-4; i++) cmd = cmd (i>1?" ":"") $i
-                if (section == "baseline") base[cmd] = count + 0
-                else cur[cmd] = count + 0
-            }
-        }
-    '
+    jq -r \
+        --slurpfile base "$baseline_file" \
+        --argjson current "$current_json" '
+        ($base[0].by_command // []) as $baseline
+        | ($current.by_command // []) as $latest
+        | [
+            $latest[]
+            | . as $cur
+            | (($baseline[] | select(.command == $cur.command) | .count) // 0) as $start
+            | ($cur.count - $start) as $delta
+            | select($delta > 0)
+            | "\($cur.command | sub("^mycelium "; "") | if length > 20 then .[0:17] + "..." else . end)(\($delta))"
+          ]
+        | join(", ")
+    ' 2>/dev/null
 }
 
-# Calculate RTK token savings for this session (delta between start and end)
-calculate_rtk_savings() {
-    # Build baseline file path (must match rtk-baseline.sh)
+# Calculate Mycelium token savings for this session (delta between start and end)
+calculate_mycelium_savings() {
+    # Build baseline file path (must match mycelium-baseline.sh)
     local baseline_key
     baseline_key=$(echo "${CLAUDE_PROJECT_DIR:-$(pwd)}" | tr '/' '-')
-    local baseline_file="/tmp/rtk-baseline${baseline_key}.txt"
+    local baseline_file="/tmp/mycelium-baseline${baseline_key}.json"
 
     # No baseline = no delta possible
     if [[ ! -f "$baseline_file" ]]; then
@@ -332,16 +292,13 @@ calculate_rtk_savings() {
         return
     fi
 
-    local baseline_text
-    baseline_text=$(<"$baseline_file")
-
-    local current_text
-    current_text=$(rtk gain 2>/dev/null) || { echo ""; return; }
+    local current_json
+    current_json=$(mycelium gain --format json 2>/dev/null) || { echo ""; return; }
 
     # Parse total commands from both snapshots
     local start_cmds end_cmds
-    start_cmds=$(parse_rtk_number "$baseline_text" "Total commands")
-    end_cmds=$(parse_rtk_number "$current_text" "Total commands")
+    start_cmds=$(jq -r '.summary.total_commands // 0' "$baseline_file" 2>/dev/null)
+    end_cmds=$(printf '%s' "$current_json" | jq -r '.summary.total_commands // 0' 2>/dev/null)
 
     local delta_cmds=$(( ${end_cmds:-0} - ${start_cmds:-0} ))
 
@@ -352,47 +309,25 @@ calculate_rtk_savings() {
         return
     fi
 
-    # Parse all token lines upfront (needed by all 3 approaches + pct calculation)
-    local start_saved end_saved start_input end_input start_output end_output
-    start_saved=$(parse_rtk_number "$baseline_text" "Tokens saved")
-    end_saved=$(parse_rtk_number "$current_text" "Tokens saved")
-    start_input=$(parse_rtk_number "$baseline_text" "Input tokens")
-    end_input=$(parse_rtk_number "$current_text" "Input tokens")
-    start_output=$(parse_rtk_number "$baseline_text" "Output tokens")
-    end_output=$(parse_rtk_number "$current_text" "Output tokens")
+    local start_saved end_saved start_input end_input
+    start_saved=$(jq -r '.summary.total_saved // 0' "$baseline_file" 2>/dev/null)
+    end_saved=$(printf '%s' "$current_json" | jq -r '.summary.total_saved // 0' 2>/dev/null)
+    start_input=$(jq -r '.summary.total_input // 0' "$baseline_file" 2>/dev/null)
+    end_input=$(printf '%s' "$current_json" | jq -r '.summary.total_input // 0' 2>/dev/null)
 
-    # Token savings: 3 approaches (M/K rounding loses precision for small sessions)
-    local delta_saved=0 estimated=0
-
-    # Approach 1: Direct delta from "Tokens saved" line
+    local delta_saved=0
     delta_saved=$(( ${end_saved:-0} - ${start_saved:-0} ))
-
-    # Approach 2: If 0 due to rounding, try (Input - Output) delta
-    if [[ $delta_saved -le 0 ]]; then
-        delta_saved=$(( (${end_input:-0} - ${start_input:-0}) - (${end_output:-0} - ${start_output:-0}) ))
-    fi
-
-    # Approach 3: Estimate from global average per command
-    if [[ $delta_saved -le 0 && ${end_cmds:-0} -gt 0 ]]; then
-        estimated=1
-        delta_saved=$(bc <<< "scale=0; ${end_saved:-0} / ${end_cmds:-1} * $delta_cmds")
-    fi
 
     # Calculate percentage
     local pct="0"
     local delta_input=$(( ${end_input:-0} - ${start_input:-0} ))
-    if [[ $estimated -eq 1 ]]; then
-        # Use global average percentage
-        if [[ ${end_input:-0} -gt 0 ]]; then
-            pct=$(bc <<< "scale=0; ${end_saved:-0} * 100 / ${end_input:-1}")
-        fi
-    elif [[ ${delta_input:-0} -gt 0 ]]; then
+    if [[ ${delta_input:-0} -gt 0 ]]; then
         pct=$(bc <<< "scale=0; $delta_saved * 100 / $delta_input")
     fi
 
-    # Parse per-command deltas from "By Command" table
+    # Parse per-command deltas from the JSON export
     local cmds_detail
-    cmds_detail=$(diff_rtk_commands "$baseline_text" "$current_text")
+    cmds_detail=$(diff_mycelium_commands "$baseline_file" "$current_json")
 
     # Clean up baseline file
     rm -f "$baseline_file"
@@ -402,9 +337,8 @@ calculate_rtk_savings() {
         --argjson cmds "$delta_cmds" \
         --argjson tokens_saved "${delta_saved:-0}" \
         --arg pct "$pct" \
-        --argjson estimated "$estimated" \
         --arg commands "${cmds_detail:-}" \
-        '{cmds: $cmds, tokens_saved: $tokens_saved, pct: $pct, estimated: ($estimated == 1), commands: $commands}'
+        '{cmds: $cmds, tokens_saved: $tokens_saved, pct: $pct, estimated: false, commands: $commands}'
 }
 
 # Collect git diff stats (files changed, insertions, deletions)
@@ -651,7 +585,7 @@ _SM=""          # session_meta JSON
 _SID=""         # session_id
 _BRANCH=""      # git branch
 _COST=""        # cost string
-_RTK=""         # rtk_data JSON
+_MYCELIUM=""    # mycelium_data JSON
 _GIT_DIFF=""    # git diff JSON
 _EXIT_REASON="" # exit reason
 
@@ -873,26 +807,26 @@ render_cost() {
     echo "Est. Cost: ${GREEN}\$$(printf "%.3f" "$_COST")${RESET}"
 }
 
-render_rtk() {
-    [[ -z "$_RTK" ]] && return
+render_mycelium() {
+    [[ -z "$_MYCELIUM" ]] && return
 
-    local rtk_cmds rtk_tokens rtk_pct rtk_estimated rtk_commands
-    rtk_cmds=$(echo "$_RTK" | jq -r '.cmds')
-    rtk_tokens=$(echo "$_RTK" | jq -r '.tokens_saved')
-    rtk_pct=$(echo "$_RTK" | jq -r '.pct')
-    rtk_estimated=$(echo "$_RTK" | jq -r '.estimated')
-    rtk_commands=$(echo "$_RTK" | jq -r '.commands')
+    local mycelium_cmds mycelium_tokens mycelium_pct mycelium_estimated mycelium_commands
+    mycelium_cmds=$(echo "$_MYCELIUM" | jq -r '.cmds')
+    mycelium_tokens=$(echo "$_MYCELIUM" | jq -r '.tokens_saved')
+    mycelium_pct=$(echo "$_MYCELIUM" | jq -r '.pct')
+    mycelium_estimated=$(echo "$_MYCELIUM" | jq -r '.estimated')
+    mycelium_commands=$(echo "$_MYCELIUM" | jq -r '.commands')
 
     local est_prefix=""
-    [[ "$rtk_estimated" == "true" ]] && est_prefix="est. "
+    [[ "$mycelium_estimated" == "true" ]] && est_prefix="est. "
 
     local out=""
-    if [[ $rtk_tokens -gt 0 ]]; then
-        out="RTK Savings: $rtk_cmds cmds · ~$(format_number "$rtk_tokens") tokens saved (${est_prefix}${rtk_pct}%)"
+    if [[ $mycelium_tokens -gt 0 ]]; then
+        out="Mycelium Savings: $mycelium_cmds cmds · ~$(format_number "$mycelium_tokens") tokens saved (${est_prefix}${mycelium_pct}%)"
     else
-        out="RTK Savings: $rtk_cmds cmds rewritten"
+        out="Mycelium Savings: $mycelium_cmds cmds rewritten"
     fi
-    [[ -n "$rtk_commands" ]] && out+=$'\n'"  $rtk_commands"
+    [[ -n "$mycelium_commands" ]] && out+=$'\n'"  $mycelium_commands"
     echo "$out"
 }
 
@@ -950,7 +884,7 @@ format_output() {
     local session_data="$3"
     local cost="$4"
     local git_branch="${5:-unknown}"
-    local rtk_data="${6:-}"
+    local mycelium_data="${6:-}"
     local exit_reason="${7:-}"
     local git_diff_data="${8:-}"
 
@@ -960,7 +894,7 @@ format_output() {
     _SID="$session_id"
     _BRANCH="$git_branch"
     _COST="$cost"
-    _RTK="$rtk_data"
+    _MYCELIUM="$mycelium_data"
     _GIT_DIFF="$git_diff_data"
     _EXIT_REASON="$exit_reason"
 
@@ -1050,7 +984,7 @@ log_summary() {
     local cost="$4"
     local cwd="$5"
     local git_branch="${6:-unknown}"
-    local rtk_data="${7:-}"
+    local mycelium_data="${7:-}"
     local exit_reason="${8:-}"
     local git_diff_data="${9:-}"
 
@@ -1107,9 +1041,9 @@ log_summary() {
         }
     ')
 
-    # RTK savings for log (JSON or null)
-    local rtk_json="${rtk_data:-null}"
-    [[ -z "$rtk_json" ]] && rtk_json="null"
+    # Mycelium savings for log (JSON or null)
+    local mycelium_json="${mycelium_data:-null}"
+    [[ -z "$mycelium_json" ]] && mycelium_json="null"
 
     # Git diff for log (JSON or null)
     local git_json="${git_diff_data:-null}"
@@ -1166,7 +1100,7 @@ log_summary() {
         --argjson skills "$skills" \
         --argjson has_teams "$has_teams" \
         --argjson has_plan_mode "$has_plan_mode" \
-        --argjson rtk_savings "$rtk_json" \
+        --argjson mycelium_savings "$mycelium_json" \
         --arg cost_usd "${cost:-0}" \
         '{
             timestamp: $timestamp,
@@ -1203,7 +1137,7 @@ log_summary() {
                 has_teams: $has_teams,
                 has_plan_mode: $has_plan_mode
             },
-            rtk_savings: $rtk_savings,
+            mycelium_savings: $mycelium_savings,
             cost_usd: ($cost_usd | tonumber)
         }'
     )
@@ -1309,10 +1243,10 @@ main() {
     local cost
     cost=$(calculate_cost "$session_id" "$session_data")
 
-    # Calculate RTK savings (if enabled)
-    local rtk_data=""
-    if [[ "$RTK_ENABLED" == "1" ]]; then
-        rtk_data=$(calculate_rtk_savings)
+    # Calculate Mycelium savings (if enabled)
+    local mycelium_data=""
+    if [[ "$MYCELIUM_ENABLED" == "1" ]]; then
+        mycelium_data=$(calculate_mycelium_savings)
     fi
 
     # Collect git diff (if enabled)
@@ -1323,11 +1257,11 @@ main() {
 
     # Format and display output
     format_output "$session_id" "$session_meta" "$session_data" "$cost" "$git_branch" \
-        "$rtk_data" "$exit_reason" "$git_diff_data"
+        "$mycelium_data" "$exit_reason" "$git_diff_data"
 
     # Log summary
     log_summary "$session_id" "$session_meta" "$session_data" "$cost" "$cwd" "$git_branch" \
-        "$rtk_data" "$exit_reason" "$git_diff_data"
+        "$mycelium_data" "$exit_reason" "$git_diff_data"
 
     exit 0
 }

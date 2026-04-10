@@ -1,7 +1,8 @@
 > Imported Claude Code reference snapshot.
 > Examples may use generic Claude Code paths such as `.claude/` or standalone
-> plugin layouts. For Lamella-specific layout and packaging, see `../index.md`,
-> `../architecture.md`, and `../getting-started/categorizing-skills.md`.
+> plugin layouts. For Lamella-specific layout and packaging, see
+> `../../README.md`, `../../architecture.md`, and
+> `../../getting-started/categorizing-skills.md`.
 
 # Extend Claude with skills
 
@@ -243,8 +244,8 @@ Reference supporting files from `SKILL.md` so Claude knows what each file contai
 ```markdown  theme={null}
 ## Additional resources
 
-- For complete API details, see [reference.md](reference.md)
-- For usage examples, see [examples.md](examples.md)
+- For complete API details, see `reference.md`
+- For usage examples, see `examples.md`
 ```
 
 <Tip>Keep `SKILL.md` under 500 lines. Move detailed reference material to separate files.</Tip>

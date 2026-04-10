@@ -8,13 +8,13 @@ Lamella is the packaging and build system for shared coding-agent content. It tu
 
 ---
 
-## What Lamella Does NOT Do
+## Operating Model
 
-- Does not run at agent runtime: it builds artifacts that other tools load later.
-- Does not execute skills or agents: Claude Code and Codex interpret the output.
-- Does not auto-update installed plugins: installation and reinstall are explicit.
-- Does not prove a skill is effective: validation checks structure and cross-references, not prompt quality in the wild.
-- Does not replace Stipe or Cortina: Lamella packages hooks, but it does not own setup or runtime capture.
+- Do not treat Lamella as a runtime. It builds artifacts that other tools load later.
+- Do not execute skills or agents. Claude Code and Codex interpret the output.
+- Do not assume install or reinstall happens automatically. Those flows stay explicit.
+- Do not confuse structure validation with prompt-quality proof. Validation checks shape and references, not field effectiveness.
+- Do not move setup or runtime capture into Lamella. Packaging hooks is not the same as owning setup or lifecycle behavior.
 
 ---
 

@@ -216,7 +216,8 @@ In this tutorial, you experienced:
 
 ## Next Steps
 
-Now that you've experienced a skill in action, explore the [Brainstorm skill](../skills/brainstorm/index.md)
-in full, [browse all skills](../skills/index.md) to find ones that match your
-work, or [learn about pipelines](../concepts/PIPELINES.MD) to see how skills
-chain together.
+Now that you've experienced a skill in action, inspect the packaged
+Brainstorming skill at `../../resources/skills/core/brainstorming/SKILL.md`,
+review the format rules in [authoring/skills-spec.md](../authoring/skills-spec.md),
+or continue with [categorizing-skills.md](categorizing-skills.md) to see how
+Lamella groups and packages skills.

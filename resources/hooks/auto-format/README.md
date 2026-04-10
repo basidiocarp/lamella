@@ -3,10 +3,10 @@
 Automatically formats files after Claude edits them.
 
 This folder contains both:
-- a standalone cross-platform Node example in [auto-format.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/auto-format/auto-format.js)
-- a standalone Bash variant in [auto-format.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/auto-format/auto-format.sh)
+- a standalone cross-platform Node example in [auto-format.js](auto-format.js)
+- a standalone Bash variant in [auto-format.sh](auto-format.sh)
 
-The Lamella plugin's shared catalog uses the Node-based [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js) hook instead.
+The Lamella plugin's shared catalog uses the Node-based [`post-edit-format.js`](../../../scripts/hooks/post-edit-format.js) hook instead.
 
 ## Behavior
 
@@ -102,4 +102,4 @@ The Node example relies on your normal `PATH` plus `npx` for prettier. If your t
 ## Related Hooks
 
 - [change-summary](../change-summary/)
-- [`post-edit-format.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-format.js)
+- [`post-edit-format.js`](../../../scripts/hooks/post-edit-format.js)

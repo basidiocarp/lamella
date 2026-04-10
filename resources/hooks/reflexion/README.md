@@ -27,7 +27,7 @@ Flow:
 ## Installation
 
 ```bash
-cd /Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/reflexion
+cd lamella/resources/hooks/reflexion
 bun install
 ```
 

@@ -4,16 +4,16 @@ This directory contains Lamella's shared hook catalog plus a few standalone exam
 
 ## What Lives Here
 
-- [`../hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/hooks.json): the main plugin-level hook catalog
-- [`../hooks-minimal.json`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/hooks-minimal.json): a smaller install profile
+- [`../hooks.json`](../hooks.json): the main plugin-level hook catalog
+- [`../hooks-minimal.json`](../hooks-minimal.json): a smaller install profile
 - `../auto-format/`, `../change-summary/`, and `../compaction/`: standalone examples for local installation
 - `../gh-cli/`, `../hookify/`, `../reflexion/`, `../obsidian-vault/`, `../security-guidance/`, and related folders: specialized hook bundles
   `obsidian-vault` now ships supported Node and Bash variants for both its hook entrypoints and its vault-management scripts
-- [`../../../scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks): the shared cross-platform Node implementations used by the main catalog, plus a few Bash-only examples
+- [`../../../scripts/hooks/`](../../../scripts/hooks/): the shared cross-platform Node implementations used by the main catalog, plus a few Bash-only examples
 
 ## Main Catalog Overview
 
-The main [`hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/hooks.json) wires these shared behaviors:
+The main [`hooks.json`](../hooks.json) wires these shared behaviors:
 
 ### `PreToolUse`
 
@@ -64,7 +64,7 @@ Two important exceptions remain:
 
 The standalone folders are examples you can copy into `~/.claude/hooks/` for manual installation.
 
-They are not a complete mirror of the main catalog, and many of them remain more shell-specific than the shared implementations in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks).
+They are not a complete mirror of the main catalog, and many of them remain more shell-specific than the shared implementations in [`scripts/hooks/`](../../../scripts/hooks/).
 
 Prefer the shared catalog when:
 - you want the Lamella plugin defaults
@@ -77,6 +77,6 @@ Prefer the standalone examples when:
 
 ## Related
 
-- [rules/common/hooks.md](/Users/williamnewton/projects/claude-mycelium/lamella/resources/rules/common/hooks.md)
-- [strategic-compact](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/core/strategic-compact/SKILL.md)
-- [compaction README](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/compaction/README.md)
+- [rules/common/hooks.md](../../rules/common/hooks.md)
+- [strategic-compact](../../skills/core/strategic-compact/SKILL.md)
+- [compaction README](../compaction/README.md)

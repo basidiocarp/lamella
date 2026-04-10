@@ -2,7 +2,7 @@
 
 ## Overview
 
-Port the Specification-Driven Development (SDD) methodology from Claude Code into the claude-mycelium ecosystem by integrating with Hyphae (persistent memory), Rhizome (code intelligence), and Cortina (guardrails/hooks). This enables specs to be authored, tracked, maintained, and recalled across agent sessions with full context and dependency tracking.
+Port the Specification-Driven Development (SDD) methodology from Claude Code into the basidiocarp ecosystem by integrating with Hyphae (persistent memory), Rhizome (code intelligence), and Cortina (guardrails/hooks). This enables specs to be authored, tracked, maintained, and recalled across agent sessions with full context and dependency tracking.
 
 ## Phase 1: Hyphae Storage
 
@@ -164,7 +164,7 @@ Enable seamless spec context across session boundaries.
 - [ ] Session context injection works across 5+ spec types (feat, fix, doc, refactor, perf)
 - [ ] Zero spec data loss across session boundary (Stop → new session → `/resume-spec`)
 - [ ] Integration test suite passes (spec creation → task → fidelity → update flow)
-- [ ] Spec usage guide adopted by 3+ projects in claude-mycelium
+- [ ] Spec usage guide adopted by 3+ projects in basidiocarp
 
 ## Open Questions
 

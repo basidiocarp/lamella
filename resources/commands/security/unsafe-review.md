@@ -12,7 +12,7 @@ If the target is not specified, infer the most relevant Rust file from the curre
 ## Workflow
 
 1. Identify the target file, module, or unsafe item.
-2. Load [`resources/skills/rust/unsafe-checker/`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/rust/unsafe-checker/SKILL.md).
+2. Load [`resources/skills/rust/unsafe-checker/`](../../skills/rust/unsafe-checker/SKILL.md).
 3. Enumerate:
    - `unsafe` blocks
    - `unsafe fn`
@@ -89,4 +89,4 @@ For each finding, include:
 
 ## Related
 
-- [`/guideline`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/database/guideline.md) for rule lookup
+- [`/guideline`](../database/guideline.md) for rule lookup

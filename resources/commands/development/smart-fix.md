@@ -81,5 +81,5 @@ End with:
 
 ## Related Commands
 
-- [`/build-fix`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/development/build-fix.md) for narrow compile and type failures
-- [`/bugfix`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/development/bugfix.md) for smaller bugfix work
+- [`/build-fix`](build-fix.md) for narrow compile and type failures
+- [`/bugfix`](bugfix.md) for smaller bugfix work

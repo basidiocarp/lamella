@@ -1,6 +1,6 @@
 # Lamella Roadmap
 
-This page is the Lamella-specific backlog. The workspace [ROADMAP.md](../../docs/ROADMAP.md) keeps the ecosystem sequencing and cross-repo priorities.
+This page is the Lamella-specific backlog. The workspace [ROADMAP.md](../../docs/workspace/ROADMAP.md) keeps the ecosystem sequencing and cross-repo priorities.
 
 Lamella is past the "prove the build works" stage. The backlog now centers on packaging, validation, dependency handling, host parity, and keeping the distribution story aligned with the actual shape of the library.
 
@@ -36,7 +36,7 @@ Source validators and post-build validators need to keep moving together. Packag
 
 ### Cortina and Stipe boundary cleanup
 
-Lamella still carries a few responsibilities that belong elsewhere. The cleanup plan in [tool-boundary-cleanup.md](tool-boundary-cleanup.md) should keep pushing runtime lifecycle work toward Cortina and host-maintenance work toward Stipe.
+Lamella still carries a few responsibilities that belong elsewhere. The cleanup plan in [maintainers/tool-boundary-cleanup.md](maintainers/tool-boundary-cleanup.md) should keep pushing runtime lifecycle work toward Cortina and host-maintenance work toward Stipe.
 
 ## Later
 

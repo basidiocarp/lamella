@@ -29,5 +29,5 @@ Use this skill when the work is beyond a basic embed and needs custom Three.js b
 
 ## Related Guidance
 
-- Use [`frontend-patterns` and its 3D reference](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/frontend/frontend-patterns/SKILL.md) when the open question is whether 3D belongs in the experience at all.
-- Use [`css-animation-creator`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/frontend/css-animation-creator/SKILL.md) when the work is better served by CSS or scroll-driven motion instead of WebGL.
+- Use [`frontend-patterns` and its 3D reference](../frontend-patterns/SKILL.md) when the open question is whether 3D belongs in the experience at all.
+- Use [`css-animation-creator`](../css-animation-creator/SKILL.md) when the work is better served by CSS or scroll-driven motion instead of WebGL.

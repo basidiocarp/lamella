@@ -8,7 +8,7 @@ allowed-tools: Bash, Read, Write, Glob, Grep
 
 Use this command when the user needs several related personas or a segmentation pass.
 
-Use [`/persona`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/content/persona.md) when they need one canonical persona artifact. Use this command when they want a persona set, messaging matrix, or CTA pack across segments.
+Use [`/persona`](persona.md) when they need one canonical persona artifact. Use this command when they want a persona set, messaging matrix, or CTA pack across segments.
 
 ## Subcommands
 
@@ -94,7 +94,7 @@ When the user wants a substantial deliverable, organize it as:
 
 ## Related Commands
 
-- [`/persona`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/content/persona.md) for a single canonical persona
-- [`/seo`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/content/seo.md) for search-driven positioning context
-- [`/articles`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/content/articles.md) for article generation
-- [`/landing`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/content/landing.md) for landing-page content
+- [`/persona`](persona.md) for a single canonical persona
+- [`/seo`](seo.md) for search-driven positioning context
+- [`/articles`](articles.md) for article generation
+- [`/landing`](landing.md) for landing-page content

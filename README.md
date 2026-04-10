@@ -149,14 +149,16 @@ make validate
 
 ## Documentation
 
-- [docs/index.md](docs/index.md): documentation entry point
+- [docs/README.md](docs/README.md): documentation entry point
 - [docs/architecture.md](docs/architecture.md): repository and packaging architecture
-- [docs/FEEDBACK-CAPTURE.md](docs/FEEDBACK-CAPTURE.md): feedback capture behavior
-- [docs/SKILL-INVENTORY.md](docs/SKILL-INVENTORY.md): inventory overview
+- [docs/maintainers/README.md](docs/maintainers/README.md): maintainer-facing docs
+- [docs/maintainers/feedback-capture.md](docs/maintainers/feedback-capture.md): feedback capture behavior
+- [docs/maintainers/skill-inventory.md](docs/maintainers/skill-inventory.md): inventory overview
 - [docs/authoring/best-practices.md](docs/authoring/best-practices.md): authoring guidance
 - [docs/authoring/best-practices-codex.md](docs/authoring/best-practices-codex.md): Codex-specific authoring guidance
 - [docs/authoring/skills-spec.md](docs/authoring/skills-spec.md): skill structure and expectations
-- [docs/getting-started/index.md](docs/getting-started/index.md): getting started path
+- [docs/getting-started/README.md](docs/getting-started/README.md): getting started path
+- [docs/reference/README.md](docs/reference/README.md): host reference entry point
 - [docs/reference/claude/plugins.md](docs/reference/claude/plugins.md): Claude plugin reference
 - [docs/reference/codex/plugins-overview.md](docs/reference/codex/plugins-overview.md): Codex packaging reference
 

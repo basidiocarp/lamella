@@ -4,9 +4,9 @@
 
 ## What It Includes
 
-- lifecycle hook entrypoints under [`scripts/`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/obsidian-vault/scripts)
-- note-management helpers under [`project-scripts/`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/obsidian-vault/project-scripts)
-- the bundled hook manifest in [`hooks.json`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/obsidian-vault/hooks.json)
+- lifecycle hook entrypoints under [`scripts/`](scripts/)
+- note-management helpers under [`project-scripts/`](project-scripts/)
+- the bundled hook manifest in [`hooks.json`](hooks.json)
 
 ## Runtime Variants
 

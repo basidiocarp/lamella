@@ -3,10 +3,10 @@
 Runs when Claude finishes a task and prints a repo-focused summary of the current diff.
 
 This folder contains both:
-- a standalone cross-platform Node example in [change-summary.js](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/change-summary/change-summary.js)
-- a standalone Bash variant in [change-summary.sh](/Users/williamnewton/projects/claude-mycelium/lamella/resources/hooks/change-summary/change-summary.sh)
+- a standalone cross-platform Node example in [change-summary.js](change-summary.js)
+- a standalone Bash variant in [change-summary.sh](change-summary.sh)
 
-The main Lamella catalog uses the shared hooks in [`scripts/hooks/`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks) plus Cortina for the primary lifecycle runtime instead of this one-file bundle.
+The main Lamella catalog uses the shared hooks in [`scripts/hooks/`](../../../scripts/hooks/) plus Cortina for the primary lifecycle runtime instead of this one-file bundle.
 
 ## What It Does
 
@@ -95,8 +95,8 @@ Both variants are supported.
 - Use `change-summary.sh` if you prefer a Bash-based setup on macOS, Linux, or Windows via Git Bash or WSL.
 
 If you want the Lamella default instead of this standalone example, prefer the shared catalog:
-- [`post-edit-typecheck.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/post-edit-typecheck.js)
-- [`check-console-log.js`](/Users/williamnewton/projects/claude-mycelium/lamella/scripts/hooks/check-console-log.js)
+- [`post-edit-typecheck.js`](../../../scripts/hooks/post-edit-typecheck.js)
+- [`check-console-log.js`](../../../scripts/hooks/check-console-log.js)
 - `cortina adapter claude-code post-tool-use`, which owns the shared capture runtime for errors, validations, corrections, and export or ingest signals
 - `cortina adapter claude-code stop`, which owns the shared session-end summary runtime
 

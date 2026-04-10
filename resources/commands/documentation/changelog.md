@@ -8,7 +8,7 @@ argument-hint: "[daily|weekly|N-days] [--audience dev|product|leadership] [--cha
 
 Generate a concise changelog for recent merged work. Use this for team updates, internal release summaries, or lightweight status posts.
 
-Use [`/release-notes`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/commands/documentation/release-notes.md) for formal versioned release artifacts.
+Use [`/release-notes`](release-notes.md) for formal versioned release artifacts.
 
 ## Time Window
 

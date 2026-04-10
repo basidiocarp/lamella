@@ -141,7 +141,7 @@ only if you deliberately create a separate home for them.
 4. Spin out or delete the remaining `tools/` utilities.
    Do not leave them in Lamella as undocumented sidecars.
 5. Update docs after each move.
-   Keep `docs/index.md`, `docs/roadmap.md`, and the hook docs aligned with the
+   Keep `docs/README.md`, `docs/roadmap.md`, and the hook docs aligned with the
    actual runtime boundary.
 
 ## Done Means

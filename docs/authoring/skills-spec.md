@@ -240,7 +240,8 @@ Keep your main `SKILL.md` under 500 lines. Move detailed reference material to s
 When referencing other files in your skill, use relative paths from the skill root:
 
 ```markdown  theme={null}
-See [the reference guide](references/REFERENCE.md) for details.
+See the example `references/REFERENCE.md` file for the detailed reference
+pattern.
 
 Run the extraction script:
 scripts/extract.py

@@ -1,7 +1,8 @@
 > Imported Claude Code reference snapshot.
 > Examples may use generic Claude Code paths such as `.claude/` or standalone
-> plugin layouts. For Lamella-specific layout and packaging, see `../index.md`,
-> `../architecture.md`, and `../getting-started/categorizing-skills.md`.
+> plugin layouts. For Lamella-specific layout and packaging, see
+> `../../README.md`, `../../architecture.md`, and
+> `../../getting-started/categorizing-skills.md`.
 
 # Connect Claude Code to tools via MCP
 

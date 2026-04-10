@@ -110,7 +110,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/scripts/rtk-baseline.js\"",
+            "command": "\"$HOME/.claude/hooks/mycelium-baseline.sh\"",
             "timeout": 5
           }
         ]

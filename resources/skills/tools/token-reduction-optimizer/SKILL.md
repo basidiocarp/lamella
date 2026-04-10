@@ -1,6 +1,6 @@
 ---
 name: token-reduction-optimizer
-description: "Reduces token-heavy command output with RTK."
+description: "Reduces token-heavy command output with Mycelium."
 requires:
   - mycelium
 ---
@@ -18,81 +18,84 @@ requires:
 - [Edge Cases](#edge-cases)
 - [Configuration](#configuration)
 - [Token Optimization](#token-optimization)
-- [Metrics (Verified)](#metrics-verified)
+- [Metrics](#metrics)
 - [Limitations](#limitations)
 - [Recommendation](#recommendation)
 - [References](#references)
 
-Use RTK when the user wants the result of a noisy command, not every line of the raw output.
+Use Mycelium when the user wants the result of a noisy shell command and the
+command is one Mycelium already supports.
 
 ## How It Works
 
 1. **Detect high-verbosity commands** in user requests
-2. **Suggest RTK wrapper** if applicable
-3. **Execute with RTK** when it preserves the information the user needs
+2. **Suggest the Mycelium wrapper** if it preserves the information the user needs
+3. **Execute with Mycelium** when the wrapped command is a real Mycelium surface
 4. **Track savings** over session
 
 ## Supported Commands
 
-### Git (>70% reduction)
-- `git log` → `rtk git log` (92.3% reduction)
-- `git status` → `rtk git status` (76.0% reduction)
-- `find` → `rtk find` (76.3% reduction)
+### Files and Search
+- `ls` → `mycelium ls`
+- `tree` → `mycelium tree`
+- `cat <large-file>` → `mycelium read <file>`
+- `find` → `mycelium find`
+- `grep` or `rg`-style content search → `mycelium grep`
 
-### Medium-Value (50-70% reduction)
-- `git diff` → `rtk git diff` (55.9% reduction)
-- `cat <large-file>` → `rtk read <file>` (62.5% reduction)
+### Git
+- `git status` → `mycelium git status`
+- `git log` → `mycelium git log`
+- `git diff` → `mycelium git diff`
+- `git show` → `mycelium git show`
 
-### JS/TS Stack (70-90% reduction)
-- `pnpm list` → `rtk pnpm list` (82% reduction)
-- `pnpm test` / `vitest run` → `rtk vitest run` (90% reduction)
+### GitHub CLI
+- `gh pr view` → `mycelium gh pr view`
+- `gh pr checks` → `mycelium gh pr checks`
 
-### Rust Toolchain (80-90% reduction)
-- `cargo test` → `rtk cargo test` (90% reduction)
-- `cargo build` → `rtk cargo build` (80% reduction)
-- `cargo clippy` → `rtk cargo clippy` (80% reduction)
+### JS and Package Managers
+- `pnpm list` → `mycelium pnpm list`
+- `pnpm outdated` → `mycelium pnpm outdated`
+- `npm list` → `mycelium npm list`
 
-### Python & Go (90% reduction)
-- `pytest` → `rtk python pytest` (90% reduction)
-- `go test` → `rtk go test` (90% reduction)
+### Tests and Build Tooling
+- `cargo test` → `mycelium cargo test`
+- `cargo build` → `mycelium cargo build`
+- `cargo check` → `mycelium cargo check`
+- `cargo clippy` → `mycelium cargo clippy`
+- generic test commands → `mycelium test ...`
+- `pytest` → `mycelium pytest`
+- `go test` → `mycelium go test`
 
-### GitHub CLI (79-87% reduction)
-- `gh pr view` → `rtk gh pr view` (87% reduction)
-- `gh pr checks` → `rtk gh pr checks` (79% reduction)
-
-### File Operations
-- `ls` → `rtk ls` (condensed output)
-- `grep` → `rtk grep` (filtered output)
+### Containers and Infra
+- `docker ...` → `mycelium docker ...`
+- `kubectl ...` → `mycelium kubectl ...`
 
 ## Activation Examples
 
 **User**: "Show me the git history"
-**Skill**: Detects `git log` → Suggests `rtk git log` → Explains 92.3% token savings
+**Skill**: Detects `git log` → Suggests `mycelium git log` → Uses the compact history output when the user wants the result, not every raw line
 
 **User**: "Find all markdown files"
-**Skill**: Detects `find` → Suggests `rtk find "*.md" .` → Explains 76.3% savings
+**Skill**: Detects `find` → Suggests `mycelium find "*.md" .` → Uses the compact search output when the user wants the matches, not the raw traversal noise
 
 ## Installation Check
 
-Before first use, verify RTK is installed:
+Before first use, verify Mycelium is installed:
 ```sh
-rtk --version
+mycelium --version
+mycelium gain
 ```
 
 If not installed:
 ```sh
-# Install With Homebrew
-brew install rtk-ai/tap/rtk
-
-# Install With Cargo
-cargo install rtk
+# Install with Cargo
+cargo install --locked --git https://github.com/basidiocarp/mycelium
 ```
 
-```powershell
-rtk --version
-if (-not $?) {
-  cargo install rtk
-}
+On macOS or Linux, the install script is also available:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/basidiocarp/mycelium/refs/heads/master/install.sh | sh
 ```
 
 ## Usage Pattern
@@ -101,11 +104,11 @@ if (-not $?) {
 # When the User Asks for a Verbose Command
 
 1. Acknowledge request
-2. Suggest RTK optimization:
-   "I'll use `rtk git log` to reduce token usage by ~92%"
-3. Execute RTK command
+2. Suggest the Mycelium wrapper when it helps:
+   "I'll use `mycelium git log` so we get the important history without the full raw output"
+3. Execute the Mycelium command
 4. Report the tradeoff when it matters:
-   "Saved ~13K tokens (baseline: 14K, RTK: 1K)"
+   "This keeps the key signal and usually saves a large amount of context"
 ```
 
 ## Session Tracking
@@ -114,14 +117,15 @@ Optional: Track cumulative savings across the session:
 
 ```bash
 # At Session End
-rtk gain  # Shows total token savings for session (SQLite-backed)
+mycelium gain  # Shows cumulative token savings and command history
 ```
 
 ## Edge Cases
 
-- **Small outputs**: Skip RTK when the raw output is already easy to read
-- **Already using Claude tools**: Grep/Read tools are already optimized
-- **Multiple commands**: Batch with RTK wrapper once, not per command
+- **Small outputs**: Skip Mycelium when the raw output is already easy to read
+- **Already using Claude or Codex file tools**: `Read`, `rg`, or structure-aware tools may already be the better choice
+- **Interactive commands**: Skip wrappers when raw interactivity is the point
+- **Unsupported commands**: do not guess; only switch when Mycelium already supports the surface
 
 ## Configuration
 
@@ -129,22 +133,20 @@ Enable via CLAUDE.md:
 ```markdown
 ## Token Optimization
 
-Use RTK (Rust Token Killer) for high-verbosity commands:
+Use Mycelium for high-verbosity commands it already supports:
 - git operations (log, status, diff)
 - package managers (pnpm, npm)
 - build tools (cargo, go)
-- test frameworks (vitest, pytest)
+- test frameworks (generic test wrapper, pytest)
 - file finding and reading
 ```
 
 ## Metrics
 
-Sample reductions from the skill's reference data:
-- `git log`: 13,994 chars → 1,076 chars (92.3% reduction)
-- `git status`: 100 chars → 24 chars (76.0% reduction)
-- `find`: 780 chars → 185 chars (76.3% reduction)
-- `git diff`: 15,815 chars → 6,982 chars (55.9% reduction)
-- `read file`: 163,587 chars → 61,339 chars (62.5% reduction)
+Typical savings from Mycelium docs and examples:
+- files, search, and package-manager commands often cut 30-80% of noisy output
+- git, GitHub CLI, build, and test commands often cut 40-90% depending on the command
+- very large test runs can save much more when Mycelium keeps only actionable failures
 
 Treat these numbers as examples, not guarantees. The best check is whether the compact output still answers the user's question.
 
@@ -155,12 +157,12 @@ Treat these numbers as examples, not guarantees. The best check is whether the c
 
 ## Recommendation
 
-**Use RTK for**: git workflows, file operations, test frameworks, build tools, package managers
-**Skip RTK for**: quick exploration, interactive commands, or cases where raw output is the point
+**Use Mycelium for**: supported git workflows, file operations, test frameworks, build tools, package managers, and other high-verbosity commands
+**Skip Mycelium for**: quick exploration, interactive commands, unsupported commands, or cases where raw output is the point
 
 ## References
 
-- RTK GitHub: https://github.com/rtk-ai/rtk
-- RTK Website: https://www.rtk-ai.app/
-- Evaluation: `docs/resource-evaluations/rtk-evaluation.md`
-- CLAUDE.md template: `examples/claude-md/rtk-optimized.md`
+- Mycelium README: `mycelium/README.md`
+- Command reference: `mycelium/docs/commands.md`
+- Feature overview: `mycelium/docs/features.md`
+- Install guide: `mycelium/docs/getting-started/installation.md`

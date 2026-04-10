@@ -8,7 +8,7 @@ No active migration batch is in progress. The remaining backlog is now an explic
 
 ### Deferred Backlog
 
-This is a prioritized backlog, not an exhaustive copy of every deferred item. The full deferred list lives in `docs/CLAUDE-SKILL-MIGRATION-LOG.md`.
+This is a prioritized backlog, not an exhaustive copy of every deferred item. The full deferred list lives in `CLAUDE-SKILL-MIGRATION-LOG.md`.
 
 1. `go-to-market-and-ops-tail`
    - `acquisition-channel-advisor`

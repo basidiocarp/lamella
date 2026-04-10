@@ -40,7 +40,7 @@ Add this header once per daily file:
 ```markdown
 # Observations - YYYY-MM-DD
 
-Formatted from raw notes in `.notes/`. Each entry is a structured OBS-NNN
+Formatted from raw notes in `.notes/intake/`. Each entry is a structured OBS-NNN
 record ready for planning.
 ```
 

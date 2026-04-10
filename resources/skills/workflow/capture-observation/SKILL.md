@@ -1,6 +1,6 @@
 ---
 name: capture-observation
-description: "Formats raw ecosystem notes from `.notes/` into numbered observation records and saves them under `.notes/formatted/`. Use when agent behavior, ownership gaps, workflow problems, or ecosystem notes need to become structured OBS entries."
+description: "Formats raw ecosystem notes from `.notes/intake/` into numbered observation records and saves them under `.notes/formatted/`. Use when agent behavior, ownership gaps, workflow problems, or ecosystem notes need to become structured OBS entries."
 ---
 
 # Capture Observation
@@ -9,7 +9,7 @@ Use this skill when raw notes need to become durable observation records that ca
 
 ## Workflow
 
-1. Read unformatted note files in `.notes/`. Ignore `.notes/formatted/`.
+1. Read raw note files in `.notes/intake/`. Ignore `.notes/formatted/`.
 2. Split each file into discrete observations. One source file may produce several OBS entries.
 3. Find the highest existing `OBS-NNN` number in `.notes/formatted/` and continue from there.
 4. Extract the problem, any concrete example, any suggested solutions, and the likely owning component.
@@ -25,7 +25,7 @@ Use this skill when raw notes need to become durable observation records that ca
 - Keep the observation grounded in the raw notes. Do not invent examples or solutions.
 - If the note already contains a structured OBS entry, skip it and report that it appears pre-formatted.
 - If the note duplicates an existing observation, reference the existing OBS number instead of creating another one.
-- If `.notes/` does not exist, stop and ask the user to confirm the correct path.
+- If `.notes/intake/` does not exist, stop and ask the user to confirm the correct path.
 
 ## Clarification Threshold
 

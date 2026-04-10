@@ -82,7 +82,7 @@ const FRAMEWORK_SKILLS = {
 };
 
 const PROJECT_SKILLS = {
-  'claude-mycelium': [
+  'basidiocarp': [
     { name: 'plugin-structure', reason: 'plugin layout, manifests, and auto-discovery work' },
     { name: 'create-hook', reason: 'Claude Code hook design and SessionStart/PostToolUse automation' },
     { name: 'agent-development', reason: 'building or editing agents in lamella' },

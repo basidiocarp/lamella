@@ -4,12 +4,7 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
-### Changed
-
-- **Changelog format**: Release headings and entry structure now follow the
-  shared ecosystem changelog template.
-
-## [0.5.9] - 2026-04-03
+## [0.5.9] - 2026-04-09
 
 ### Added
 
@@ -27,12 +22,20 @@ All notable changes to Lamella are documented in this file.
 
 ### Changed
 
+- **Changelog format**: Release headings and entry structure now follow the
+  shared ecosystem changelog template.
 - **Requires tagging**: Requires metadata now flows across skills, agents, and
   the build pipeline.
 - **Requires-aware packaging**: Manifests, build scripts, and CI validators now
   understand the requires-aware content surface.
 - **Contributor docs**: CLAUDE, CONTRIBUTING, architecture, authoring guides,
   and getting-started docs were updated to match the new packaging model.
+- **Docs structure**: The Lamella docs surface is now organized around
+  canonical README entrypoints for getting started, authoring, reference,
+  maintainers, plans, and migrations.
+- **Mycelium hook surface**: Token-reduction guidance and session-summary hook
+  assets now target Mycelium instead of the older RTK workflow, including
+  updated standalone hook names and settings examples.
 
 ## [0.5.8] - 2026-04-01
 

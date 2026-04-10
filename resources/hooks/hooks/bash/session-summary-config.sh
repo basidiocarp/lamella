@@ -43,12 +43,12 @@ fi
 # ═══════════════════════════════════════════════════════════════════════════
 
 # Config keys and their defaults
-ALL_KEYS="LOG_DIR SKIP FILES RTK GIT ERRORS LOC RATIO FEATURES THINKING CONTEXT SECTIONS"
+ALL_KEYS="LOG_DIR SKIP FILES MYCELIUM GIT ERRORS LOC RATIO FEATURES THINKING CONTEXT SECTIONS"
 
 DEFAULT_LOG_DIR="$HOME/.claude/logs"
 DEFAULT_SKIP=0
 DEFAULT_FILES=1
-DEFAULT_RTK=auto
+DEFAULT_MYCELIUM=auto
 DEFAULT_GIT=1
 DEFAULT_ERRORS=1
 DEFAULT_LOC=1
@@ -56,13 +56,13 @@ DEFAULT_RATIO=1
 DEFAULT_FEATURES=1
 DEFAULT_THINKING=0
 DEFAULT_CONTEXT=0
-DEFAULT_SECTIONS="meta,duration,tools,errors,files,features,git,loc,models,cache,cost,rtk,ratio,thinking,context"
+DEFAULT_SECTIONS="meta,duration,tools,errors,files,features,git,loc,models,cache,cost,mycelium,ratio,thinking,context"
 
 # Current config values (loaded from file, overlaying defaults)
 CFG_LOG_DIR=""
 CFG_SKIP=""
 CFG_FILES=""
-CFG_RTK=""
+CFG_MYCELIUM=""
 CFG_GIT=""
 CFG_ERRORS=""
 CFG_LOC=""
@@ -78,7 +78,7 @@ get_default() {
         LOG_DIR)   echo "$DEFAULT_LOG_DIR" ;;
         SKIP)      echo "$DEFAULT_SKIP" ;;
         FILES)     echo "$DEFAULT_FILES" ;;
-        RTK)       echo "$DEFAULT_RTK" ;;
+        MYCELIUM)  echo "$DEFAULT_MYCELIUM" ;;
         GIT)       echo "$DEFAULT_GIT" ;;
         ERRORS)    echo "$DEFAULT_ERRORS" ;;
         LOC)       echo "$DEFAULT_LOC" ;;
@@ -98,7 +98,7 @@ get_cfg() {
         LOG_DIR)   val="$CFG_LOG_DIR" ;;
         SKIP)      val="$CFG_SKIP" ;;
         FILES)     val="$CFG_FILES" ;;
-        RTK)       val="$CFG_RTK" ;;
+        MYCELIUM)  val="$CFG_MYCELIUM" ;;
         GIT)       val="$CFG_GIT" ;;
         ERRORS)    val="$CFG_ERRORS" ;;
         LOC)       val="$CFG_LOC" ;;
@@ -118,7 +118,7 @@ set_cfg() {
         LOG_DIR)   CFG_LOG_DIR="$val" ;;
         SKIP)      CFG_SKIP="$val" ;;
         FILES)     CFG_FILES="$val" ;;
-        RTK)       CFG_RTK="$val" ;;
+        MYCELIUM)  CFG_MYCELIUM="$val" ;;
         GIT)       CFG_GIT="$val" ;;
         ERRORS)    CFG_ERRORS="$val" ;;
         LOC)       CFG_LOC="$val" ;;
@@ -134,7 +134,7 @@ set_cfg() {
 is_valid_key() {
     local key="$1"
     case "$key" in
-        LOG_DIR|SKIP|FILES|RTK|GIT|ERRORS|LOC|RATIO|FEATURES|THINKING|CONTEXT|SECTIONS) return 0 ;;
+        LOG_DIR|SKIP|FILES|MYCELIUM|GIT|ERRORS|LOC|RATIO|FEATURES|THINKING|CONTEXT|SECTIONS) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -153,7 +153,7 @@ get_section_desc() {
         models)   echo "Model usage (reqs, tokens)" ;;
         cache)    echo "Cache hit rate" ;;
         cost)     echo "Estimated session cost" ;;
-        rtk)      echo "RTK token savings" ;;
+        mycelium) echo "Mycelium token savings" ;;
         ratio)    echo "Conversation ratio (interactive/auto)" ;;
         thinking) echo "Thinking blocks count" ;;
         context)  echo "Context window estimate" ;;
@@ -169,7 +169,7 @@ get_section_key() {
         git)      echo "GIT" ;;
         errors)   echo "ERRORS" ;;
         loc)      echo "LOC" ;;
-        rtk)      echo "RTK" ;;
+        mycelium) echo "Mycelium" ;;
         ratio)    echo "RATIO" ;;
         features) echo "FEATURES" ;;
         thinking) echo "THINKING" ;;
@@ -320,7 +320,7 @@ cmd_sections() {
         echo "  $(get_cfg SECTIONS)"
         echo ""
         echo "${DIM}Available sections:${RESET}"
-        echo "  cache,context,cost,duration,errors,features,files,git,loc,meta,models,ratio,rtk,thinking,tools"
+        echo "  cache,context,cost,duration,errors,features,files,git,loc,meta,models,mycelium,ratio,thinking,tools"
         echo ""
         echo "${DIM}Usage: session-summary-config sections \"meta,duration,tools,files,...\"${RESET}"
     else
@@ -369,7 +369,7 @@ cmd_preview() {
                 ;;
             errors)
                 echo "${DIM}Errors:${RESET} ${RED}2${RESET}"
-                echo "  Bash: \"command not found: rtk\" (x1)"
+                echo "  Bash: \"command not found: mycelium\" (x1)"
                 echo "  Edit: \"old_string not unique\" (x1)"
                 ;;
             files)
@@ -395,8 +395,8 @@ cmd_preview() {
             cost)
                 echo "Est. Cost: ${GREEN}\$0.045${RESET}"
                 ;;
-            rtk)
-                echo "RTK Savings: 24 cmds · ~12.4K tokens saved (73%)"
+            mycelium)
+                echo "Mycelium Savings: 24 cmds · ~12.4K tokens saved (73%)"
                 echo "  git status(8), git diff(5), ls(4)"
                 ;;
             ratio)
@@ -427,7 +427,7 @@ cmd_install() {
     script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
     local src_summary="${script_dir}/session-summary.sh"
-    local src_baseline="${script_dir}/rtk-baseline.sh"
+    local src_baseline="${script_dir}/mycelium-baseline.sh"
     local src_config="${script_dir}/session-summary-config.sh"
 
     if [[ -f "$src_summary" ]]; then
@@ -439,9 +439,9 @@ cmd_install() {
     fi
 
     if [[ -f "$src_baseline" ]]; then
-        cp "$src_baseline" "$HOOKS_DIR/rtk-baseline.sh"
-        chmod +x "$HOOKS_DIR/rtk-baseline.sh"
-        echo "  ${GREEN}Copied${RESET} rtk-baseline.sh -> $HOOKS_DIR/"
+        cp "$src_baseline" "$HOOKS_DIR/mycelium-baseline.sh"
+        chmod +x "$HOOKS_DIR/mycelium-baseline.sh"
+        echo "  ${GREEN}Copied${RESET} mycelium-baseline.sh -> $HOOKS_DIR/"
     fi
 
     if [[ -f "$src_config" ]]; then
@@ -467,7 +467,7 @@ cmd_install() {
     local hook_session_start='{
         "hooks": [{
             "type": "command",
-            "command": "~/.claude/hooks/rtk-baseline.sh",
+            "command": "~/.claude/hooks/mycelium-baseline.sh",
             "timeout": 5000
         }]
     }'
@@ -483,11 +483,11 @@ cmd_install() {
             )
         ' "$settings_file" > "$tmp"
 
-        # Add/update SessionStart hook (rtk-baseline) if RTK available
-        if command -v rtk &>/dev/null; then
+        # Add/update SessionStart hook (mycelium-baseline) if Mycelium is available
+        if command -v mycelium &>/dev/null; then
             jq --argjson hook "$hook_session_start" '
                 .hooks.SessionStart = (
-                    [(.hooks.SessionStart // [])[] | select(.hooks[0].command | test("rtk-baseline") | not)] + [$hook]
+                    [(.hooks.SessionStart // [])[] | select(.hooks[0].command | test("[A-Za-z0-9-]*baseline\\.sh") | not)] + [$hook]
                 )
             ' "$tmp" > "${tmp}.2" && mv "${tmp}.2" "$tmp"
         fi
@@ -497,7 +497,7 @@ cmd_install() {
     else
         # Create new settings.json
         local hooks_obj="{\"SessionEnd\": [$hook_session_end]"
-        if command -v rtk &>/dev/null; then
+        if command -v mycelium &>/dev/null; then
             hooks_obj+=", \"SessionStart\": [$hook_session_start]"
         fi
         hooks_obj+="}"
@@ -546,13 +546,13 @@ cmd_help() {
     echo "  session-summary-config ${CYAN}log${RESET} [n]           Show last n summaries (default: 5)"
     echo ""
     echo "${BOLD}Config keys:${RESET}"
-    echo "  files, git, errors, loc, rtk, ratio, features, thinking, context"
+    echo "  files, git, errors, loc, mycelium, ratio, features, thinking, context"
     echo "  skip, log_dir, sections"
     echo ""
     echo "${BOLD}Examples:${RESET}"
     echo "  session-summary-config set git=0          # Disable git diff"
     echo "  session-summary-config set thinking=1     # Enable thinking blocks"
-    echo "  session-summary-config set rtk=auto       # Auto-detect RTK"
+    echo "  session-summary-config set mycelium=auto  # Auto-detect Mycelium"
     echo "  session-summary-config sections \"meta,duration,tools,cost\"  # Minimal output"
 }
 

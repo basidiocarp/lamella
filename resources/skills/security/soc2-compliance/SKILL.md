@@ -25,9 +25,9 @@ Use this skill when the task is about SOC 2 readiness rather than general applic
 
 ## What It Does Not Replace
 
-- [`security-review`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/security/security-review/SKILL.md) for secure implementation choices
-- [`security-audit-methodology`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/security/security-audit-methodology/SKILL.md) for code-audit process
-- [`supply-chain-risk-auditor`](/Users/williamnewton/projects/claude-mycelium/lamella/resources/skills/security/supply-chain-risk-auditor/SKILL.md) for dependency and vendor risk review
+- [`security-review`](../security-review/SKILL.md) for secure implementation choices
+- [`security-audit-methodology`](../security-audit-methodology/SKILL.md) for code-audit process
+- [`supply-chain-risk-auditor`](../supply-chain-risk-auditor/SKILL.md) for dependency and vendor risk review
 
 ## References
 

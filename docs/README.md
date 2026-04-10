@@ -48,14 +48,33 @@ as well.
 ./lamella install-codex --all
 ```
 
-## Documentation
+## Start Here
 
 | Section | Description |
 |---------|-------------|
-| [Getting Started](getting-started/index.md) | Installation, first skill, and onboarding flow |
+| [Getting Started](getting-started/README.md) | Installation, first skill, and onboarding flow |
 | [Authoring](authoring/best-practices.md) | Skill and agent authoring guidance |
-| [Reference](reference/plugins.md) | Claude Code reference snapshots plus Lamella-specific marketplace and packaging context |
+| [Reference](reference/README.md) | Claude and Codex reference snapshots with Lamella-specific pointers |
+
+## Project Docs
+
+| Section | Description |
+|---------|-------------|
 | [Architecture](architecture.md) | Build pipeline, packaging model, and validation flow |
 | [Roadmap](roadmap.md) | Current priorities and shipped milestones |
-| [Plugin Layering Migration Plan](plans/plugin-layering-migration.md) | Proposed plugin split, naming, and rollout plan for narrower bundles |
-| [Tool Cleanup Plan](tool-boundary-cleanup.md) | Per-file keep, migrate, retire, and sequencing decisions for Lamella tooling |
+| [Maintainers](maintainers/README.md) | Maintainer-facing docs for inventory, feedback capture, and boundary cleanup |
+
+## Planning and Migration
+
+| Section | Description |
+|---------|-------------|
+| [Plans](plans/README.md) | Active Lamella planning documents |
+| [Migrations](migrations/README.md) | Claude skill import and migration records |
+
+## Canonical vs Historical
+
+Treat the docs above as Lamella's maintained surface. In practice, that means:
+
+- `getting-started/`, `authoring/`, and `reference/` are the live operator and authoring paths
+- `architecture.md`, `roadmap.md`, and `maintainers/` hold current project guidance
+- imported snapshots under `reference/` are maintained only where Lamella adds packaging or host-specific context

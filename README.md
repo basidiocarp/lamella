@@ -67,6 +67,11 @@ Named install surfaces live in `resources/presets/*.toml`. The
 can call directly with `./lamella install --preset stipe-package-repair`
 without inventing its own package-selection rules.
 
+When Lamella packages statusline presets or customization bundles, it should
+target Septa's `resolved-status-customization-v1` contract instead of owning a
+host-specific status config format. Lamella is the preset and bundle consumer,
+not the status-resolution authority.
+
 ---
 
 ## How It Works

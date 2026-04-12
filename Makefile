@@ -20,16 +20,7 @@ help: ## Show this help
 
 validate: ## Run all CI validators
 	@echo "Running validators..."
-	@node scripts/ci/validate-commands.js
-	@node scripts/ci/validate-hooks.js
-	@node scripts/ci/validate-rules.js
-	@node scripts/ci/validate-skills.js
-	@node scripts/ci/validate-subagents.js
-	@node scripts/ci/test-subagents.js
-	@node scripts/ci/validate-manifests.js
-	@node scripts/ci/validate-marketplace-catalog.js
-	@node scripts/ci/validate-xrefs.js
-	@node scripts/ci/validate-presets.js
+	@bash scripts/ci/run-validate-suite.sh
 	@echo "All validators passed."
 
 build: ## Build all Claude plugins to dist/claude/plugins/

@@ -43,6 +43,9 @@ those outputs ordered and reproducible.
 > **Boundary:** `lamella` owns packaged content and host exports. It does not
 > own session memory, shell filtering, code parsing, or lifecycle classification.
 
+> **Source of truth:** author in `resources/` and `manifests/`. Treat `dist/`
+> as generated output and rebuild it instead of editing it by hand.
+
 ---
 
 ## Quick Start
@@ -61,6 +64,10 @@ those outputs ordered and reproducible.
 
 The `install` flow resolves manifest dependencies before it builds or installs
 anything.
+
+Those install commands are Lamella's packaging entrypoints, not the ecosystem's
+runtime repair surface. Host setup, reinstall policy, and repair behavior belong
+to `stipe`, even when `stipe` calls Lamella by name.
 
 Named install surfaces live in `resources/presets/*.toml`. The
 `stipe-package-repair` preset is the Lamella-owned repair surface that Stipe
@@ -123,6 +130,7 @@ plugin manifests        ─►   dependency graph     ─►    installable arti
 - Code intelligence: handled by `rhizome`
 - Lifecycle capture: handled by `cortina`
 - Install and host repair policy: handled by `stipe`
+- Runtime mutation of host state after packaging decisions are made
 
 ---
 

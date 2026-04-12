@@ -3,6 +3,10 @@
 Lamella is a portable resource system for AI coding environments with
 first-class Claude plugin builds and Codex skill exports.
 
+It is a packaging repo, not a runtime manager. Author in `resources/` and
+`manifests/`, validate and build from there, and treat `dist/` as disposable
+output.
+
 The current library ships **286 curated skills** across **52 plugins**, plus
 shared agents, commands, hooks, workflows, and templates that are bundled into
 installable outputs.
@@ -14,6 +18,9 @@ local Claude marketplace under `dist/claude/`, and exports Codex skills under
 `dist/codex/`. Packaging is manifest-driven and covers skills, agents, commands,
 hooks, and standalone resources. Build tooling validates source files, manifests,
 cross-file references, and built output.
+
+Runtime install policy and repair flows stay outside Lamella. Those belong to
+the ecosystem manager, even when it calls Lamella presets or install surfaces.
 
 ## Plugin Families
 

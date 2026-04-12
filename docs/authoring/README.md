@@ -10,3 +10,11 @@ Start here:
 
 Use the other files in this directory for narrower topics such as shared
 subagents, migration reviews, and writing specs for agents.
+
+Lamella-owned authoring guardrails now include:
+
+- `make validate` for the repo-local validation suite, including skill/package alignment
+- `./lamella validate skills` for direct skill-frontmatter and authoring-spec checks
+- `./lamella validate skill-packages` for manifest-to-skill package alignment checks
+- `./lamella scaffold skill <category>/<name> --description "..."` for a valid starter skill
+- `manifests/claude/*.json` `resources.*` arrays as the package-surface contract that Lamella validates before packaging

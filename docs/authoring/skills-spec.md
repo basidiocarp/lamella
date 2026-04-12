@@ -9,6 +9,26 @@
 
 This document defines the Agent Skills format.
 
+## Lamella enforcement
+
+Lamella validates skill metadata before packaging and installation handoff.
+The supported repo-local authoring surfaces are:
+
+```bash
+./lamella validate skills
+./lamella validate skill-packages
+./lamella scaffold skill <category>/<name> --description "What the skill does and when to use it."
+```
+
+In Lamella, the validator currently enforces the package-critical parts of this
+spec:
+
+- `name` is present, kebab-case, 64 characters or fewer, and matches the parent directory
+- `description` is present and 1024 characters or fewer
+- `compatibility`, when present, is 500 characters or fewer
+- `allowed-tools`, when present, is a string or list of non-empty entries
+- manifest skill references continue to align with the checked-in package manifests
+
 ## Directory structure
 
 A skill is a directory containing at minimum a `SKILL.md` file:
@@ -257,5 +277,46 @@ skills:
 ```bash  theme={null}
 skills-ref validate ./my-skill
 ```
+
+## Lamella validation and package alignment
+
+Lamella adds a repo-local validation layer on top of the base skill spec.
+
+Run:
+
+```bash
+make validate
+```
+
+This suite checks:
+
+- skill frontmatter presence and required fields
+- Lamella-specific frontmatter alignment such as `name` matching the skill directory
+- `allowed-tools` shape when present
+- manifest-to-skill references for packaged skills
+- Claude manifest to Codex manifest alignment for portable package surfaces
+
+Within Lamella, the `resources.*` arrays in `manifests/claude/*.json` are the
+package-surface contract. If those declarations drift from the checked-in Codex
+export manifests, validation fails before packaging.
+
+## Lamella skill scaffolding
+
+Use Lamella's scaffold flow to start new skills from a validator-friendly
+template instead of copying an existing skill by hand:
+
+```bash
+./lamella scaffold skill <category>/<name> --description "What the skill does and when to use it."
+```
+
+Example:
+
+```bash
+./lamella scaffold skill meta/my-new-skill --description "Guides effective skill creation and when to use it."
+```
+
+The scaffold writes a `resources/skills/<category>/<name>/SKILL.md` file with
+frontmatter and section headings that already satisfy Lamella's validation
+expectations.
 
 This checks that your `SKILL.md` frontmatter is valid and follows all naming conventions.

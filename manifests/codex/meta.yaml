@@ -8,7 +8,9 @@
     "meta-routing"
   ],
   "resources": {
-    "skills": [],
+    "skills": [
+      "meta/create-handoff"
+    ],
     "workflows": [],
     "templates": [],
     "scripts": []

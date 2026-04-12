@@ -4,9 +4,11 @@
 #
 # Usage:
 #   ./lamella list [plugins|codex|all]
+#   ./lamella validate [all|skills|skill-packages]
 #   ./lamella build-marketplace
 #   ./lamella build-repo-marketplace
 #   ./lamella build-codex
+#   ./lamella scaffold skill <category>/<name> --description "..."
 #   ./lamella install [options] [plugin-names...]
 #   ./lamella install-codex [options] [skill-or-agent-names...]
 #   ./lamella uninstall [plugin-names...]
@@ -25,8 +27,10 @@ USAGE
 
 COMMANDS
     list [plugins|codex|all]   List available built plugins, Codex skills, or Codex agents
+    validate [surface]         Run Lamella validators (`all`, `skills`, `skill-packages`)
     build-marketplace          Build the Claude plugin marketplace
     build-codex                Build and export Codex skills and agents
+    scaffold skill ...         Scaffold a Lamella skill directory from the template
     install [args...]          Install Claude plugins
     install-codex [args...]    Install Codex skills and agents
     uninstall [args...]        Remove installed Claude plugins
@@ -41,11 +45,29 @@ EXAMPLES
     ./lamella install --preset stipe-package-repair
     ./lamella preset list
     ./lamella preset show tdd-cycle
+    ./lamella scaffold skill meta/my-new-skill --description "Guides ..."
     ./lamella build-repo-marketplace
     ./lamella install-codex --all
     ./lamella update
 EOF
     exit 0
+}
+
+run_validate() {
+    case "${1:-all}" in
+        all)
+            exec bash "$SCRIPT_DIR/scripts/ci/run-validate-suite.sh"
+            ;;
+        skills)
+            exec node "$SCRIPT_DIR/scripts/ci/validate-skills.js"
+            ;;
+        skill-packages)
+            exec node "$SCRIPT_DIR/scripts/ci/validate-skill-packages.js"
+            ;;
+        *)
+            usage
+            ;;
+    esac
 }
 
 install_usage() {
@@ -180,6 +202,10 @@ main() {
             shift
             run_list "${1:-plugins}"
             ;;
+        validate)
+            shift
+            run_validate "${1:-all}"
+            ;;
         build-marketplace|build)
             shift
             exec bash "$SCRIPT_DIR/builders/build-claude-marketplace.sh" "$@"
@@ -197,6 +223,18 @@ main() {
         build-codex)
             shift
             build_codex_exports "${1:-}"
+            ;;
+        scaffold)
+            shift
+            case "${1:-}" in
+                skill)
+                    shift
+                    exec bash "$SCRIPT_DIR/scripts/scaffold/create-skill.sh" "$@"
+                    ;;
+                *)
+                    usage
+                    ;;
+            esac
             ;;
         install-codex)
             shift

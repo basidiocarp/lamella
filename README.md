@@ -52,6 +52,10 @@ those outputs ordered and reproducible.
 
 ```bash
 # Claude marketplace build and install
+./lamella validate
+./lamella validate skills
+./lamella validate skill-packages
+./lamella scaffold skill meta/my-new-skill --description "Guides ..."
 ./lamella build-marketplace
 ./lamella install core python typescript
 ./lamella install --preset stipe-package-repair
@@ -157,6 +161,7 @@ lamella/
 ```
 
 ```bash
+./lamella validate
 ./lamella build-marketplace
 ./lamella build-codex
 ./lamella install <plugin...>

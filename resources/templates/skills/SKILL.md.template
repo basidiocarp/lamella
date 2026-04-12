@@ -1,0 +1,32 @@
+---
+name: __SKILL_NAME__
+description: "__DESCRIPTION__"
+---
+
+# __TITLE__
+
+## When to Use
+
+- Use when __DESCRIPTION_LOWER__
+
+## When NOT to Use
+
+- Do not use when another existing Lamella skill already covers the task more precisely.
+
+## Workflow
+
+1. Clarify the task and required inputs.
+2. Inspect the current repo or artifact state before proposing changes.
+3. Make the narrowest change that satisfies the request.
+4. Run the relevant verification for the touched surface.
+5. Return the result, verification, and any follow-up work.
+
+## Outputs
+
+- Primary output for the task
+- Verification evidence when applicable
+
+## Notes
+
+- Add references, scripts, or assets only when the skill needs them.
+- Keep the main skill concise and move deep detail into `references/` or `assets/`.

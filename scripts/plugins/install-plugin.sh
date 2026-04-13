@@ -747,6 +747,17 @@ EOF
             echo ""
             echo -e "Or register the marketplace in settings.json:"
             echo -e "  See docs/getting-started/ for details"
+
+            # Validate hook paths after install
+            echo ""
+            validate_hooks_result=$(node "$BASE_DIR/scripts/validate-hooks.js" 2>&1 || true)
+            if echo "$validate_hooks_result" | grep -q "^\[STALE\]"; then
+                log_warn "Stale hook paths detected in ~/.claude/settings.json"
+                echo "$validate_hooks_result" | grep "^\[STALE\]" | sed 's/^/  /'
+                echo ""
+                echo "  To repair hook paths, run:"
+                echo "    stipe install --repair"
+            fi
         fi
     fi
     [[ $failed -gt 0 ]] && log_error "Failed: $failed plugins"

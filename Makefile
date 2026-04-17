@@ -1,4 +1,4 @@
-.PHONY: validate lint-skills build build-marketplace build-codex build-claude-subagents build-codex-agents sync-codex-manifests install install-all uninstall install-codex audit clean help
+.PHONY: validate lint-skills build build-adapters build-adapters-dry build-marketplace build-codex build-claude-subagents build-codex-agents sync-codex-manifests install install-all uninstall install-codex audit clean help
 
 SHELL := /bin/bash
 PLUGIN_DIR := manifests/claude
@@ -34,7 +34,15 @@ build: ## Build all Claude plugins to dist/claude/plugins/
 	done
 	@echo "Build complete. Output in dist/claude/plugins/"
 
-build-marketplace: ## Build all plugins + marketplace.json
+build-adapters: ## Run cross-agent install adapters for all platforms
+	@echo "Running cross-agent install adapters..."
+	@bash -c 'source scripts/adapters/registry.sh && run_all_adapters resources/skills false'
+	@echo "Adapters complete."
+
+build-adapters-dry: ## Dry run: show what adapters would do
+	@bash -c 'source scripts/adapters/registry.sh && run_all_adapters resources/skills true'
+
+build-marketplace: build-adapters ## Build all plugins + marketplace.json
 	@bash $(LAMELLA) build-marketplace
 
 sync-codex-manifests: ## Generate Codex manifests from Claude manifests

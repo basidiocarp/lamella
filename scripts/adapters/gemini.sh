@@ -4,12 +4,13 @@ input_file="$1"
 output_dir="$2"
 filename="$(basename "$input_file")"
 
-# Tool name rewriting table
-sed \
-    -e 's/\bRead\b/read_file/g' \
-    -e 's/\bBash\b/run_shell_command/g' \
-    -e 's/\bWrite\b/write_file/g' \
-    -e 's/\bEdit\b/edit_file/g' \
-    -e 's/\bGlob\b/list_files/g' \
-    -e 's/\bGrep\b/search_files/g' \
-    "$input_file" > "$output_dir/$filename"
+# Rewrite tool names to Gemini equivalents.
+# Uses perl for portable word-boundary support (BSD sed does not support \b).
+perl -pe '
+  s/\bRead\b/read_file/g;
+  s/\bBash\b/run_shell_command/g;
+  s/\bWrite\b/write_file/g;
+  s/\bEdit\b/edit_file/g;
+  s/\bGlob\b/list_files/g;
+  s/\bGrep\b/search_files/g;
+' "$input_file" > "$output_dir/$filename"

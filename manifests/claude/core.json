@@ -101,7 +101,9 @@
       "check-console-log.js",
       "evaluate-session.js",
       "comment-style-check.sh",
-      "capture-pr-reviews.js"
+      "capture-pr-reviews.js",
+      "annotation-advisory.js",
+      "annotation-audit-log.js"
     ],
     "templates": []
   }

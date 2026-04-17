@@ -167,6 +167,15 @@ Matchers go in `.claude/settings.json` under the relevant event key:
   stdin — they cannot cancel the action, only react to it.
 - Test with both well-formed and empty/malformed stdin before shipping.
 
+## Transitional Notes
+
+### session-end.js
+
+The `session-end.js` hook is a transitional shim that delegates to the `cortina`
+session-end adapter. It will be replaced by direct cortina wiring in a future
+cutover (#67c). Until then, it provides a clean fallback when cortina is
+unavailable.
+
 ## Related
 
 - [resources/hooks/annotation-aware-advisory/README.md](../../resources/hooks/annotation-aware-advisory/README.md)

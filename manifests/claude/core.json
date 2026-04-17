@@ -92,6 +92,7 @@
     ],
     "hooks": [
       "session-start.js",
+      "session-end.js",
       "pre-compact.js",
       "post-edit-format.js",
       "post-edit-typecheck.js",

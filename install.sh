@@ -182,7 +182,7 @@ parse_args() {
             -a|--all) INSTALL_ALL=true; shift ;;
             -l|--list) LIST_ONLY=true; shift ;;
             -n|--dry-run) DRY_RUN=true; shift ;;
-            --refresh) REFRESH=true; shift ;;
+            --refresh|--force) REFRESH=true; shift ;;
             -h|--help) usage ;;
             -*) log_error "Unknown option: $1"; usage ;;
             *) PLUGINS+=("$1"); shift ;;

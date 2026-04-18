@@ -371,7 +371,7 @@ cmd_install() {
 
     local install_args=("$@")
     local arg
-    for arg in "${install_args[@]}"; do
+    for arg in "${install_args[@]+"${install_args[@]}"}"; do
         case "$arg" in
             -h|--help)
                 preset_install_usage
@@ -437,10 +437,10 @@ cmd_install() {
     # Fall back to the legacy broad install behavior for workflow-only presets.
     if [[ ${#install_plugins[@]} -gt 0 ]]; then
         log_info "Installing preset surface: ${install_plugins[*]}"
-        bash "$INSTALL_SCRIPT" "${install_args[@]}" "${install_plugins[@]}"
+        bash "$INSTALL_SCRIPT" "${install_args[@]+"${install_args[@]}"}" "${install_plugins[@]}"
     else
         log_info "Installing plugins with preset configuration..."
-        bash "$INSTALL_SCRIPT" "${install_args[@]}" --all
+        bash "$INSTALL_SCRIPT" "${install_args[@]+"${install_args[@]}"}" --all
     fi
 
     echo ""

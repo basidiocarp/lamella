@@ -185,13 +185,13 @@ main() {
             esac
         done
         if [[ -n "$preset_name" ]]; then
-            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" install "$preset_name" "${other_args[@]}"
+            exec bash "$SCRIPT_DIR/scripts/plugins/preset.sh" install "$preset_name" "${other_args[@]+"${other_args[@]}"}"
         fi
         if [[ "$saw_preset" == true ]]; then
             echo "lamella: missing preset name for --preset" >&2
             exit 1
         fi
-        exec bash "$SCRIPT_DIR/install.sh" "${other_args[@]}"
+        exec bash "$SCRIPT_DIR/install.sh" "${other_args[@]+"${other_args[@]}"}"
     fi
 
     case "${1:-}" in

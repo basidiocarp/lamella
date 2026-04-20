@@ -254,6 +254,21 @@
         ],
         "description": "Evaluate session for extractable patterns"
       }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code session-end"
+          }
+        ],
+        "description": "Cortina runtime: capture session-end event into scoped lifecycle state"
+      }
     ]
   }
 }

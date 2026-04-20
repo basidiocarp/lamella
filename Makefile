@@ -1,4 +1,4 @@
-.PHONY: validate lint-skills build build-adapters build-adapters-dry build-marketplace build-codex build-claude-subagents build-codex-agents sync-codex-manifests install install-all uninstall install-codex audit clean help
+.PHONY: validate lint-skills sync-check build build-adapters build-adapters-dry build-marketplace build-codex build-claude-subagents build-codex-agents sync-codex-manifests install install-all uninstall install-codex audit clean help
 
 SHELL := /bin/bash
 PLUGIN_DIR := manifests/claude
@@ -18,10 +18,13 @@ help: ## Show this help
 		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-validate: lint-skills ## Run all CI validators
+validate: lint-skills sync-check ## Run all CI validators
 	@echo "Running validators..."
 	@bash scripts/ci/run-validate-suite.sh
 	@echo "All validators passed."
+
+sync-check: ## Verify skill sync scripts and adapter paths are intact
+	@bash scripts/sync-skills.sh --check
 
 lint-skills: ## Lint all skill files for required sections
 	@bash scripts/lint-skills.sh

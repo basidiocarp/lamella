@@ -1,0 +1,26 @@
+# Lamella skill sync manifest
+# Defines canonical source and per-agent adapter targets.
+# Run: bash scripts/sync-skills.sh --dry-run
+# Check: make sync-check
+
+canonical_dir = "resources/skills"
+
+[[targets]]
+name = "claude-code"
+adapter = "scripts/adapters/claude-code.sh"
+output_dir = "dist/claude-code"
+
+[[targets]]
+name = "codex"
+adapter = "scripts/adapters/codex.sh"
+output_dir = "dist/codex"
+
+[[targets]]
+name = "cursor"
+adapter = "scripts/adapters/cursor.sh"
+output_dir = "dist/cursor"
+
+[[targets]]
+name = "gemini"
+adapter = "scripts/adapters/gemini.sh"
+output_dir = "dist/gemini"

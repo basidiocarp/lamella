@@ -62,6 +62,7 @@ as well.
 | [Getting Started](getting-started/README.md) | Installation, first skill, and onboarding flow |
 | [Authoring](authoring/best-practices.md) | Skill and agent authoring guidance |
 | [Reference](reference/README.md) | Claude and Codex reference snapshots with Lamella-specific pointers |
+| [Plugin Validator Reference](plugin-validator-reference.md) | Observed Claude Code plugin validator constraints and gotchas |
 
 ## Project Docs
 

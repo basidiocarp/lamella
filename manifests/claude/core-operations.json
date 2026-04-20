@@ -15,6 +15,7 @@
   "dependencies": [],
   "resources": {
     "skills": [
+      "core/agent-introspection-debugging",
       "core/codebase-onboarding",
       "core/continuous-learning",
       "core/error-memory",

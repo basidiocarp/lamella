@@ -84,6 +84,17 @@ lamella/
 
 ---
 
+## Context Assembly Order
+
+Lamella follows the cache-friendly L0→L3 assembly model documented in
+`docs/foundations/cache-friendly-assembly.md`. When assembling context for
+sessions or hooks, stable content (global rules at L0, workspace docs at L1,
+project CLAUDE.md at L2) must appear before dynamic content (tool results,
+active task state). This ordering maximizes Anthropic prompt cache hits across
+turns, reducing token cost and improving latency for multi-turn sessions.
+
+---
+
 ## Key Files
 
 | File | Purpose |

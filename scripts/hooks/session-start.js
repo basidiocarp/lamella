@@ -220,6 +220,8 @@ async function main() {
     );
   }
 
+  // Context assembly order: stable project summary first (L2), then dynamic skill recommendations
+  // This follows cache-friendly assembly rules to maximize prompt cache hits across turns.
   const startupNotes = [projectSummary, formatSkillRecommendations(recommendations)].filter(Boolean);
   if (startupNotes.length > 0) {
     output(startupNotes.join('\n\n'));

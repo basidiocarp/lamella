@@ -2,6 +2,7 @@
 name: agent-introspection-debugging
 description: "Provides a structured four-phase self-repair loop and failure-pattern table for agents that are stuck, looping, or hitting context limits."
 origin: "ECC agent-introspection-debugging (adapted)"
+convention: v1
 requires:
   - hyphae
 ---

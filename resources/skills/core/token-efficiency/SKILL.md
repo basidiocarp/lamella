@@ -2,6 +2,7 @@
 name: token-efficiency
 description: Reduces unnecessary token generation through conciseness instructions injected at SessionStart
 origin: "caveman compression persona (adapted)"
+convention: v1
 ---
 
 # Token Efficiency

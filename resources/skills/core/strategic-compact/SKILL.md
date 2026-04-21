@@ -2,6 +2,7 @@
 name: strategic-compact
 description: "Suggests manual context compaction at logical intervals to preserve context through task phases."
 origin: "ECC strategic-compact (adapted)"
+convention: v1
 requires:
   - hyphae
 ---

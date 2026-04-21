@@ -35,14 +35,18 @@ check_skill() {
     fi
     # Note: origin: presence is already guaranteed by the early-return above.
 
-    # Check required sections
-    if ! grep -q "## When to Activate" "$file" 2>/dev/null; then
-        echo "FAIL [$file]: missing '## When to Activate' section"
-        file_fail=1
-    fi
-    if ! grep -q "## How It Works" "$file" 2>/dev/null; then
-        echo "FAIL [$file]: missing '## How It Works' section"
-        file_fail=1
+    # Check required sections — only enforced for convention: v1 skills.
+    # Pre-convention skills (no convention: field) are not required to have
+    # these sections yet; they will be migrated incrementally.
+    if grep -q "^convention: v1" "$file" 2>/dev/null; then
+        if ! grep -q "## When to Activate" "$file" 2>/dev/null; then
+            echo "FAIL [$file]: missing '## When to Activate' section"
+            file_fail=1
+        fi
+        if ! grep -q "## How It Works" "$file" 2>/dev/null; then
+            echo "FAIL [$file]: missing '## How It Works' section"
+            file_fail=1
+        fi
     fi
 
     if [ "$file_fail" -eq 0 ]; then

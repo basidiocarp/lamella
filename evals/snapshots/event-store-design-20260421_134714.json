@@ -1,0 +1,38 @@
+{
+  "skill_path": "resources/skills/microservices/event-store-design/SKILL.md",
+  "task": "Design an event store for a payment system",
+  "timestamp": "2026-04-21T13:47:14.568276+00:00",
+  "arms": [
+    {
+      "name": "baseline",
+      "prompt": "Design an event store for a payment system",
+      "metrics": {
+        "prompt_length": 42,
+        "response_length": 83,
+        "delta_vs_control": null
+      }
+    },
+    {
+      "name": "terse_control",
+      "prompt": "Answer concisely and completely.\n\nDesign an event store for a payment system",
+      "metrics": {
+        "prompt_length": 76,
+        "response_length": 117,
+        "delta_vs_control": null
+      }
+    },
+    {
+      "name": "skill",
+      "prompt": "Answer concisely and completely.\n\n---\nname: event-store-design\ndescription: \"Designs event stores for event-sourced systems.\"\n---\n\n# Event Store Design\n\nUse this skill when designing the persistence layer for event-sourced systems.\n\n## When to Use\n\n- Choosing between EventStoreDB, PostgreSQL, DynamoDB, or streaming-backed approaches\n- Designing stream layout, global ordering, and concurrency checks\n- Defining append-only persistence and replay boundaries\n- Reviewing subscription and projection needs before implementation\n\n## Core Requirements\n\n- append-only writes\n- per-stream ordering\n- optimistic concurrency\n- replayable event history\n- idempotent append behavior\n- projection or subscription support\n\n## Core Workflow\n\n1. Define aggregate and stream boundaries.\n2. Choose the storage technology based on ordering, query, and ops constraints.\n3. Design write contracts around optimistic concurrency and idempotency.\n4. Separate read models and subscriptions from the primary append path.\n5. Plan for event versioning and replay before the first production write.\n\n## Technology Guide\n\n| Option | Good fit |\n|-------|----------|\n| EventStoreDB | dedicated event-sourcing platform |\n| PostgreSQL | teams already operating Postgres well |\n| DynamoDB | serverless AWS-native event storage |\n| Kafka | event streaming backbone, not always best as the primary store |\n\n## Guardrails\n\n- never mutate or delete historical events\n- keep payloads small and explicit\n- version events from day one\n- test replay and projection rebuild as first-class workflows\n\n\n---\n\nTask: Design an event store for a payment system",
+      "metrics": {
+        "prompt_length": 1613,
+        "response_length": 141,
+        "delta_vs_control": 24
+      }
+    }
+  ],
+  "conclusion": {
+    "primary_delta": 24,
+    "methodology_note": "This delta (skill vs terse_control) measures the skill's added value beyond generic prompting."
+  }
+}

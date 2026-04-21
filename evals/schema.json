@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Three-Arm Evaluation Result",
+  "description": "Result of a three-arm controlled evaluation of a skill",
+  "type": "object",
+  "required": ["skill_path", "task", "timestamp", "arms", "conclusion"],
+  "properties": {
+    "skill_path": {
+      "type": "string",
+      "description": "Path to the evaluated SKILL.md file"
+    },
+    "task": {
+      "type": "string",
+      "description": "Description of the task used in the evaluation"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the evaluation was run"
+    },
+    "arms": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Results for each of the three arms",
+      "items": {
+        "type": "object",
+        "required": ["name", "prompt", "metrics"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["baseline", "terse_control", "skill"],
+            "description": "Name of the arm (baseline, terse_control, or skill)"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Full prompt used for this arm"
+          },
+          "metrics": {
+            "type": "object",
+            "required": ["prompt_length", "response_length", "delta_vs_control"],
+            "properties": {
+              "prompt_length": {
+                "type": "integer",
+                "description": "Length of the prompt in characters"
+              },
+              "response_length": {
+                "type": "integer",
+                "description": "Length of the response in characters"
+              },
+              "delta_vs_control": {
+                "type": ["integer", "null"],
+                "description": "Difference in response_length vs terse_control arm. Null for baseline and terse_control arms."
+              }
+            }
+          }
+        }
+      }
+    },
+    "conclusion": {
+      "type": "object",
+      "required": ["primary_delta", "methodology_note"],
+      "properties": {
+        "primary_delta": {
+          "type": "integer",
+          "description": "The key delta: skill arm response_length minus terse_control arm response_length"
+        },
+        "methodology_note": {
+          "type": "string",
+          "description": "Explanation of what the delta measures"
+        }
+      }
+    }
+  }
+}

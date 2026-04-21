@@ -1,0 +1,38 @@
+{
+  "skill_path": "resources/skills/microservices/microservices-design/SKILL.md",
+  "task": "How should I structure my system architecture?",
+  "timestamp": "2026-04-21T13:59:24.384162+00:00",
+  "arms": [
+    {
+      "name": "baseline",
+      "prompt": "How should I structure my system architecture?",
+      "metrics": {
+        "prompt_length": 46,
+        "response_length": 87,
+        "delta_vs_control": null
+      }
+    },
+    {
+      "name": "terse_control",
+      "prompt": "Answer concisely and completely.\n\nHow should I structure my system architecture?",
+      "metrics": {
+        "prompt_length": 80,
+        "response_length": 121,
+        "delta_vs_control": null
+      }
+    },
+    {
+      "name": "skill",
+      "prompt": "Answer concisely and completely.\n\n---\nname: microservices-design\ndescription: \"Designs microservices architectures with service boundaries, event-driven communication, and resilience patterns.\"\n---\n\n# Microservices Architect\n\n## Scope\n\nCovers service decomposition, domain-driven design, resilience patterns, service mesh, and cloud-native architectures. Focus on systems that scale, self-heal, and enable autonomous teams.\n\n## When to Use This Skill\n\n- Decomposing monoliths into microservices\n- Defining service boundaries and bounded contexts\n- Designing inter-service communication patterns\n- Implementing resilience patterns (circuit breakers, retries, bulkheads)\n- Setting up service mesh (Istio, Linkerd)\n- Designing event-driven architectures\n- Implementing distributed transactions (Saga, CQRS)\n- Establishing observability (tracing, metrics, logging)\n\n## Core Workflow\n\n1. **Domain Analysis** - Apply DDD to identify bounded contexts and service boundaries\n2. **Communication Design** - Choose sync/async patterns, protocols (REST, gRPC, events)\n3. **Data Strategy** - Database per service, event sourcing, eventual consistency\n4. **Resilience** - Circuit breakers, retries, timeouts, bulkheads, fallbacks\n5. **Observability** - Distributed tracing, correlation IDs, centralized logging\n6. **Deployment** - Container orchestration, service mesh, progressive delivery\n\n## Reference Guide\n\nLoad detailed guidance based on context:\n\n| Topic | Reference | Load When |\n|-------|-----------|-----------|\n| Service Boundaries | `references/decomposition.md` | Monolith decomposition, bounded contexts, DDD |\n| Communication | `references/communication.md` | REST vs gRPC, async messaging, event-driven |\n| Resilience Patterns | `references/patterns.md` | Circuit breakers, saga, bulkhead, retry strategies |\n| Data Management | `references/data.md` | Database per service, event sourcing, CQRS |\n| Observability | `references/observability.md` | Distributed tracing, correlation IDs, metrics |\n\n## Constraints\n\n### MUST DO\n- Apply domain-driven design for service boundaries\n- Use database per service pattern\n- Implement circuit breakers for external calls\n- Add correlation IDs to all requests\n- Use async communication for cross-aggregate operations\n- Design for failure and graceful degradation\n- Implement health checks and readiness probes\n- Use API versioning strategies\n\n### MUST NOT DO\n- Create distributed monoliths\n- Share databases between services\n- Use synchronous calls for long-running operations\n- Skip distributed tracing implementation\n- Ignore network latency and partial failures\n- Create chatty service interfaces\n- Store shared state without proper patterns\n- Deploy without observability\n\n## Common Pitfalls\n\n- **Distributed Monolith**: Tightly coupled services\n- **Chatty Services**: Too many inter-service calls\n- **Shared Databases**: Tight coupling through data\n- **No Circuit Breakers**: Cascade failures\n- **Synchronous Everything**: Poor resilience\n- **Premature Microservices**: Starting micro instead of monolith-first\n- **No Compensation Logic**: Can't undo failed transactions\n\n## Output Templates\n\nWhen designing microservices architecture, provide:\n1. Service boundary diagram with bounded contexts\n2. Communication patterns (sync/async, protocols)\n3. Data ownership and consistency model\n4. Resilience patterns for each integration point\n5. Deployment and infrastructure requirements\n\n## Knowledge Reference\n\nDomain-driven design, bounded contexts, event storming, REST/gRPC, message queues (Kafka, RabbitMQ), service mesh (Istio, Linkerd), Kubernetes, circuit breakers, saga patterns, event sourcing, CQRS, distributed tracing (Jaeger, Zipkin), API gateways, eventual consistency, CAP theorem\n### Additional Resources\n\n- [Communication Patterns](references/communication-patterns.md)\n- [Decomposition Patterns](references/decomposition-patterns.md)\n- [Resilience Patterns](references/resilience-patterns.md)\n\n\n---\n\nTask: How should I structure my system architecture?",
+      "metrics": {
+        "prompt_length": 4009,
+        "response_length": 141,
+        "delta_vs_control": 20
+      }
+    }
+  ],
+  "conclusion": {
+    "primary_delta": 20,
+    "methodology_note": "This delta (skill vs terse_control) measures the skill's added value beyond generic prompting."
+  }
+}

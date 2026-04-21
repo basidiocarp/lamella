@@ -236,6 +236,7 @@
         "hooks": [
           {
             "type": "command",
+            "timeout": 10,
             "requires": [
               "cortina"
             ],
@@ -261,6 +262,7 @@
         "hooks": [
           {
             "type": "command",
+            "timeout": 10,
             "requires": [
               "cortina"
             ],

@@ -46,17 +46,6 @@
             "command": "node \"$HOME/.claude/hooks/scripts/suggest-compact.js\""
           }
         ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/scripts/observe.js\" pre",
-            "timeout": 10,
-            "async": true
-          }
-        ]
       }
     ],
     "PreCompact": [
@@ -204,17 +193,6 @@
             "type": "command",
             "command": "node \"$HOME/.claude/hooks/scripts/session-logger.js\"",
             "timeout": 5,
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"$HOME/.claude/hooks/scripts/observe.js\" post",
-            "timeout": 10,
             "async": true
           }
         ]

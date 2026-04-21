@@ -16,6 +16,8 @@ Lamella is the packaging and build system for shared coding-agent content. It tu
 - Do not confuse structure validation with prompt-quality proof. Validation checks shape and references, not field effectiveness.
 - Do not move setup or runtime capture into Lamella. Packaging hooks is not the same as owning setup or lifecycle behavior.
 
+**Note (2026-04-21)**: `observe.js` and the `~/.claude/homunculus/` observation store were removed. Runtime lifecycle capture belongs in cortina, not lamella. If an observation system is needed in future, it should be implemented as a cortina adapter, not a lamella hook script.
+
 ---
 
 ## Failure Modes

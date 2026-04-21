@@ -1,6 +1,6 @@
 # Lamella Skill Inventory
 
-The Lamella skill corpus lives under `lamella/resources/skills/`. As of 2026-04-02, it contains **286 skills across 20 categories**.
+The Lamella skill corpus lives under `lamella/resources/skills/core/` and other category directories. As of 2026-04-02, it contains **286 skills across 20 categories**.
 
 ## Categories
 
@@ -27,4 +27,4 @@ The Lamella skill corpus lives under `lamella/resources/skills/`. As of 2026-04-
 
 ## Adding Skills
 
-See `lamella/resources/skills/meta/create-skill.md` for the skill creation workflow.
+See `lamella/resources/skills/meta/create-skill/SKILL.md` for the skill creation workflow.

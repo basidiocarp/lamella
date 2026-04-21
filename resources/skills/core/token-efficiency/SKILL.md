@@ -80,20 +80,18 @@ Then show the read output. Then state the finding directly: "The `validate` func
 
 ## SessionStart Hook Integration
 
-This skill is injected at SessionStart via the `cortina` hook runner, which manages system-prompt augmentation.
+This skill is currently distributed through its included hook scripts that suggest compaction at logical intervals during implementation work.
 
-**What gets injected:**
-- A conciseness instruction block (500 tokens) appended to the base system prompt
-- A fallback phrase-omission checklist for reference in the first turn
+**Planned enhancement:** SessionStart injection via `cortina` that would append a 500-token conciseness instruction block to the base system prompt. This mode is not yet implemented but is reserved for future integration.
 
-**Where in the system prompt:**
-- Position: after core task instructions, before tool descriptions
-- Scope: affects all model outputs for the session
-- Override: users can disable per-session by omitting the skill from their session context
+**Current operation:**
+- Hook scripts in `resources/hooks/` apply local suggestions after edits and writes
+- Agents may manually reference the phases above as guidance
 
-**How to disable:**
-- Per-session: request the skill not be loaded for a specific conversation
-- Per-role: modify cortina configuration to exclude the skill from certain agent roles
+**How to use today:**
+- The skill is active through its packaged hooks when installed into a Claude plugin or Codex environment
+- Per-session: request the skill not be loaded for a specific conversation if conciseness instructions are undesirable
+- Per-role: modify manifest configuration to exclude the skill from certain agent roles
 - Per-project: update project CLAUDE.md to exclude the skill from the manifest
 
 ## Eval Criteria

@@ -69,6 +69,8 @@ Emit this block at the end of every recovery attempt:
 
 Store in hyphae (`hyphae memory store --topic errors/resolved`) when the failure was a real error (not a loop), the recovery succeeded, and the pattern is worth remembering for future sessions.
 
+**Requires hyphae 0.11.0 or later** (`hyphae --version` to confirm).
+
 ## Handoff Pointers
 
 - **#134 Strategic Compact Skill** — context overflow recovery (Phase 3) uses the strategic-compact decision table

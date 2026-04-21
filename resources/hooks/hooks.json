@@ -269,7 +269,7 @@
             "command": "cortina adapter claude-code session-end"
           }
         ],
-        "description": "Cortina runtime: capture session-end event into scoped lifecycle state"
+        "description": "Cortina runtime: capture session-end event into scoped lifecycle state (synchronous — must complete before exit)"
       }
     ]
   }

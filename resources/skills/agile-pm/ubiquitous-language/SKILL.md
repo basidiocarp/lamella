@@ -1,6 +1,7 @@
 ---
 name: ubiquitous-language
 description: "Builds a shared domain glossary with canonical terms, ambiguities, and usage rules."
+origin: lamella
 ---
 
 # Ubiquitous Language

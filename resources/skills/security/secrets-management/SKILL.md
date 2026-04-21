@@ -1,6 +1,7 @@
 ---
 name: secrets-management
 description: "Implements secure secrets management for CI/CD and cloud platforms."
+origin: lamella
 ---
 
 # Secrets Management

@@ -1,6 +1,7 @@
 ---
 name: agent-browser
 description: "Automates browser interactions with Vercel's agent-browser CLI."
+origin: lamella
 ---
 
 # agent-browser: CLI Browser Automation

@@ -1,6 +1,7 @@
 ---
 name: subagent-driven-development
 description: "Executes implementation plans with fresh subagents for independent tasks and built-in review gates."
+origin: lamella
 ---
 
 # Subagent-Driven Development

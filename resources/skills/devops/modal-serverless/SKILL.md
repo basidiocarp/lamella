@@ -1,6 +1,7 @@
 ---
 name: modal-serverless
 description: "Runs Python code in the cloud with serverless containers, GPUs, and autoscaling."
+origin: lamella
 ---
 
 # Modal

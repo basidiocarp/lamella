@@ -1,6 +1,7 @@
 ---
 name: yara-rule-authoring
 description: "Guides authoring of high-quality YARA-X detection rules for malware identification."
+origin: lamella
 ---
 
 # YARA-X Rule Authoring

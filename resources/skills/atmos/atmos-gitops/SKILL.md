@@ -1,6 +1,7 @@
 ---
 name: atmos-gitops
 description: "Implements Atmos CI/CD workflows with GitHub Actions, Spacelift, Atlantis, and affected-stack detection."
+origin: lamella
 ---
 
 # Atmos GitOps and CI/CD Integrations

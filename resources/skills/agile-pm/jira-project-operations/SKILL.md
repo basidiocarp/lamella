@@ -1,6 +1,7 @@
 ---
 name: jira-project-operations
 description: "Operates Jira projects through JQL, workflow design, automation rules, dashboards, and issue hygiene."
+origin: lamella
 ---
 # Jira Project Operations
 

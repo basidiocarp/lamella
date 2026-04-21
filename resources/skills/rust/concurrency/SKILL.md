@@ -1,6 +1,7 @@
 ---
 name: concurrency
 description: "Analyzes Rust concurrency and async issues."
+origin: lamella
 ---
 
 # Concurrency & Async

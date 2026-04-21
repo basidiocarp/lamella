@@ -1,6 +1,7 @@
 ---
 name: cargo-fuzz
 description: "Uses cargo-fuzz for Rust projects that need libFuzzer-based fuzzing."
+origin: lamella
 ---
 # cargo-fuzz
 

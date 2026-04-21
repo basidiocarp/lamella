@@ -1,6 +1,7 @@
 ---
 name: content-strategy
 description: "Plans content strategy with pillars, topic clusters, buyer-stage coverage, and distribution intent."
+origin: lamella
 ---
 # Content Strategy
 

@@ -1,6 +1,7 @@
 ---
 name: docs-style
 description: "Defines style guidelines for writing and updating documentation."
+origin: lamella
 ---
 
 # Docs Style

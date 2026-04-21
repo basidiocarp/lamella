@@ -3,6 +3,7 @@ name: humanizer
 description: "Removes signs of AI-generated writing from text."
 metadata:
   user-invocable: true
+origin: lamella
 ---
 # Humanizer: Remove AI Writing Patterns
 

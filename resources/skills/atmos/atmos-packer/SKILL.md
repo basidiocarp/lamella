@@ -1,6 +1,7 @@
 ---
 name: atmos-packer
 description: "Orchestrates Packer initialization, builds, validation, inspection, outputs, and image source management through Atmos."
+origin: lamella
 ---
 
 # Atmos Packer Orchestration

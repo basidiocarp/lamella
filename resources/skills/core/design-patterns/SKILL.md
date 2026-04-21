@@ -1,6 +1,7 @@
 ---
 name: design-patterns
 description: "Analyzes codebases for GoF design patterns, refactoring opportunities, and stack-aware adaptations."
+origin: lamella
 ---
 # Design Patterns
 

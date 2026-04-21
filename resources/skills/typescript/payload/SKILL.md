@@ -1,6 +1,7 @@
 ---
 name: payload
 description: "Guides Payload CMS collections, hooks, access control, and APIs."
+origin: lamella
 ---
 
 # Payload CMS Application Development

@@ -1,6 +1,7 @@
 ---
 name: django-patterns
 description: "Guides Django architecture, DRF APIs, ORM patterns, and testing."
+origin: lamella
 ---
 
 # Django Development Patterns

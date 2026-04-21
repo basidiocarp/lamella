@@ -1,6 +1,7 @@
 ---
 name: git-create-pr
 description: "Creates pull requests with GitHub CLI using proper templates and formatting."
+origin: lamella
 ---
 
 # How to Create a Pull Request Using GitHub CLI

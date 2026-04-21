@@ -1,6 +1,7 @@
 ---
 name: atmos-templates
 description: "Writes Atmos Go templates with Sprig, Gomplate, atmos.Component, atmos.GomplateDatasource, and atmos.Store helpers."
+origin: lamella
 ---
 
 # Atmos Go Templates

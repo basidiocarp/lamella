@@ -1,6 +1,7 @@
 ---
 name: kaizen
 description: "Applies Kaizen continuous-improvement methods such as 5 Whys, Fishbone, PDCA, and A3 problem documentation."
+origin: lamella
 ---
 
 # Kaizen: Continuous Improvement

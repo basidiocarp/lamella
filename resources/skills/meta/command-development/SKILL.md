@@ -1,6 +1,7 @@
 ---
 name: command-development
 description: "Guides slash command development for Claude Code."
+origin: lamella
 ---
 # Command Development for Claude Code
 

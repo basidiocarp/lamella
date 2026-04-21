@@ -1,6 +1,7 @@
 ---
 name: company-culture-design
 description: "Designs company culture as observable behaviors, rituals, and reinforcement systems."
+origin: lamella
 ---
 # Company Culture Design
 

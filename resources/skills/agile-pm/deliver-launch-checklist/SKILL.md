@@ -1,6 +1,7 @@
 ---
 name: deliver-launch-checklist
 description: "Creates a comprehensive pre-launch checklist covering engineering, design, marketing, support, legal, and operations readiness."
+origin: lamella
 ---
 # Launch Checklist
 

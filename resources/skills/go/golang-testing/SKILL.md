@@ -1,6 +1,7 @@
 ---
 name: golang-testing
 description: "Implements idiomatic Go testing patterns."
+origin: lamella
 ---
 
 # Go Testing Patterns

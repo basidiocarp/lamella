@@ -1,6 +1,7 @@
 ---
 name: github-actions-validator
 description: "Validates, lints, audits, and fixes GitHub Actions workflows in `.github/workflows`."
+origin: lamella
 ---
 
 # GitHub Actions Validator

@@ -1,6 +1,7 @@
 ---
 name: python-testing
 description: "Applies pytest patterns and configuration for Python test suites."
+origin: lamella
 ---
 
 # Python Testing Patterns

@@ -1,6 +1,7 @@
 ---
 name: discover-company-profile
 description: "Builds company profiles from public signals and strategy context."
+origin: lamella
 ---
 # Discover Company Profile
 

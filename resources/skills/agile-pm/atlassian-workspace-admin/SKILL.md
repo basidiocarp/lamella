@@ -1,6 +1,7 @@
 ---
 name: atlassian-workspace-admin
 description: "Administers Atlassian workspaces, permissions, security controls, and lifecycle operations."
+origin: lamella
 ---
 # Atlassian Workspace Admin
 

@@ -1,6 +1,7 @@
 ---
 name: memory-safety-patterns
 description: "Applies memory-safety patterns across Rust, C++, and C."
+origin: lamella
 ---
 
 # Memory Safety Patterns

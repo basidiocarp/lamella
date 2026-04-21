@@ -1,6 +1,7 @@
 ---
 name: openapi-spec-generation
 description: "Generates and maintains OpenAPI 3.1 specifications from code, design-first specs, and validation patterns."
+origin: lamella
 ---
 
 # OpenAPI Spec Generation

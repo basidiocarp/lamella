@@ -1,6 +1,7 @@
 ---
 name: skill-stocktake
 description: "Audits Claude skills and commands for quality."
+origin: lamella
 ---
 
 # skill-stocktake

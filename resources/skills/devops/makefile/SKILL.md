@@ -1,6 +1,7 @@
 ---
 name: makefile
 description: "Generates, validates, lints, and audits Makefiles with `.PHONY` targets and build automation."
+origin: lamella
 ---
 
 # Makefile

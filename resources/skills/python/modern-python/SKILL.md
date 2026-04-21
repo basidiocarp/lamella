@@ -1,6 +1,7 @@
 ---
 name: modern-python
 description: "Configures Python projects with modern tooling (uv, ruff, ty)."
+origin: lamella
 ---
 
 # Modern Python

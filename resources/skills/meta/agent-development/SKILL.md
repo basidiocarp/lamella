@@ -1,6 +1,7 @@
 ---
 name: agent-development
 description: "Guides agent development for Claude Code plugins."
+origin: lamella
 ---
 # Agent Development for Claude Code Plugins
 

@@ -1,6 +1,7 @@
 ---
 name: rust-async-patterns
 description: Design and review Rust async code beyond the always-on core rules. Use when working on Tokio runtime choices, channels, task orchestration, cancellation, blocking boundaries, or async coordination patterns.
+origin: lamella
 ---
 
 # Rust Async Patterns

@@ -1,6 +1,7 @@
 ---
 name: threat-mitigation-mapping
 description: "Maps identified threats to appropriate security controls and mitigations."
+origin: lamella
 ---
 
 # Threat Mitigation Mapping

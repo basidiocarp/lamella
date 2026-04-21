@@ -2,6 +2,7 @@
 name: launch-sub-agent
 description: "Launches an intelligent sub-agent with automatic model selection, specialized agent matching, and self-critique verification."
 argument-hint: "Task description (e.g., \"Implement user authentication\" or \"Research caching strategies\") [--model opus|sonnet|haiku] [--agent <agent-name>] [--output <path>]"
+origin: lamella
 ---
 # launch-sub-agent
 

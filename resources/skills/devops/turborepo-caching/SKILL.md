@@ -1,6 +1,7 @@
 ---
 name: turborepo-caching
 description: "Configures Turborepo for efficient monorepo builds with local and remote caching."
+origin: lamella
 ---
 
 # Turborepo Caching

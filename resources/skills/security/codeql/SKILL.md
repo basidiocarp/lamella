@@ -1,6 +1,7 @@
 ---
 name: codeql
 description: "Scans codebases for security vulnerabilities using CodeQL's interprocedural data flow and taint tracking analysis."
+origin: lamella
 ---
 # CodeQL Analysis
 

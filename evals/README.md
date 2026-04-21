@@ -31,7 +31,18 @@ Without Arm 2, you cannot distinguish between:
 
 ## Running an Evaluation
 
+Real evaluation requires a live model. The harness raises `NotImplementedError` if `--simulate` is not passed and no live API integration is wired in.
+
 ```bash
+# Simulation mode: tests harness machinery without calling a real model API.
+# Snapshots are written to evals/snapshots/synthetic/ and should not be
+# treated as evidence of skill quality.
+python3 lamella/evals/run_eval.py \
+  --skill resources/skills/path/to/SKILL.md \
+  --task "Your task description here" \
+  --simulate
+
+# Real evaluation (requires live model API integration):
 python3 lamella/evals/run_eval.py \
   --skill resources/skills/path/to/SKILL.md \
   --task "Your task description here"
@@ -41,7 +52,7 @@ The script will:
 1. Load the skill from the filesystem
 2. Run the three arms with corresponding prompts
 3. Collect metrics (prompt length, response characteristics, delta vs control)
-4. Write results to `evals/snapshots/<skill-name>-<timestamp>.json`
+4. Write results to `evals/snapshots/<skill-name>-<timestamp>.json` (or `evals/snapshots/synthetic/` in simulation mode)
 5. Print a summary to stdout
 
 ## Output Format
@@ -91,9 +102,11 @@ Each evaluation produces a JSON file in `evals/snapshots/` with the structure de
 
 ## Interpreting Results
 
-- **delta = 0 or negative**: The skill does not improve over generic prompting. Consider revising or retiring the skill.
-- **delta > 0**: The skill adds measurable value. Document the effect size and discuss whether it justifies the added token cost.
+The delta is `terse_control_response_length - skill_response_length`. For token-efficiency skills, a shorter response is better, so **positive delta = improvement**.
+
+- **delta > 0**: The skill produced a shorter, more efficient response than generic prompting. Positive effect.
 - **delta >> 0**: Strong positive effect. The skill is likely high-value.
+- **delta = 0 or negative**: The skill does not improve (or regresses) over generic prompting. Consider revising or retiring the skill.
 
 ## Current Status
 

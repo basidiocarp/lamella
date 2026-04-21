@@ -1,6 +1,7 @@
 ---
 name: prompt-engineering
 description: "Improves prompts for commands, hooks, skills, agents, and other LLM interactions."
+origin: lamella
 ---
 
 # Prompt Engineering Patterns

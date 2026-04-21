@@ -1,6 +1,7 @@
 ---
 name: deployment
 description: "Guides production deployments, CI/CD, rollbacks, and readiness checks."
+origin: lamella
 ---
 
 # Deployment

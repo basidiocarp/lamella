@@ -1,6 +1,7 @@
 ---
 name: dependency-upgrade
 description: "Manages major dependency upgrades with compatibility analysis, staged rollout, and testing."
+origin: lamella
 ---
 
 # Dependency Upgrade

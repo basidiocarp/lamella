@@ -1,6 +1,7 @@
 ---
 name: zero-cost
 description: "Explains Rust generics, traits, and zero-cost abstraction trade-offs."
+origin: lamella
 ---
 
 # Generics, Traits & Zero-Cost Abstractions

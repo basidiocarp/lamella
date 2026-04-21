@@ -1,6 +1,7 @@
 ---
 name: graphql-patterns
 description: "Designs GraphQL schemas, resolvers, federation layouts, and subscriptions."
+origin: lamella
 ---
 # GraphQL Patterns
 

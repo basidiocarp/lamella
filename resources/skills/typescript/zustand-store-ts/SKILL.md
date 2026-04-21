@@ -1,6 +1,7 @@
 ---
 name: zustand-store-ts
 description: "Creates Zustand stores with TypeScript, subscribeWithSelector middleware, and proper state-action separation."
+origin: lamella
 ---
 
 # Zustand Store

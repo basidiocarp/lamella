@@ -1,6 +1,7 @@
 ---
 name: discover-stakeholder-summary
 description: "Documents stakeholder needs, concerns, and influence for a project or initiative."
+origin: lamella
 ---
 # Stakeholder Summary
 

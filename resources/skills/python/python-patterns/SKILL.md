@@ -1,6 +1,7 @@
 ---
 name: python-patterns
 description: "Applies Python idioms, typing, async patterns, and standard library."
+origin: lamella
 ---
 
 # Python Development Patterns

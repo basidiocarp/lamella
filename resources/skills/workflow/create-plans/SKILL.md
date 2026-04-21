@@ -1,6 +1,7 @@
 ---
 name: create-plans
 description: "Creates hierarchical project plans optimized for solo agentic development."
+origin: lamella
 ---
 
 Use `spec-driven-workflow` when the user needs a formal reviewable spec with acceptance criteria before implementation. Use this skill when the output should be an executable plan for Claude.

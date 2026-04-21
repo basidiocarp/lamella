@@ -1,6 +1,7 @@
 ---
 name: analytics-tracking
 description: "Plans, audits, and debugs analytics tracking with GA4, GTM, event taxonomies, and conversion instrumentation."
+origin: lamella
 ---
 # Analytics Tracking
 

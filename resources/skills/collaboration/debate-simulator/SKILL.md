@@ -1,6 +1,7 @@
 ---
 name: debate-simulator
 description: "Simulates debates between 2-3 expert personas from different angles."
+origin: lamella
 ---
 
 # Debate Simulator

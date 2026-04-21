@@ -1,6 +1,7 @@
 ---
 name: component-architecture
 description: "Designs reusable frontend component architectures."
+origin: lamella
 ---
 
 # Component Architecture

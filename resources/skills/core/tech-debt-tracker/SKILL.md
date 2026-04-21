@@ -1,6 +1,7 @@
 ---
 name: tech-debt-tracker
 description: "Scans codebases for technical debt, prioritizes remediation work, and tracks debt trends over time."
+origin: lamella
 ---
 
 # Tech Debt Tracker

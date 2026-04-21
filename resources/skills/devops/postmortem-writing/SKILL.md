@@ -1,6 +1,7 @@
 ---
 name: postmortem-writing
 description: "Writes effective blameless postmortems with root cause analysis, timelines, and action items."
+origin: lamella
 ---
 
 # Postmortem Writing

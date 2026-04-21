@@ -1,6 +1,7 @@
 ---
 name: rust-performance
 description: Optimize Rust performance and memory usage with measurement-first guidance. Use when benchmarking, profiling, reducing allocation pressure, tuning release profiles, or evaluating layout and container tradeoffs in hot paths.
+origin: lamella
 ---
 
 # Rust Performance

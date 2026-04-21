@@ -1,6 +1,7 @@
 ---
 name: threejs-advanced
 description: "Implements advanced Three.js animation, post-processing, and shader workflows."
+origin: lamella
 ---
 
 # Three.js Advanced

@@ -3,6 +3,7 @@ name: skill-best-practices
 description: "Applies Anthropic's official best practices for skill development."
 metadata:
   argument-hint: Optional skill name or path to skill being reviewed
+origin: lamella
 ---
 # Anthropic's Official Skill Authoring Best Practices
 

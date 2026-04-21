@@ -1,6 +1,7 @@
 ---
 name: atmos-introspection
 description: "Queries Atmos configuration, workspace state, dependency graphs, and filtered stack data."
+origin: lamella
 ---
 
 # Atmos Introspection

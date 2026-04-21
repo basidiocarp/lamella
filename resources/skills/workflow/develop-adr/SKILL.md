@@ -1,6 +1,7 @@
 ---
 name: develop-adr
 description: "Creates Architecture Decision Records using the Nygard format."
+origin: lamella
 ---
 # Architecture Decision Record (ADR)
 

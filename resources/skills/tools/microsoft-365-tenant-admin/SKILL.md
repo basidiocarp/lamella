@@ -1,6 +1,7 @@
 ---
 name: microsoft-365-tenant-admin
 description: "Administers Microsoft 365 tenants, identities, licensing, and security baselines."
+origin: lamella
 ---
 # Microsoft 365 Tenant Admin
 

@@ -1,6 +1,7 @@
 ---
 name: css-animation-creator
 description: "Creates frontend motion and animation patterns."
+origin: lamella
 ---
 
 # CSS Animation Creator

@@ -1,6 +1,7 @@
 ---
 name: rust-testing-patterns
 description: Design Rust tests with the right split between unit, integration, doctest, async, property, mock, and benchmark coverage. Use when adding tests, choosing test style, or reviewing whether evidence matches the behavior claim.
+origin: lamella
 ---
 
 # Rust Testing Patterns

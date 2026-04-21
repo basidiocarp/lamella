@@ -1,6 +1,7 @@
 ---
 name: plan-fleet
 description: "Creates implementation plans optimized for GitHub Copilot CLI fleet execution."
+origin: lamella
 ---
 
 # Fleet Plan Generator

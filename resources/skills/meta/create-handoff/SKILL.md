@@ -4,6 +4,7 @@ description: Create a structured handoff document with verification script
 category: meta
 version: 0.1.0
 tags: [handoff, planning, delegation, verification]
+origin: lamella
 ---
 
 # Create Handoff

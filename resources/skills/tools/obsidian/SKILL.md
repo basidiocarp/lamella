@@ -1,6 +1,7 @@
 ---
 name: obsidian
 description: "Manages Obsidian vaults and Obsidian Flavored Markdown."
+origin: lamella
 ---
 
 # Obsidian

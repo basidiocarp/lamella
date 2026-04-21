@@ -1,6 +1,7 @@
 ---
 name: cqrs-implementation
 description: "Implements Command Query Responsibility Segregation patterns for distributed systems."
+origin: lamella
 ---
 
 # CQRS Implementation

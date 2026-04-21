@@ -1,6 +1,7 @@
 ---
 name: discover-market-sizing
 description: "Estimates TAM, SAM, and SOM with explicit assumptions, segment logic, and sizing math."
+origin: lamella
 ---
 # Discover Market Sizing
 

@@ -1,6 +1,7 @@
 ---
 name: stress-test-design
 description: "Stress-tests a plan or design through sequential challenge questions and recommended answers."
+origin: lamella
 ---
 
 # Stress Test Design

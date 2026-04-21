@@ -1,6 +1,7 @@
 ---
 name: skill-router
 description: "Routes questions to the right skill, plugin, or agent."
+origin: lamella
 ---
 
 # Skill Router

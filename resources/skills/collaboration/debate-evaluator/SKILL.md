@@ -1,6 +1,7 @@
 ---
 name: debate-evaluator
 description: "Evaluates solutions through multi-round debate between independent judges until consensus."
+origin: lamella
 ---
 
 # Debate Evaluator

@@ -1,6 +1,7 @@
 ---
 name: ownership
 description: "Analyzes Rust ownership, borrowing, and lifetime issues."
+origin: lamella
 ---
 
 # Ownership, Borrowing & Lifetimes

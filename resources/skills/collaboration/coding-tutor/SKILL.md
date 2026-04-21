@@ -1,6 +1,7 @@
 ---
 name: coding-tutor
 description: "Creates codebase-aware coding tutorials for learning and onboarding."
+origin: lamella
 ---
 
 # Coding Tutor

@@ -3,6 +3,7 @@ name: resolve-pr-parallel
 description: "Resolves pull request comments using parallel processing."
 argument-hint: "[optional: PR number or current PR]"
 disable-model-invocation: true
+origin: lamella
 ---
 # Resolve PR Comments in Parallel
 

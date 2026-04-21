@@ -1,6 +1,7 @@
 ---
 name: kubernetes-manifest-generator
 description: "Creates production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets."
+origin: lamella
 ---
 
 # Kubernetes Manifest Generator

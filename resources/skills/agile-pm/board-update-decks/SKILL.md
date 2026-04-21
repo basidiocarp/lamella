@@ -1,6 +1,7 @@
 ---
 name: board-update-decks
 description: "Builds board and investor update decks with metrics and asks."
+origin: lamella
 ---
 # Board Update Decks
 

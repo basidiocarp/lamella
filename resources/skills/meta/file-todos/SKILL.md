@@ -3,6 +3,7 @@ name: file-todos
 description: "Manages a file-based todo tracking system in the `todos/` directory."
 metadata:
   disable-model-invocation: true
+origin: lamella
 ---
 # File-Based Todo Tracking Skill
 

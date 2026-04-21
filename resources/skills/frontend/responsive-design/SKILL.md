@@ -1,6 +1,7 @@
 ---
 name: responsive-design
 description: "Builds responsive frontend layouts with modern CSS."
+origin: lamella
 ---
 
 # Responsive Design

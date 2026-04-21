@@ -1,6 +1,7 @@
 ---
 name: supply-chain-risk-auditor
 description: "Audits dependency supply-chain risk, staleness, and takeover exposure."
+origin: lamella
 ---
 # Supply Chain Risk Auditor
 

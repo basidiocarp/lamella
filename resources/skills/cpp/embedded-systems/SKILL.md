@@ -1,6 +1,7 @@
 ---
 name: embedded-systems
 description: "Builds embedded and firmware systems in C and C++."
+origin: lamella
 ---
 
 # Embedded Systems Engineer

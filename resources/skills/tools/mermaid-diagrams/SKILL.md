@@ -1,6 +1,7 @@
 ---
 name: mermaid-diagrams
 description: "Creates software diagrams using Mermaid syntax."
+origin: lamella
 ---
 
 # Mermaid Diagramming

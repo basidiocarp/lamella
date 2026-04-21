@@ -1,6 +1,7 @@
 ---
 name: fastapi
 description: "Applies FastAPI best practices and conventions for APIs and Pydantic models."
+origin: lamella
 ---
 
 # FastAPI

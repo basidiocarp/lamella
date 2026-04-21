@@ -1,6 +1,7 @@
 ---
 name: spec-driven-workflow
 description: "Creates implementation-ready specs and derives tests from acceptance criteria."
+origin: lamella
 ---
 
 # Spec-Driven Workflow

@@ -1,6 +1,7 @@
 ---
 name: fuzz-harness-writing
 description: "Designs fuzz harnesses, corpora, dictionaries, and coverage strategies."
+origin: lamella
 ---
 
 # Writing Fuzzing Harnesses

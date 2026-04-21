@@ -1,6 +1,7 @@
 ---
 name: rag-implementation
 description: "Builds Retrieval-Augmented Generation systems for LLM applications."
+origin: lamella
 ---
 
 # RAG Implementation

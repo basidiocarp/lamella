@@ -1,6 +1,7 @@
 ---
 name: storyboard
 description: "Creates a six-frame storyboard that shows one user narrative from problem to outcome."
+origin: lamella
 ---
 # Storyboard
 

@@ -1,6 +1,7 @@
 ---
 name: modern-javascript-patterns
 description: "Applies modern JavaScript patterns, utilities, and module-system guidance."
+origin: lamella
 ---
 
 # Modern JavaScript Patterns

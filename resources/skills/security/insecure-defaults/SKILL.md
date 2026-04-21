@@ -1,6 +1,7 @@
 ---
 name: insecure-defaults
 description: "Detects fail-open defaults like weak auth, secrets, and permissive security."
+origin: lamella
 ---
 # Insecure Defaults Detection
 

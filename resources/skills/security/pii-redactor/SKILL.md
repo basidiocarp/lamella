@@ -2,6 +2,7 @@
 name: pii-redactor
 description: "Detects and redacts PII from text files."
 compatibility: Requires python3
+origin: lamella
 ---
 
 # AgentWard Sanitize

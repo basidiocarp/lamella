@@ -1,6 +1,7 @@
 ---
 name: atmos-vendoring
 description: "Vendors Atmos components from Git, OCI, registries, and storage."
+origin: lamella
 ---
 
 # Atmos Component Vendoring

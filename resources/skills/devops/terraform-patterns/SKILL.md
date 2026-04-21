@@ -1,6 +1,7 @@
 ---
 name: terraform-patterns
 description: "Implements infrastructure as code with Terraform across AWS, Azure, or GCP."
+origin: lamella
 ---
 
 # Terraform Patterns

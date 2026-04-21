@@ -1,6 +1,7 @@
 ---
 name: type-driven-design
 description: "Uses the type system to prevent bugs at compile time."
+origin: lamella
 ---
 
 # Type-Driven Design

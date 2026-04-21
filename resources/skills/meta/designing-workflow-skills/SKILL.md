@@ -1,6 +1,7 @@
 ---
 name: designing-workflow-skills
 description: "Designs workflow skills with phases, routing, gates, and delegation."
+origin: lamella
 ---
 # Designing Workflow Skills
 

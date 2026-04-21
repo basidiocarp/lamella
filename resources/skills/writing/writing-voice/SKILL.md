@@ -1,6 +1,7 @@
 ---
 name: writing-voice
 description: "Defines voice and tone rules for written prose."
+origin: lamella
 ---
 
 # Writing Voice

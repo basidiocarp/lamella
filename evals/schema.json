@@ -50,7 +50,7 @@
               },
               "delta_vs_control": {
                 "type": ["integer", "null"],
-                "description": "Difference in response_length vs terse_control arm. Null for baseline and terse_control arms."
+                "description": "terse_control response_length minus skill response_length. Positive means the skill arm produced a shorter (more efficient) response — improvement. Negative means regression. Null for baseline and terse_control arms."
               }
             }
           }
@@ -63,7 +63,7 @@
       "properties": {
         "primary_delta": {
           "type": "integer",
-          "description": "The key delta: skill arm response_length minus terse_control arm response_length"
+          "description": "The key delta: terse_control arm response_length minus skill arm response_length. Positive means improvement (skill produced a shorter, more efficient response)."
         },
         "methodology_note": {
           "type": "string",

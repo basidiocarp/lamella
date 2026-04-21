@@ -1,6 +1,7 @@
 ---
 name: plan-discovery-interviews
 description: "Plans discovery interviews with clear research goals, participant targets, interview themes, and bias controls."
+origin: lamella
 ---
 # Plan Discovery Interviews
 

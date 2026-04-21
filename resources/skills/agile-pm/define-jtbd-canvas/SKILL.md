@@ -1,6 +1,7 @@
 ---
 name: define-jtbd-canvas
 description: "Creates Jobs to be Done canvases for customer motivations."
+origin: lamella
 ---
 # Jobs to be Done Canvas
 

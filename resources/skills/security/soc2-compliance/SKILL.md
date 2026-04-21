@@ -1,6 +1,7 @@
 ---
 name: soc2-compliance
 description: "Plans SOC 2 readiness, control mapping, and audit evidence collection."
+origin: lamella
 ---
 
 # SOC 2 Compliance

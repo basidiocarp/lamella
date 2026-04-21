@@ -1,6 +1,7 @@
 ---
 name: sast-configuration
 description: "Configures SAST tools, scans, and SARIF processing workflows."
+origin: lamella
 ---
 
 # SAST Configuration

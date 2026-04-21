@@ -1,6 +1,7 @@
 ---
 name: runbook-generator
 description: "Generates operational runbooks for services, deployments, maintenance, and rollback flows."
+origin: lamella
 ---
 
 # Runbook Generator

@@ -1,6 +1,7 @@
 ---
 name: bash-script-validator
 description: "Validates bash and shell scripts with ShellCheck."
+origin: lamella
 ---
 
 # Bash Script Validator

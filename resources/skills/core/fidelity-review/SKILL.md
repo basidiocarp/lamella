@@ -1,6 +1,7 @@
 ---
 name: fidelity-review
 description: "Compares implementation against a plan or specification to identify deviations."
+origin: lamella
 ---
 
 # Fidelity Review

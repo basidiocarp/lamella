@@ -1,6 +1,7 @@
 ---
 name: postgresql
 description: "Designs PostgreSQL schemas and database patterns."
+origin: lamella
 ---
 
 # PostgreSQL Table Design

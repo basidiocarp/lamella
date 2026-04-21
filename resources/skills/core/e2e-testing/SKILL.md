@@ -1,6 +1,7 @@
 ---
 name: e2e-testing
 description: "Guides Playwright end-to-end testing, page models, and flake reduction."
+origin: lamella
 ---
 
 # E2E Testing Patterns

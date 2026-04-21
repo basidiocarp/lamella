@@ -1,6 +1,7 @@
 ---
 name: atmos-stacks
 description: "Configures Atmos stacks with imports, inheritance, deep merging, locals, vars, settings, metadata, and overrides."
+origin: lamella
 ---
 
 # Atmos Stack Configuration

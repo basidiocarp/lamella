@@ -1,6 +1,7 @@
 ---
 name: lifecycle
 description: "Designs Rust resource lifecycle patterns."
+origin: lamella
 ---
 
 # Resource Lifecycle & RAII

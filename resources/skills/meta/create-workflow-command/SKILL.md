@@ -3,6 +3,7 @@ name: create-workflow-command
 description: "Creates workflow commands that orchestrate multi-step execution through sub-agents with file-based task prompts."
 metadata:
   argument-hint: "[workflow-name] [description]"
+origin: lamella
 ---
 # Create Workflow Command
 

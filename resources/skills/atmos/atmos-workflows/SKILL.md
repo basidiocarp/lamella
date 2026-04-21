@@ -1,6 +1,7 @@
 ---
 name: atmos-workflows
 description: "Automates Atmos workflows with multi-step execution, Go template support, and cross-component orchestration."
+origin: lamella
 ---
 
 # Atmos Workflows

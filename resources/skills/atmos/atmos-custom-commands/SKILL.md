@@ -1,6 +1,7 @@
 ---
 name: atmos-custom-commands
 description: "Defines custom Atmos CLI commands in atmos.yaml, including arguments, flags, steps, and environment variables."
+origin: lamella
 ---
 
 # Atmos Custom Commands

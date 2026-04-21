@@ -1,6 +1,7 @@
 ---
 name: spline-3d-integration
 description: "Integrates Spline scenes into web projects with React, Next.js, or vanilla HTML."
+origin: lamella
 ---
 
 # Spline 3D Integration

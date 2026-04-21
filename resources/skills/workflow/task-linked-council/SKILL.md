@@ -1,6 +1,7 @@
 ---
 name: task-linked-council
 description: "Runs a fixed two-role technical council for one task using the existing reviewer and architect lanes."
+origin: lamella
 ---
 
 # Task Linked Council

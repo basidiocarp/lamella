@@ -13,6 +13,7 @@ metadata:
     - matcher: Bash(aws bedrock-agentcore-control create-*)
       command: aws sts get-caller-identity --query Account --output text
       once: true
+origin: lamella
 ---
 # AWS Bedrock AgentCore
 

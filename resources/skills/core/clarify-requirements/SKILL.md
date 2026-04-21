@@ -1,6 +1,7 @@
 ---
 name: clarify-requirements
 description: "Clarifies requirements before implementation."
+origin: lamella
 ---
 
 # Clarify Requirements

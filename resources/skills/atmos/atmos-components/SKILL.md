@@ -1,6 +1,7 @@
 ---
 name: atmos-components
 description: "Designs Atmos components with inheritance, mixins, catalogs, and versioning."
+origin: lamella
 ---
 
 # Atmos Component Architecture

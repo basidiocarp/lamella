@@ -1,6 +1,7 @@
 ---
 name: promql
 description: "Generates, validates, lints, and optimizes PromQL queries, alerting rules, and recording rules."
+origin: lamella
 ---
 
 # PromQL

@@ -1,6 +1,7 @@
 ---
 name: nextjs-app-router-patterns
 description: "Applies Next.js App Router architecture, caching strategies, and component patterns."
+origin: lamella
 ---
 
 # Next.js App Router Patterns

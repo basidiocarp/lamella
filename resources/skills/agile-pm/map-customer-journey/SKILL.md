@@ -1,6 +1,7 @@
 ---
 name: map-customer-journey
 description: "Maps a customer journey across stages, touchpoints, actions, emotions, KPIs, and team ownership."
+origin: lamella
 ---
 # Map Customer Journey
 

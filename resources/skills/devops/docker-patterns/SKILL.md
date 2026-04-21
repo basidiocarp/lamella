@@ -1,6 +1,7 @@
 ---
 name: docker-patterns
 description: "Guides Dockerfiles, Compose setups, networking, volumes, and container security."
+origin: lamella
 ---
 
 # Docker Patterns

@@ -1,6 +1,7 @@
 ---
 name: founder-leadership-coaching
 description: "Helps founders improve delegation, leadership focus, and operating cadence."
+origin: lamella
 ---
 # Founder Leadership Coaching
 

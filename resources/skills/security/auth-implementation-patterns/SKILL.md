@@ -1,6 +1,7 @@
 ---
 name: auth-implementation-patterns
 description: "Provides authentication and authorization patterns for JWT, OAuth2, sessions, RBAC, and permission-based access control."
+origin: lamella
 ---
 
 # Authentication & Authorization Patterns

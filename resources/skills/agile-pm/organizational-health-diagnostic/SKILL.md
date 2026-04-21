@@ -1,6 +1,7 @@
 ---
 name: organizational-health-diagnostic
 description: "Builds organizational health reviews across product, people, operations, and finance."
+origin: lamella
 ---
 # Organizational Health Diagnostic
 

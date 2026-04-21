@@ -1,6 +1,7 @@
 ---
 name: discover-interview-synthesis
 description: "Synthesizes user research interviews into actionable insights, patterns, and recommendations."
+origin: lamella
 ---
 # Interview Synthesis
 

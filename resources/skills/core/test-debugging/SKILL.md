@@ -1,6 +1,7 @@
 ---
 name: test-debugging
 description: "Applies a five-phase workflow for debugging test failures."
+origin: lamella
 ---
 
 # Test Debugging

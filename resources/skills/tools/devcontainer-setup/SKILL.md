@@ -1,6 +1,7 @@
 ---
 name: devcontainer-setup
 description: "Creates devcontainers with Claude Code, language-specific tooling (Python/Node/Rust/Go), and persistent volumes."
+origin: lamella
 ---
 
 # Devcontainer Setup Skill

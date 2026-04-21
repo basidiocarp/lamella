@@ -5,6 +5,7 @@ allowed-tools:
   - Read
   - Grep
   - Glob
+origin: lamella
 ---
 
 # Sharp Edges Analysis

@@ -1,6 +1,7 @@
 ---
 name: duplicate-detection
 description: "Finds semantically duplicated code despite different names or implementations."
+origin: lamella
 ---
 
 # Duplicate Detection

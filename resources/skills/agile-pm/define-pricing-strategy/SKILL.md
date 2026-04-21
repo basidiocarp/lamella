@@ -1,6 +1,7 @@
 ---
 name: define-pricing-strategy
 description: "Designs SaaS pricing strategy across packaging, value metrics, price points, and price-change plans."
+origin: lamella
 ---
 # Define Pricing Strategy
 

@@ -1,6 +1,7 @@
 ---
 name: otel-instrumentation
 description: "Instruments services with the OpenTelemetry SDK to emit traces, metrics, and logs. Use when adding OTel to a new service, reviewing telemetry quality, or choosing SDK setup across Node.js, Go, Python, Java, or Rust."
+origin: lamella
 ---
 
 # OTel Instrumentation

@@ -1,6 +1,7 @@
 ---
 name: database-schema-designer
 description: "Designs relational schemas, migrations, indexes, policies, and ERDs."
+origin: lamella
 ---
 
 # Database Schema Designer

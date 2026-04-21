@@ -1,6 +1,7 @@
 ---
 name: react-patterns
 description: "Applies React and Next.js component patterns for performance, accessibility, and animation work."
+origin: lamella
 ---
 
 # React Patterns

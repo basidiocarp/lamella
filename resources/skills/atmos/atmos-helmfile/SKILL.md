@@ -1,6 +1,7 @@
 ---
 name: atmos-helmfile
 description: "Orchestrates Helmfile operations, Kubernetes deployments, varfile generation, EKS integration, and source management through Atmos."
+origin: lamella
 ---
 
 # Atmos Helmfile Orchestration

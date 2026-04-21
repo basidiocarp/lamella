@@ -1,6 +1,7 @@
 ---
 name: confluence-knowledge-ops
 description: "Designs and audits Confluence spaces, page hierarchies, templates, labels, and embedded reporting."
+origin: lamella
 ---
 # Confluence Knowledge Operations
 

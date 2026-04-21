@@ -1,6 +1,7 @@
 ---
 name: pandas-pro
 description: "Applies pandas patterns for DataFrame manipulation, cleaning, aggregation, merging, and time series analysis."
+origin: lamella
 ---
 
 # Pandas Pro

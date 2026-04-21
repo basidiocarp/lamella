@@ -1,6 +1,7 @@
 ---
 name: latex-posters
 description: "Creates professional research posters in LaTeX using beamerposter, tikzposter, or baposter."
+origin: lamella
 ---
 # LaTeX Research Posters
 

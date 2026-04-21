@@ -1,6 +1,7 @@
 ---
 name: team-communication-protocols
 description: "Defines agent team messaging, approvals, and shutdown protocols."
+origin: lamella
 ---
 # Team Communication Protocols
 

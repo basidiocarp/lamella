@@ -1,6 +1,7 @@
 ---
 name: google-workspace-operations
 description: "Operates Google Workspace with Gmail, Drive, Calendar, and Sheets."
+origin: lamella
 ---
 # Google Workspace Operations
 

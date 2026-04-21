@@ -1,6 +1,7 @@
 ---
 name: otel-collector
 description: "Configures OpenTelemetry Collector pipelines for traces, metrics, and logs. Use when setting up receivers, processors, exporters, or service pipelines; choosing between agent and gateway deployment; applying sampling strategies; or transforming telemetry with OTTL."
+origin: lamella
 ---
 
 # OpenTelemetry Collector

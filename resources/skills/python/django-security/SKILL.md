@@ -1,6 +1,7 @@
 ---
 name: django-security
 description: "Applies Django security patterns for auth, CSRF, XSS, and deployment."
+origin: lamella
 ---
 
 # Django Security Best Practices

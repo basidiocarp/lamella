@@ -1,6 +1,7 @@
 ---
 name: define-problem-statement
 description: "Creates a clear problem framing document with user impact, business context, and success criteria."
+origin: lamella
 ---
 # Problem Statement
 

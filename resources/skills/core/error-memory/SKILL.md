@@ -3,6 +3,7 @@ name: error-memory
 description: "Finds past error resolutions and records new ones."
 requires:
   - hyphae
+origin: lamella
 ---
 # Error Memory
 

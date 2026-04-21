@@ -1,6 +1,7 @@
 ---
 name: bash-script-generator
 description: "Generates bash and shell scripts for automation and CLI workflows."
+origin: lamella
 ---
 
 # Bash Script Generator

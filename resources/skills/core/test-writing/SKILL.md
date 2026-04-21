@@ -3,6 +3,7 @@ name: test-writing
 description: "Systematically write tests for new code or fix failing tests after refactoring."
 metadata:
   argument-hint: what tests or modules to focus on
+origin: lamella
 ---
 # Test Writing
 

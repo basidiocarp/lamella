@@ -1,6 +1,7 @@
 ---
 name: atmos-toolchain
 description: "Manages Atmos tool installation, execution, search, and version pinning."
+origin: lamella
 ---
 
 # Atmos Toolchain

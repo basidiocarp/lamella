@@ -1,6 +1,7 @@
 ---
 name: director-transition-coaching
 description: "Coaches transitions from PM to Director roles."
+origin: lamella
 ---
 # Director Transition Coaching
 

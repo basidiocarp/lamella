@@ -1,6 +1,7 @@
 ---
 name: semgrep
 description: "Runs Semgrep static analysis scans and helps create custom Semgrep rules."
+origin: lamella
 ---
 
 # Semgrep Security Scan

@@ -1,6 +1,7 @@
 ---
 name: atmos-auth
 description: "Configures Atmos authentication, identities, keyrings, and chained sessions."
+origin: lamella
 ---
 
 # Atmos Authentication and Identity Management

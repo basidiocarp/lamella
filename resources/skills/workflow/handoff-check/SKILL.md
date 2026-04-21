@@ -1,6 +1,7 @@
 ---
 name: handoff-check
 description: Audits an active handoff for unchecked checklist items, empty PASTE blocks, and missing verification evidence before completion claims. Use when working from `.handoffs/*.md` or before saying a handoff is done.
+origin: lamella
 ---
 
 # Handoff Check

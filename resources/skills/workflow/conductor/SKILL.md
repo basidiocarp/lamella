@@ -1,6 +1,7 @@
 ---
 name: conductor
 description: "Organizes project context, track-based work management, and TDD execution with the Conductor system."
+origin: lamella
 ---
 
 # Conductor

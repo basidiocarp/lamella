@@ -4,6 +4,7 @@ description: "Reviews unsafe Rust and FFI code for soundness risks."
 allowed-tools: Read Grep Glob
 metadata:
   globs: "**/*.rs"
+origin: lamella
 ---
 
 # Unsafe Code & FFI Review

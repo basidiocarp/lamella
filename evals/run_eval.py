@@ -49,8 +49,8 @@ def simulate_response(prompt: str) -> str:
     """
     Simulate a model response.
 
-    In a real system, this would call the Claude API and return the actual response.
-    For now, we return a placeholder that echoes part of the prompt.
+    Returns a deterministic placeholder. Only used when --simulate is passed.
+    Real evaluations must call a live model API instead.
     """
     # Placeholder: return a short summary of the prompt
     return f"[Simulated response to prompt about: {prompt[:100]}...]"
@@ -61,11 +61,13 @@ def calculate_metrics(arm_name: str, prompt: str, response: str, control_respons
     prompt_length = len(prompt)
     response_length = len(response)
 
-    # delta_vs_control is null for baseline and control arms, otherwise difference
+    # delta_vs_control is null for baseline and control arms, otherwise difference.
+    # Positive delta means improvement: the skill arm produced a shorter (more efficient)
+    # response than the terse_control arm.
     if arm_name in ("baseline", "terse_control"):
         delta_vs_control = None
     else:
-        delta_vs_control = response_length - control_response_length
+        delta_vs_control = control_response_length - response_length
 
     return {
         "prompt_length": prompt_length,
@@ -74,8 +76,17 @@ def calculate_metrics(arm_name: str, prompt: str, response: str, control_respons
     }
 
 
-def run_eval(skill_path: str, task: str) -> dict:
-    """Run a three-arm evaluation."""
+def run_eval(skill_path: str, task: str, simulate: bool = False) -> dict:
+    """Run a three-arm evaluation.
+
+    Args:
+        skill_path: Path to the SKILL.md file to evaluate.
+        task: Task description for the evaluation.
+        simulate: When True, use synthetic placeholder responses instead of
+                  calling a live model API. Synthetic snapshots are written to
+                  ``evals/snapshots/synthetic/`` to avoid being mistaken for
+                  real measurement data.
+    """
     # Read the skill
     skill_content = read_skill(skill_path)
     skill_name = extract_skill_name(skill_path)
@@ -85,10 +96,15 @@ def run_eval(skill_path: str, task: str) -> dict:
     control_prompt = build_control_prompt(task)
     skill_prompt = build_skill_prompt(task, skill_content)
 
-    # Simulate responses
-    baseline_response = simulate_response(baseline_prompt)
-    control_response = simulate_response(control_prompt)
-    skill_response = simulate_response(skill_prompt)
+    if simulate:
+        baseline_response = simulate_response(baseline_prompt)
+        control_response = simulate_response(control_prompt)
+        skill_response = simulate_response(skill_prompt)
+    else:
+        raise NotImplementedError(
+            "Real model evaluation is not yet implemented. "
+            "Pass --simulate to run with synthetic responses."
+        )
 
     # Calculate metrics (control response length is used for delta calculation)
     control_response_length = len(control_response)
@@ -119,10 +135,11 @@ def run_eval(skill_path: str, task: str) -> dict:
         "skill_path": skill_path,
         "task": task,
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "simulate": simulate,
         "arms": arms,
         "conclusion": {
             "primary_delta": primary_delta,
-            "methodology_note": "This delta (skill vs terse_control) measures the skill's added value beyond generic prompting.",
+            "methodology_note": "This delta (skill vs terse_control) measures the skill's added value beyond generic prompting. Positive delta means the skill produced a shorter (more efficient) response than the terse control.",
         },
     }
 
@@ -130,8 +147,17 @@ def run_eval(skill_path: str, task: str) -> dict:
 
 
 def write_snapshot(result: dict, skill_name: str) -> Path:
-    """Write evaluation result to snapshots directory."""
-    snapshots_dir = Path(__file__).parent / "snapshots"
+    """Write evaluation result to snapshots directory.
+
+    When ``result['simulate']`` is True the snapshot is written under
+    ``snapshots/synthetic/`` so it cannot be confused with real measurement
+    data.
+    """
+    base_dir = Path(__file__).parent / "snapshots"
+    if result.get("simulate"):
+        snapshots_dir = base_dir / "synthetic"
+    else:
+        snapshots_dir = base_dir
     snapshots_dir.mkdir(parents=True, exist_ok=True)
 
     # Use timestamp for uniqueness
@@ -148,7 +174,7 @@ def print_summary(result: dict, output_file: Path) -> None:
     print("THREE-ARM EVALUATION SUMMARY")
     print("=" * 70)
     print(f"Skill: {result['skill_path']}")
-    print(f"Task: {result['task'][:60]}...")
+    print(f"Task: {result['task'][:60] + ('...' if len(result['task']) > 60 else '')}")
     print(f"Timestamp: {result['timestamp']}")
     print()
 
@@ -182,11 +208,22 @@ def main():
         required=True,
         help="Task description for the evaluation",
     )
+    parser.add_argument(
+        "--simulate",
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help=(
+            "Run in simulation mode using synthetic placeholder responses instead "
+            "of calling a live model API. Snapshots are written to "
+            "evals/snapshots/synthetic/ to avoid being mistaken for real data."
+        ),
+    )
 
     args = parser.parse_args()
 
     try:
-        result = run_eval(args.skill, args.task)
+        result = run_eval(args.skill, args.task, simulate=args.simulate)
         skill_name = extract_skill_name(args.skill)
         output_file = write_snapshot(result, skill_name)
         print_summary(result, output_file)

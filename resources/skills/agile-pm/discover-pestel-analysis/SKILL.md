@@ -1,6 +1,7 @@
 ---
 name: discover-pestel-analysis
 description: "Analyzes political, economic, social, technological, environmental, and legal forces affecting a product or market."
+origin: lamella
 ---
 # Discover PESTEL Analysis
 

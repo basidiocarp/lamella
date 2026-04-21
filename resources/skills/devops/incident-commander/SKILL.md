@@ -1,6 +1,7 @@
 ---
 name: incident-commander
 description: "Coordinates live incident response with severity classification, role separation, communication cadence, and timeline reconstruction."
+origin: lamella
 ---
 
 # Incident Commander

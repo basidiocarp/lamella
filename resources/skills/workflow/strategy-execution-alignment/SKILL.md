@@ -1,6 +1,7 @@
 ---
 name: strategy-execution-alignment
 description: "Checks whether company strategy, team goals, and execution are aligned."
+origin: lamella
 ---
 # Strategy Execution Alignment
 

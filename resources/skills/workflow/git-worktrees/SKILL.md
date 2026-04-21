@@ -1,6 +1,7 @@
 ---
 name: git-worktrees
 description: "Manages Git worktrees for parallel development across multiple branches and working directories."
+origin: lamella
 ---
 
 # Git Worktrees

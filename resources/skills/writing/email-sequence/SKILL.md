@@ -1,6 +1,7 @@
 ---
 name: email-sequence
 description: "Designs lifecycle email sequences with triggers, timing, message progression, and ready-to-send drafts."
+origin: lamella
 ---
 # Email Sequence
 

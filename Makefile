@@ -32,7 +32,7 @@ lint-skills: ## Lint all skill files for required sections
 build: ## Build all Claude plugins to dist/claude/plugins/
 	@for manifest in $(PLUGIN_DIR)/*.json; do \
 		name=$$(basename "$$manifest" .json); \
-		[ "$$name" = "schema" ] || [ "$$name" = "index" ] && continue; \
+		{ [ "$$name" = "schema" ] || [ "$$name" = "index" ]; } && continue; \
 		bash $(BUILD_SCRIPT) "$$manifest" > /dev/null 2>&1 || echo "FAILED: $$name"; \
 	done
 	@echo "Build complete. Output in dist/claude/plugins/"

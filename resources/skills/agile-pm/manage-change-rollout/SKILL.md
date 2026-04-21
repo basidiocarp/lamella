@@ -1,6 +1,7 @@
 ---
 name: manage-change-rollout
 description: "Plans organizational change rollouts with stakeholder messaging, enablement, and reinforcement."
+origin: lamella
 ---
 # Manage Change Rollout
 

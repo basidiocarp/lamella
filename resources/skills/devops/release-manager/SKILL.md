@@ -1,6 +1,7 @@
 ---
 name: release-manager
 description: "Plans releases, derives changelogs, recommends semantic version bumps, and checks release readiness."
+origin: lamella
 ---
 
 # Release Manager

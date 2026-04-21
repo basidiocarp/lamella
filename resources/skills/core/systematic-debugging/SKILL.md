@@ -1,6 +1,7 @@
 ---
 name: systematic-debugging
 description: "Applies structured debugging through investigation, hypotheses, testing, and validation."
+origin: lamella
 ---
 
 # Systematic Debugging

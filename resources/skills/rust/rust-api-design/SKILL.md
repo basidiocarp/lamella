@@ -1,6 +1,7 @@
 ---
 name: rust-api-design
 description: Design Rust APIs with the right defaults for boundaries, naming, builders, typed values, and public contract stability. Use when shaping public APIs, reviewing ergonomics, choosing between enums/newtypes/builders, or when naming and type design questions matter.
+origin: lamella
 ---
 
 # Rust API Design

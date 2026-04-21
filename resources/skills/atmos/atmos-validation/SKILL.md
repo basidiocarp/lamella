@@ -1,6 +1,7 @@
 ---
 name: atmos-validation
 description: "Validates Atmos configs with Rego, JSON Schema, and manifests."
+origin: lamella
 ---
 
 # Atmos Validation Framework

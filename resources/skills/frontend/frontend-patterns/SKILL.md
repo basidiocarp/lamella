@@ -1,6 +1,7 @@
 ---
 name: frontend-patterns
 description: "Applies modern frontend architecture patterns."
+origin: lamella
 ---
 
 # Frontend Development Patterns

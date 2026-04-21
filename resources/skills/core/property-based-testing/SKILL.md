@@ -1,6 +1,7 @@
 ---
 name: property-based-testing
 description: "Provides guidance for property-based testing across multiple languages and smart contracts."
+origin: lamella
 ---
 
 # Property-Based Testing Guide

@@ -1,6 +1,7 @@
 ---
 name: pptx-presentations
 description: "Creates, edits, and analyzes PowerPoint presentations (.pptx)."
+origin: lamella
 ---
 
 # PPTX creation, editing, and analysis

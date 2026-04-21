@@ -1,6 +1,7 @@
 ---
 name: pdf-manipulation
 description: "Extracts, creates, merges, splits, and fills PDF documents."
+origin: lamella
 ---
 
 # PDF Processing Guide

@@ -1,6 +1,7 @@
 ---
 name: content-writer
 description: "Creates, researches, and repurposes content across platforms and formats."
+origin: lamella
 ---
 
 # Content Writer

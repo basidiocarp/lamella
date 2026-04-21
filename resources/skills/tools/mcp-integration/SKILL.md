@@ -1,6 +1,7 @@
 ---
 name: mcp-integration
 description: "Integrates MCP servers into Claude Code plugins and tools."
+origin: lamella
 ---
 
 # MCP Integration for Claude Code Plugins

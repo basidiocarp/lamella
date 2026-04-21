@@ -1,6 +1,7 @@
 ---
 name: plugin-settings
 description: "Documents the `.claude/plugin-name.local.md` pattern for plugin-specific configuration."
+origin: lamella
 ---
 # Plugin Settings Pattern for Claude Code Plugins
 

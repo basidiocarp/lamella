@@ -1,6 +1,7 @@
 ---
 name: multi-agent-patterns
 description: "Designs multi-agent architectures for complex tasks."
+origin: lamella
 ---
 
 # Multi-Agent Architecture Patterns for Claude Code

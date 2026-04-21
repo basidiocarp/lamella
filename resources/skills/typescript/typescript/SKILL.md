@@ -1,6 +1,7 @@
 ---
 name: typescript
 description: "Applies TypeScript code style, type-safety patterns, and project conventions."
+origin: lamella
 ---
 
 # TypeScript Code Style Guide

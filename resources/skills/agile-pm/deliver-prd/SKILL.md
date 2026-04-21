@@ -1,6 +1,7 @@
 ---
 name: deliver-prd
 description: "Creates product requirements documents with scope, rationale, and success metrics."
+origin: lamella
 ---
 # Product Requirements Document (PRD)
 

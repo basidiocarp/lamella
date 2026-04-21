@@ -1,6 +1,7 @@
 ---
 name: api-design-principles
 description: "Designs REST and GraphQL APIs with clear contracts and maintainable patterns."
+origin: lamella
 ---
 
 # API Design Principles

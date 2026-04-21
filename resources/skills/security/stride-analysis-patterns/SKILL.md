@@ -1,6 +1,7 @@
 ---
 name: stride-analysis-patterns
 description: "Applies the STRIDE methodology to threat identification, attack tree construction, and security requirement extraction."
+origin: lamella
 ---
 
 # STRIDE Analysis Patterns

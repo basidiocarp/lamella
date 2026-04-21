@@ -1,6 +1,7 @@
 ---
 name: rclone
 description: "Uploads, syncs, and manages files across cloud storage providers with rclone."
+origin: lamella
 ---
 
 # rclone File Transfer Skill

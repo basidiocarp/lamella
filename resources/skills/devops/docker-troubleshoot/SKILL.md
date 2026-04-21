@@ -1,6 +1,7 @@
 ---
 name: docker-troubleshoot
 description: "Diagnoses container failures, networking issues, permissions, and port conflicts."
+origin: lamella
 ---
 
 # Docker Troubleshooting Skill

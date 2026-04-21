@@ -1,6 +1,7 @@
 ---
 name: frontend-slides
 description: "Builds browser-based presentation decks from scratch or from PowerPoint content."
+origin: lamella
 ---
 
 # Frontend Slides

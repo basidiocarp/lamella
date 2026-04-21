@@ -1,6 +1,7 @@
 ---
 name: cpp-pro
 description: "Applies modern C++ development patterns."
+origin: lamella
 ---
 
 # C++ Pro

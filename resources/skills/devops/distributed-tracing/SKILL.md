@@ -1,6 +1,7 @@
 ---
 name: distributed-tracing
 description: "Implements distributed tracing with Jaeger, Tempo, and request analysis."
+origin: lamella
 ---
 
 # Distributed Tracing

@@ -100,7 +100,7 @@
       "suggest-compact.js",
       "check-console-log.js",
       "evaluate-session.js",
-      "comment-style-check.sh",
+      "comment-style-check.js",
       "capture-pr-reviews.js",
       "annotation-advisory.js",
       "annotation-audit-log.js"

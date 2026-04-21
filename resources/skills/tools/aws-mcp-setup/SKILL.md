@@ -1,6 +1,7 @@
 ---
 name: aws-mcp-setup
 description: "Configures AWS MCP servers for documentation search and API access."
+origin: lamella
 ---
 # AWS MCP Server Configuration Guide
 

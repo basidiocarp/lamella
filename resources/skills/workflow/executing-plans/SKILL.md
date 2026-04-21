@@ -1,6 +1,7 @@
 ---
 name: executing-plans
 description: "Executes a written implementation plan in a separate session with review checkpoints."
+origin: lamella
 ---
 
 # Executing Plans

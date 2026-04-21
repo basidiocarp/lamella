@@ -1,6 +1,7 @@
 ---
 name: kubernetes-security-policies
 description: "Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC for production-grade security."
+origin: lamella
 ---
 
 # Kubernetes Security Policies

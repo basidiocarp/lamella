@@ -1,6 +1,7 @@
 ---
 name: security-review
 description: "Reviews code against OWASP patterns and secure coding practices."
+origin: lamella
 ---
 
 # Security Review Skill

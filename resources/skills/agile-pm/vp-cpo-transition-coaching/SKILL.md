@@ -1,6 +1,7 @@
 ---
 name: vp-cpo-transition-coaching
 description: "Coaches transitions into VP and CPO leadership roles."
+origin: lamella
 ---
 # VP CPO Transition Coaching
 

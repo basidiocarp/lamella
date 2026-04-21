@@ -1,6 +1,7 @@
 ---
 name: monorepo-management
 description: "Manages monorepos with Turborepo, Nx, and pnpm workspaces."
+origin: lamella
 ---
 
 # Monorepo Management

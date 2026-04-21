@@ -1,6 +1,7 @@
 ---
 name: capture-observation
 description: "Formats raw ecosystem notes from `.notes/intake/` into numbered observation records and saves them under `.notes/formatted/`. Use when agent behavior, ownership gaps, workflow problems, or ecosystem notes need to become structured OBS entries."
+origin: lamella
 ---
 
 # Capture Observation

@@ -1,6 +1,7 @@
 ---
 name: iterative-retrieval
 description: "Refines context retrieval iteratively to solve the subagent context problem."
+origin: lamella
 ---
 
 # Iterative Retrieval Pattern

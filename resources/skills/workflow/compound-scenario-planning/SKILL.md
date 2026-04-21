@@ -1,6 +1,7 @@
 ---
 name: compound-scenario-planning
 description: "Models compound scenarios that cascade across revenue, people, product, operations, and cash."
+origin: lamella
 ---
 # Compound Scenario Planning
 

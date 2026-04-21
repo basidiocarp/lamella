@@ -1,6 +1,7 @@
 ---
 name: xlsx-spreadsheets
 description: "Creates, edits, and analyzes Excel spreadsheets and CSV files."
+origin: lamella
 ---
 
 # XLSX Creation, Editing, and Analysis

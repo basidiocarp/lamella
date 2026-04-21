@@ -1,6 +1,7 @@
 ---
 name: golang-patterns
 description: "Applies idiomatic Go development patterns."
+origin: lamella
 ---
 
 # Go Development Patterns

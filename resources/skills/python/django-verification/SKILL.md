@@ -1,6 +1,7 @@
 ---
 name: django-verification
 description: "Verifies Django projects with migrations, linting, coverage-backed tests, security scans, and deployment-readiness checks."
+origin: lamella
 ---
 
 # Django Verification Loop

@@ -1,6 +1,7 @@
 ---
 name: atmos-stores
 description: "Configures Atmos store backends, secret-manager integrations, hook usage, and cross-component data sharing."
+origin: lamella
 ---
 
 # Atmos External Stores

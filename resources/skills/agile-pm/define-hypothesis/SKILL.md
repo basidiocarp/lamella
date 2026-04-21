@@ -1,6 +1,7 @@
 ---
 name: define-hypothesis
 description: "Defines a testable hypothesis with clear success metrics and validation approach."
+origin: lamella
 ---
 # Hypothesis
 

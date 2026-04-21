@@ -1,6 +1,7 @@
 ---
 name: slo-implementation
 description: "Defines SLIs, SLOs, error budgets, and alerting."
+origin: lamella
 ---
 
 # SLO Implementation

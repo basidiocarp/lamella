@@ -2,6 +2,7 @@
 name: tmux-interactive-runner
 description: "Controls interactive CLI tools with tmux sessions and scripted key input."
 compatibility: Requires tmux on macOS, Linux, or WSL. Native Windows terminals need a different PTY-based approach.
+origin: lamella
 ---
 
 # Using tmux for Interactive Commands

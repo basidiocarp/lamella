@@ -1,6 +1,7 @@
 ---
 name: rust-docs-quality
 description: Write and review Rust documentation and lint policy with the right level of strictness. Use when improving rustdoc, documenting public contracts, deciding lint severity, or aligning docs and tooling with crate quality goals.
+origin: lamella
 ---
 
 # Rust Docs Quality

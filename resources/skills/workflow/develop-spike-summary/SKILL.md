@@ -1,6 +1,7 @@
 ---
 name: develop-spike-summary
 description: "Documents the results of a time-boxed technical or design exploration."
+origin: lamella
 ---
 # Spike Summary
 

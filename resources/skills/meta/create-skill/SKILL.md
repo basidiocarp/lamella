@@ -1,6 +1,7 @@
 ---
 name: create-skill
 description: "Guides effective skill creation."
+origin: lamella
 ---
 
 # Create Skill Command

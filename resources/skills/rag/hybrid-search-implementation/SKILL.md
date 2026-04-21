@@ -1,6 +1,7 @@
 ---
 name: hybrid-search-implementation
 description: "Combines vector and keyword retrieval strategies."
+origin: lamella
 ---
 
 # Hybrid Search Implementation

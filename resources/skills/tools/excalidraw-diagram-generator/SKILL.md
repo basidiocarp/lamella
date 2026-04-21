@@ -1,6 +1,7 @@
 ---
 name: excalidraw-diagram-generator
 description: "Generates Excalidraw diagrams as .excalidraw JSON files."
+origin: lamella
 ---
 
 # Excalidraw Diagram Generator

@@ -6,6 +6,7 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+origin: lamella
 ---
 
 # Agentic Actions Auditor

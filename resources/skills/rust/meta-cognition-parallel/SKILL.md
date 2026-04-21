@@ -2,6 +2,7 @@
 name: meta-cognition-parallel
 description: "Applies an experimental three-layer Rust analysis workflow."
 argument-hint: <rust_question>
+origin: lamella
 ---
 # Meta-Cognition Parallel Analysis
 

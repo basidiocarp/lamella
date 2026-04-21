@@ -1,6 +1,7 @@
 ---
 name: tailwind-design-system
 description: "Builds Tailwind CSS design systems with tokens and components."
+origin: lamella
 ---
 
 # Tailwind Design System (v4)

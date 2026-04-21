@@ -1,6 +1,7 @@
 ---
 name: ossfuzz
 description: "Sets up OSS-Fuzz for continuous fuzzing of open source projects."
+origin: lamella
 ---
 
 # OSS-Fuzz

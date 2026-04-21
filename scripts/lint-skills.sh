@@ -3,22 +3,22 @@ set -euo pipefail
 
 # Lint skill markdown files for required sections.
 #
-# Scope: only files with `origin: lamella` in their YAML frontmatter.
-# Existing skills without this field are skipped to avoid breaking CI
-# before a migration pass is done.
+# All SKILL.md files must declare `origin:` in their frontmatter.
+# Files missing this field are failed, not skipped.
 
 FAIL=0
 PASS=0
 CHECKED=0
-SKIPPED=0
 
 check_skill() {
     local file="$1"
     local file_fail=0
 
-    # Skip files that don't declare origin: lamella — pre-convention content
+    # Fail files that have frontmatter but no origin: field.
+    # origin: is required for all skill files; missing it is a lint error, not a skip.
     if ! grep -q "^origin:" "$file" 2>/dev/null; then
-        SKIPPED=$((SKIPPED + 1))
+        echo "FAIL [$file]: missing required 'origin:' field in frontmatter"
+        FAIL=$((FAIL + 1))
         return
     fi
 
@@ -33,10 +33,7 @@ check_skill() {
         echo "FAIL [$file]: missing 'description:' in frontmatter"
         file_fail=1
     fi
-    if ! grep -q "^origin:" "$file" 2>/dev/null; then
-        echo "FAIL [$file]: missing 'origin:' in frontmatter"
-        file_fail=1
-    fi
+    # Note: origin: presence is already guaranteed by the early-return above.
 
     # Check required sections
     if ! grep -q "## When to Activate" "$file" 2>/dev/null; then
@@ -65,7 +62,7 @@ done < <(find resources/skills -name "SKILL.md" -print0 2>/dev/null)
 # and is not a real skill, so it is never passed to check_skill above.
 
 echo ""
-echo "Skills checked: $CHECKED (skipped $SKIPPED without origin: lamella)"
+echo "Skills checked: $CHECKED"
 echo "Passed: $PASS, Failed: $FAIL"
 
 [ "$FAIL" -eq 0 ]

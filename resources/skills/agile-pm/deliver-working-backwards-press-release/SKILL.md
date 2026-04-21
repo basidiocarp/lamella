@@ -1,6 +1,7 @@
 ---
 name: deliver-working-backwards-press-release
 description: "Creates an Amazon-style Working Backwards press release to define customer value before building."
+origin: lamella
 ---
 # Deliver Working Backwards Press Release
 

@@ -1,6 +1,7 @@
 ---
 name: plugin-structure
 description: "Guides Claude Code plugin architecture and directory structure."
+origin: lamella
 ---
 # Plugin Structure for Claude Code
 

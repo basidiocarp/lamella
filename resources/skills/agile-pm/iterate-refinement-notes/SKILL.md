@@ -1,6 +1,7 @@
 ---
 name: iterate-refinement-notes
 description: "Documents backlog refinement session outcomes including stories refined, estimates, questions raised, and decisions made."
+origin: lamella
 ---
 # Refinement Notes
 

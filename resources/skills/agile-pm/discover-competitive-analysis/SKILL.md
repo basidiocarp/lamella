@@ -1,6 +1,7 @@
 ---
 name: discover-competitive-analysis
 description: "Creates a structured competitive analysis comparing features, positioning, and strategy across competitors."
+origin: lamella
 ---
 # Competitive Analysis
 

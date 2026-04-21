@@ -1,6 +1,7 @@
 ---
 name: resource-mgmt
 description: "Explains Rust smart pointers and resource management patterns."
+origin: lamella
 ---
 
 # Smart Pointers & Resource Management

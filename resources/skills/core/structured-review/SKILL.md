@@ -1,6 +1,7 @@
 ---
 name: structured-review
 description: "Reviews plans and specs for clarity, feasibility, risk, and completeness."
+origin: lamella
 ---
 
 # Structured Review

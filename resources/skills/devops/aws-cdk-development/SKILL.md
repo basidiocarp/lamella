@@ -10,6 +10,7 @@ metadata:
     - matcher: Bash(cdk deploy*)
       command: aws sts get-caller-identity --query Account --output text
       once: true
+origin: lamella
 ---
 # AWS CDK Development
 

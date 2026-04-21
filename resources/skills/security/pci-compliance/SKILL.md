@@ -1,6 +1,7 @@
 ---
 name: pci-compliance
 description: "Implements PCI DSS controls for payment systems and card data."
+origin: lamella
 ---
 
 # PCI Compliance

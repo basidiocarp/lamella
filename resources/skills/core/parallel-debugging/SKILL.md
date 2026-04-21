@@ -1,6 +1,7 @@
 ---
 name: parallel-debugging
 description: "Debugs complex issues with competing hypotheses, parallel investigation, evidence collection, and root cause arbitration."
+origin: lamella
 ---
 
 # Parallel Debugging

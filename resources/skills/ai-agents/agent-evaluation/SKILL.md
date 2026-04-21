@@ -1,6 +1,7 @@
 ---
 name: agent-evaluation
 description: "Evaluates and improves Claude Code commands, skills, and agents."
+origin: lamella
 ---
 
 # Evaluation Methods for Claude Code Agents

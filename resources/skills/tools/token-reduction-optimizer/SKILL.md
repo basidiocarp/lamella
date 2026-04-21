@@ -3,6 +3,7 @@ name: token-reduction-optimizer
 description: "Reduces token-heavy command output with Mycelium."
 requires:
   - mycelium
+origin: lamella
 ---
 
 # Token Reduction Optimizer

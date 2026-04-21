@@ -1,6 +1,7 @@
 ---
 name: codebase-onboarding
 description: "Analyzes a repository and drafts onboarding material for engineers, contractors, or handoff docs."
+origin: lamella
 ---
 
 # Codebase Onboarding

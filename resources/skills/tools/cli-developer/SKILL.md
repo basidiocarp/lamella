@@ -1,6 +1,7 @@
 ---
 name: cli-developer
 description: "Builds CLI tools with commands, prompts, parsing, and completions."
+origin: lamella
 ---
 # CLI Developer
 

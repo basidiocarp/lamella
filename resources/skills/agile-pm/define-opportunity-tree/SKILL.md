@@ -1,6 +1,7 @@
 ---
 name: define-opportunity-tree
 description: "Creates an opportunity solution tree mapping desired outcomes to opportunities and potential solutions."
+origin: lamella
 ---
 # Opportunity Solution Tree
 

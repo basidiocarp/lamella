@@ -1,6 +1,7 @@
 ---
 name: mcp-ecosystem-context
 description: "Provides MCP tool preferences for subagents that inherit MCP access but lack CLAUDE.md context. Include via the skills frontmatter field in subagent definitions to enable rhizome and hyphae tool awareness."
+origin: lamella
 ---
 
 # Ecosystem Tool Preferences

@@ -1,6 +1,7 @@
 ---
 name: expert-panel
 description: "Assembles 2-3 complementary experts to collaboratively analyze a topic."
+origin: lamella
 ---
 
 # Expert Panel

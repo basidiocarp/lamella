@@ -10,6 +10,7 @@ metadata:
     - matcher: Bash(aws ce *)
       command: aws sts get-caller-identity --query Account --output text
       once: true
+origin: lamella
 ---
 # AWS Cost & Operations
 

@@ -3,6 +3,7 @@ name: git-cleanup
 description: "Safely analyze and clean up local git branches and worktrees."
 metadata:
   disable-model-invocation: true
+origin: lamella
 ---
 # Git Cleanup
 

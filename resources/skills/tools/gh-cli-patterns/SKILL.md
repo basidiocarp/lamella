@@ -1,6 +1,7 @@
 ---
 name: gh-cli-patterns
 description: "Guides GitHub CLI usage for repos, PRs, issues, and APIs."
+origin: lamella
 ---
 # Using the GitHub CLI (`gh`)
 

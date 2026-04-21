@@ -1,6 +1,7 @@
 ---
 name: docx-word-documents
 description: "Creates, reads, and edits Word documents (.docx)."
+origin: lamella
 ---
 
 # DOCX creation, editing, and analysis

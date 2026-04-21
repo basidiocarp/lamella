@@ -1,6 +1,7 @@
 ---
 name: atmos-yaml-functions
 description: "Uses Atmos YAML functions for dynamic configuration values."
+origin: lamella
 ---
 
 # Atmos YAML Functions

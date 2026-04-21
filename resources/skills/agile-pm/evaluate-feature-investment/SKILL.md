@@ -1,6 +1,7 @@
 ---
 name: evaluate-feature-investment
 description: "Evaluates feature investment using ROI, costs, and strategic value."
+origin: lamella
 ---
 # Evaluate Feature Investment
 

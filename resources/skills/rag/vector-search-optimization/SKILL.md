@@ -1,6 +1,7 @@
 ---
 name: vector-search-optimization
 description: "Optimizes vector search infrastructure and retrieval quality."
+origin: lamella
 ---
 
 # Vector Search Optimization

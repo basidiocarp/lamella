@@ -1,6 +1,7 @@
 ---
 name: security-audit-methodology
 description: "Guides end-to-end security audits, scoping, and deep code review."
+origin: lamella
 ---
 
 # Security Audit Methodology

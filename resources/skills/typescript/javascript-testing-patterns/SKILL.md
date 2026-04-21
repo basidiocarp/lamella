@@ -1,6 +1,7 @@
 ---
 name: javascript-testing-patterns
 description: "Applies non-obvious testing patterns for Jest and Vitest."
+origin: lamella
 ---
 
 # JavaScript Testing Patterns

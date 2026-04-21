@@ -1,6 +1,7 @@
 ---
 name: skill-composer-studio
 description: "Composes multiple existing skills into custom multi-step workflows with automatic handoffs."
+origin: lamella
 ---
 
 # Skill Composer Studio

@@ -1,6 +1,7 @@
 ---
 name: gitops-workflow
 description: "Implements GitOps deployments with ArgoCD, Flux, and reconciliation."
+origin: lamella
 ---
 
 # GitOps Workflow

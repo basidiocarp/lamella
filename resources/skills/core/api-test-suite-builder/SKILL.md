@@ -1,6 +1,7 @@
 ---
 name: api-test-suite-builder
 description: "Generates API test scaffolds for route handlers, auth flows, validation rules, and contract edges."
+origin: lamella
 ---
 
 # API Test Suite Builder

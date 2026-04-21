@@ -1,6 +1,7 @@
 ---
 name: atmos-config
 description: "Configures atmos.yaml structure, discovery, merging, base paths, settings, imports, and profiles."
+origin: lamella
 ---
 
 # Atmos Project Configuration

@@ -1,6 +1,7 @@
 ---
 name: interface-design-variants
 description: "Designs multiple materially different interfaces before implementation."
+origin: lamella
 ---
 
 # Interface Design Variants

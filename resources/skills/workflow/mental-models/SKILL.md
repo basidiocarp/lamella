@@ -1,6 +1,7 @@
 ---
 name: mental-models
 description: "Applies decision-making frameworks such as first-principles decomposition, inversion, pre-mortems, and second-order thinking."
+origin: lamella
 ---
 
 # Mental Models for Decision Making

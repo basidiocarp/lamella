@@ -1,6 +1,7 @@
 ---
 name: mutability
 description: "Analyzes Rust mutability and interior mutability issues."
+origin: lamella
 ---
 
 # Mutability & Interior Mutability

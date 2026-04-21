@@ -1,6 +1,7 @@
 ---
 name: embedding-strategies
 description: "Selects and optimizes embedding models for RAG systems."
+origin: lamella
 ---
 
 # Embedding Strategies

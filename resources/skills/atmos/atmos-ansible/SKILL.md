@@ -1,6 +1,7 @@
 ---
 name: atmos-ansible
 description: "Orchestrates Ansible playbook execution, variable passing, inventory management, and stack-based configuration through Atmos."
+origin: lamella
 ---
 
 # Atmos Ansible Orchestration

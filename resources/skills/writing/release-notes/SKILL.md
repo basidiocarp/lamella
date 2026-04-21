@@ -1,6 +1,7 @@
 ---
 name: release-notes
 description: "Generates changelogs and user-facing release notes from commits and pull requests."
+origin: lamella
 ---
 
 # Release Notes

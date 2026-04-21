@@ -1,6 +1,7 @@
 ---
 name: dependency-auditor
 description: "Audits dependencies for vulnerabilities, licenses, staleness, and upgrades."
+origin: lamella
 ---
 
 # Dependency Auditor

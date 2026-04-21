@@ -1,6 +1,7 @@
 ---
 name: architecture-decision-records
 description: "Writes and maintains Architecture Decision Records (ADRs) with clear rationale and trade-offs."
+origin: lamella
 ---
 # Architecture Decision Records
 

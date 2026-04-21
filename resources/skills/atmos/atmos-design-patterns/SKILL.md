@@ -1,6 +1,7 @@
 ---
 name: atmos-design-patterns
 description: "Designs Atmos stack organization, component catalogs, inheritance, configuration composition, version management, and layered configuration."
+origin: lamella
 ---
 
 # Atmos Design Patterns

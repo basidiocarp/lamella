@@ -3,6 +3,7 @@ name: create-hook
 description: "Creates Claude Code hooks and matching repo guardrails."
 metadata:
   argument-hint: Optional hook type or description of desired behavior
+origin: lamella
 ---
 # Create Hook Command
 
@@ -99,6 +100,30 @@ Use appropriate template and add to `.claude/settings.json`:
 
 ### Auto-format on save
 
+Use a Node.js script with `execFileSync` instead of shell command substitution.
+An unquoted `$(jq -r '.tool_input.file_path')` is a shell injection vector — a
+path containing spaces, semicolons, or backticks would break the command or
+execute arbitrary code. `execFileSync` passes the path as a literal argument
+without invoking a shell.
+
+```js
+// scripts/hooks/post-edit-format.js
+const { execFileSync } = require('child_process');
+let d = '';
+process.stdin.on('data', c => d += c);
+process.stdin.on('end', () => {
+  try {
+    const input = JSON.parse(d);
+    const filePath = input.tool_input?.file_path;
+    if (filePath && /\.(ts|tsx|js|jsx)$/.test(filePath)) {
+      // Pass filePath as a separate argument — no shell, no injection risk.
+      execFileSync('npx', ['prettier', '--write', filePath], { stdio: 'pipe' });
+    }
+  } catch { /* non-blocking */ }
+  process.stdout.write(d);
+});
+```
+
 ```json
 {
   "hooks": {
@@ -106,7 +131,7 @@ Use appropriate template and add to `.claude/settings.json`:
       "matcher": "Write|Edit",
       "hooks": [{
         "type": "command",
-        "command": "prettier --write $(jq -r '.tool_input.file_path')"
+        "command": "node scripts/hooks/post-edit-format.js"
       }]
     }]
   }

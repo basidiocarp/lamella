@@ -1,6 +1,7 @@
 ---
 name: django-tdd
 description: "Applies Django testing strategies with pytest-django, TDD, factory_boy, mocking, coverage, and DRF test patterns."
+origin: lamella
 ---
 
 # Django Testing with TDD

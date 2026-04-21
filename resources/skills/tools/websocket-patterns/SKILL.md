@@ -1,6 +1,7 @@
 ---
 name: websocket-patterns
 description: "Designs real-time systems with WebSockets or Socket.IO."
+origin: lamella
 ---
 # WebSocket Patterns
 

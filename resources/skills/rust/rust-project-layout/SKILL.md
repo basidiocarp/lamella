@@ -1,6 +1,7 @@
 ---
 name: rust-project-layout
 description: Organize Rust crates, modules, visibility, workspaces, and internal public surfaces coherently. Use when restructuring crates, deciding on workspace boundaries, reviewing module layout, or tightening visibility and re-export policy.
+origin: lamella
 ---
 
 # Rust Project Layout

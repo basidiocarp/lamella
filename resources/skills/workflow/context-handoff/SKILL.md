@@ -1,6 +1,7 @@
 ---
 name: context-handoff
 description: "Creates a structured session handoff document for continuity across sessions."
+origin: lamella
 ---
 
 # Session Handoff Skill

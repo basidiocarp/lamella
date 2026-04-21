@@ -5,6 +5,7 @@ metadata:
   globs:
     - '**/Cargo.toml'
     - '**/*.rs'
+origin: lamella
 ---
 
 # Rust Question Router

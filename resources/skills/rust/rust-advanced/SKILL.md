@@ -1,6 +1,7 @@
 ---
 name: rust-advanced
 description: "Guides advanced Rust implementation work."
+origin: lamella
 ---
 
 # Advanced Rust Development

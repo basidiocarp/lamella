@@ -1,6 +1,7 @@
 ---
 name: deliver-user-stories
 description: "Generates user stories with clear acceptance criteria from product requirements or feature descriptions."
+origin: lamella
 ---
 # User Stories
 

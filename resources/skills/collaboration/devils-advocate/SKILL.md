@@ -1,6 +1,7 @@
 ---
 name: devils-advocate
 description: "Challenges ideas, plans, decisions, or proposals using structured critical reasoning."
+origin: lamella
 ---
 
 # Devil's Advocate

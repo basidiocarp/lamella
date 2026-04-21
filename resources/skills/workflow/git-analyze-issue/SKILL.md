@@ -2,6 +2,7 @@
 name: git-analyze-issue
 description: "Analyzes a GitHub issue and creates a detailed technical specification."
 argument-hint: Issue number (e.g., 42)
+origin: lamella
 ---
 
 # GitHub Issue to Technical Spec

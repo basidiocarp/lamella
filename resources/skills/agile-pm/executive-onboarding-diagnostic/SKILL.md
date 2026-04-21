@@ -1,6 +1,7 @@
 ---
 name: executive-onboarding-diagnostic
 description: "Plans executive transition diagnostics for the first 90 days."
+origin: lamella
 ---
 # Executive Onboarding Diagnostic
 

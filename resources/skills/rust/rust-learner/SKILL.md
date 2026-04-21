@@ -1,6 +1,7 @@
 ---
 name: rust-learner
 description: "Retrieves Rust release, crate, and documentation information."
+origin: lamella
 ---
 # Rust Learner
 

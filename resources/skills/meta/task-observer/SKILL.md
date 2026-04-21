@@ -1,6 +1,7 @@
 ---
 name: task-observer
 description: "Monitors task execution for skill improvement opportunities."
+origin: lamella
 ---
 
 # Task Observer — Continuous Skill Discovery & Improvement

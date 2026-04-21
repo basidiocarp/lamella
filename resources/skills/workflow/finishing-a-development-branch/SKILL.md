@@ -1,6 +1,7 @@
 ---
 name: finishing-a-development-branch
 description: "Guides merge, PR, or cleanup steps after implementation."
+origin: lamella
 ---
 
 # Finishing a Development Branch

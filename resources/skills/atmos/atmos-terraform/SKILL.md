@@ -1,6 +1,7 @@
 ---
 name: atmos-terraform
 description: "Orchestrates Terraform planning, apply workflows, workspace management, backend configuration, and varfile generation through Atmos."
+origin: lamella
 ---
 
 # Atmos Terraform Orchestration

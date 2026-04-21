@@ -1,6 +1,7 @@
 ---
 name: grafana-dashboards
 description: "Creates and manages production Grafana dashboards for real-time visualization of system and application metrics."
+origin: lamella
 ---
 
 # Grafana Dashboards

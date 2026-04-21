@@ -1,6 +1,7 @@
 ---
 name: prometheus-configuration
 description: "Sets up Prometheus for metric collection, storage, and monitoring of infrastructure and applications."
+origin: lamella
 ---
 
 # Prometheus Configuration

@@ -1,6 +1,7 @@
 ---
 name: atmos-devcontainer
 description: "Manages Atmos devcontainer lifecycle operations, instance configuration, and VS Code integration."
+origin: lamella
 ---
 
 # Atmos Devcontainer

@@ -7,6 +7,7 @@ allowed-tools:
   - Bash
   - Glob
   - Grep
+origin: lamella
 ---
 
 # macOS Seatbelt Sandbox Profiling

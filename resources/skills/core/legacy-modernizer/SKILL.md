@@ -1,6 +1,7 @@
 ---
 name: legacy-modernizer
 description: "Modernizes legacy systems incrementally with strangler fig, branch by abstraction, and zero-downtime migration strategies."
+origin: lamella
 ---
 
 # Legacy Modernizer

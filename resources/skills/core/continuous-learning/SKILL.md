@@ -1,6 +1,7 @@
 ---
 name: continuous-learning
 description: "Extracts reusable patterns from sessions into new learned skills."
+origin: lamella
 ---
 
 # Continuous Learning Skill

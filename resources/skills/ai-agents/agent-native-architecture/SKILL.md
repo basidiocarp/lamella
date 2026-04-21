@@ -1,6 +1,7 @@
 ---
 name: agent-native-architecture
 description: "Builds applications where agents are first-class citizens."
+origin: lamella
 ---
 
 <why_now>

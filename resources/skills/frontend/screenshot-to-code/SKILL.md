@@ -1,6 +1,7 @@
 ---
 name: screenshot-to-code
 description: "Converts UI screenshots into working frontend code."
+origin: lamella
 ---
 
 # Screenshot to Code

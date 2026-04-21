@@ -1,6 +1,7 @@
 ---
 name: code-review-pro
 description: "Reviews code for security vulnerabilities, performance bottlenecks, maintainability issues, and refactoring opportunities."
+origin: lamella
 ---
 
 # Code Review Pro

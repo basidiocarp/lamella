@@ -1,6 +1,7 @@
 ---
 name: address-sanitizer
 description: "Detects memory errors with AddressSanitizer during fuzzing."
+origin: lamella
 ---
 # AddressSanitizer (ASan)
 

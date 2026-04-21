@@ -1,6 +1,7 @@
 ---
 name: sql-pro
 description: "Optimizes SQL queries and database design across PostgreSQL, MySQL, SQL Server, and Oracle."
+origin: lamella
 ---
 
 # SQL Pro

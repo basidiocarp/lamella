@@ -7,6 +7,7 @@ allowed-tools:
   - Glob
   - Grep
   - AskUserQuestion
+origin: lamella
 ---
 
 # Second Opinion

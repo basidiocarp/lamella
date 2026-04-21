@@ -1,6 +1,7 @@
 ---
 name: playwright
 description: "Automates browsers and Playwright end-to-end tests."
+origin: lamella
 ---
 # Playwright
 

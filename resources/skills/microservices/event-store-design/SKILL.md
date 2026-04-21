@@ -1,6 +1,7 @@
 ---
 name: event-store-design
 description: "Designs event stores for event-sourced systems."
+origin: lamella
 ---
 
 # Event Store Design

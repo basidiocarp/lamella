@@ -1,6 +1,7 @@
 ---
 name: company-operating-rhythm
 description: "Designs a company operating rhythm with ownership, scorecards, meeting cadence, and quarterly priorities."
+origin: lamella
 ---
 # Company Operating Rhythm
 

@@ -1,6 +1,7 @@
 ---
 name: php-pro
 description: "Builds modern PHP applications with strict typing, Symfony patterns, static analysis, and PSR conventions."
+origin: lamella
 ---
 # PHP Pro
 

@@ -1,6 +1,7 @@
 ---
 name: brainstorming
 description: "Explores design options collaboratively before implementation."
+origin: lamella
 ---
 
 # Brainstorming Ideas Into Designs

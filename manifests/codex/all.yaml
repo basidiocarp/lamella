@@ -105,6 +105,7 @@
       "core/test-debugging",
       "core/test-driven-development",
       "core/test-writing",
+      "core/token-efficiency",
       "core/type-driven-design",
       "core/verified-implementer",
       "cpp/cpp-pro",

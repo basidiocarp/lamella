@@ -12,7 +12,8 @@
       "core/git-cleanup",
       "core/parallel-debugging",
       "core/plan-fleet",
-      "core/strategic-compact"
+      "core/strategic-compact",
+      "core/token-efficiency"
     ],
     "workflows": [],
     "templates": [],

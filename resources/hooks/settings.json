@@ -246,7 +246,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "npx -y ccstatusline@latest",
+    "command": "npx ccstatusline@1.0",
     "padding": 0
   },
   "enabledPlugins": {

@@ -40,10 +40,30 @@ function findProjectRoot(startDir) {
   return startDir;
 }
 
+/**
+ * Return a copy of process.env with secret-bearing variables removed.
+ * Formatter toolchains (ruff, goimports, prettier) do not need API keys or
+ * tokens, and executable configs such as prettier.config.js could read them.
+ */
+function scrubEnv() {
+  const SECRET_SUFFIXES = ['_API_KEY', '_SECRET_KEY', '_SECRET', '_TOKEN', '_PASSWORD', '_CREDENTIAL'];
+  const SECRET_EXACT = new Set(['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'AWS_ACCESS_KEY_ID',
+    'AWS_SECRET_ACCESS_KEY', 'GITHUB_TOKEN', 'GITLAB_TOKEN', 'BEARER_TOKEN']);
+  const env = Object.assign({}, process.env);
+  for (const key of Object.keys(env)) {
+    const upper = key.toUpperCase();
+    if (SECRET_EXACT.has(upper) || SECRET_SUFFIXES.some(suf => upper.endsWith(suf))) {
+      delete env[key];
+    }
+  }
+  return env;
+}
+
 function run(bin, args, cwd) {
   try {
     execFileSync(bin, args, {
       cwd,
+      env: scrubEnv(),
       stdio: 'ignore',
       timeout: 30000
     });

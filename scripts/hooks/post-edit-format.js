@@ -71,6 +71,29 @@ function getFormatterCommand(formatter, filePath) {
   return null;
 }
 
+/**
+ * Return a copy of process.env with secret-bearing variables removed.
+ *
+ * Post-edit hooks run in the Claude Code agent environment, which may include
+ * API keys, cloud credentials, and VCS tokens. Repo-local Node toolchains
+ * (Prettier, Biome, tsc) do not need these values, and executable configs such
+ * as prettier.config.js could read them from process.env. Scrubbing before
+ * spawn removes that attack surface.
+ */
+function scrubEnv() {
+  const SECRET_SUFFIXES = ['_API_KEY', '_SECRET_KEY', '_SECRET', '_TOKEN', '_PASSWORD', '_CREDENTIAL'];
+  const SECRET_EXACT = new Set(['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'AWS_ACCESS_KEY_ID',
+    'AWS_SECRET_ACCESS_KEY', 'GITHUB_TOKEN', 'GITLAB_TOKEN', 'BEARER_TOKEN']);
+  const env = Object.assign({}, process.env);
+  for (const key of Object.keys(env)) {
+    const upper = key.toUpperCase();
+    if (SECRET_EXACT.has(upper) || SECRET_SUFFIXES.some(suf => upper.endsWith(suf))) {
+      delete env[key];
+    }
+  }
+  return env;
+}
+
 process.stdin.on('end', () => {
   try {
     const input = JSON.parse(data);
@@ -85,6 +108,7 @@ process.stdin.on('end', () => {
         if (cmd) {
           execFileSync(cmd.bin, cmd.args, {
             cwd: projectRoot,
+            env: scrubEnv(),
             stdio: ['pipe', 'pipe', 'pipe'],
             timeout: 15000
           });

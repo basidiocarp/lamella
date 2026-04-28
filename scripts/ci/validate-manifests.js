@@ -71,7 +71,18 @@ function validateManifest(manifestPath) {
 
     for (const entry of entries) {
       resourceCount++;
+
+      // Reject path traversal before any filesystem access.
+      // path.join normalises sequences like ../../ but path.resolve
+      // gives the canonical absolute path that lets us check containment.
       const fullPath = path.join(baseDir, entry);
+      const canonical = path.resolve(fullPath);
+      const baseSep = baseDir.endsWith(path.sep) ? baseDir : baseDir + path.sep;
+      if (!canonical.startsWith(baseSep) && canonical !== baseDir) {
+        console.error(`ERROR: ${name} - Path traversal in ${type}: ${entry}`);
+        errors++;
+        continue;
+      }
 
       if (!fs.existsSync(fullPath)) {
         console.error(`ERROR: ${name} - Missing ${type}: ${entry}`);

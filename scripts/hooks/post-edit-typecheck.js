@@ -13,6 +13,27 @@ const { execFileSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
 
+/**
+ * Return a copy of process.env with secret-bearing variables removed.
+ *
+ * Post-edit hooks run in the Claude Code agent environment, which may include
+ * API keys and tokens. tsc does not need them, and this prevents leakage into
+ * the spawned compiler process.
+ */
+function scrubEnv() {
+  const SECRET_SUFFIXES = ["_API_KEY", "_SECRET_KEY", "_SECRET", "_TOKEN", "_PASSWORD", "_CREDENTIAL"];
+  const SECRET_EXACT = new Set(["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY", "GITHUB_TOKEN", "GITLAB_TOKEN", "BEARER_TOKEN"]);
+  const env = Object.assign({}, process.env);
+  for (const key of Object.keys(env)) {
+    const upper = key.toUpperCase();
+    if (SECRET_EXACT.has(upper) || SECRET_SUFFIXES.some((suf) => upper.endsWith(suf))) {
+      delete env[key];
+    }
+  }
+  return env;
+}
+
 const MAX_STDIN = 1024 * 1024; // 1MB limit
 let data = "";
 process.stdin.setEncoding("utf8");
@@ -54,6 +75,7 @@ process.stdin.on("end", () => {
           const npxBin = process.platform === "win32" ? "npx.cmd" : "npx";
           execFileSync(npxBin, ["tsc", "--noEmit", "--pretty", "false"], {
             cwd: dir,
+            env: scrubEnv(),
             encoding: "utf8",
             stdio: ["pipe", "pipe", "pipe"],
             timeout: 30000,

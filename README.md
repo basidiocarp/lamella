@@ -115,7 +115,7 @@ plugin manifests        ─►   dependency graph     ─►    installable arti
 | Category | Count |
 |----------|-------|
 | Claude plugins | 52 |
-| Skills across plugins | 292 |
+| Skills across plugins | 301 |
 | Layered umbrella plugins | 7 |
 
 ---

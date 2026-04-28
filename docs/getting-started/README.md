@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide is the shortest path to using the current library of 286 skills
+This guide is the shortest path to using the current library of 301 skills
 across 52 plugins.
 
 ## Prerequisites

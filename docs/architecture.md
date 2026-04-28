@@ -120,7 +120,10 @@ File: `builders/build-claude-plugin.sh`
 2. Collect the referenced resources and dependency set.
 3. Flatten source paths into plugin-local output names.
 4. Emit `dist/claude/plugins/<plugin>/`.
-5. Update the marketplace catalog under `dist/claude/`.
+
+The marketplace catalog (`dist/claude/marketplace.json`) is generated separately
+by `builders/build-claude-marketplace.sh`, which is run via `make build-marketplace`
+or `./lamella build-marketplace`. The plugin builder does not update the catalog.
 
 ### Output Matrix
 

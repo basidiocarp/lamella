@@ -7,7 +7,7 @@ It is a packaging repo, not a runtime manager. Author in `resources/` and
 `manifests/`, validate and build from there, and treat `dist/` as disposable
 output.
 
-The current library ships **286 curated skills** across **52 plugins**, plus
+The current library ships **301 curated skills** across **52 plugins**, plus
 shared agents, commands, hooks, workflows, and templates that are bundled into
 installable outputs.
 

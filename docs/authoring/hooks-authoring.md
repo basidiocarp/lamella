@@ -136,7 +136,13 @@ Key points:
 
 ## Matcher Configuration
 
-Matchers go in `.claude/settings.json` under the relevant event key:
+Hooks are distributed inside Claude plugins. When a plugin is installed, its
+`hooks.json` is merged into the agent's hook configuration automatically.
+The plugin runtime sets environment variables (including the plugin root path)
+at install time — these variables are not available outside the plugin context.
+
+For hooks packaged inside a plugin (the normal authoring path), the hook config
+references scripts relative to the plugin-provided path variable:
 
 ```json
 {
@@ -145,7 +151,25 @@ Matchers go in `.claude/settings.json` under the relevant event key:
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/my-hook.js\"" }
+          { "type": "command", "command": "node \"$PLUGIN_SCRIPTS_DIR/my-hook.js\"" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+For hooks wired up manually outside a plugin, use an absolute or home-relative
+path that the shell resolves at runtime:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "node \"$HOME/.claude/hooks/scripts/my-hook.js\"" }
         ]
       }
     ]

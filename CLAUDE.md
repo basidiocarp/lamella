@@ -46,7 +46,7 @@ Lamella is the packaging and build system for shared coding-agent content. It tu
 ```bash
 make validate
 make build-marketplace
-make build PLUGIN=core
+make build
 
 ./lamella build-codex
 ./lamella install-codex --all

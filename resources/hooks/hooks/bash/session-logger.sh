@@ -28,6 +28,27 @@ mkdir -p "$LOG_DIR"
 # Log file for today
 LOG_FILE="$LOG_DIR/activity-$(date +%Y-%m-%d).jsonl"
 
+# Redact common secret patterns from a command string before logging.
+# Replaces Bearer tokens, API_KEY/TOKEN/SECRET/PASSWORD assignments, and
+# Authorization header values with [REDACTED].
+redact_secrets() {
+  local input="$1"
+  # Redact Bearer / Authorization tokens
+  local out
+  out=$(printf '%s' "$input" | sed 's/Bearer [A-Za-z0-9._~+/-][A-Za-z0-9._~+/=-]*/Bearer [REDACTED]/g')
+  # Redact common secret assignments — patterns cover prefix-qualified names too:
+  # e.g. GITHUB_TOKEN=, ANTHROPIC_API_KEY=, NPM_TOKEN=, STRIPE_SECRET=
+  out=$(printf '%s' "$out" | sed \
+    -e 's/\([A-Z_]*API_KEY=\)[^ &|;]*/\1[REDACTED]/g' \
+    -e 's/\([A-Z_]*TOKEN=\)[^ &|;]*/\1[REDACTED]/g' \
+    -e 's/\([A-Z_]*SECRET=\)[^ &|;]*/\1[REDACTED]/g' \
+    -e 's/\([A-Z_]*PASSWORD=\)[^ &|;]*/\1[REDACTED]/g' \
+    -e 's/\([A-Z_]*PASSWD=\)[^ &|;]*/\1[REDACTED]/g')
+  # Redact Authorization header values
+  out=$(printf '%s' "$out" | sed 's/\(Authorization: \)[^ ]*/\1[REDACTED]/g')
+  printf '%s' "$out"
+}
+
 # Read JSON from stdin
 INPUT=$(cat)
 
@@ -49,6 +70,7 @@ case "$TOOL_NAME" in
         ;;
     Bash)
         COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command // ""' | head -c 200)
+        COMMAND=$(redact_secrets "$COMMAND")
         ;;
     Grep|Glob)
         FILE_PATH=$(echo "$TOOL_INPUT" | jq -r '.path // .pattern // ""')
@@ -97,6 +119,10 @@ LOG_ENTRY=$(jq -n \
 
 # Append to log file
 echo "$LOG_ENTRY" >> "$LOG_FILE"
+
+# Restrict log file permissions to owner read/write only (0600).
+# Prevents other users from reading logs that may contain command snippets.
+chmod 600 "$LOG_FILE" 2>/dev/null || true
 
 # Always allow
 exit 0

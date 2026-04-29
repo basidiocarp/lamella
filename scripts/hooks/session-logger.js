@@ -23,6 +23,28 @@ function estimateTokens(value) {
   return Math.floor(value.length / 4);
 }
 
+/**
+ * Redact common secret patterns from a command string before logging.
+ * Targets Bearer tokens, API_KEY/TOKEN/SECRET/PASSWORD assignments, and
+ * Authorization header values that appear in shell commands.
+ *
+ * @param {string} str - Raw command string
+ * @returns {string} Command with secret values replaced by [REDACTED]
+ */
+function redactSecrets(str) {
+  if (!str) return str;
+  // Bearer / Authorization header tokens (e.g. curl -H "Authorization: Bearer sk-...")
+  let out = str.replace(/Bearer\s+\S+/g, 'Bearer [REDACTED]');
+  // Common secret env-var assignments: API_KEY=..., TOKEN=..., SECRET=..., PASSWORD=...
+  out = out.replace(
+    /((?:API_?KEY|TOKEN|SECRET|PASSWORD|PASSWD|AUTH(?:ORIZATION)?|ACCESS_?KEY|PRIVATE_?KEY)\s*=\s*)(\S+)/gi,
+    '$1[REDACTED]'
+  );
+  // Authorization header values in bare header form
+  out = out.replace(/(Authorization:\s*)(\S+)/gi, '$1[REDACTED]');
+  return out;
+}
+
 async function main() {
   const input = await readStdinJson();
   const logDir = process.env.CLAUDE_LOG_DIR || path.join(getHomeDir(), '.claude', 'logs');
@@ -48,7 +70,7 @@ async function main() {
       filePath = toolInput.file_path || toolInput.path || '';
       break;
     case 'Bash':
-      command = String(toolInput.command || '').slice(0, 200);
+      command = redactSecrets(String(toolInput.command || '')).slice(0, 200);
       break;
     case 'Grep':
     case 'Glob':
@@ -80,7 +102,11 @@ async function main() {
   }
 
   const logFile = path.join(logDir, `activity-${getDateString()}.jsonl`);
-  fs.appendFileSync(logFile, `${JSON.stringify(logEntry)}\n`, 'utf8');
+  // mode 0o600: owner read/write only — prevents other users from reading log files
+  // that may contain command snippets with sensitive context.
+  fs.appendFileSync(logFile, `${JSON.stringify(logEntry)}\n`, { encoding: 'utf8', mode: 0o600 });
+  // appendFileSync mode only applies at file creation; enforce 0600 on existing files too.
+  try { fs.chmodSync(logFile, 0o600); } catch { /* best-effort: read-only fs or no ownership */ }
 }
 
 main().catch(error => {

@@ -16,15 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "workflow/capture-observation",
-      "workflow/create-plans",
-      "workflow/deliver-edge-cases",
-      "workflow/develop-adr",
-      "workflow/develop-spike-summary",
-      "workflow/kaizen",
-      "workflow/mental-models"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

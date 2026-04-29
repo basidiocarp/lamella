@@ -14,13 +14,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "devops/incident-commander",
-      "devops/release-manager",
-      "devops/runbook-generator",
-      "workflow/spec-driven-workflow",
-      "core/tech-debt-tracker"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

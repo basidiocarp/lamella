@@ -14,17 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/api-test-suite-builder",
-      "core/code-maturity-assessor",
-      "core/code-review-pro",
-      "core/code-review-process",
-      "core/e2e-testing",
-      "core/fidelity-review",
-      "core/property-based-testing",
-      "core/structured-review",
-      "core/verified-implementer"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

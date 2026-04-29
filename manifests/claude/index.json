@@ -6,14 +6,14 @@
   "generated": "2026-03-29",
   "stats": {
     "totalPlugins": 52,
-    "totalSkills": 292,
+    "totalSkills": 301,
     "coverage": "98%"
   },
   "plugins": [
     {
       "name": "agile-pm",
       "version": "1.0.0",
-      "skills": 10,
+      "skills": 33,
       "description": "Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts",
       "tags": [
         "agile",
@@ -63,7 +63,7 @@
     {
       "name": "collaboration",
       "version": "1.0.0",
-      "skills": 7,
+      "skills": 8,
       "description": "Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination",
       "tags": [
         "collaboration",
@@ -79,7 +79,7 @@
     {
       "name": "core-architecture",
       "version": "1.0.0",
-      "skills": 10,
+      "skills": 0,
       "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
       "tags": [
         "core",
@@ -95,7 +95,7 @@
     {
       "name": "core-base",
       "version": "1.0.0",
-      "skills": 6,
+      "skills": 0,
       "description": "Foundational development workflow: planning, debugging, and test discipline",
       "tags": [
         "core",
@@ -111,7 +111,7 @@
     {
       "name": "core-operations",
       "version": "1.0.0",
-      "skills": 7,
+      "skills": 0,
       "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
       "tags": [
         "core",
@@ -127,7 +127,7 @@
     {
       "name": "core-quality",
       "version": "1.0.0",
-      "skills": 9,
+      "skills": 0,
       "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
       "tags": [
         "core",
@@ -143,7 +143,7 @@
     {
       "name": "core",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 35,
       "description": "Umbrella bundle for layered core development plugins and shared base resources",
       "tags": [
         "core",
@@ -174,7 +174,7 @@
     {
       "name": "customer-insights",
       "version": "1.0.0",
-      "skills": 9,
+      "skills": 0,
       "description": "Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language",
       "tags": [
         "discovery",
@@ -206,7 +206,7 @@
     {
       "name": "developer-ops",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
       "tags": [
         "developer-ops",
@@ -222,7 +222,7 @@
     {
       "name": "devops-cloud",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
       "tags": [
         "devops",
@@ -238,7 +238,7 @@
     {
       "name": "devops-kubernetes",
       "version": "1.0.0",
-      "skills": 4,
+      "skills": 0,
       "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
       "tags": [
         "devops",
@@ -254,7 +254,7 @@
     {
       "name": "devops-observability",
       "version": "1.0.0",
-      "skills": 7,
+      "skills": 0,
       "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
       "tags": [
         "devops",
@@ -270,7 +270,7 @@
     {
       "name": "devops-platform",
       "version": "1.0.0",
-      "skills": 8,
+      "skills": 0,
       "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
       "tags": [
         "devops",
@@ -286,7 +286,7 @@
     {
       "name": "devops",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 29,
       "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
       "tags": [
         "devops",
@@ -302,7 +302,7 @@
     {
       "name": "enterprise-it",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
       "tags": [
         "enterprise-it",
@@ -318,7 +318,7 @@
     {
       "name": "executive",
       "version": "1.0.0",
-      "skills": 11,
+      "skills": 0,
       "description": "Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning",
       "tags": [
         "executive",
@@ -334,7 +334,7 @@
     {
       "name": "frontend-3d",
       "version": "1.0.0",
-      "skills": 2,
+      "skills": 0,
       "description": "3D frontend experiences for Spline and advanced Three.js workflows",
       "tags": [
         "frontend",
@@ -350,7 +350,7 @@
     {
       "name": "frontend-base",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
       "tags": [
         "frontend",
@@ -366,7 +366,7 @@
     {
       "name": "frontend-visual",
       "version": "1.0.0",
-      "skills": 4,
+      "skills": 0,
       "description": "Visual frontend work for motion, design systems, screenshots, and slides",
       "tags": [
         "frontend",
@@ -382,7 +382,7 @@
     {
       "name": "frontend",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 11,
       "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
       "tags": [
         "frontend",
@@ -398,7 +398,7 @@
     {
       "name": "go-to-market",
       "version": "1.0.0",
-      "skills": 6,
+      "skills": 0,
       "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
       "tags": [
         "go-to-market",
@@ -429,7 +429,7 @@
     {
       "name": "meta-authoring",
       "version": "1.0.0",
-      "skills": 8,
+      "skills": 0,
       "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
       "tags": [
         "meta",
@@ -445,7 +445,7 @@
     {
       "name": "meta-governance",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Meta governance for curation, audits, stocktakes, and task capture",
       "tags": [
         "meta",
@@ -461,7 +461,7 @@
     {
       "name": "meta-routing",
       "version": "1.0.0",
-      "skills": 4,
+      "skills": 0,
       "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
       "tags": [
         "meta",
@@ -477,7 +477,7 @@
     {
       "name": "meta",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 18,
       "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
       "tags": [
         "meta",
@@ -557,7 +557,7 @@
     {
       "name": "security-base",
       "version": "1.0.0",
-      "skills": 7,
+      "skills": 0,
       "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
       "tags": [
         "security",
@@ -573,7 +573,7 @@
     {
       "name": "security-compliance",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
       "tags": [
         "security",
@@ -589,7 +589,7 @@
     {
       "name": "security-crypto",
       "version": "1.0.0",
-      "skills": 3,
+      "skills": 0,
       "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
       "tags": [
         "security",
@@ -605,7 +605,7 @@
     {
       "name": "security-fuzzing",
       "version": "1.0.0",
-      "skills": 4,
+      "skills": 0,
       "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
       "tags": [
         "security",
@@ -621,7 +621,7 @@
     {
       "name": "security-scanning",
       "version": "1.0.0",
-      "skills": 6,
+      "skills": 0,
       "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
       "tags": [
         "security",
@@ -637,7 +637,7 @@
     {
       "name": "security",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 26,
       "description": "Umbrella bundle for layered security plugins and shared security commands",
       "tags": [
         "security",
@@ -653,7 +653,7 @@
     {
       "name": "tools-browser",
       "version": "1.0.0",
-      "skills": 3,
+      "skills": 0,
       "description": "Browser automation and realtime web tooling for interactive surfaces",
       "tags": [
         "tools",
@@ -669,7 +669,7 @@
     {
       "name": "tools-cli",
       "version": "1.0.0",
-      "skills": 8,
+      "skills": 0,
       "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
       "tags": [
         "tools",
@@ -685,7 +685,7 @@
     {
       "name": "tools-diagrams",
       "version": "1.0.0",
-      "skills": 2,
+      "skills": 0,
       "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
       "tags": [
         "tools",
@@ -701,7 +701,7 @@
     {
       "name": "tools-documents",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
       "tags": [
         "tools",
@@ -717,7 +717,7 @@
     {
       "name": "tools-integration",
       "version": "1.0.0",
-      "skills": 10,
+      "skills": 0,
       "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
       "tags": [
         "tools",
@@ -733,7 +733,7 @@
     {
       "name": "tools",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 31,
       "description": "Umbrella bundle for layered tool plugins and shared research/setup commands",
       "tags": [
         "tools",
@@ -766,7 +766,7 @@
     {
       "name": "workflow-execution",
       "version": "1.0.0",
-      "skills": 5,
+      "skills": 0,
       "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
       "tags": [
         "workflow",
@@ -782,7 +782,7 @@
     {
       "name": "workflow-git",
       "version": "1.0.0",
-      "skills": 4,
+      "skills": 0,
       "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
       "tags": [
         "workflow",
@@ -798,7 +798,7 @@
     {
       "name": "workflow-planning",
       "version": "1.0.0",
-      "skills": 6,
+      "skills": 0,
       "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
       "tags": [
         "workflow",
@@ -814,7 +814,7 @@
     {
       "name": "workflow",
       "version": "1.0.0",
-      "skills": 0,
+      "skills": 20,
       "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
       "tags": [
         "workflow",
@@ -830,7 +830,7 @@
     {
       "name": "writing",
       "version": "1.0.0",
-      "skills": 6,
+      "skills": 9,
       "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
       "tags": [
         "writing",

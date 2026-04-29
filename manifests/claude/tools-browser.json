@@ -16,11 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/agent-browser",
-      "tools/playwright",
-      "tools/websocket-patterns"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

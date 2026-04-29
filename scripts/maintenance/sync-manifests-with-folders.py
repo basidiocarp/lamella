@@ -8,9 +8,9 @@ import json
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).parent.parent
-SKILLS_DIR = BASE_DIR / "skills"
-MANIFESTS_DIR = BASE_DIR / "plugin-manifests"
+BASE_DIR = Path(__file__).parent.parent.parent
+SKILLS_DIR = BASE_DIR / "resources" / "skills"
+MANIFESTS_DIR = BASE_DIR / "manifests" / "claude"
 
 SKIP_MANIFESTS = {"schema.json", "index.json"}
 
@@ -143,6 +143,14 @@ def main():
     print("Syncing Plugin Manifests with Skill Folders")
     print("=" * 60)
 
+    # Guard: check that both required directories exist
+    if not SKILLS_DIR.exists():
+        print(f"\nERROR: Skills directory does not exist: {SKILLS_DIR}")
+        return 1
+    if not MANIFESTS_DIR.exists():
+        print(f"\nERROR: Manifests directory does not exist: {MANIFESTS_DIR}")
+        return 1
+
     print("\nSyncing manifests...")
     for manifest_path in sorted(MANIFESTS_DIR.glob("*.json")):
         if manifest_path.name in SKIP_MANIFESTS:
@@ -155,7 +163,9 @@ def main():
     print("\n" + "=" * 60)
     print("Sync complete!")
     print("=" * 60)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(main())

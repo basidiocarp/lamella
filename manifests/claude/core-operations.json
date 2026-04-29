@@ -14,17 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/agent-introspection-debugging",
-      "core/codebase-onboarding",
-      "core/continuous-learning",
-      "core/error-memory",
-      "core/git-cleanup",
-      "core/parallel-debugging",
-      "core/plan-fleet",
-      "core/strategic-compact",
-      "core/token-efficiency"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

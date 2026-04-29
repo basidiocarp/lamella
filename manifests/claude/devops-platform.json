@@ -16,16 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "devops/ansible",
-      "devops/deployment",
-      "devops/docker-patterns",
-      "devops/docker-troubleshoot",
-      "devops/github-actions-validator",
-      "devops/makefile",
-      "devops/terraform-patterns",
-      "devops/turborepo-caching"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

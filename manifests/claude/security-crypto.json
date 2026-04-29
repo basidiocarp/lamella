@@ -16,11 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "security/constant-time-crypto",
-      "security/wycheproof",
-      "security/yara-rule-authoring"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

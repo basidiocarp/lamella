@@ -14,14 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/brainstorming",
-      "core/clarify-requirements",
-      "core/systematic-debugging",
-      "core/test-debugging",
-      "core/test-driven-development",
-      "core/test-writing"
-    ],
+    "skills": [],
     "agents": [],
     "commands": [],
     "workflows": [

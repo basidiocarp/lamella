@@ -16,13 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "workflow/conductor",
-      "workflow/context-handoff",
-      "workflow/executing-plans",
-      "workflow/finishing-a-development-branch",
-      "workflow/task-linked-council"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

@@ -16,13 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "security/pci-compliance",
-      "security/soc2-compliance",
-      "security/stride-analysis-patterns",
-      "security/threat-mitigation-mapping",
-      "security/seatbelt-sandboxer"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

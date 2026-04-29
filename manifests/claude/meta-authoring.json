@@ -14,16 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "meta/agent-development",
-      "meta/command-development",
-      "meta/create-hook",
-      "meta/create-skill",
-      "meta/create-workflow-command",
-      "meta/designing-workflow-skills",
-      "meta/plugin-settings",
-      "meta/plugin-structure"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

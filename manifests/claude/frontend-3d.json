@@ -16,10 +16,7 @@
     "typescript"
   ],
   "resources": {
-    "skills": [
-      "frontend/spline-3d-integration",
-      "frontend/threejs-advanced"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

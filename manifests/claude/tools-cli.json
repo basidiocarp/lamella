@@ -16,16 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/bash-script-generator",
-      "tools/bash-script-validator",
-      "tools/cli-developer",
-      "tools/gh-cli-patterns",
-      "tools/php-pro",
-      "tools/regex-debugger",
-      "tools/tmux-interactive-runner",
-      "tools/token-reduction-optimizer"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

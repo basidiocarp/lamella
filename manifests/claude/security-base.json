@@ -16,15 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "security/api-footgun-detector",
-      "security/auth-implementation-patterns",
-      "security/dependency-auditor",
-      "security/insecure-defaults",
-      "security/memory-safety-patterns",
-      "security/secrets-management",
-      "security/security-review"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

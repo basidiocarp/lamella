@@ -14,13 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "meta/config-curator",
-      "meta/file-todos",
-      "meta/skill-best-practices",
-      "meta/skill-stocktake",
-      "meta/task-observer"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

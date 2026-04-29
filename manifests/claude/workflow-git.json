@@ -16,12 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "workflow/git-analyze-issue",
-      "workflow/git-create-pr",
-      "workflow/git-worktrees",
-      "workflow/resolve-pr-parallel"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

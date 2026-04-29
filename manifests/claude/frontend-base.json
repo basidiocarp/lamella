@@ -16,13 +16,7 @@
     "typescript"
   ],
   "resources": {
-    "skills": [
-      "frontend/accessibility",
-      "frontend/component-architecture",
-      "frontend/frontend-patterns",
-      "frontend/frontend-performance",
-      "frontend/responsive-design"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

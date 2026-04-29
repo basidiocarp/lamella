@@ -21,10 +21,10 @@
       "collaboration/debate-simulator",
       "collaboration/devils-advocate",
       "collaboration/expert-panel",
+      "collaboration/founder-leadership-coaching",
       "collaboration/stress-test-design"
     ],
-    "agents": [
-    ],
+    "agents": [],
     "commands": []
   }
 }

@@ -16,14 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "security/agentic-actions-auditor",
-      "security/codeql",
-      "security/pii-redactor",
-      "security/sast-configuration",
-      "security/semgrep",
-      "security/supply-chain-risk-auditor"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

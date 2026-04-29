@@ -16,19 +16,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/analytics-tracking",
-      "tools/api-design-principles",
-      "tools/aws-mcp-setup",
-      "tools/devcontainer-setup",
-      "tools/graphql-patterns",
-      "tools/mcp-ecosystem-context",
-      "tools/mcp-integration",
-      "tools/mcp-server-builder",
-      "tools/obsidian",
-      "tools/openapi-spec-generation",
-      "tools/rclone"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

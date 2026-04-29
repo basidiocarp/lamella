@@ -14,18 +14,7 @@
   ],
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/architecture-decision-records",
-      "core/context-engineering",
-      "core/deep-module-review",
-      "core/dependency-upgrade",
-      "core/design-patterns",
-      "core/duplicate-detection",
-      "core/interface-design-variants",
-      "core/legacy-modernizer",
-      "core/monorepo-management",
-      "core/type-driven-design"
-    ],
+    "skills": [],
     "agents": [],
     "commands": []
   }

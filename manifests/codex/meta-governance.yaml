@@ -4,13 +4,7 @@
   "source_plugin": "meta-governance",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "meta/config-curator",
-      "meta/file-todos",
-      "meta/skill-best-practices",
-      "meta/skill-stocktake",
-      "meta/task-observer"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

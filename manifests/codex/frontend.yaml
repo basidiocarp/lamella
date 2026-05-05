@@ -9,7 +9,19 @@
     "frontend-3d"
   ],
   "resources": {
-    "skills": [],
+    "skills": [
+      "frontend/accessibility",
+      "frontend/component-architecture",
+      "frontend/css-animation-creator",
+      "frontend/design-systems",
+      "frontend/frontend-patterns",
+      "frontend/frontend-performance",
+      "frontend/frontend-slides",
+      "frontend/responsive-design",
+      "frontend/screenshot-to-code",
+      "frontend/spline-3d-integration",
+      "frontend/threejs-advanced"
+    ],
     "workflows": [],
     "templates": [],
     "scripts": []

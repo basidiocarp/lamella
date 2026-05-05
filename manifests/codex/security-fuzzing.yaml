@@ -6,12 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "security/address-sanitizer",
-      "security/cargo-fuzz",
-      "security/fuzz-harness-writing",
-      "security/ossfuzz"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

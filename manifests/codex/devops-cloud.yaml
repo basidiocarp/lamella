@@ -6,13 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "devops/aws-agentic-ai",
-      "devops/aws-cdk-development",
-      "devops/aws-cost-operations",
-      "devops/aws-serverless-eda",
-      "devops/modal-serverless"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

@@ -4,13 +4,7 @@
   "source_plugin": "enterprise-it",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "agile-pm/atlassian-workspace-admin",
-      "agile-pm/confluence-knowledge-ops",
-      "agile-pm/jira-project-operations",
-      "tools/google-workspace-operations",
-      "tools/microsoft-365-tenant-admin"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

@@ -4,19 +4,7 @@
   "source_plugin": "executive",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "agile-pm/board-update-decks",
-      "agile-pm/company-culture-design",
-      "agile-pm/company-operating-rhythm",
-      "agile-pm/director-transition-coaching",
-      "agile-pm/executive-onboarding-diagnostic",
-      "agile-pm/manage-change-rollout",
-      "agile-pm/organizational-health-diagnostic",
-      "agile-pm/vp-cpo-transition-coaching",
-      "collaboration/founder-leadership-coaching",
-      "workflow/compound-scenario-planning",
-      "workflow/strategy-execution-alignment"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

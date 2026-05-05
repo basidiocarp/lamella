@@ -4,17 +4,7 @@
   "source_plugin": "core-operations",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/agent-introspection-debugging",
-      "core/codebase-onboarding",
-      "core/continuous-learning",
-      "core/error-memory",
-      "core/git-cleanup",
-      "core/parallel-debugging",
-      "core/plan-fleet",
-      "core/strategic-compact",
-      "core/token-efficiency"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

@@ -6,13 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/docx-word-documents",
-      "tools/markitdown-converter",
-      "tools/pdf-manipulation",
-      "tools/pptx-presentations",
-      "tools/xlsx-spreadsheets"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

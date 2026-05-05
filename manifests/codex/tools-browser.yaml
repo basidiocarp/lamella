@@ -6,11 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/agent-browser",
-      "tools/playwright",
-      "tools/websocket-patterns"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

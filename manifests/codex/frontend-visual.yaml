@@ -6,12 +6,7 @@
     "typescript"
   ],
   "resources": {
-    "skills": [
-      "frontend/css-animation-creator",
-      "frontend/design-systems",
-      "frontend/frontend-slides",
-      "frontend/screenshot-to-code"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

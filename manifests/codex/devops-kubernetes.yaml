@@ -6,12 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "devops/gitops-workflow",
-      "devops/helm-charts",
-      "devops/kubernetes-manifest-generator",
-      "devops/kubernetes-security-policies"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

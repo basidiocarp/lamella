@@ -6,10 +6,7 @@
     "core"
   ],
   "resources": {
-    "skills": [
-      "tools/excalidraw-diagram-generator",
-      "tools/mermaid-diagrams"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

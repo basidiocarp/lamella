@@ -4,12 +4,7 @@
   "source_plugin": "meta-routing",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "meta/rust-crate-skill-generator",
-      "meta/skill-composer-studio",
-      "meta/skill-router",
-      "meta/team-communication-protocols"
-    ],
+    "skills": [],
     "workflows": [],
     "templates": [],
     "scripts": []

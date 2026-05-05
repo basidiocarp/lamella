@@ -4,14 +4,7 @@
   "source_plugin": "core-base",
   "dependencies": [],
   "resources": {
-    "skills": [
-      "core/brainstorming",
-      "core/clarify-requirements",
-      "core/systematic-debugging",
-      "core/test-debugging",
-      "core/test-driven-development",
-      "core/test-writing"
-    ],
+    "skills": [],
     "workflows": [
       "development/TDD.md",
       "development/SEARCH-FIRST.md",

@@ -176,6 +176,61 @@ For complete Skill structure details, see
 the [Skills overview](https://docs.anthropic.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure).
 </Note>
 
+## Skill Pack Classification
+
+Skills in lamella are classified into two distribution tiers: **general** and **basidiocarp**.
+
+### When to Write a General Skill
+
+Write a general skill when:
+- The skill teaches a technique or pattern that is independent of any specific tool or ecosystem
+- The skill does not reference basidiocarp-specific tooling (hyphae, mycelium, cortina, canopy, rhizome, stipe, lamella, spore, annulus, hymenium, volva)
+- The skill does not reference basidiocarp-specific conventions (.handoffs/, HANDOFFS.md, ecosystem-versions.toml, septa/)
+- The skill's examples and guidance work in any codebase or environment
+
+**Examples of general skills:** test-driven-development, code-review-pro, architecture-decision-records, git-cleanup, error-memory-*patterns* (if separated from hyphae integration)
+
+### When to Write a Basidiocarp Skill
+
+Write a basidiocarp skill when:
+- The skill assumes the basidiocarp ecosystem is installed and available
+- The skill demonstrates how to use basidiocarp tools (hyphae memoir, mycelium compression, annulus statusline, cortina signals, etc.)
+- The skill references basidiocarp project names, handoff workflows, or ecosystem contracts (septa/, HANDOFFS.md)
+- The skill is specific to basidiocarp operators and cannot generalize to other environments
+
+**Examples of basidiocarp skills:** handoff-check (audits .handoffs/ files), create-handoff (uses ecosystem conventions), capture-observation (writes to .notes/ ecosystem structure), error-memory (stores to hyphae)
+
+### When to Write an Adapter-Candidate Skill
+
+Write an adapter-candidate skill when:
+- The core technique is general and reusable
+- Basidiocarp-specific references are limited to examples, integration patterns, or optional enrichment
+- The skill can be split into a general base skill plus a thin basidiocarp companion
+
+**Pattern:** Create a general skill with core guidance, then reference a basidiocarp companion skill for ecosystem-specific integration.
+
+**Example:** context-engineering (general context management principles) — the core guidance is universally applicable; the optional hyphae enrichment steps are a basidiocarp companion layer
+
+### Classification Signal Words
+
+A skill is **basidiocarp** if it references any of these:
+
+- Tool names: `hyphae`, `mycelium`, `cortina`, `canopy`, `rhizome`, `stipe`, `lamella`, `spore`, `annulus`, `hymenium`, `volva`
+- Ecosystem conventions: `septa/`, `.handoffs/`, `HANDOFFS.md`, `ecosystem-versions.toml`
+- Basidiocarp repo paths: `basidiocarp/`, `.notes/`
+- Project-specific terms: basidiocarp project names or ecosystem roles
+
+### Checking Your Skill
+
+Before marking a skill complete, ask:
+- Does this skill work without the basidiocarp ecosystem?
+- Are all tool references optional enrichment, or core to the skill?
+- Would someone outside the basidiocarp project find this skill useful?
+
+If yes to the first two questions, classify as **general**. If no, classify as **basidiocarp**. If it's a general core with optional ecosystem examples, consider **adapter-candidate**.
+
+See `docs/maintainers/skill-pack-classification.md` for a detailed inventory of all skills by classification.
+
 ### Naming conventions
 
 Use consistent naming patterns to make Skills easier to reference and discuss. Consider using **gerund form** (verb +

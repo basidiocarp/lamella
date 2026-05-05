@@ -60,7 +60,7 @@
         "path": "plugins/core",
         "ref": "gh-pages"
       },
-      "description": "Umbrella bundle for layered core development plugins and shared base resources",
+      "description": "Umbrella bundle for layered core development plugins and shared base resources. Includes general skills (reusable without ecosystem dependencies) and basidiocarp skills (require hyphae, mycelium, annulus, or .handoffs/).",
       "version": "0.5.15"
     },
     {

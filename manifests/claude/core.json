@@ -2,7 +2,7 @@
   "$schema": "./schema.json",
   "name": "core",
   "version": "1.0.0",
-  "description": "Umbrella bundle for layered core development plugins and shared base resources",
+  "description": "Umbrella bundle for layered core development plugins and shared base resources. Includes general skills (reusable without ecosystem dependencies) and basidiocarp skills (require hyphae, mycelium, annulus, or .handoffs/).",
   "author": "William Newton",
   "license": "MIT",
   "tags": [

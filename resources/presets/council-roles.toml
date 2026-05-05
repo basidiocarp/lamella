@@ -1,0 +1,20 @@
+# Preset: council-roles
+# Four-voice technical council using independent role bundles
+
+[preset]
+name = "council-roles"
+description = "Four-voice technical council (Architect, Skeptic, Pragmatist, Critic) for non-trivial decisions using context-isolated subagents"
+requires = []
+
+[models]
+
+[tools]
+
+[skills]
+activate = [
+  "council",
+  "council-architect",
+  "council-skeptic",
+  "council-pragmatist",
+  "council-critic",
+]

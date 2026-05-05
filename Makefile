@@ -21,6 +21,13 @@ help: ## Show this help
 validate: lint-skills sync-check ## Run all CI validators
 	@echo "Running validators..."
 	@bash scripts/ci/run-validate-suite.sh
+	@echo "Running plugin validators..."
+	@PLUGIN_FAIL=0; \
+	for v in scripts/validate-*.sh; do \
+	    [ -f "$$v" ] || continue; \
+	    bash "$$v" || PLUGIN_FAIL=$$((PLUGIN_FAIL + 1)); \
+	done; \
+	[ "$$PLUGIN_FAIL" -eq 0 ] || (echo "$$PLUGIN_FAIL plugin validator(s) failed" && exit 1)
 	@echo "All validators passed."
 
 sync-check: ## Verify skill sync scripts and adapter paths are intact

@@ -1240,6 +1240,113 @@ Before sharing a Skill, verify:
 - [ ] Tested with real usage scenarios
 - [ ] Team feedback incorporated (if applicable)
 
+## Three-Tier Progressive Disclosure
+
+Many large Skills exceed the recommended 200-line budget for SKILL.md. Use a three-tier model to manage token usage and keep working instructions concise:
+
+### Tier 1: Metadata (always loaded)
+
+The frontmatter provides just enough for routing:
+
+- `name`: The Skill identifier
+- `description`: What the Skill does and when to use it
+- `origin`: Where the Skill comes from
+
+Claude loads this tier at startup across all available Skills. Keep descriptions specific and action-oriented so Claude correctly selects the right Skill.
+
+### Tier 2: Working Instructions (loaded on trigger)
+
+SKILL.md contains the core guidance Claude needs once the Skill is active. This is the "how do I use this?" layer.
+
+**Token budget:** Aim to keep SKILL.md body under 200 lines for optimal performance. If you approach or exceed this limit, move extended content to Tier 3.
+
+**What goes in Tier 2:**
+- Quick start or overview
+- Common workflows
+- Key patterns and examples
+- Links to Tier 3 resources when needed
+- A note pointing to `references/README.md` for extended content
+
+### Tier 3: Extended Reference (loaded on demand)
+
+Create a `references/` subdirectory for extended documentation that Claude loads only when needed:
+
+```
+skills/category/my-skill/
+├── SKILL.md              # Tier 2: working instructions (≤200 lines)
+└── references/
+    ├── README.md         # Required: index of what's here and when to load each file
+    ├── architecture.md   # Extended architecture or API details
+    ├── examples.md       # Extended examples or patterns
+    ├── edge-cases.md     # Uncommon scenarios or troubleshooting
+    └── ...               # Other domain-specific reference files
+```
+
+### References directory structure
+
+The `references/` directory must include a `README.md` index that:
+
+- Lists what reference files are available
+- Describes when to read each one
+- Provides a brief overview of what each file covers
+
+**Example `references/README.md`:**
+
+```markdown
+# Extended References
+
+## When to use these files
+
+**architecture.md**: Read when implementing advanced features or understanding how the Skill internally organizes data.
+
+**examples.md**: Read when you need extended usage examples beyond what's in SKILL.md.
+
+**edge-cases.md**: Read when encountering errors or behaviors not covered in the main working instructions.
+
+---
+
+## Files
+
+- `architecture.md` — System design and internal organization
+- `examples.md` — Extended usage examples and patterns
+- `edge-cases.md` — Error handling and uncommon scenarios
+```
+
+### Frontmatter references field (optional)
+
+To explicitly declare which reference files are available, add a `references:` field to SKILL.md frontmatter:
+
+```yaml
+---
+name: my-skill
+description: Short description for routing
+origin: lamella
+references:
+  - references/architecture.md
+  - references/examples.md
+---
+```
+
+This is optional but helps Claude discover available resources.
+
+### When to create Tier 3
+
+Create reference files when:
+- More than 3 extended examples exist (move to `references/examples.md`)
+- Architecture or design details exceed 50 lines (move to `references/architecture.md`)
+- Edge cases, error patterns, or troubleshooting needs separate documentation
+- SKILL.md approaches 200 lines and still needs growth
+
+### Token budget guidance
+
+- **Tier 1 (metadata)**: 20-50 tokens — description is specific and action-oriented
+- **Tier 2 (SKILL.md)**: 300-400 tokens (roughly 100-200 lines) — concise working instructions
+- **Tier 3 (references)**: Unlimited — loaded only on demand
+
+The token savings from keeping SKILL.md lean often exceed the cost of reading multiple reference files later, because most users need only Tier 1 + Tier 2 for common tasks.
+
+---
+
 ## Next steps
 
 <CardGroup cols={2}>

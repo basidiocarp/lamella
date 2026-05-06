@@ -70,6 +70,7 @@ as well.
 |---------|-------------|
 | [Architecture](architecture.md) | Build pipeline, packaging model, and validation flow |
 | [Roadmap](roadmap.md) | Current priorities and shipped milestones |
+| [MCP Security Boundaries](mcp-security-boundaries.md) | Security boundary rules for rhizome and hyphae MCP surfaces |
 | [Maintainers](maintainers/README.md) | Maintainer-facing docs for inventory, feedback capture, and boundary cleanup |
 
 ## Planning and Migration

@@ -35,6 +35,20 @@ check_skill() {
     fi
     # Note: origin: presence is already guaranteed by the early-return above.
 
+    # Warn if type: is missing (backward-compatible — warn only)
+    if ! grep -q "^type:" "$file" 2>/dev/null; then
+        echo "WARN [$file]: missing recommended 'type:' field (reference|pipeline)"
+    fi
+
+    # Error if type: is present but invalid
+    if grep -q "^type:" "$file" 2>/dev/null; then
+        type_val=$(grep "^type:" "$file" | head -1 | sed 's/^type:[[:space:]]*//;s/[[:space:]]*$//')
+        if [ "$type_val" != "reference" ] && [ "$type_val" != "pipeline" ]; then
+            echo "FAIL [$file]: invalid 'type:' value '$type_val' (must be reference or pipeline)"
+            file_fail=1
+        fi
+    fi
+
     # Check required sections — only enforced for convention: v1 skills.
     # Pre-convention skills (no convention: field) are not required to have
     # these sections yet; they will be migrated incrementally.

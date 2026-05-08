@@ -1,6 +1,6 @@
 ---
 name: parallel-debugging
-description: "Debugs complex issues with competing hypotheses, parallel investigation, evidence collection, and root cause arbitration."
+description: "Run this when debugging a complex issue with multiple plausible causes — uses competing hypotheses methodology to isolate root cause."
 origin: lamella
 ---
 

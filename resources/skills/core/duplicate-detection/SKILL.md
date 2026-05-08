@@ -1,6 +1,6 @@
 ---
 name: duplicate-detection
-description: "Finds semantically duplicated code despite different names or implementations."
+description: "Run this when looking for code duplication or consolidation opportunities — identifies semantic duplicates across different implementations."
 origin: lamella
 ---
 

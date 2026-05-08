@@ -1,6 +1,6 @@
 ---
 name: plan-fleet
-description: "Creates implementation plans optimized for GitHub Copilot CLI fleet execution."
+description: "Run this when breaking down work for fleet execution — creates implementation plans optimized for GitHub Copilot CLI parallel agents."
 origin: lamella
 references:
   - references/examples.md

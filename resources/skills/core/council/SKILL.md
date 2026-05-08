@@ -1,6 +1,6 @@
 ---
 name: council
-description: "Runs a 4-voice technical council (Architect, Skeptic, Pragmatist, Critic) using context-isolated subagents as an anti-anchoring mechanism for non-trivial decisions."
+description: "Run this for non-trivial design decisions to avoid anchoring bias — coordinates 4-voice technical council (Architect, Skeptic, Pragmatist, Critic)."
 origin: lamella
 ---
 

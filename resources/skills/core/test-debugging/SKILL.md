@@ -1,6 +1,6 @@
 ---
 name: test-debugging
-description: "Applies a five-phase workflow for debugging test failures."
+description: "Run this when test failures need diagnosis — applies five-phase workflow to isolate root cause and fix."
 origin: lamella
 ---
 

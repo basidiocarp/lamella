@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: "Enforces test-driven development by requiring a failing test before implementation."
+description: "Activate when starting feature work — enforces TDD by requiring failing tests before implementation begins."
 origin: lamella
 ---
 

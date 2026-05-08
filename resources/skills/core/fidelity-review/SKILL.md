@@ -1,6 +1,6 @@
 ---
 name: fidelity-review
-description: "Compares implementation against a plan or specification to identify deviations."
+description: "Run this to verify implementation matches plan — compares code against specification to identify deviations and compliance gaps."
 origin: lamella
 ---
 

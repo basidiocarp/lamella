@@ -1,6 +1,6 @@
 ---
 name: structured-review
-description: "Reviews plans and specs for clarity, feasibility, risk, and completeness."
+description: "Run this to review a plan or spec — evaluates clarity, feasibility, risk, and completeness using systematic framework."
 origin: lamella
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: verified-implementer
-description: "Implements tasks with automated LLM-as-Judge verification for critical steps."
+description: "Run this for complex implementations requiring verification — orchestrates implementation with LLM-as-Judge validation at critical steps."
 metadata:
   argument-hint: "Task file [options] (e.g., \"add-validation.feature.md --continue --human-in-the-loop\")"
 origin: lamella

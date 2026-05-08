@@ -22,8 +22,8 @@ type: pipeline
 
 Field rules:
 - `name` — lowercase letters, numbers, and hyphens only; max 64 characters
-- `description` — non-empty; max 1024 characters; third-person voice; includes
-  both what the skill does and when to use it
+- `description` — non-empty; max 1024 characters; includes both what the skill
+  does and when to use it; write as a trigger condition (see "Description as Trigger" below)
 - `origin` — always `lamella` for skills authored in this repo
 - `type` — `reference` or `pipeline` (lowercase); **recommended** for all new skills
   - `reference` — always-loaded context; contributes to ambient context window; fires based on trigger conditions in `description`; may not have side effects
@@ -38,6 +38,24 @@ one sentence whether this skill applies to their situation.
 
 Numbered phases. Each phase is one distinct action the agent takes. Keep
 phases short and scannable. Aim for 3–7 phases for most skills.
+
+---
+
+## Description as Trigger
+
+The `description` frontmatter field is how Claude Code decides when to auto-activate a skill. Write it as a **trigger condition**, not a summary.
+
+**Bad example:**
+```yaml
+description: "This skill helps you design microservices architectures."
+```
+
+**Good example:**
+```yaml
+description: "Run this when designing a new service that needs to integrate with existing microservices — produces boundary decisions, API contracts, and deployment topology."
+```
+
+Trigger descriptions typically begin with: "Run this when", "Use this to", "Invoke this if", "Activate when". The description should answer: "What user goal or situation causes this skill to fire?"
 
 ---
 
@@ -73,6 +91,19 @@ further human input for more than a single turn. Include:
   of obstacles
 
 Remove this section entirely for simple one-shot skills.
+
+---
+
+## Gotchas Section
+
+Every skill should include a `## Gotchas` section that lists 2–5 failure modes, sharp edges, or "when not to use this" notes. This is the highest-signal section — agents read it to avoid known mistakes before invoking the skill.
+
+Examples of gotchas:
+- Known edge cases the skill does not handle
+- Situations where the skill will fail or produce wrong output
+- Prerequisites that must be met first
+- Performance or token implications
+- Incompatibilities with certain patterns or tools
 
 ---
 

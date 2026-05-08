@@ -1,6 +1,6 @@
 ---
 name: context-engineering
-description: "Explains the components, mechanics, and constraints of context in agent systems."
+description: "Activate when designing or optimizing context windows in agent systems — explains components, mechanics, constraints, and assembly patterns."
 requires:
   - hyphae
 origin: lamella

@@ -1,6 +1,6 @@
 ---
 name: strategic-compact
-description: "Suggests manual context compaction at logical intervals to preserve context through task phases."
+description: "Activate at task boundaries when context pressure is high — suggests manual compaction points to preserve context through phases."
 origin: "ECC strategic-compact (adapted)"
 convention: v1
 requires:

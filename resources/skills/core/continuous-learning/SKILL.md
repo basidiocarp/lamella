@@ -1,6 +1,6 @@
 ---
 name: continuous-learning
-description: "Extracts reusable patterns from sessions into new learned skills."
+description: "Run this at session end or after solving a novel problem — extracts patterns into reusable learned skills for future sessions."
 origin: lamella
 ---
 

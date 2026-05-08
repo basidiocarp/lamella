@@ -1,6 +1,6 @@
 ---
 name: code-review-process
-description: "Runs an end-to-end code review workflow with subagent feedback and technical evaluation."
+description: "Run this when you need structured code review before merging — coordinates subagent feedback and produces technical evaluation report."
 origin: lamella
 ---
 # Code Review Process

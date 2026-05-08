@@ -1,6 +1,6 @@
 ---
 name: test-writing
-description: "Systematically write tests for new code or fix failing tests after refactoring."
+description: "Run this when writing tests for new code or fixing tests after refactoring — orchestrates test creation with systematic coverage."
 metadata:
   argument-hint: what tests or modules to focus on
 origin: lamella

@@ -1,6 +1,6 @@
 ---
 name: code-review-pro
-description: "Reviews code for security vulnerabilities, performance bottlenecks, maintainability issues, and refactoring opportunities."
+description: "Run this when reviewing code for security, performance, or maintainability — identifies vulnerabilities, bottlenecks, and refactoring opportunities."
 origin: lamella
 ---
 

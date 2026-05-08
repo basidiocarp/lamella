@@ -1,6 +1,6 @@
 ---
 name: git-cleanup
-description: "Safely analyze and clean up local git branches and worktrees."
+description: "Run this when local git branches have accumulated and need review for deletion — safely analyzes, groups, and confirms before cleanup."
 metadata:
   disable-model-invocation: true
 origin: lamella

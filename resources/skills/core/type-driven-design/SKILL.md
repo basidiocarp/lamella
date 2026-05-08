@@ -1,6 +1,6 @@
 ---
 name: type-driven-design
-description: "Uses the type system to prevent bugs at compile time."
+description: "Run this when designing types to prevent bugs at compile time — leverages type systems to make invalid states unrepresentable."
 origin: lamella
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: e2e-testing
-description: "Guides Playwright end-to-end testing, page models, and flake reduction."
+description: "Run this when building or reviewing Playwright tests — guides test structure, page models, and flake reduction strategies."
 origin: lamella
 ---
 

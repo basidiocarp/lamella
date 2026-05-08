@@ -40,6 +40,11 @@ check_skill() {
         echo "WARN [$file]: missing recommended 'type:' field (reference|pipeline)"
     fi
 
+    # Warn if Gotchas section is missing (backward-compatible — warn only)
+    if ! grep -q "^## Gotchas" "$file" 2>/dev/null; then
+        echo "WARN [$file]: missing recommended '## Gotchas' section"
+    fi
+
     # Error if type: is present but invalid
     if grep -q "^type:" "$file" 2>/dev/null; then
         type_val=$(grep "^type:" "$file" | head -1 | sed 's/^type:[[:space:]]*//;s/[[:space:]]*$//')

@@ -1,6 +1,6 @@
 ---
 name: dependency-upgrade
-description: "Manages major dependency upgrades with compatibility analysis, staged rollout, and testing."
+description: "Run this when upgrading major dependencies — manages compatibility analysis, staged rollout, testing, and rollback strategies."
 origin: lamella
 ---
 

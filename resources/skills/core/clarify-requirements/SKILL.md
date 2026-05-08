@@ -1,6 +1,6 @@
 ---
 name: clarify-requirements
-description: "Clarifies requirements before implementation."
+description: "Run this when requirements are ambiguous or incomplete before starting implementation — produces clarity on scope and success criteria."
 origin: lamella
 ---
 

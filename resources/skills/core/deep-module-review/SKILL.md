@@ -1,6 +1,6 @@
 ---
 name: deep-module-review
-description: "Reviews architecture for shallow modules, brittle seams, and deep-module refactor candidates."
+description: "Run this when reviewing architecture — identifies shallow modules, brittle seams, and candidates for deep-module refactoring."
 origin: lamella
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: monorepo-management
-description: "Manages monorepos with Turborepo, Nx, and pnpm workspaces."
+description: "Run this when setting up or working with monorepos — guides Turborepo, Nx, and pnpm workspace configuration and management."
 origin: lamella
 ---
 

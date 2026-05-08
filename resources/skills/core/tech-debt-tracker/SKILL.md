@@ -1,6 +1,6 @@
 ---
 name: tech-debt-tracker
-description: "Scans codebases for technical debt, prioritizes remediation work, and tracks debt trends over time."
+description: "Run this when assessing codebase health — scans for technical debt, prioritizes fixes, and tracks trends for backlog planning."
 origin: lamella
 ---
 

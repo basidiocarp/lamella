@@ -1,6 +1,6 @@
 ---
 name: interface-design-variants
-description: "Designs multiple materially different interfaces before implementation."
+description: "Run this before finalizing an interface — designs and compares multiple materially different interface shapes."
 origin: lamella
 ---
 

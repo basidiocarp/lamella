@@ -1,6 +1,6 @@
 ---
 name: agent-introspection-debugging
-description: "Provides a structured four-phase self-repair loop and failure-pattern table for agents that are stuck, looping, or hitting context limits."
+description: "Activate when an agent is stuck, looping, or hitting context limits — provides self-repair framework and failure-pattern diagnosis."
 origin: "ECC agent-introspection-debugging (adapted)"
 convention: v1
 requires:

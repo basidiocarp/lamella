@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "Explores design options collaboratively before implementation."
+description: "Run this when exploring design options before implementation — generates multiple approaches and compares feasibility."
 origin: lamella
 ---
 

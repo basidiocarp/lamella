@@ -1,6 +1,6 @@
 ---
 name: code-maturity-assessor
-description: "Assesses code maturity with Trail of Bits' nine-category framework."
+description: "Run this when evaluating code quality or security readiness — produces maturity assessment using Trail of Bits' nine-category framework."
 origin: lamella
 ---
 

@@ -1,9 +1,11 @@
 ---
 name: your-skill-name
 # name: lowercase letters, numbers, and hyphens only; max 64 characters
-description: One-sentence description of what this skill does and when it fires.
-# description: third-person voice; include both what it does and when to use it
+description: "Run this when [trigger condition] — [what it produces]."
+# description: Write as a trigger condition, not a summary. Begin with "Run this when", "Use this to", "Invoke this if", or "Activate when".
 origin: lamella
+type: pipeline
+# type: pipeline for on-demand workflow skills; use reference for always-loaded lookup skills
 ---
 
 ## When to Activate
@@ -17,6 +19,13 @@ Activate when [describe trigger condition].
 1. **[Phase name]**: [What happens in this phase]
 2. **[Phase name]**: [What happens in this phase]
 3. **[Phase name]**: [What happens in this phase]
+
+## Gotchas
+
+<!-- List 2–5 failure modes, sharp edges, or "when not to use this" notes. -->
+- [When or why this skill might fail or produce wrong output]
+- [Prerequisites or incompatibilities]
+- [Performance or token implications if relevant]
 
 ## Operating Contract
 

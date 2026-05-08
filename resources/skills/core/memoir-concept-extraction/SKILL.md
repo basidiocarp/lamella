@@ -1,6 +1,6 @@
 ---
 name: memoir-concept-extraction
-description: "Extracts named concepts and relationships from a source document or hyphae search results and populates a target memoir."
+description: "Run this to extract domain knowledge into a memoir — captures named concepts and relationships from documents or hyphae search results."
 origin: lamella
 ---
 

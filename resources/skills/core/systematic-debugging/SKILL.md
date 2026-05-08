@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "Applies structured debugging through investigation, hypotheses, testing, and validation."
+description: "Run this when debugging to apply structured methodology — uses investigation, hypotheses, testing, and validation framework."
 origin: lamella
 ---
 

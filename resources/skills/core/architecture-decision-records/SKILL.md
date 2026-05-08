@@ -1,6 +1,6 @@
 ---
 name: architecture-decision-records
-description: "Writes and maintains Architecture Decision Records (ADRs) with clear rationale and trade-offs."
+description: "Run this when making or documenting architectural decisions — produces ADRs with clear rationale, alternatives, and trade-offs."
 origin: lamella
 ---
 # Architecture Decision Records

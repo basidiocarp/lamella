@@ -1,6 +1,6 @@
 ---
 name: error-memory
-description: "Finds past error resolutions and records new ones."
+description: "Run this when debugging to search past error resolutions or after fixing an error to record the solution for future recall."
 requires:
   - hyphae
 origin: lamella

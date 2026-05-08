@@ -102,7 +102,7 @@ Turn hooks on with:
 
 ```toml
 [features]
-codex_hooks = true
+hooks = true
 ```
 
 For the current event list, input fields, output behavior, and limitations, see

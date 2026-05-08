@@ -303,7 +303,7 @@ For sandbox and approval keys (`approval_policy`, `sandbox_mode`, and `sandbox_w
       description: "Enable ChatGPT Apps/connectors support (experimental).",
     },
     {
-      key: "features.codex_hooks",
+      key: "features.hooks",
       type: "boolean",
       description:
         "Enable lifecycle hooks loaded from `hooks.json` (under development; off by default).",

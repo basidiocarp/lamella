@@ -148,7 +148,7 @@ shell_snapshot = true           # Speed up repeated commands
 | Key                  |        Default        | Maturity          | Description                                                             |
 | -------------------- | :-------------------: | ----------------- | ----------------------------------------------------------------------- |
 | `apps`               |         false         | Experimental      | Enable ChatGPT Apps/connectors support                                  |
-| `codex_hooks`        |         false         | Under development | Enable lifecycle hooks from `hooks.json`. See [Hooks](https://developers.openai.com/codex/hooks).    |
+| `hooks`              |         false         | Under development | Enable lifecycle hooks from `hooks.json`. See [Hooks](https://developers.openai.com/codex/hooks).    |
 | `fast_mode`          |         true          | Stable            | Enable Fast mode selection and the `service_tier = "fast"` path         |
 | `multi_agent`        |         true          | Stable            | Enable subagent collaboration tools                                     |
 | `personality`        |         true          | Stable            | Enable personality selection controls                                   |

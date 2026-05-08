@@ -16,7 +16,7 @@ Hooks are behind a feature flag in `config.toml`:
 
 ```toml
 [features]
-codex_hooks = true
+hooks = true
 ```
 
 Runtime behavior to keep in mind:

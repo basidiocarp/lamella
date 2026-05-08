@@ -107,6 +107,18 @@ Examples of gotchas:
 
 ---
 
+## Installation Skills
+
+When writing a skill that installs or configures software across multiple platforms, use `resources/templates/docs/INSTALLER-SKILL.md` as your starting point. This template includes:
+
+- A Dispatcher pattern for reliable platform detection (`uname -s` with cases for macOS, Linux, and Windows)
+- Separate platform subsections (macOS, Linux, Windows) with installation steps and verification commands for each
+- Common gotchas specific to cross-platform installation (PATH changes, permission differences, command name variations)
+
+**Key principle:** Platform-specific branching based on `$OSTYPE` or `$OS` inside a single skill body is a smell — it signals that the skill should be broken into dedicated platform sections using the template pattern.
+
+---
+
 ## Optional
 
 ### `## Handoff Pointers`

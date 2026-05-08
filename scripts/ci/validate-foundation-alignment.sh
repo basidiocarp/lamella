@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 check() {
   local pattern="$1"
   shift
-  if ! rg -q "$pattern" "$@"; then
+  if ! grep -qE "$pattern" "$@"; then
     printf 'foundation alignment check failed: missing pattern %s in %s\n' "$pattern" "$*" >&2
     exit 1
   fi

@@ -80,7 +80,20 @@ c) Not sure - use default
 Reply with: defaults (or 1a 2a)
 ```
 
+## Inline Markers for Plan and Spec Documents
+
+When clarifying a plan, spec, or handoff document rather than a user request, use inline markers to flag unresolved items without blocking the rest of the document:
+
+- `[NEEDS CLARIFICATION]` — ambiguous requirement or constraint; must be resolved before dispatch
+- `[TBD]` — placeholder that should be filled in before implementation starts
+- `[OPEN QUESTION]` — a question that affects scope or approach; needs an answer
+
+Place the marker inline immediately after the ambiguous text. When the document is reviewed for dispatch (via `handoff-check`), these markers are treated as blockers — the handoff cannot be dispatched until all markers are resolved and removed.
+
+Use this pattern when authoring a handoff with a section that is intentionally incomplete, reviewing a spec and flagging gaps for the author to address, or when a question affects implementation direction but the answer is not yet available.
+
 ## Anti-patterns
 
 - Don't ask questions you can answer with a quick, low-risk discovery read (e.g., configs, existing patterns, docs).
 - Don't ask open-ended questions if a tight multiple-choice or yes/no would eliminate ambiguity faster.
+- Don't leave `[NEEDS CLARIFICATION]` markers in a dispatched handoff — they block completion and signal the plan was not ready.

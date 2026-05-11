@@ -48,6 +48,14 @@ Follow the repo-level work-item handoff template:
   - Checklist of testable assertions
 - **Completion Protocol**: References the verify script
 
+**Three conventions to follow while authoring:**
+
+1. **Clarification markers**: if a section is intentionally incomplete pending input, use `[NEEDS CLARIFICATION]`, `[TBD]`, or `[OPEN QUESTION]` inline. These are dispatch blockers — resolve and remove every marker before the handoff is dispatched.
+
+2. **Execution freeze note**: the template includes a note after the Scope section stating that Problem/Scope/Intent are read-only once dispatched. Do not remove it. If an implementer discovers the plan is wrong mid-execution, they raise a flag — they do not rewrite the plan to fit the diff.
+
+3. **Residual Work section**: the template includes a `## Residual Work` table between the last step and `## Completion`. After Stage 2 review, log every accepted-but-unfixed finding there with its disposition. An empty table is only valid when Stage 2 confirms zero open findings.
+
 Every step MUST have:
 ```markdown
 #### Verification

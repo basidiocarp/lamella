@@ -18,9 +18,12 @@ Load plan, review critically, execute tasks in batches, report for review betwee
 
 ### Step 1: Load and Review Plan
 1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+2. Scan for unresolved markers: `[NEEDS CLARIFICATION]`, `[TBD]`, `[OPEN QUESTION]`. If any are found, stop and resolve them before starting — do not silently assume an answer.
+3. Review critically - identify any questions or concerns about the plan
+4. If concerns: Raise them with your human partner before starting
+5. If no concerns: Create TodoWrite and proceed
+
+**Plan body is read-only once execution starts.** Only status fields, verification output blocks, and Completion fields may be updated during execution. If the plan turns out to be wrong mid-execution, raise a flag and wait for the orchestrator to update the plan — do not rewrite scope or intent to fit the diff.
 
 ### Step 2: Execute Batch
 **Default: First 3 tasks**

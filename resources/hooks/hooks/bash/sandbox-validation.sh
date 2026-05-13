@@ -21,9 +21,10 @@
 #        }
 #      }
 #
-# Environment Variables (passed by Claude Code):
-#   CLAUDE_TOOL_NAME: Name of the tool being used (e.g., "Bash")
-#   CLAUDE_TOOL_PARAMS: JSON string of tool parameters
+# Input (passed by Claude Code on stdin as JSON):
+#   .tool_name:  Name of the tool being used (e.g., "Bash")
+#   .tool_input: Object of tool parameters
+#   .tool_input.dangerouslyDisableSandbox: boolean, set to true when sandbox is explicitly disabled
 #
 # Exit Codes:
 #   0 = Allow (sandbox active or check disabled)
@@ -32,7 +33,6 @@
 # Read hook input from stdin
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_PARAMS=$(echo "$INPUT" | jq -r '.tool_input // empty')
 
 set -euo pipefail
 
@@ -52,8 +52,10 @@ is_production() {
 
 # Check if sandbox is active
 is_sandbox_active() {
-  # Parse tool parameters to check for dangerouslyDisableSandbox
-  if echo "${CLAUDE_TOOL_PARAMS:-}" | jq -e '.dangerouslyDisableSandbox == true' >/dev/null 2>&1; then
+  # Check if sandbox is explicitly disabled via tool input
+  local disabled
+  disabled=$(printf '%s' "${INPUT}" | jq -r '.tool_input.dangerouslyDisableSandbox // false' 2>/dev/null || echo "false")
+  if [ "$disabled" = "true" ]; then
     return 1  # Sandbox explicitly disabled
   fi
 

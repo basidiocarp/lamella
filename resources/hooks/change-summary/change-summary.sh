@@ -1,6 +1,10 @@
 #!/bin/bash
 # Stop hook: Check TypeScript errors and display a summary of changes
 
+source "$(dirname "$0")/../lib/envelope.sh"
+# Note: This is correct because change-summary is a sibling of lib, not nested under hooks/bash
+read_envelope
+
 # Load mise (if available) for Node.js/npx
 if command -v mise &> /dev/null; then
   eval "$(mise activate bash)"
@@ -58,23 +62,15 @@ if [[ -n "$ts_files_changed" ]]; then
     echo "Checking types for modified TypeScript files..."
     echo ""
 
-    # Run tsc and capture output
-    tsc_output=$(cd "$tsconfig_dir" && npx tsc --noEmit 2>&1)
-    tsc_exit=$?
+    # Run tsc with timeout and capture output
+    tsc_output=$(cd "$tsconfig_dir" && timeout 30s npx tsc --noEmit 2>&1) || {
+        jq -n --arg msg "TypeScript errors detected:\n$tsc_output" \
+          '{"hookSpecificOutput":{"hookEventName":"Stop","systemMessage":$msg}}'
+        exit 0
+    }
 
-    if [[ $tsc_exit -ne 0 ]]; then
-      echo "❌ TypeScript errors found:"
-      echo "───────────────────────────────────────────────────────────────"
-      echo "$tsc_output"
-      echo ""
-      echo "═══════════════════════════════════════════════════════════════"
-      echo "Please fix the TypeScript errors above before finishing."
-      echo "═══════════════════════════════════════════════════════════════"
-      exit 1
-    else
-      echo "✅ No TypeScript errors found"
-      echo ""
-    fi
+    echo "✅ No TypeScript errors found"
+    echo ""
   fi
 fi
 

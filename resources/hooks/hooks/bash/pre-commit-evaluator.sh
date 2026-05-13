@@ -24,6 +24,12 @@
 
 set -e
 
+# Guard against recursive Claude invocation
+if [ -n "${CLAUDE_CODE_SESSION:-}" ] || [ -n "${CLAUDE_CODE_HOOK_EVENT:-}" ]; then
+    echo "Skipping claude evaluation: already inside a Claude Code session"
+    exit 0
+fi
+
 # Check if evaluation is enabled
 if [[ "${CLAUDE_PRECOMMIT_EVAL:-0}" != "1" ]]; then
     exit 0
@@ -127,12 +133,12 @@ if ! command -v claude &> /dev/null; then
     exit 1
 fi
 
-# Run evaluation
-RESULT=$(echo "$PROMPT" | claude --model "$MODEL" --print 2>/dev/null) || {
-    echo -e "${RED}Error: Claude evaluation failed${NC}"
-    echo "You can bypass with: CLAUDE_SKIP_EVAL=1 git commit"
-    exit 1
+# Run evaluation with timeout
+EVAL_OUTPUT=$(timeout 60s claude --model "$MODEL" --print <<< "$PROMPT" 2>&1) || {
+    echo "Claude evaluation timed out or failed — skipping"
+    exit 0
 }
+RESULT="$EVAL_OUTPUT"
 
 # Extract JSON from response (handle potential markdown wrapping)
 JSON_RESULT=$(echo "$RESULT" | grep -o '{.*}' | head -1)

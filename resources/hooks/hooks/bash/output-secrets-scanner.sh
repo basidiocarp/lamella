@@ -29,11 +29,11 @@
 
 set -euo pipefail
 
-# Read the hook input from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
 # Extract tool output from JSON (handle both formats)
-TOOL_OUTPUT=$(echo "$INPUT" | jq -r '.tool_output // .output // ""' 2>/dev/null || echo "")
+TOOL_OUTPUT=$(tool_response_output)
 
 # If no output or empty, exit cleanly
 if [[ -z "$TOOL_OUTPUT" ]]; then

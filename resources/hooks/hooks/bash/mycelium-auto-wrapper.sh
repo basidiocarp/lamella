@@ -27,8 +27,11 @@ if ! command -v mycelium &> /dev/null; then
     exit 0
 fi
 
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
+
 # Parse tool input to get the bash command
-COMMAND=$(echo "$INPUT" | jq -r '.command // empty' 2>/dev/null)
+COMMAND=$(tool_input_command)
 
 if [ -z "$COMMAND" ]; then
     # No command found, continue

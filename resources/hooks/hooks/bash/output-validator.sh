@@ -15,11 +15,11 @@
 
 set -e
 
-# Read JSON from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_OUTPUT=$(echo "$INPUT" | jq -r '.tool_output // empty')
+TOOL_NAME=$(tool_name)
+TOOL_OUTPUT=$(tool_response_output)
 
 # Only validate tools that produce code/content outputs
 case "$TOOL_NAME" in

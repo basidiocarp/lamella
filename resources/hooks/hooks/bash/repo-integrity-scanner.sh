@@ -33,16 +33,15 @@
 
 set -euo pipefail
 
-# Read the hook input from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')
+TOOL_NAME=$(tool_name)
 
 # Only check Read operations
 [[ "$TOOL_NAME" != "Read" ]] && exit 0
 
-FILE_PATH=$(echo "$TOOL_INPUT" | jq -r '.file_path // empty')
+FILE_PATH=$(tool_input_file_path)
 [[ -z "$FILE_PATH" ]] && exit 0
 
 # Check if file exists
@@ -95,8 +94,11 @@ check_injection_patterns() {
     fi
 
     # === ROLE OVERRIDE PATTERNS ===
-    if echo "$content" | grep -qiE 'ignore (previous|all|your) instructions|you are now|pretend (you are|to be)|from now on|new instructions:'; then
-        echo "BLOCKED: Prompt injection pattern detected in: $file" >&2
+    # Strip code blocks and comments before checking
+    local stripped
+    stripped=$(echo "$content" | sed '/^```/,/^```/d' | sed 's/^> //' | grep -v '^\s*//' | grep -v '^\s*#' || true)
+    if echo "$stripped" | grep -qiE 'ignore (previous|all|your) instructions|you are now|pretend (you are|to be)|from now on|new instructions:'; then
+        echo "BLOCKED: Prompt injection pattern detected in file content (outside code blocks): $file" >&2
         return 1
     fi
 
@@ -198,7 +200,7 @@ for ide_pattern in "${IDE_CONFIG_PATTERNS[@]}"; do
 
         # Check for suspicious config modifications
         if [[ "$FILENAME" == *.json ]]; then
-            local content
+            content=""
             content=$(cat "$FILE_PATH" 2>/dev/null || echo "")
 
             # Look for hooks pointing to external URLs or suspicious commands

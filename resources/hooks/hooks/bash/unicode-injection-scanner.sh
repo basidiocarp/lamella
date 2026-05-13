@@ -26,11 +26,10 @@
 
 set -euo pipefail
 
-# Read the hook input from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')
+TOOL_NAME=$(tool_name)
 
 # Only check Edit and Write tools
 case "$TOOL_NAME" in
@@ -45,10 +44,10 @@ esac
 CONTENT=""
 case "$TOOL_NAME" in
     Write)
-        CONTENT=$(echo "$TOOL_INPUT" | jq -r '.content // empty')
+        CONTENT=$(tool_input_content)
         ;;
     Edit)
-        CONTENT=$(echo "$TOOL_INPUT" | jq -r '.new_string // empty')
+        CONTENT=$(tool_input_new_string)
         ;;
 esac
 

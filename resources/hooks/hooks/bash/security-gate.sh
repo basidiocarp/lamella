@@ -12,16 +12,18 @@
 
 set -e
 
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
+
 BT=$'\x60'
-INPUT=$(cat)
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
+TOOL_NAME=$(tool_name)
 
 # Only check Write and Edit operations on source files
 if [[ "$TOOL_NAME" != "Write" && "$TOOL_NAME" != "Edit" ]]; then
     exit 0
 fi
 
-FILE_PATH=$(echo "$INPUT" | jq -r '.file_path // empty')
+FILE_PATH=$(tool_input_file_path)
 
 # Skip non-source files (tests, docs, configs)
 EXTENSION="${FILE_PATH##*.}"
@@ -37,10 +39,10 @@ fi
 
 # Extract content being written
 if [[ "$TOOL_NAME" == "Write" ]]; then
-    CONTENT=$(echo "$INPUT" | jq -r '.content // empty')
+    CONTENT=$(tool_input_content)
 else
     # Edit: check both old and new strings
-    CONTENT=$(echo "$INPUT" | jq -r '.new_string // empty')
+    CONTENT=$(tool_input_new_string)
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -7,15 +7,14 @@
 
 set -e
 
-# Read JSON from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')
+TOOL_NAME=$(tool_name)
+COMMAND=$(tool_input_command)
 
 # === BASH: Dangerous commands ===
 if [[ "$TOOL_NAME" == "Bash" ]]; then
-    COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command // empty')
 
     # Dangerous patterns
     DANGEROUS_PATTERNS=(
@@ -75,7 +74,7 @@ fi
 
 # === EDIT/WRITE: Sensitive files ===
 if [[ "$TOOL_NAME" == "Edit" || "$TOOL_NAME" == "Write" ]]; then
-    FILE_PATH=$(echo "$TOOL_INPUT" | jq -r '.file_path // empty')
+    FILE_PATH=$(tool_input_file_path)
 
     # Protected files
     PROTECTED_FILES=(
@@ -140,7 +139,6 @@ fi
 
 # === DELETE: Always warn ===
 if [[ "$TOOL_NAME" == "Bash" ]]; then
-    COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command // empty')
     if echo "$COMMAND" | grep -qE "rm -r|rmdir|unlink"; then
         # Warning but not blocking (exit 0)
         echo '{"systemMessage": "Warning: File deletion detected. Verify this is intentional."}'

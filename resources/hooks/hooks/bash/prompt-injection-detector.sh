@@ -10,11 +10,10 @@
 
 set -e
 
-# Read JSON from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input // empty')
+TOOL_NAME=$(tool_name)
 
 # Only check tools that handle user-provided text content
 case "$TOOL_NAME" in
@@ -29,13 +28,16 @@ esac
 CONTENT=""
 case "$TOOL_NAME" in
     Bash)
-        CONTENT=$(echo "$TOOL_INPUT" | jq -r '.command // empty')
+        CONTENT=$(tool_input_command)
         ;;
-    Write|Edit)
-        CONTENT=$(echo "$TOOL_INPUT" | jq -r '.content // .new_string // empty')
+    Write)
+        CONTENT=$(tool_input_content)
+        ;;
+    Edit)
+        CONTENT=$(tool_input_new_string)
         ;;
     WebFetch)
-        CONTENT=$(echo "$TOOL_INPUT" | jq -r '.url // empty')
+        CONTENT=$(tool_input_url)
         ;;
 esac
 
@@ -96,17 +98,33 @@ for pattern in "${JAILBREAK_PATTERNS[@]}"; do
     fi
 done
 
+# === BROAD PATTERNS (advisory only) ===
+# Patterns that appear in normal code comments, docs, and test fixtures
+# Downgraded to warnings since they have high false-positive rates
+BROAD_PATTERNS=(
+    "</system>"
+    "### System:"
+    "[INST]"
+    "this is a test"
+    "testing mode"
+)
+
+for pattern in "${BROAD_PATTERNS[@]}"; do
+    if echo "$CONTENT" | grep -qiF "$pattern"; then
+        emit_warn "Possible prompt injection pattern detected: $pattern (advisory only)"
+        exit 0
+    fi
+done
+
 # === DELIMITER INJECTION ===
 # Attempts to inject fake system messages or close prompt sections
+# Specific enough patterns to warrant blocking
 DELIMITER_PATTERNS=(
-    "</system>"
     "<|endoftext|>"
     "<|im_end|>"
     "[/INST]"
-    "[INST]"
     "<<SYS>>"
     "<</SYS>>"
-    "### System:"
     "### Human:"
     "### Assistant:"
     "${BT}${BT}${BT}system"
@@ -115,13 +133,14 @@ DELIMITER_PATTERNS=(
 
 for pattern in "${DELIMITER_PATTERNS[@]}"; do
     if [[ "$CONTENT" == *"$pattern"* ]]; then
-        echo "BLOCKED: Prompt injection detected - delimiter injection: '$pattern'" >&2
+        emit_block "Prompt injection detected - delimiter injection: '$pattern'"
         exit 2
     fi
 done
 
 # === AUTHORITY IMPERSONATION ===
 # Claims of special authority or permissions
+# Specific patterns that warrant blocking
 AUTHORITY_PATTERNS=(
     "anthropic employee"
     "anthropic staff"
@@ -131,13 +150,11 @@ AUTHORITY_PATTERNS=(
     "authorized to bypass"
     "emergency override"
     "security exception"
-    "this is a test"
-    "testing mode"
 )
 
 for pattern in "${AUTHORITY_PATTERNS[@]}"; do
     if [[ "$CONTENT_LOWER" == *"$pattern"* ]]; then
-        echo "BLOCKED: Prompt injection detected - authority impersonation: '$pattern'" >&2
+        emit_block "Prompt injection detected - authority impersonation: '$pattern'"
         exit 2
     fi
 done

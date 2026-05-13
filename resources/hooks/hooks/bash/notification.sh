@@ -9,12 +9,13 @@
 
 set -e
 
-# Read JSON from stdin
-INPUT=$(cat)
+source "$(dirname "$0")/../../lib/envelope.sh"
+read_envelope
 
-# Extract message and title
-MESSAGE=$(echo "$INPUT" | jq -r '.message // "Claude Code Notification"')
-TITLE=$(echo "$INPUT" | jq -r '.title // "Claude Code"')
+# Notification is a flat payload (not a tool-use envelope) — read fields directly.
+# The payload shape is: {"hook_event_name":"Notification","message":"...","title":"..."}
+MESSAGE=$(printf '%s' "$INPUT" | jq -r '.message // "Claude Code Notification"')
+TITLE=$(printf '%s' "$INPUT" | jq -r '.title // "Claude Code"')
 
 # Select sound based on context
 select_sound() {
@@ -56,7 +57,9 @@ if [[ -f "$SOUND_FILE" ]]; then
     afplay "$SOUND_FILE" &
 fi
 
-# Display macOS notification
-osascript -e "display notification \"$MESSAGE\" with title \"$TITLE\" sound name \"\"" 2>/dev/null || true
+# Display macOS notification - pass message via environment to avoid injection
+NOTIF_MSG="$MESSAGE" NOTIF_TITLE="$TITLE" osascript <<'APPLESCRIPT' 2>/dev/null || true
+display notification (system attribute "NOTIF_MSG") with title (system attribute "NOTIF_TITLE")
+APPLESCRIPT
 
 exit 0

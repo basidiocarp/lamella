@@ -4,6 +4,8 @@
 
 set -e
 
+HOOK_INPUT=$(cat)
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/hook-utils.sh"
 
@@ -55,6 +57,14 @@ fi
 if echo "$TOOL_INPUT" | grep -qE "\.mcp\.json|mcp-servers"; then
     COMPONENT_TYPE="tool"
     COMPONENT_PATH=$(echo "$TOOL_INPUT" | grep -oE "[^ ]*\.mcp\.json" | head -1)
+fi
+
+# If no component detected via tool_input, try tool_input.file_path
+if [[ -z "$COMPONENT_TYPE" ]]; then
+    FILE_PATH=$(printf '%s' "${HOOK_INPUT}" | jq -r '.tool_input.file_path // empty' 2>/dev/null || echo "")
+    if [[ -n "$FILE_PATH" ]]; then
+        TOOL_INPUT="$FILE_PATH"
+    fi
 fi
 
 # Skip if no component detected

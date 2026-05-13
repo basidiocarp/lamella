@@ -200,7 +200,6 @@ for ide_pattern in "${IDE_CONFIG_PATTERNS[@]}"; do
 
         # Check for suspicious config modifications
         if [[ "$FILENAME" == *.json ]]; then
-            content=""
             content=$(cat "$FILE_PATH" 2>/dev/null || echo "")
 
             # Look for hooks pointing to external URLs or suspicious commands

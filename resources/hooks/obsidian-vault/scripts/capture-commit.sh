@@ -4,6 +4,8 @@
 
 set -e
 
+HOOK_INPUT=$(cat)
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/hook-utils.sh"
 
@@ -22,12 +24,12 @@ if [[ -z "$VAULT_PATH" ]]; then
     exit 0
 fi
 
-# Get the tool input (the command that was run)
-TOOL_INPUT=$(get_tool_input)
-debug_log "Tool input: $TOOL_INPUT"
+# Get the tool command (the command that was run)
+TOOL_COMMAND=$(get_tool_command)
+debug_log "Tool command: $TOOL_COMMAND"
 
 # Check if this was a git commit command
-if ! echo "$TOOL_INPUT" | grep -q "git commit"; then
+if ! echo "$TOOL_COMMAND" | grep -q "git commit"; then
     debug_log "Not a git commit command"
     exit 0
 fi

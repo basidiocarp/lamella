@@ -125,14 +125,19 @@ commit_note_exists() {
     grep -rl "Commit: $commit_hash" "$vault_path/journal/commits" --include="*.md" 2>/dev/null | head -1
 }
 
-# Get tool input from environment (set by Claude Code hooks)
+# Get tool input from HOOK_INPUT variable (read from stdin by each hook script)
 get_tool_input() {
-    echo "${CLAUDE_TOOL_INPUT:-}"
+    printf '%s' "${HOOK_INPUT}" | jq -r '.tool_input // empty'
 }
 
-# Get tool output from environment
+# Get tool command from HOOK_INPUT variable
+get_tool_command() {
+    printf '%s' "${HOOK_INPUT}" | jq -r '.tool_input.command // empty'
+}
+
+# Get tool output from HOOK_INPUT variable
 get_tool_output() {
-    echo "${CLAUDE_TOOL_OUTPUT:-}"
+    printf '%s' "${HOOK_INPUT}" | jq -r '.tool_response.output // .tool_response.stdout // empty'
 }
 
 # Log to debug file (optional)
@@ -147,4 +152,4 @@ debug_log() {
 
 export -f get_vault_path is_capture_enabled check_vault slugify get_date get_datetime
 export -f create_frontmatter get_project_name get_git_branch ensure_dir
-export -f commit_note_exists get_tool_input get_tool_output debug_log
+export -f commit_note_exists get_tool_input get_tool_command get_tool_output debug_log

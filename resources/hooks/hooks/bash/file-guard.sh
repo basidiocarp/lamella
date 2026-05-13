@@ -91,23 +91,15 @@ fi
 
 # Check for bypass attempts
 if detect_bypass "$FILE_PATH"; then
-    cat << EOF
-{
-  "block": true,
-  "systemMessage": "⛔ File access blocked: Variable expansion detected in path\n\nPath: $FILE_PATH\n\nThis looks like a bypass attempt. Use literal paths only."
-}
-EOF
+    jq -n --arg msg "⛔ File access blocked: Variable expansion detected in path\n\nPath: $FILE_PATH\n\nThis looks like a bypass attempt. Use literal paths only." \
+      '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"block","permissionDecisionReason":$msg}}'
     exit 2
 fi
 
 # Check protection patterns
 if is_protected "$FILE_PATH"; then
-    cat << EOF
-{
-  "block": true,
-  "systemMessage": "⛔ File access blocked: Protected file\n\nPath: $FILE_PATH\n\nThis file is protected by .agentignore or security policy.\nTo access it, remove from ignore file and confirm manually."
-}
-EOF
+    jq -n --arg msg "⛔ File access blocked: Protected file\n\nPath: $FILE_PATH\n\nThis file is protected by .agentignore or security policy.\nTo access it, remove from ignore file and confirm manually." \
+      '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"block","permissionDecisionReason":$msg}}'
     exit 2
 fi
 

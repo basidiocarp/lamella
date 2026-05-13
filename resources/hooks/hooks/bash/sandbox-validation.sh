@@ -41,7 +41,7 @@ STRICT_MODE="${SANDBOX_VALIDATION_STRICT:-false}"  # Set to "true" to require sa
 PRODUCTION_MARKER="${SANDBOX_VALIDATION_MARKER:-.production}"  # File marker for production environments
 
 # Only validate Bash tool
-if [ "${CLAUDE_TOOL_NAME:-}" != "Bash" ]; then
+if [ "$TOOL_NAME" != "Bash" ]; then
   exit 0
 fi
 

@@ -31,11 +31,8 @@ TSC_OUTPUT=$(npx tsc --noEmit "$FILE_PATH" 2>&1 || true)
 
 # Check if there are errors (not just warnings)
 if echo "$TSC_OUTPUT" | grep -q "error TS"; then
-    cat << EOF
-{
-  "systemMessage": "⚠ TypeScript errors in $FILE_PATH:\n\n$TSC_OUTPUT\n\nFix these before proceeding."
-}
-EOF
+    MSG="⚠ TypeScript errors in ${FILE_PATH}:\n\n${TSC_OUTPUT}\n\nFix these before proceeding."
+    jq -n --arg msg "$MSG" '{"systemMessage": $msg}'
 fi
 
 exit 0

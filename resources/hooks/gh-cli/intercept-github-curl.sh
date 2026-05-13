@@ -53,4 +53,5 @@ elif [[ $cmd =~ gist\.github\.com/ ]]; then
 fi
 
 jq -n --arg reason "${suggestion}. The gh CLI uses your authenticated GitHub token and works with private repos." \
-  '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":$reason}}'
+  '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"block","permissionDecisionReason":$reason}}'
+exit 2

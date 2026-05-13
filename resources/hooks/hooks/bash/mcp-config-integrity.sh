@@ -42,12 +42,23 @@ PROJECT_MCP=".mcp.json"
 
 WARNINGS=()
 
+# Platform-aware hash function
+hash_file() {
+    if command -v sha256sum &>/dev/null; then
+        sha256sum "$1" | cut -d' ' -f1
+    elif command -v shasum &>/dev/null; then
+        shasum -a 256 "$1" | cut -d' ' -f1
+    else
+        openssl dgst -sha256 -r "$1" | cut -d' ' -f1
+    fi
+}
+
 # === GLOBAL MCP CONFIG CHECK ===
 if [[ -f "$MCP_CONFIG" ]]; then
     # Check if baseline exists
     if [[ -f "$MCP_BASELINE" ]]; then
         # Compute current hash
-        CURRENT_HASH=$(sha256sum "$MCP_CONFIG" 2>/dev/null | awk '{print $1}')
+        CURRENT_HASH=$(hash_file "$MCP_CONFIG" 2>/dev/null)
         BASELINE_HASH=$(awk '{print $1}' "$MCP_BASELINE" 2>/dev/null || echo "")
 
         if [[ -n "$CURRENT_HASH" && -n "$BASELINE_HASH" && "$CURRENT_HASH" != "$BASELINE_HASH" ]]; then
@@ -55,7 +66,7 @@ if [[ -f "$MCP_CONFIG" ]]; then
         fi
     else
         # No baseline - suggest creating one
-        WARNINGS+=("No MCP config baseline found. Consider running: sha256sum ~/.claude.json > ~/.claude/.mcp-baseline.sha256")
+        WARNINGS+=("No MCP config baseline found. Consider running: hash_file ~/.claude.json > ~/.claude/.mcp-baseline.sha256")
     fi
 
     # === CHECK FOR SUSPICIOUS MCP SERVERS ===
@@ -78,8 +89,9 @@ if [[ -f "$MCP_CONFIG" ]]; then
     fi
 
     # Check for external URLs in commands
-    if echo "$MCP_CONTENT" | grep -qE 'https?://[^"]+' | grep -vE 'npm|github|registry'; then
-        WARNINGS+=("MCP config references external URLs. Verify these are trusted sources.")
+    EXTERNAL_URLS=$(echo "$MCP_CONTENT" | grep -oE 'https?://[^"]+' | grep -vE 'npm|github|registry' || true)
+    if [ -n "$EXTERNAL_URLS" ]; then
+        WARNINGS+=("MCP config references external URLs: $EXTERNAL_URLS")
     fi
 fi
 

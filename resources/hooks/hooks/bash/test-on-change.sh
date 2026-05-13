@@ -62,11 +62,8 @@ if [[ -n "$TEST_FILE" ]]; then
 
     # Check for failures
     if echo "$TEST_OUTPUT" | grep -qE "(FAIL|failed|error|Error)"; then
-        cat << EOF
-{
-  "systemMessage": "⚠ Tests failed in $TEST_FILE:\n\n$TEST_OUTPUT\n\nFix implementation or update tests."
-}
-EOF
+        MSG="⚠ Tests failed in ${TEST_FILE}:\n\n${TEST_OUTPUT}\n\nFix implementation or update tests."
+        jq -n --arg msg "$MSG" '{"systemMessage": $msg}'
     fi
 fi
 

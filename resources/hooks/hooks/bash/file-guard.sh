@@ -6,6 +6,9 @@
 
 set -euo pipefail
 
+# Enable recursive glob patterns
+shopt -s globstar extglob 2>/dev/null || true
+
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name')
 
@@ -50,7 +53,7 @@ is_protected() {
             [[ "$pattern" =~ ^#.*$ || -z "$pattern" ]] && continue
 
             # Convert gitignore pattern to bash glob
-            if [[ "$file" == $pattern || "$file" =~ $pattern ]]; then
+            if [[ "$file" == $pattern ]]; then
                 return 0
             fi
         done < "$IGNORE_FILE"
@@ -58,7 +61,7 @@ is_protected() {
 
     # Check critical patterns
     for pattern in "${CRITICAL_PATTERNS[@]}"; do
-        if [[ "$file" == $pattern || "$file" =~ $pattern ]]; then
+        if [[ "$file" == $pattern ]]; then
             return 0
         fi
     done

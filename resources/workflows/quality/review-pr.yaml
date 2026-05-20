@@ -1,0 +1,78 @@
+schema_version: "1.0"
+workflow_id: review-pr
+name: Parallel PR Review
+description: >
+  Runs code review, error-handler review, and test coverage review in parallel,
+  then synthesizes findings into a prioritized action list.
+  Use after completing a feature branch before creating a PR.
+
+nodes:
+  - kind: prompt
+    id: review-code
+    prompt: |
+      Run a comprehensive code review on the current implementation.
+      Check for:
+      - Security vulnerabilities
+      - Performance issues
+      - Maintainability and readability
+      - Best practices and design patterns
+      - Potential bugs or edge cases
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: review-errors
+    prompt: |
+      Review the code for error handling and silent failure risks.
+      Check for:
+      - Unhandled exceptions or edge cases
+      - Silent failures that could mask bugs
+      - Missing error messages or debugging information
+      - Error propagation and recovery strategies
+      - Logging and observability gaps
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: review-tests
+    prompt: |
+      Review the test coverage and quality.
+      Check for:
+      - Test gaps (untested code paths)
+      - Weak assertions or incomplete test scenarios
+      - Flaky or brittle tests
+      - Missing edge case coverage
+      - Integration vs unit test balance
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: synthesize
+    prompt: |
+      You have three parallel review outputs:
+
+      Code review findings:
+      $review-code.output
+
+      Error handler review findings:
+      $review-errors.output
+
+      Test coverage review findings:
+      $review-tests.output
+
+      Synthesize these into a single prioritized list:
+      1. Blockers (must fix before PR)
+      2. Concerns (should fix, explain why if skipping)
+      3. Nits (optional improvements)
+
+      Be concrete. Reference specific file paths and line numbers.
+    context: fresh
+    trigger_rule: one_success
+
+edges:
+  - { from: review-code,   to: synthesize }
+  - { from: review-errors, to: synthesize }
+  - { from: review-tests,  to: synthesize }

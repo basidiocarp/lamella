@@ -18,7 +18,7 @@ help: ## Show this help
 		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
-validate: lint-skills sync-check ## Run all CI validators
+validate: lint-skills sync-check validate-workflows ## Run all CI validators
 	@echo "Running validators..."
 	@bash scripts/ci/run-validate-suite.sh
 	@echo "Running plugin validators..."
@@ -29,6 +29,9 @@ validate: lint-skills sync-check ## Run all CI validators
 	done; \
 	[ "$$PLUGIN_FAIL" -eq 0 ] || (echo "$$PLUGIN_FAIL plugin validator(s) failed" && exit 1)
 	@echo "All validators passed."
+
+validate-workflows: ## Validate all workflow YAML files are syntactically correct
+	@bash scripts/ci/validate-workflows.sh
 
 sync-check: ## Verify skill sync scripts and adapter paths are intact
 	@bash scripts/sync-skills.sh --check

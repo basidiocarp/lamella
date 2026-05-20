@@ -1,0 +1,42 @@
+schema_version: "1.0"
+workflow_id: fix-github-issue
+name: Fix GitHub Issue
+description: >
+  Plans a fix for a GitHub issue, implements it, validates, and opens a PR.
+  Requires ISSUE_URL or ISSUE_NUMBER in env.
+
+nodes:
+  - kind: prompt
+    id: plan
+    prompt: |
+      Analyze the issue at $ISSUE_URL and produce an implementation plan.
+      Identify the owning repo, likely files, and verification commands.
+    context: fresh
+
+  - kind: prompt
+    id: implement
+    prompt: |
+      Implement the plan:
+      $plan.output
+
+      Stay inside the owning repo. Run repo-local verification before finishing.
+
+  - kind: bash
+    id: validate
+    command: "if [ -f '$REPO_PATH/Cargo.toml' ]; then cd $REPO_PATH && cargo test 2>&1; elif [ -f '$REPO_PATH/package.json' ]; then cd $REPO_PATH && npm test 2>&1; else echo 'No test runner found'; exit 1; fi"
+
+  - kind: prompt
+    id: create-pr
+    prompt: |
+      The implementation is complete and tests pass.
+      Create a pull request summarizing the changes and linking to the issue.
+      Validation output: $validate.output
+
+edges:
+  - { from: plan,      to: implement }
+  - { from: implement, to: validate }
+  - { from: validate,  to: create-pr }
+
+env:
+  ISSUE_URL: ""
+  REPO_PATH: "."

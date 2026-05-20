@@ -4,8 +4,17 @@
   "source_plugin": "core-quality",
   "dependencies": [],
   "resources": {
-    "skills": [],
-    "workflows": [],
+    "skills": [
+      "core/code-review-pro",
+      "core/systematic-debugging",
+      "core/test-debugging",
+      "core/deep-module-review"
+    ],
+    "workflows": [
+      "quality/review-pr.yaml",
+      "quality/do-and-judge.yaml",
+      "development/fix-github-issue.yaml"
+    ],
     "templates": [],
     "scripts": []
   },

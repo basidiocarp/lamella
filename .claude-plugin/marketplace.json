@@ -4,7 +4,7 @@
     "name": "William Newton"
   },
   "metadata": {
-    "description": "Lamella — curated skills, agents, and commands for Claude Code",
+    "description": "Lamella \u2014 curated skills, agents, and commands for Claude Code",
     "version": "0.7.0"
   },
   "plugins": [
@@ -205,6 +205,17 @@
       },
       "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
       "version": "0.7.0"
+    },
+    {
+      "name": "ecosystem",
+      "description": "Curated plugin set for the basidiocarp ecosystem. Installs the tools, skills, and rules needed to work with mycelium, hyphae, canopy, cortina, stipe, and related tools. Language-specific and domain-specific plugins are optional extras.",
+      "version": "0.7.0",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/basidiocarp/lamella.git",
+        "path": "plugins/ecosystem",
+        "ref": "gh-pages"
+      }
     },
     {
       "name": "enterprise-it",

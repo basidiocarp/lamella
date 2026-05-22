@@ -1,0 +1,32 @@
+{
+  "$schema": "./schema.json",
+  "name": "ecosystem",
+  "version": "1.0.0",
+  "author": "William Newton",
+  "license": "MIT",
+  "description": "Curated plugin set for the basidiocarp ecosystem. Installs the tools, skills, and rules needed to work with mycelium, hyphae, canopy, cortina, stipe, and related tools. Language-specific and domain-specific plugins are optional extras.",
+  "tags": [
+    "ecosystem",
+    "basidiocarp",
+    "bundle",
+    "default"
+  ],
+  "dependencies": [
+    "core",
+    "meta",
+    "ai-agents",
+    "workflow",
+    "tools",
+    "rust",
+    "typescript"
+  ],
+  "resources": {
+    "skills": [],
+    "agents": [],
+    "commands": [],
+    "rules": [],
+    "hooks": [],
+    "workflows": [],
+    "templates": []
+  }
+}

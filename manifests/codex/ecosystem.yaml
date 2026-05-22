@@ -1,0 +1,24 @@
+{
+  "name": "ecosystem",
+  "description": "Curated plugin set for the basidiocarp ecosystem. Installs the tools, skills, and rules needed to work with mycelium, hyphae, canopy, cortina, stipe, and related tools. Language-specific and domain-specific plugins are optional extras.",
+  "source_plugin": "ecosystem",
+  "dependencies": [
+    "core",
+    "meta",
+    "ai-agents",
+    "workflow",
+    "tools",
+    "rust",
+    "typescript"
+  ],
+  "resources": {
+    "skills": [],
+    "workflows": [],
+    "templates": [],
+    "scripts": []
+  },
+  "options": {
+    "include_workflow_wrappers": true,
+    "include_template_wrappers": true
+  }
+}

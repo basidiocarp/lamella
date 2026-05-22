@@ -190,8 +190,30 @@ parse_args() {
     done
 }
 
+ensure_content_root() {
+    local sibling_path
+    sibling_path="$(cd "$SCRIPT_DIR/.." && pwd)/lamella-skills"
+    if [[ -n "${LAMELLA_CONTENT_ROOT:-}" ]]; then
+        log_info "Using LAMELLA_CONTENT_ROOT: $LAMELLA_CONTENT_ROOT"
+        return
+    fi
+    if [[ -d "$sibling_path/skills" ]]; then
+        export LAMELLA_CONTENT_ROOT="$sibling_path"
+        log_info "Using sibling lamella-skills: $sibling_path"
+        return
+    fi
+    log_info "lamella-skills not found at $sibling_path — cloning..."
+    if ! git clone https://github.com/basidiocarp/lamella-skills.git "$sibling_path" 2>&1; then
+        log_warn "Could not clone lamella-skills — falling back to bundled resources/"
+        return
+    fi
+    export LAMELLA_CONTENT_ROOT="$sibling_path"
+    log_success "lamella-skills ready at $sibling_path"
+}
+
 main() {
     check_deps
+    ensure_content_root
     parse_args "$@"
 
     if $LIST_ONLY; then

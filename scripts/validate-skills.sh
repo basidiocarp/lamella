@@ -39,10 +39,13 @@ check_skill() {
     fi
 }
 
+# Resolve content root (supports LAMELLA_CONTENT_ROOT and sibling lamella-skills/)
+source "$(dirname "${BASH_SOURCE[0]}")/lib/content-root.sh"
+
 # Find and check all SKILL.md files
 while IFS= read -r -d '' file; do
     check_skill "$file"
-done < <(find resources/skills -name "SKILL.md" -print0 2>/dev/null)
+done < <(find "$CONTENT_ROOT/skills" -name "SKILL.md" -print0 2>/dev/null)
 
 # Build JSON output
 FINDINGS_JSON="["

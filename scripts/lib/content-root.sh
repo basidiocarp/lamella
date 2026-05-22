@@ -23,7 +23,13 @@ if [[ -n "${LAMELLA_CONTENT_ROOT:-}" ]]; then
         CONTENT_ROOT="$_CONTENT_ROOT_BASE_DIR/$LAMELLA_CONTENT_ROOT"
     fi
 else
-    CONTENT_ROOT="$_CONTENT_ROOT_BASE_DIR/resources"
+    # Try the sibling lamella-skills repo first; fall back to the local resources/ tree.
+    _SIBLING_ROOT="$(cd "$_CONTENT_ROOT_BASE_DIR/.." && pwd)/lamella-skills"
+    if [[ -d "$_SIBLING_ROOT/skills" ]]; then
+        CONTENT_ROOT="$_SIBLING_ROOT"
+    else
+        CONTENT_ROOT="$_CONTENT_ROOT_BASE_DIR/resources"
+    fi
 fi
 
 export CONTENT_ROOT

@@ -75,11 +75,14 @@ check_skill() {
     fi
 }
 
-# Check all SKILL.md files under resources/skills/.
+# Resolve content root (supports LAMELLA_CONTENT_ROOT and sibling lamella-skills/)
+source "$(dirname "${BASH_SOURCE[0]}")/lib/content-root.sh"
+
+# Check all SKILL.md files under $CONTENT_ROOT/skills/.
 # Non-SKILL.md files (references, guides, etc.) are not subject to this lint.
 while IFS= read -r -d '' file; do
     check_skill "$file"
-done < <(find resources/skills -name "SKILL.md" -print0 2>/dev/null)
+done < <(find "$CONTENT_ROOT/skills" -name "SKILL.md" -print0 2>/dev/null)
 
 # Also check SKILL_TEMPLATE.md is excluded — it lives at the top level
 # and is not a real skill, so it is never passed to check_skill above.

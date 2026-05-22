@@ -8,7 +8,9 @@ set -euo pipefail
 # - hook-002 SHOULD: every hook entry's hooks array items have a type field
 # - hook-003 MAY: every hook entry has a matcher field (only applicable to PreToolUse/PostToolUse)
 
-HOOKS_FILE="resources/hooks/hooks.json"
+# Resolve content root (supports LAMELLA_CONTENT_ROOT and sibling lamella-skills/)
+source "$(dirname "${BASH_SOURCE[0]}")/lib/content-root.sh"
+HOOKS_FILE="$CONTENT_ROOT/hooks/hooks.json"
 FINDINGS=()
 MUST_COUNT=0
 

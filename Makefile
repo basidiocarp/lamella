@@ -49,11 +49,11 @@ build: ## Build all Claude plugins to dist/claude/plugins/
 
 build-adapters: ## Run cross-agent install adapters for all platforms
 	@echo "Running cross-agent install adapters..."
-	@bash -c 'source scripts/adapters/registry.sh && run_all_adapters resources/skills false'
+	@bash -c 'source scripts/lib/content-root.sh && source scripts/adapters/registry.sh && run_all_adapters "$$CONTENT_ROOT/skills" false'
 	@echo "Adapters complete."
 
 build-adapters-dry: ## Dry run: show what adapters would do
-	@bash -c 'source scripts/adapters/registry.sh && run_all_adapters resources/skills true'
+	@bash -c 'source scripts/lib/content-root.sh && source scripts/adapters/registry.sh && run_all_adapters "$$CONTENT_ROOT/skills" true'
 
 build-marketplace: build-adapters ## Build all plugins + marketplace.json
 	@bash $(LAMELLA) build-marketplace

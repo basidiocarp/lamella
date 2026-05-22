@@ -13,16 +13,18 @@ ADAPTERS=(
     "gemini:scripts/adapters/gemini.sh:dist/gemini"
 )
 
-CANONICAL_DIR="resources/skills"
+# Resolve content root (supports LAMELLA_CONTENT_ROOT and sibling lamella-skills/)
+source "$(dirname "${BASH_SOURCE[0]}")/lib/content-root.sh"
+CANONICAL_DIR="$CONTENT_ROOT/skills"
 
 # Usage: check_adapters
 # Verifies adapter scripts exist, are executable, and canonical dir exists
 check_adapters() {
     local exit_code=0
 
-    # Check canonical directory exists
-    if [[ ! -d "$REPO_ROOT/$CANONICAL_DIR" ]]; then
-        echo "ERROR: canonical directory not found: $REPO_ROOT/$CANONICAL_DIR" >&2
+    # Check canonical directory exists (CANONICAL_DIR is now absolute)
+    if [[ ! -d "$CANONICAL_DIR" ]]; then
+        echo "ERROR: canonical directory not found: $CANONICAL_DIR" >&2
         return 1
     fi
 
@@ -47,7 +49,7 @@ check_adapters() {
 # Usage: dry_run
 # Lists what would be processed without modifying files
 dry_run() {
-    echo "Canonical source: $REPO_ROOT/$CANONICAL_DIR"
+    echo "Canonical source: $CANONICAL_DIR"
     echo "Adapters to run:"
     echo ""
 
@@ -59,8 +61,8 @@ dry_run() {
 
         # Count skills in canonical dir
         local skill_count=0
-        if [[ -d "$REPO_ROOT/$CANONICAL_DIR" ]]; then
-            skill_count=$(find "$REPO_ROOT/$CANONICAL_DIR" -name "SKILL.md" -o -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+        if [[ -d "$CANONICAL_DIR" ]]; then
+            skill_count=$(find "$CANONICAL_DIR" -name "SKILL.md" -o -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
         fi
         echo "    Skills to process: $skill_count"
         echo ""

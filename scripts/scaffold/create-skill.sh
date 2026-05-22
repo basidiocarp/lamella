@@ -3,8 +3,17 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# Where to write new skills — respects LAMELLA_CONTENT_ROOT for testing.
 CONTENT_ROOT="${LAMELLA_CONTENT_ROOT:-$BASE_DIR/resources}"
-TEMPLATE="$BASE_DIR/resources/templates/skills/SKILL.md.template"
+
+# Where to find scaffold templates — always the real content root, not the test override.
+if [[ -d "$BASE_DIR/../lamella-skills/templates" ]]; then
+    _TEMPLATE_ROOT="$(cd "$BASE_DIR/.." && pwd)/lamella-skills"
+else
+    _TEMPLATE_ROOT="$BASE_DIR/resources"
+fi
+TEMPLATE="$_TEMPLATE_ROOT/templates/skills/SKILL.md.template"
 
 usage() {
     cat <<'EOF'

@@ -9,9 +9,12 @@
 
 const fs = require('fs');
 const path = require('path');
-const { CONTENT_ROOT, BASE_DIR } = require('../lib/content-root');
+const { CONTENT_ROOT, BASE_DIR, LOCAL_RESOURCES_DIR } = require('../lib/content-root');
 
 const MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
+
+// Secondary skills root for lamella-local content (resources/skills/meta/).
+const LOCAL_SKILLS_DIR = path.join(LOCAL_RESOURCES_DIR, 'skills');
 
 // Map resource types to their base directories.
 // Content resources resolve via CONTENT_ROOT; infrastructure resources stay under BASE_DIR.
@@ -84,7 +87,10 @@ function validateManifest(manifestPath) {
         continue;
       }
 
-      if (!fs.existsSync(fullPath)) {
+      // For skills, also check the lamella-local resources/skills/ tree (e.g. meta/).
+      const exists = fs.existsSync(fullPath) ||
+        (type === 'skills' && fs.existsSync(path.join(LOCAL_SKILLS_DIR, entry)));
+      if (!exists) {
         console.error(`ERROR: ${name} - Missing ${type}: ${entry}`);
         errors++;
       }

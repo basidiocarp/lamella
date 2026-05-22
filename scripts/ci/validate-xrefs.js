@@ -8,7 +8,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { CONTENT_ROOT, BASE_DIR } = require('../lib/content-root');
+const { CONTENT_ROOT, BASE_DIR, LOCAL_RESOURCES_DIR } = require('../lib/content-root');
 
 // Directories to scan for markdown files containing references.
 // These are relative to CONTENT_ROOT (subagents, commands, etc.).
@@ -108,6 +108,12 @@ function referenceExists(ref) {
     const contentPath = path.join(CONTENT_ROOT, ref);
     candidatePaths.push(contentPath);
     candidatePaths.push(`${contentPath}.md`);
+    // Also check the lamella-local resources/ tree for meta/ and other local content.
+    if (LOCAL_RESOURCES_DIR !== CONTENT_ROOT) {
+      const localPath = path.join(LOCAL_RESOURCES_DIR, ref);
+      candidatePaths.push(localPath);
+      candidatePaths.push(`${localPath}.md`);
+    }
   }
 
   for (const candidate of candidatePaths) {

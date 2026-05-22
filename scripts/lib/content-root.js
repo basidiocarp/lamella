@@ -11,6 +11,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 
 const BASE_DIR = path.join(__dirname, '../..');
 
@@ -21,7 +22,15 @@ if (process.env.LAMELLA_CONTENT_ROOT) {
     ? envRoot
     : path.join(BASE_DIR, envRoot);
 } else {
-  CONTENT_ROOT = path.join(BASE_DIR, 'resources');
+  const siblingRoot = path.join(BASE_DIR, '..', 'lamella-skills');
+  if (fs.existsSync(path.join(siblingRoot, 'skills'))) {
+    CONTENT_ROOT = siblingRoot;
+  } else {
+    CONTENT_ROOT = path.join(BASE_DIR, 'resources');
+  }
 }
 
-module.exports = { CONTENT_ROOT, BASE_DIR };
+// Always points to lamella's own resources/ tree (for meta skills and local-only content).
+const LOCAL_RESOURCES_DIR = path.join(BASE_DIR, 'resources');
+
+module.exports = { CONTENT_ROOT, BASE_DIR, LOCAL_RESOURCES_DIR };

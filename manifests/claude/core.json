@@ -133,6 +133,7 @@
       "post-edit-typecheck.js",
       "post-edit-console-warn.js",
       "pre-write-doc-warn.js",
+      "rhizome-advisory.js",
       "suggest-compact.js",
       "check-console-log.js",
       "evaluate-session.js",

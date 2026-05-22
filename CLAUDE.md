@@ -34,7 +34,7 @@ Lamella is the packaging and build system for shared coding-agent content. It tu
 
 | What | Path |
 |------|------|
-| Source resources | `$LAMELLA_CONTENT_ROOT` (default: `../lamella-skills`; fallback: `resources/`) |
+| Source resources | `$LAMELLA_CONTENT_ROOT` (default: sibling `../lamella-skills`) |
 | Manifests | `manifests/` |
 | Generated output | `dist/` |
 | Installed Claude plugins | `~/.claude/plugins/` |
@@ -60,20 +60,29 @@ make build
 
 ```text
 lamella/
-├── resources/   source skills, commands, hooks, rules, subagents, templates
 ├── manifests/   Claude and Codex packaging metadata
 ├── builders/    build and export scripts
 ├── scripts/     validators and packaging helpers
 ├── tools/       support tooling such as skills-ref
 ├── docs/        authoring and reference docs
 └── dist/        generated output
+
+../lamella-skills/   consumable content root (sibling repo)
+├── skills/
+├── hooks/
+├── commands/
+├── rules/
+├── subagents/
+├── workflows/
+├── templates/
+└── ...
 ```
 
-- **resources/**: the source of truth for packaged content.
-- **resources/presets/**: named install surfaces and workflow presets.
+- **lamella-skills**: the source of truth for all packaged content. Resolved via `LAMELLA_CONTENT_ROOT`; defaults to the sibling `../lamella-skills` repo.
 - **manifests/**: plugin and export boundaries.
 - **scripts/ci/**: structural validation.
 - **builders/** and `./lamella`: the build pipeline and wrapper entry point.
+- **lamella-skills** (sibling): consumable content consumed at build and install time.
 
 ---
 

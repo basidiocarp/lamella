@@ -1,9 +1,0 @@
-{
-  "_lamella_note": "Example config. Pin @playwright/mcp to a specific version before use.",
-  "playwright": {
-    "command": "npx",
-    "args": [
-      "@playwright/mcp"
-    ]
-  }
-}

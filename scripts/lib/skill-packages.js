@@ -1,22 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 const { loadMarkdownFrontmatter, validateRequiresValue } = require('./requires');
-const { CONTENT_ROOT, BASE_DIR, LOCAL_RESOURCES_DIR } = require('./content-root');
+const { CONTENT_ROOT, BASE_DIR } = require('./content-root');
 
 const SKILLS_DIR = path.join(CONTENT_ROOT, 'skills');
-// Local lamella-owned skills (e.g. meta/) not present in the external content root.
-const LOCAL_SKILLS_DIR = path.join(LOCAL_RESOURCES_DIR, 'skills');
 const CLAUDE_MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'claude');
 const CODEX_MANIFESTS_DIR = path.join(BASE_DIR, 'manifests', 'codex');
 const VALID_SKILL_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const RESERVED_NAME_SEGMENTS = new Set(['anthropic', 'claude']);
 const PORTABLE_CODEX_RESOURCE_TYPES = ['skills', 'workflows', 'templates', 'scripts'];
 
-function scanSkillsDir(dir, out) {
-  if (!fs.existsSync(dir)) return;
-  for (const category of fs.readdirSync(dir, { withFileTypes: true })) {
+function listSkillDirs() {
+  if (!fs.existsSync(SKILLS_DIR)) {
+    return [];
+  }
+
+  const out = [];
+  for (const category of fs.readdirSync(SKILLS_DIR, { withFileTypes: true })) {
     if (!category.isDirectory() || category.name.startsWith('.')) continue;
-    const categoryPath = path.join(dir, category.name);
+    const categoryPath = path.join(SKILLS_DIR, category.name);
     for (const skill of fs.readdirSync(categoryPath, { withFileTypes: true })) {
       if (!skill.isDirectory() || skill.name.startsWith('.')) continue;
       out.push({
@@ -27,19 +29,6 @@ function scanSkillsDir(dir, out) {
         skillMd: path.join(categoryPath, skill.name, 'SKILL.md'),
       });
     }
-  }
-}
-
-function listSkillDirs() {
-  if (!fs.existsSync(SKILLS_DIR) && !fs.existsSync(LOCAL_SKILLS_DIR)) {
-    return [];
-  }
-
-  const out = [];
-  scanSkillsDir(SKILLS_DIR, out);
-  // Also include lamella-local skills (e.g. meta/) not shipped in the external content root.
-  if (LOCAL_SKILLS_DIR !== SKILLS_DIR) {
-    scanSkillsDir(LOCAL_SKILLS_DIR, out);
   }
 
   return out.sort((a, b) => a.relPath.localeCompare(b.relPath));

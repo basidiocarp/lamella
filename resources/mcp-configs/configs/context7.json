@@ -1,9 +1,0 @@
-{
-  "_lamella_note": "Example config. Pin @upstash/context7-mcp to a specific version before use.",
-  "context7": {
-    "command": "npx",
-    "args": [
-      "@upstash/context7-mcp"
-    ]
-  }
-}

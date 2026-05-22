@@ -34,7 +34,7 @@ Lamella is the packaging and build system for shared coding-agent content. It tu
 
 | What | Path |
 |------|------|
-| Source resources | `resources/` |
+| Source resources | `$LAMELLA_CONTENT_ROOT` (default: `../lamella-skills`; fallback: `resources/`) |
 | Manifests | `manifests/` |
 | Generated output | `dist/` |
 | Installed Claude plugins | `~/.claude/plugins/` |

@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
-const { validateManifestAlignment, validateSkillFrontmatter } = require('../lib/skill-packages');
+const { validateManifestAlignment, validateSkillFrontmatter, detectHardcodedHomePaths } = require('../lib/skill-packages');
 
 function captureValidation(skill) {
   const errors = [];
@@ -199,11 +199,156 @@ function testManifestAlignmentRejectsPortableResourceDrift() {
   }
 }
 
+function testDetectHardcodedHomePathsFindsRealPaths() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lamella-hardcoded-paths-real-'));
+  try {
+    const skill = writeSkillFile(
+      tempRoot,
+      'test',
+      'hardcoded-real',
+      `---
+name: hardcoded-real
+description: Test skill with real hardcoded paths
+---
+
+# Test Skill
+
+Build script at /Users/alice/projects/build.sh
+`,
+    );
+
+    const { warnings, errors } = captureValidation(skill);
+    assert.equal(errors.length, 0, `unexpected errors: ${errors.join('; ')}`);
+    assert.ok(warnings.some((msg) => msg.includes('hardcoded user-home path found') && msg.includes('/Users/alice')), 'should warn about /Users/alice path');
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function testDetectHardcodedHomePathsIgnoresPlaceholders() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lamella-hardcoded-paths-placeholder-'));
+  try {
+    const skill = writeSkillFile(
+      tempRoot,
+      'test',
+      'hardcoded-placeholder',
+      `---
+name: hardcoded-placeholder
+description: Test skill with placeholder paths
+---
+
+# Test Skill
+
+Template path: /Users/you/projects/example
+Or: /home/username/build.sh
+Environment: \${HOME}/scripts/run.sh
+`,
+    );
+
+    const { warnings, errors } = captureValidation(skill);
+    assert.equal(errors.length, 0, `unexpected errors: ${errors.join('; ')}`);
+    const pathWarnings = warnings.filter((msg) => msg.includes('hardcoded user-home path found'));
+    assert.equal(pathWarnings.length, 0, `should not warn about placeholder paths; got: ${pathWarnings.join('; ')}`);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function testDetectHardcodedHomePathsScansScriptFiles() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lamella-hardcoded-paths-scripts-'));
+  try {
+    // Create a skill with a script file
+    const skillDir = path.join(tempRoot, 'skills', 'test', 'hardcoded-script');
+    fs.mkdirSync(skillDir, { recursive: true });
+
+    const skillMd = path.join(skillDir, 'SKILL.md');
+    fs.writeFileSync(
+      skillMd,
+      `---
+name: hardcoded-script
+description: Test skill with hardcoded paths in scripts
+---
+
+# Test Skill
+`,
+    );
+
+    // Create a build script with a hardcoded path
+    const buildScript = path.join(skillDir, 'build.sh');
+    fs.writeFileSync(
+      buildScript,
+      `#!/bin/bash
+# Build script
+cd /Users/bob/projects/myapp
+npm run build
+`,
+    );
+
+    const skill = {
+      relPath: 'test/hardcoded-script',
+      name: 'hardcoded-script',
+      skillMd,
+    };
+
+    const { warnings, errors } = captureValidation(skill);
+    assert.equal(errors.length, 0, `unexpected errors: ${errors.join('; ')}`);
+    assert.ok(warnings.some((msg) => msg.includes('hardcoded user-home path found') && msg.includes('/Users/bob')), 'should warn about path in script file');
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+// Regression guard for shared global-flag regex state: two files in one walk,
+// each holding a distinct real path. If the detector reused a stateful regex
+// object across files (carrying lastIndex), the second file's hit could be
+// skipped. Both must surface — and as warnings, never errors, so a green
+// `make validate` stays green on legitimately path-bearing bundled content.
+function testDetectHardcodedHomePathsScansMultipleFiles() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lamella-hardcoded-paths-multi-'));
+  try {
+    const skillDir = path.join(tempRoot, 'skills', 'test', 'hardcoded-multi');
+    fs.mkdirSync(skillDir, { recursive: true });
+
+    const skillMd = path.join(skillDir, 'SKILL.md');
+    fs.writeFileSync(
+      skillMd,
+      `---
+name: hardcoded-multi
+description: Test skill with paths across multiple files
+---
+
+# Test Skill
+
+See /Users/carol/projects for details.
+`,
+    );
+
+    fs.writeFileSync(
+      path.join(skillDir, 'setup.sh'),
+      `#!/bin/bash
+cd /Users/dave/work
+`,
+    );
+
+    const skill = { relPath: 'test/hardcoded-multi', name: 'hardcoded-multi', skillMd };
+    const { warnings, errors } = captureValidation(skill);
+    assert.equal(errors.length, 0, `unexpected errors: ${errors.join('; ')}`);
+    assert.ok(warnings.some((msg) => msg.includes('/Users/carol')), 'should warn about path in markdown body');
+    assert.ok(warnings.some((msg) => msg.includes('/Users/dave')), 'should warn about path in second (script) file');
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
 function main() {
   testValidationRejectsStaleSkillMetadata();
   testScaffoldCreatesValidatorCompatibleSkill();
   testManifestAlignmentRejectsMissingCodexManifest();
   testManifestAlignmentRejectsPortableResourceDrift();
+  testDetectHardcodedHomePathsFindsRealPaths();
+  testDetectHardcodedHomePathsIgnoresPlaceholders();
+  testDetectHardcodedHomePathsScansScriptFiles();
+  testDetectHardcodedHomePathsScansMultipleFiles();
   console.log('Skill package validator and scaffold checks passed');
 }
 

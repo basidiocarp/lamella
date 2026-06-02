@@ -80,6 +80,151 @@ function buildExpectedCodexManifest(claudeManifest) {
   };
 }
 
+function detectHardcodedHomePaths(skillDir, reportWarning) {
+  // Placeholder names (case-insensitive) that should not be flagged
+  const placeholderNames = new Set([
+    'user',
+    'username',
+    'name',
+    'you',
+    'your-name',
+    'yourname',
+    'me',
+    'myname',
+    'someone',
+    'example',
+    'johndoe',
+    'jdoe',
+    'foo',
+    'bar',
+  ]);
+
+  // Script extensions to scan in full
+  const scriptExtensions = new Set(['sh', 'bash', 'zsh', 'fish', 'py', 'rb', 'pl', 'lua', 'js', 'ts', 'mjs']);
+
+  // Markdown filenames to skip
+  const skipMdFilenames = new Set(['readme.md', 'changelog.md', 'claude.md', 'agents.md', 'license.md']);
+
+  // Regex patterns for hardcoded user paths
+  const posixRegex = /(?:\/Users\/|\/home\/)([A-Za-z0-9._-]+)/g;
+  const windowsRegex = /[Cc]:[\\/]Users[\\/]([A-Za-z0-9._-]+)/g;
+
+  function isPlaceholder(name) {
+    return placeholderNames.has(name.toLowerCase());
+  }
+
+  function isScript(filePath, content) {
+    // Check for shebang
+    if (content.startsWith('#!')) {
+      return true;
+    }
+    // Check file extension
+    const ext = path.extname(filePath).slice(1).toLowerCase();
+    return scriptExtensions.has(ext);
+  }
+
+  function extractFrontmatterBody(content) {
+    // Skip YAML frontmatter in markdown files. Match the closing fence with
+    // either LF or CRLF line endings so CRLF-authored files are handled the
+    // same as LF ones (otherwise the whole file, frontmatter included, gets
+    // scanned). Returns the body after the closing fence, or the full content
+    // when there is no frontmatter.
+    if (content.startsWith('---')) {
+      const fence = content.match(/\r?\n---\r?\n/);
+      if (fence) {
+        return content.slice(fence.index + fence[0].length);
+      }
+    }
+    return content;
+  }
+
+  function scanContent(filePath, content, isMarkdown) {
+    const hits = [];
+
+    // For markdown, skip frontmatter so template metadata is not flagged.
+    const contentToScan = isMarkdown ? extractFrontmatterBody(content) : content;
+
+    // matchAll returns a fresh iterator per call, so the global-flagged regex
+    // objects carry no lastIndex state between files.
+    for (const regex of [posixRegex, windowsRegex]) {
+      for (const match of contentToScan.matchAll(regex)) {
+        const username = match[1];
+        if (!isPlaceholder(username)) {
+          hits.push({ file: filePath, text: match[0] });
+        }
+      }
+    }
+
+    return hits;
+  }
+
+  // Walk the skill directory tree
+  function walkDir(dir) {
+    const allHits = [];
+
+    try {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+      for (const entry of entries) {
+        // Skip hidden directories and symlinks
+        if (entry.name.startsWith('.')) {
+          continue;
+        }
+
+        const fullPath = path.join(dir, entry.name);
+
+        if (entry.isSymbolicLink()) {
+          continue;
+        }
+
+        if (entry.isDirectory()) {
+          // Recurse into subdirectories
+          allHits.push(...walkDir(fullPath));
+        } else if (entry.isFile()) {
+          const relativePath = path.relative(skillDir, fullPath);
+          const filename = entry.name.toLowerCase();
+          const isMarkdown = filename.endsWith('.md');
+
+          // Skip certain markdown files
+          if (isMarkdown && skipMdFilenames.has(filename)) {
+            continue;
+          }
+
+          try {
+            const content = fs.readFileSync(fullPath, 'utf-8');
+
+            // Decide whether to scan this file
+            let shouldScan = false;
+            if (isMarkdown) {
+              shouldScan = true;
+            } else if (isScript(fullPath, content)) {
+              shouldScan = true;
+            }
+
+            if (shouldScan) {
+              const hits = scanContent(relativePath, content, isMarkdown);
+              allHits.push(...hits);
+            }
+          } catch (err) {
+            // Skip files we can't read (binary, permission denied, etc.)
+          }
+        }
+      }
+    } catch (err) {
+      // Silently skip inaccessible directories
+    }
+
+    return allHits;
+  }
+
+  const hits = walkDir(skillDir);
+
+  // Report each hit via reportWarning
+  for (const hit of hits) {
+    reportWarning(`${hit.file} - hardcoded user-home path found: ${hit.text}`);
+  }
+}
+
 function validateSkillFrontmatter(skill, reportError, reportWarning = () => {}) {
   if (!fs.existsSync(skill.skillMd)) {
     reportError(`${skill.relPath} - missing SKILL.md`);
@@ -148,6 +293,9 @@ function validateSkillFrontmatter(skill, reportError, reportWarning = () => {}) 
   if (!content.includes('## Workflow')) {
     reportWarning(`${skill.relPath}/SKILL.md - missing recommended '## Workflow' section`);
   }
+
+  // Detect hardcoded home paths in the skill directory
+  detectHardcodedHomePaths(path.dirname(skill.skillMd), reportWarning);
 
   return {
     frontmatter,
@@ -248,6 +396,7 @@ module.exports = {
   sortedStrings,
   readJson,
   buildExpectedCodexManifest,
+  detectHardcodedHomePaths,
   validateSkillFrontmatter,
   validateManifestAlignment,
   PORTABLE_CODEX_RESOURCE_TYPES,

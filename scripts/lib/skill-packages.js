@@ -306,9 +306,10 @@ function validateSkillFrontmatter(skill, reportError, reportWarning = () => {}) 
 function validateManifestAlignment(skillIndex, reportError, reportWarning = () => {}, options = {}) {
   const claudeManifestsDir = options.claudeManifestsDir || CLAUDE_MANIFESTS_DIR;
   const codexManifestsDir = options.codexManifestsDir || CODEX_MANIFESTS_DIR;
+  const writeEnabled = options.writeEnabled === true;
 
   if (!fs.existsSync(claudeManifestsDir)) {
-    return 0;
+    return { aligned: 0, detected: 0, written: 0, errored: 0 };
   }
 
   const manifestFiles = fs.readdirSync(claudeManifestsDir)
@@ -316,59 +317,81 @@ function validateManifestAlignment(skillIndex, reportError, reportWarning = () =
     .sort();
 
   let alignedManifests = 0;
+  let detected = 0;
+  let written = 0;
+  let errored = 0;
 
   for (const file of manifestFiles) {
     const claudePath = path.join(claudeManifestsDir, file);
     const claudeManifest = readJson(claudePath);
     const manifestName = claudeManifest.name || file.replace(/\.json$/, '');
 
+    // Skill-ref checks are source errors — always reportError, even in write mode.
+    let hadSkillRefError = false;
     for (const skillRef of claudeManifest.resources?.skills || []) {
       const skillMeta = skillIndex.get(skillRef);
       if (!skillMeta) {
         reportError(`manifests/claude/${file} - references unknown skill '${skillRef}'`);
+        hadSkillRefError = true;
         continue;
       }
       if (skillMeta.frontmatter?.name && skillMeta.frontmatter.name !== skillMeta.name) {
         reportError(`manifests/claude/${file} - skill '${skillRef}' frontmatter name does not match directory`);
+        hadSkillRefError = true;
       }
+    }
+    if (hadSkillRefError) {
+      errored += 1;
     }
 
     const codexPath = path.join(codexManifestsDir, `${manifestName}.yaml`);
     if (!fs.existsSync(codexPath)) {
-      reportError(`manifests/claude/${file} - missing paired Codex manifest ${manifestName}.yaml`);
+      detected += 1;
+      if (writeEnabled) {
+        fs.writeFileSync(codexPath, JSON.stringify(buildExpectedCodexManifest(claudeManifest), null, 2) + '\n');
+        written += 1;
+      } else {
+        reportError(`manifests/claude/${file} - missing paired Codex manifest ${manifestName}.yaml`);
+        if (!hadSkillRefError) {
+          errored += 1;
+        }
+      }
       continue;
     }
 
     const codexManifest = readJson(codexPath);
     const expectedManifest = buildExpectedCodexManifest(claudeManifest);
 
+    // Determine whether this manifest has any drift before deciding how to handle it.
+    const driftErrors = [];
+
     if (codexManifest.name !== expectedManifest.name) {
-      reportError(`manifests/codex/${manifestName}.yaml - name drift from manifests/claude/${file}`);
+      driftErrors.push(`manifests/codex/${manifestName}.yaml - name drift from manifests/claude/${file}`);
     }
 
     if (codexManifest.description !== expectedManifest.description) {
-      reportError(`manifests/codex/${manifestName}.yaml - description drift from manifests/claude/${file}`);
+      driftErrors.push(`manifests/codex/${manifestName}.yaml - description drift from manifests/claude/${file}`);
     }
 
     if (codexManifest.source_plugin !== expectedManifest.source_plugin) {
-      reportError(`manifests/codex/${manifestName}.yaml - source_plugin drift from manifests/claude/${file}`);
+      driftErrors.push(`manifests/codex/${manifestName}.yaml - source_plugin drift from manifests/claude/${file}`);
     }
 
     if (JSON.stringify(sortedStrings(codexManifest.dependencies || [])) !== JSON.stringify(sortedStrings(expectedManifest.dependencies))) {
-      reportError(`manifests/codex/${manifestName}.yaml - dependencies drift from manifests/claude/${file}`);
+      driftErrors.push(`manifests/codex/${manifestName}.yaml - dependencies drift from manifests/claude/${file}`);
     }
 
     const actualResourceKeys = sortedStrings(Object.keys(codexManifest.resources || {}));
     const expectedResourceKeys = sortedStrings(PORTABLE_CODEX_RESOURCE_TYPES);
     if (JSON.stringify(actualResourceKeys) !== JSON.stringify(expectedResourceKeys)) {
-      reportError(`manifests/codex/${manifestName}.yaml - resources keys must match Lamella's portable Codex surface`);
+      driftErrors.push(`manifests/codex/${manifestName}.yaml - resources keys must match Lamella's portable Codex surface`);
     }
 
     for (const resourceType of PORTABLE_CODEX_RESOURCE_TYPES) {
       const expected = sortedStrings(expectedManifest.resources[resourceType] || []);
       const actual = sortedStrings(codexManifest.resources?.[resourceType] || []);
       if (JSON.stringify(expected) !== JSON.stringify(actual)) {
-        reportError(`manifests/codex/${manifestName}.yaml - ${resourceType} drift from manifests/claude/${file}`);
+        driftErrors.push(`manifests/codex/${manifestName}.yaml - ${resourceType} drift from manifests/claude/${file}`);
       }
     }
 
@@ -376,14 +399,31 @@ function validateManifestAlignment(skillIndex, reportError, reportWarning = () =
     const actualOptions = codexManifest.options || {};
     for (const [key, value] of Object.entries(expectedOptions)) {
       if (actualOptions[key] !== value) {
-        reportError(`manifests/codex/${manifestName}.yaml - option '${key}' drift from manifests/claude/${file}`);
+        driftErrors.push(`manifests/codex/${manifestName}.yaml - option '${key}' drift from manifests/claude/${file}`);
+      }
+    }
+
+    if (driftErrors.length > 0) {
+      detected += 1;
+      if (writeEnabled) {
+        // Repair mode: rewrite the codex manifest to match the expected shape.
+        fs.writeFileSync(codexPath, JSON.stringify(buildExpectedCodexManifest(claudeManifest), null, 2) + '\n');
+        written += 1;
+      } else {
+        // Detect mode: emit all per-field errors exactly as before.
+        for (const msg of driftErrors) {
+          reportError(msg);
+        }
+        if (!hadSkillRefError) {
+          errored += 1;
+        }
       }
     }
 
     alignedManifests += 1;
   }
 
-  return alignedManifests;
+  return { aligned: alignedManifests, detected, written, errored };
 }
 
 module.exports = {

@@ -126,14 +126,14 @@ function testManifestAlignmentRejectsMissingCodexManifest() {
     );
 
     const errors = [];
-    const aligned = validateManifestAlignment(
+    const result = validateManifestAlignment(
       new Map([['meta/create-handoff', { name: 'create-handoff', frontmatter: { name: 'create-handoff' } }]]),
       (message) => errors.push(message),
       () => {},
       { claudeManifestsDir: claudeDir, codexManifestsDir: codexDir },
     );
 
-    assert.equal(aligned, 0);
+    assert.equal(result.aligned, 0);
     assert.ok(errors.some((message) => message.includes('missing paired Codex manifest meta.yaml')));
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
@@ -185,14 +185,14 @@ function testManifestAlignmentRejectsPortableResourceDrift() {
     );
 
     const errors = [];
-    const aligned = validateManifestAlignment(
+    const result = validateManifestAlignment(
       new Map([['tools/mcp-integration', { name: 'mcp-integration', frontmatter: { name: 'mcp-integration' } }]]),
       (message) => errors.push(message),
       () => {},
       { claudeManifestsDir: claudeDir, codexManifestsDir: codexDir },
     );
 
-    assert.equal(aligned, 1);
+    assert.equal(result.aligned, 1);
     assert.ok(errors.some((message) => message.includes('skills drift from manifests/claude/tools.json')));
   } finally {
     fs.rmSync(tempRoot, { recursive: true, force: true });
@@ -340,11 +340,90 @@ cd /Users/dave/work
   }
 }
 
+function testManifestAlignmentWriteModeRepairsAndIsIdempotent() {
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lamella-manifest-write-'));
+  try {
+    const claudeDir = path.join(tempRoot, 'claude');
+    const codexDir = path.join(tempRoot, 'codex');
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.mkdirSync(codexDir, { recursive: true });
+
+    // Same fixture shape as testManifestAlignmentRejectsPortableResourceDrift:
+    // a codex manifest whose skills list is stale (empty) while the claude
+    // manifest lists one skill.
+    fs.writeFileSync(
+      path.join(claudeDir, 'tools.json'),
+      JSON.stringify({
+        name: 'tools',
+        description: 'Tools package',
+        dependencies: [],
+        resources: {
+          skills: ['tools/mcp-integration'],
+          workflows: ['workflow/tooling.md'],
+          templates: ['docs/SKILL-MD-TEMPLATE.md'],
+          commands: ['tools/cli.md'],
+          agents: [],
+        },
+      }, null, 2),
+    );
+
+    fs.writeFileSync(
+      path.join(codexDir, 'tools.yaml'),
+      JSON.stringify({
+        name: 'tools',
+        description: 'Tools package',
+        source_plugin: 'tools',
+        dependencies: [],
+        resources: {
+          skills: [],
+          workflows: ['workflow/tooling.md'],
+          templates: ['docs/SKILL-MD-TEMPLATE.md'],
+          scripts: [],
+        },
+        options: {
+          include_workflow_wrappers: true,
+          include_template_wrappers: true,
+        },
+      }, null, 2),
+    );
+
+    const skillMap = new Map([
+      ['tools/mcp-integration', { name: 'mcp-integration', frontmatter: { name: 'mcp-integration' } }],
+    ]);
+
+    // (a) Write mode: drift must be repaired, not errored.
+    const writeErrors = [];
+    const writeResult = validateManifestAlignment(
+      skillMap,
+      (message) => writeErrors.push(message),
+      () => {},
+      { claudeManifestsDir: claudeDir, codexManifestsDir: codexDir, writeEnabled: true },
+    );
+
+    assert.equal(writeErrors.length, 0, `write mode should not report errors; got: ${writeErrors.join('; ')}`);
+    assert.ok(writeResult.written >= 1, `write mode should report at least one written manifest; got ${writeResult.written}`);
+
+    // (b) Idempotency: a subsequent detect-only run must report zero drift errors.
+    const detectErrors = [];
+    validateManifestAlignment(
+      skillMap,
+      (message) => detectErrors.push(message),
+      () => {},
+      { claudeManifestsDir: claudeDir, codexManifestsDir: codexDir },
+    );
+
+    assert.equal(detectErrors.length, 0, `detect run after write should find zero drift; got: ${detectErrors.join('; ')}`);
+  } finally {
+    fs.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
 function main() {
   testValidationRejectsStaleSkillMetadata();
   testScaffoldCreatesValidatorCompatibleSkill();
   testManifestAlignmentRejectsMissingCodexManifest();
   testManifestAlignmentRejectsPortableResourceDrift();
+  testManifestAlignmentWriteModeRepairsAndIsIdempotent();
   testDetectHardcodedHomePathsFindsRealPaths();
   testDetectHardcodedHomePathsIgnoresPlaceholders();
   testDetectHardcodedHomePathsScansScriptFiles();

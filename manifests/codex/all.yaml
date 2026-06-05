@@ -288,6 +288,7 @@
       "workflow/git-analyze-issue",
       "workflow/git-create-pr",
       "workflow/git-worktrees",
+      "workflow/github-triage",
       "workflow/handoff-check",
       "workflow/kaizen",
       "workflow/mental-models",

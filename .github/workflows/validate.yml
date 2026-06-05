@@ -10,8 +10,16 @@ jobs:
   validate:
     name: Run validators
     runs-on: ubuntu-latest
+    env:
+      LAMELLA_CONTENT_ROOT: ${{ github.workspace }}/lamella-skills
     steps:
       - uses: actions/checkout@v6.0.2
+
+      - name: Checkout lamella-skills content root
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: basidiocarp/lamella-skills
+          path: lamella-skills
 
       - name: Setup Node.js
         uses: actions/setup-node@v6.3.0

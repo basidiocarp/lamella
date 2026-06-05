@@ -7,10 +7,17 @@ BASE_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 # Where to write new skills — respects LAMELLA_CONTENT_ROOT for testing.
 CONTENT_ROOT="${LAMELLA_CONTENT_ROOT:-$BASE_DIR/resources}"
 
-# Where to find scaffold templates — always the real content root, not the test override.
+# Where to find scaffold templates — always the real content root, not the test
+# override. Tests point LAMELLA_CONTENT_ROOT at an empty temp dir, so template
+# resolution stays independent of it and probes known content layouts instead.
 if [[ -d "$BASE_DIR/../lamella-skills/templates" ]]; then
+    # Local dev: lamella-skills is a sibling repo.
     _TEMPLATE_ROOT="$(cd "$BASE_DIR/.." && pwd)/lamella-skills"
+elif [[ -d "$BASE_DIR/lamella-skills/templates" ]]; then
+    # CI: lamella-skills is checked out as a workspace subdir.
+    _TEMPLATE_ROOT="$BASE_DIR/lamella-skills"
 else
+    # Legacy in-repo content.
     _TEMPLATE_ROOT="$BASE_DIR/resources"
 fi
 TEMPLATE="$_TEMPLATE_ROOT/templates/skills/SKILL.md.template"

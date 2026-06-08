@@ -59,6 +59,8 @@
       "git/git-workflow.md",
       "git/git.md",
       "git/pr-enhance.md",
+      "git/prs-awaiting-author.md",
+      "git/prs-awaiting-maintainer.md",
       "git/revert.md",
       "git/review-pr.md",
       "planning/deepen-plan.md",

@@ -4,8 +4,8 @@
     "name": "William Newton"
   },
   "metadata": {
-    "description": "Lamella \u2014 curated skills, agents, and commands for Claude Code",
-    "version": "0.7.0"
+    "description": "Lamella — curated skills, agents, and commands for Claude Code",
+    "version": "0.8.0"
   },
   "plugins": [
     {
@@ -17,7 +17,7 @@
         "ref": "gh-pages"
       },
       "description": "Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "ai-agents",
@@ -28,7 +28,7 @@
         "ref": "gh-pages"
       },
       "description": "AI agent development: multi-agent patterns, LLM evaluation, RAG architecture, and Claude-specific tooling",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "atmos",
@@ -39,7 +39,7 @@
         "ref": "gh-pages"
       },
       "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "collaboration",
@@ -50,7 +50,7 @@
         "ref": "gh-pages"
       },
       "description": "Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "core",
@@ -61,7 +61,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered core development plugins and shared base resources. Includes general skills (reusable without ecosystem dependencies) and basidiocarp skills (require hyphae, mycelium, annulus, or .handoffs/).",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "core-architecture",
@@ -72,7 +72,7 @@
         "ref": "gh-pages"
       },
       "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "core-base",
@@ -83,7 +83,7 @@
         "ref": "gh-pages"
       },
       "description": "Foundational development workflow: planning, debugging, and test discipline",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "core-operations",
@@ -94,7 +94,7 @@
         "ref": "gh-pages"
       },
       "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "core-quality",
@@ -105,7 +105,7 @@
         "ref": "gh-pages"
       },
       "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "cpp",
@@ -116,7 +116,7 @@
         "ref": "gh-pages"
       },
       "description": "C++ development: modern C++ patterns, coding standards, and testing practices",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "customer-insights",
@@ -127,7 +127,7 @@
         "ref": "gh-pages"
       },
       "description": "Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "database",
@@ -138,7 +138,7 @@
         "ref": "gh-pages"
       },
       "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "developer-ops",
@@ -149,7 +149,7 @@
         "ref": "gh-pages"
       },
       "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "devops",
@@ -160,7 +160,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "devops-cloud",
@@ -171,7 +171,7 @@
         "ref": "gh-pages"
       },
       "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "devops-kubernetes",
@@ -182,7 +182,7 @@
         "ref": "gh-pages"
       },
       "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "devops-observability",
@@ -193,7 +193,7 @@
         "ref": "gh-pages"
       },
       "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "devops-platform",
@@ -204,12 +204,12 @@
         "ref": "gh-pages"
       },
       "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "ecosystem",
       "description": "Curated plugin set for the basidiocarp ecosystem. Installs the tools, skills, and rules needed to work with mycelium, hyphae, canopy, cortina, stipe, and related tools. Language-specific and domain-specific plugins are optional extras.",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "source": {
         "source": "git-subdir",
         "url": "https://github.com/basidiocarp/lamella.git",
@@ -226,7 +226,7 @@
         "ref": "gh-pages"
       },
       "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "executive",
@@ -237,7 +237,7 @@
         "ref": "gh-pages"
       },
       "description": "Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "frontend",
@@ -248,7 +248,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "frontend-3d",
@@ -259,7 +259,7 @@
         "ref": "gh-pages"
       },
       "description": "3D frontend experiences for Spline and advanced Three.js workflows",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "frontend-base",
@@ -270,7 +270,7 @@
         "ref": "gh-pages"
       },
       "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "frontend-visual",
@@ -281,7 +281,7 @@
         "ref": "gh-pages"
       },
       "description": "Visual frontend work for motion, design systems, screenshots, and slides",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "go",
@@ -292,7 +292,7 @@
         "ref": "gh-pages"
       },
       "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "go-to-market",
@@ -303,7 +303,7 @@
         "ref": "gh-pages"
       },
       "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "meta",
@@ -314,7 +314,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "meta-authoring",
@@ -325,7 +325,7 @@
         "ref": "gh-pages"
       },
       "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "meta-governance",
@@ -336,7 +336,7 @@
         "ref": "gh-pages"
       },
       "description": "Meta governance for curation, audits, stocktakes, and task capture",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "meta-routing",
@@ -347,7 +347,7 @@
         "ref": "gh-pages"
       },
       "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "microservices",
@@ -358,7 +358,7 @@
         "ref": "gh-pages"
       },
       "description": "Microservices architecture, event sourcing, and distributed systems",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "python",
@@ -369,7 +369,7 @@
         "ref": "gh-pages"
       },
       "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "rag",
@@ -380,7 +380,7 @@
         "ref": "gh-pages"
       },
       "description": "Retrieval-Augmented Generation: vector search, embeddings, hybrid search, and RAG system architecture",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "rust",
@@ -391,7 +391,7 @@
         "ref": "gh-pages"
       },
       "description": "Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security",
@@ -402,7 +402,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered security plugins and shared security commands",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security-base",
@@ -413,7 +413,7 @@
         "ref": "gh-pages"
       },
       "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security-compliance",
@@ -424,7 +424,7 @@
         "ref": "gh-pages"
       },
       "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security-crypto",
@@ -435,7 +435,7 @@
         "ref": "gh-pages"
       },
       "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security-fuzzing",
@@ -446,7 +446,7 @@
         "ref": "gh-pages"
       },
       "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "security-scanning",
@@ -457,7 +457,7 @@
         "ref": "gh-pages"
       },
       "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools",
@@ -468,7 +468,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered tool plugins and shared research/setup commands",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools-browser",
@@ -479,7 +479,7 @@
         "ref": "gh-pages"
       },
       "description": "Browser automation and realtime web tooling for interactive surfaces",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools-cli",
@@ -490,7 +490,7 @@
         "ref": "gh-pages"
       },
       "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools-diagrams",
@@ -501,7 +501,7 @@
         "ref": "gh-pages"
       },
       "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools-documents",
@@ -512,7 +512,7 @@
         "ref": "gh-pages"
       },
       "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "tools-integration",
@@ -523,7 +523,7 @@
         "ref": "gh-pages"
       },
       "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "typescript",
@@ -534,7 +534,7 @@
         "ref": "gh-pages"
       },
       "description": "TypeScript/JavaScript development: React, Next.js, Node.js patterns, and frontend architecture",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "workflow",
@@ -545,7 +545,7 @@
         "ref": "gh-pages"
       },
       "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "workflow-execution",
@@ -556,7 +556,7 @@
         "ref": "gh-pages"
       },
       "description": "Execution workflows for handoffs, conductor, plan execution, and branch finishing",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "workflow-git",
@@ -567,7 +567,7 @@
         "ref": "gh-pages"
       },
       "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "workflow-planning",
@@ -578,7 +578,7 @@
         "ref": "gh-pages"
       },
       "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
-      "version": "0.7.0"
+      "version": "0.8.0"
     },
     {
       "name": "writing",
@@ -589,7 +589,7 @@
         "ref": "gh-pages"
       },
       "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
-      "version": "0.7.0"
+      "version": "0.8.0"
     }
   ]
 }

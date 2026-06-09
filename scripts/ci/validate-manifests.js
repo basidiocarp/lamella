@@ -32,6 +32,25 @@ let warnings = 0;
 let manifestCount = 0;
 let resourceCount = 0;
 
+// True only if every segment of `entry` exists under baseDir with exact case.
+// Catches case drift on macOS/APFS that fs.existsSync misses. Never throws.
+function existsCaseExact(baseDir, entry) {
+  if (!entry) return false; // an empty entry is de facto missing
+  const segments = entry.split('/').filter(Boolean);
+  let current = baseDir;
+  for (const seg of segments) {
+    let listing;
+    try {
+      listing = fs.readdirSync(current);
+    } catch {
+      return false;
+    }
+    if (!listing.includes(seg)) return false;
+    current = path.join(current, seg);
+  }
+  return true;
+}
+
 function validateManifest(manifestPath) {
   const name = path.basename(manifestPath);
   let manifest;
@@ -84,7 +103,7 @@ function validateManifest(manifestPath) {
         continue;
       }
 
-      if (!fs.existsSync(fullPath)) {
+      if (!existsCaseExact(baseDir, entry)) {
         console.error(`ERROR: ${name} - Missing ${type}: ${entry}`);
         errors++;
       }

@@ -43,6 +43,7 @@
       "devops/otel-collector",
       "devops/otel-instrumentation",
       "devops/postmortem-writing",
+      "devops/pre-publish-review",
       "devops/prometheus-configuration",
       "devops/promql",
       "devops/release-manager",

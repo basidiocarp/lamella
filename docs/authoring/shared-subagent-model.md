@@ -210,11 +210,11 @@ These fields are recognized by the shared schema and validator today.
 | Field | Type | Notes |
 |-------|------|-------|
 | `disallowedTools` | `string[]` | Denylist layered on top of `tools` |
-| `permissionMode` | `string` | `default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, or `plan` |
+| `permissionMode` | `string` | `default`, `acceptEdits`, `dontAsk`, `bypassPermissions`, or `plan`. **Ignored for plugin agents** — honored only for user-installed agents. |
 | `maxTurns` | `number` | Positive integer |
 | `skills` | `string[]` | Skills to preload |
-| `mcpServers` | `string \| string[] \| map` | String reference, list of references, or inline config map |
-| `hooks` | `map` | Subagent-scoped hook config |
+| `mcpServers` | `string \| string[] \| map` | String reference, list of references, or inline config map. **Ignored for plugin agents** — honored only for user-installed agents. |
+| `hooks` | `map` | Subagent-scoped hook config. **Ignored for plugin agents** — honored only for user-installed agents. |
 | `memory` | `string` | `user`, `project`, or `local` |
 | `background` | `boolean` | Run as a background task |
 | `isolation` | `string` | Currently modeled as `worktree` |

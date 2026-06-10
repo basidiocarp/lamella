@@ -78,10 +78,22 @@ in the shared instructions.
 
 ## Optional Frontmatter
 
-Lamella recognizes these optional fields today:
+Lamella recognizes these optional fields today.
 
-- Claude: `disallowedTools`, `permissionMode`, `maxTurns`, `skills`,
-  `mcpServers`, `hooks`, `memory`, `background`, `isolation`
+Claude fields that work for both user-installed and plugin-shipped agents:
+
+- `disallowedTools`, `maxTurns`, `skills`, `memory`, `background`, `isolation`
+
+Claude fields that are **silently ignored** when the agent ships as a plugin agent:
+
+- `hooks`, `mcpServers`, `permissionMode`
+
+> **Warning:** Do not use `hooks`, `mcpServers`, or `permissionMode` in
+> lamella-shipped plugin subagents. Claude Code silently ignores these fields
+> for plugin agents — they are only honored for user-installed agents under
+> `~/.claude/agents/`. Setting them creates a false safety or config
+> expectation with no runtime effect.
+
 - Codex: `nickname_candidates`
 
 If you need a field outside that set, update the shared schema and validator

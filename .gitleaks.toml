@@ -1,0 +1,12 @@
+# gitleaks config for the lamella secret-scanning CI gate.
+# Consumed by the "Scan for secrets (gitleaks)" step in .github/workflows/validate.yml.
+minVersion = "8.30.1"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Exclude generated build output. dist/ is gitignored and never committed, so it cannot be a secret-commit vector. CI runs gitleaks right after checkout (before any build), so dist/ does not exist there; this exclusion only matters for a local `gitleaks dir .` run, keeping it consistent with the CI surface."
+paths = [
+  '''^dist/''',
+]

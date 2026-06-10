@@ -44,8 +44,11 @@ description: Action verb first. Trigger conditions.
 model: inherit | haiku | sonnet | opus
 color: blue | cyan | green | yellow | magenta | red
 tools: Read, Grep, Glob
+disallowedTools: [Write, Edit, Bash, Agent]   # optional; read-only/report-only agents only
 ---
 ```
+
+For read-only and report-only subagents, add `disallowedTools` with a list of prohibited tool names to enforce the read-only posture at runtime. The `tools` allowlist remains your primary constraint; `disallowedTools` is an additive denylist that blocks specific tools even if they appear in `tools`. Use this pattern for review agents and auditors that must not modify state: `disallowedTools: [Write, Edit, Bash, Agent]`.
 
 ## Body Structure
 

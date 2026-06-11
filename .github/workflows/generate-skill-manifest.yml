@@ -1,0 +1,59 @@
+name: Generate Skill Manifest
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Generate skills-manifest.json
+    runs-on: ubuntu-latest
+    env:
+      LAMELLA_CONTENT_ROOT: ${{ github.workspace }}/lamella-skills
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Checkout lamella-skills content root
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: basidiocarp/lamella-skills
+          path: lamella-skills
+
+      - name: Generate skills manifest
+        run: bash scripts/generate-skill-manifest.sh generated/skills-manifest.json
+
+      - name: Verify manifest is valid JSON
+        run: python3 -c "import json,sys; d=json.load(open('generated/skills-manifest.json')); print('skills/agents/commands:', len(d.get('skills',[])), len(d.get('agents',[])), len(d.get('commands',[])))"
+
+      - name: Commit manifest if changed
+        run: |
+          # Guard: fail loudly if the manifest path is gitignored — that would
+          # make git add a no-op and silently disable drift detection every run.
+          if git check-ignore -q "generated/skills-manifest.json"; then
+            echo "::error::generated/skills-manifest.json is gitignored — drift detection would be disabled. Fix .gitignore before proceeding."
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add generated/skills-manifest.json
+
+          # Guard: fail if the file was not staged AND is not already tracked
+          # (i.e. git add left the index untouched for a reason other than no-change).
+          if ! git diff --cached --name-only | grep -q "^generated/skills-manifest.json$"; then
+            if ! git ls-files --error-unmatch generated/skills-manifest.json 2>/dev/null; then
+              echo "::error::generated/skills-manifest.json was not staged by git add — the path may be gitignored or the file was not written."
+              exit 1
+            fi
+          fi
+
+          if git diff --cached --quiet; then
+            echo "No changes to skills-manifest.json — skipping commit."
+          else
+            git commit -m "chore: regenerate skills-manifest.json"
+            git push
+          fi

@@ -1,0 +1,4090 @@
+{
+  "content_root": "/Users/williamnewton/projects/personal/basidiocarp/lamella-skills",
+  "skills": [
+    {
+      "name": "atlassian-workspace-admin",
+      "description": "Administers Atlassian workspaces, permissions, security controls, and lifecycle operations.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/atlassian-workspace-admin/SKILL.md"
+    },
+    {
+      "name": "board-update-decks",
+      "description": "Builds board and investor update decks with metrics and asks.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/board-update-decks/SKILL.md"
+    },
+    {
+      "name": "company-culture-design",
+      "description": "Designs company culture as observable behaviors, rituals, and reinforcement systems.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/company-culture-design/SKILL.md"
+    },
+    {
+      "name": "company-operating-rhythm",
+      "description": "Designs a company operating rhythm with ownership, scorecards, meeting cadence, and quarterly priorities.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/company-operating-rhythm/SKILL.md"
+    },
+    {
+      "name": "confluence-knowledge-ops",
+      "description": "Designs and audits Confluence spaces, page hierarchies, templates, labels, and embedded reporting.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/confluence-knowledge-ops/SKILL.md"
+    },
+    {
+      "name": "define-hypothesis",
+      "description": "Defines a testable hypothesis with clear success metrics and validation approach.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/define-hypothesis/SKILL.md"
+    },
+    {
+      "name": "define-jtbd-canvas",
+      "description": "Creates Jobs to be Done canvases for customer motivations.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/define-jtbd-canvas/SKILL.md"
+    },
+    {
+      "name": "define-opportunity-tree",
+      "description": "Creates an opportunity solution tree mapping desired outcomes to opportunities and potential solutions.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/define-opportunity-tree/SKILL.md"
+    },
+    {
+      "name": "define-pricing-strategy",
+      "description": "Designs SaaS pricing strategy across packaging, value metrics, price points, and price-change plans.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/define-pricing-strategy/SKILL.md"
+    },
+    {
+      "name": "define-problem-statement",
+      "description": "Creates a clear problem framing document with user impact, business context, and success criteria.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/define-problem-statement/SKILL.md"
+    },
+    {
+      "name": "deliver-launch-checklist",
+      "description": "Creates a comprehensive pre-launch checklist covering engineering, design, marketing, support, legal, and operations readiness.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/deliver-launch-checklist/SKILL.md"
+    },
+    {
+      "name": "deliver-prd",
+      "description": "Creates product requirements documents with scope, rationale, and success metrics.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/deliver-prd/SKILL.md"
+    },
+    {
+      "name": "deliver-user-stories",
+      "description": "Generates user stories with clear acceptance criteria from product requirements or feature descriptions.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/deliver-user-stories/SKILL.md"
+    },
+    {
+      "name": "deliver-working-backwards-press-release",
+      "description": "Creates an Amazon-style Working Backwards press release to define customer value before building.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/deliver-working-backwards-press-release/SKILL.md"
+    },
+    {
+      "name": "director-transition-coaching",
+      "description": "Coaches transitions from PM to Director roles.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/director-transition-coaching/SKILL.md"
+    },
+    {
+      "name": "discover-company-profile",
+      "description": "Builds company profiles from public signals and strategy context.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-company-profile/SKILL.md"
+    },
+    {
+      "name": "discover-competitive-analysis",
+      "description": "Creates a structured competitive analysis comparing features, positioning, and strategy across competitors.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-competitive-analysis/SKILL.md"
+    },
+    {
+      "name": "discover-interview-synthesis",
+      "description": "Synthesizes user research interviews into actionable insights, patterns, and recommendations.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-interview-synthesis/SKILL.md"
+    },
+    {
+      "name": "discover-market-sizing",
+      "description": "Estimates TAM, SAM, and SOM with explicit assumptions, segment logic, and sizing math.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-market-sizing/SKILL.md"
+    },
+    {
+      "name": "discover-pestel-analysis",
+      "description": "Analyzes political, economic, social, technological, environmental, and legal forces affecting a product or market.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-pestel-analysis/SKILL.md"
+    },
+    {
+      "name": "discover-stakeholder-summary",
+      "description": "Documents stakeholder needs, concerns, and influence for a project or initiative.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/discover-stakeholder-summary/SKILL.md"
+    },
+    {
+      "name": "evaluate-feature-investment",
+      "description": "Evaluates feature investment using ROI, costs, and strategic value.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/evaluate-feature-investment/SKILL.md"
+    },
+    {
+      "name": "executive-onboarding-diagnostic",
+      "description": "Plans executive transition diagnostics for the first 90 days.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/executive-onboarding-diagnostic/SKILL.md"
+    },
+    {
+      "name": "iterate-refinement-notes",
+      "description": "Documents backlog refinement session outcomes including stories refined, estimates, questions raised, and decisions made.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/iterate-refinement-notes/SKILL.md"
+    },
+    {
+      "name": "iterate-retrospective",
+      "description": "Facilitates retrospectives with outcomes, improvements, and action items.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/iterate-retrospective/SKILL.md"
+    },
+    {
+      "name": "jira-project-operations",
+      "description": "Operates Jira projects through JQL, workflow design, automation rules, dashboards, and issue hygiene.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/jira-project-operations/SKILL.md"
+    },
+    {
+      "name": "manage-change-rollout",
+      "description": "Plans organizational change rollouts with stakeholder messaging, enablement, and reinforcement.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/manage-change-rollout/SKILL.md"
+    },
+    {
+      "name": "map-customer-journey",
+      "description": "Maps a customer journey across stages, touchpoints, actions, emotions, KPIs, and team ownership.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/map-customer-journey/SKILL.md"
+    },
+    {
+      "name": "organizational-health-diagnostic",
+      "description": "Builds organizational health reviews across product, people, operations, and finance.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/organizational-health-diagnostic/SKILL.md"
+    },
+    {
+      "name": "plan-discovery-interviews",
+      "description": "Plans discovery interviews with clear research goals, participant targets, interview themes, and bias controls.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/plan-discovery-interviews/SKILL.md"
+    },
+    {
+      "name": "storyboard",
+      "description": "Creates a six-frame storyboard that shows one user narrative from problem to outcome.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/storyboard/SKILL.md"
+    },
+    {
+      "name": "ubiquitous-language",
+      "description": "Builds a shared domain glossary with canonical terms, ambiguities, and usage rules.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/ubiquitous-language/SKILL.md"
+    },
+    {
+      "name": "vp-cpo-transition-coaching",
+      "description": "Coaches transitions into VP and CPO leadership roles.",
+      "origin": "lamella",
+      "category": "agile-pm",
+      "path": "skills/agile-pm/vp-cpo-transition-coaching/SKILL.md"
+    },
+    {
+      "name": "agent-evaluation",
+      "description": "Evaluates and improves Claude Code commands, skills, and agents.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/agent-evaluation/SKILL.md"
+    },
+    {
+      "name": "agent-native-architecture",
+      "description": "Builds applications where agents are first-class citizens.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/agent-native-architecture/SKILL.md"
+    },
+    {
+      "name": "cost-aware-llm-pipeline",
+      "description": "Optimizes LLM API usage with routing, budgets, retries, and caching.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/cost-aware-llm-pipeline/SKILL.md"
+    },
+    {
+      "name": "external-llm-review",
+      "description": "Runs external Codex or Gemini code reviews.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/external-llm-review/SKILL.md"
+    },
+    {
+      "name": "iterative-retrieval",
+      "description": "Refines context retrieval iteratively to solve the subagent context problem.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/iterative-retrieval/SKILL.md"
+    },
+    {
+      "name": "launch-sub-agent",
+      "description": "Launches an intelligent sub-agent with automatic model selection, specialized agent matching, and self-critique verification.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/launch-sub-agent/SKILL.md"
+    },
+    {
+      "name": "multi-agent-patterns",
+      "description": "Designs multi-agent architectures for complex tasks.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/multi-agent-patterns/SKILL.md"
+    },
+    {
+      "name": "orchestration-boundaries",
+      "description": "Pre-dispatch checklist for orchestrators: what to keep in the parent session and what is safe to delegate to subagents.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/orchestration-boundaries/SKILL.md"
+    },
+    {
+      "name": "prompt-engineering",
+      "description": "Improves prompts for commands, hooks, skills, agents, and other LLM interactions.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/prompt-engineering/SKILL.md"
+    },
+    {
+      "name": "subagent-driven-development",
+      "description": "Executes implementation plans with fresh subagents for independent tasks and built-in review gates.",
+      "origin": "lamella",
+      "category": "ai-agents",
+      "path": "skills/ai-agents/subagent-driven-development/SKILL.md"
+    },
+    {
+      "name": "atmos-ansible",
+      "description": "Orchestrates Ansible playbook execution, variable passing, inventory management, and stack-based configuration through Atmos.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-ansible/SKILL.md"
+    },
+    {
+      "name": "atmos-auth",
+      "description": "Configures Atmos authentication, identities, keyrings, and chained sessions.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-auth/SKILL.md"
+    },
+    {
+      "name": "atmos-components",
+      "description": "Designs Atmos components with inheritance, mixins, catalogs, and versioning.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-components/SKILL.md"
+    },
+    {
+      "name": "atmos-config",
+      "description": "Configures atmos.yaml structure, discovery, merging, base paths, settings, imports, and profiles.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-config/SKILL.md"
+    },
+    {
+      "name": "atmos-custom-commands",
+      "description": "Defines custom Atmos CLI commands in atmos.yaml, including arguments, flags, steps, and environment variables.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-custom-commands/SKILL.md"
+    },
+    {
+      "name": "atmos-design-patterns",
+      "description": "Designs Atmos stack organization, component catalogs, inheritance, configuration composition, version management, and layered configuration.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-design-patterns/SKILL.md"
+    },
+    {
+      "name": "atmos-devcontainer",
+      "description": "Manages Atmos devcontainer lifecycle operations, instance configuration, and VS Code integration.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-devcontainer/SKILL.md"
+    },
+    {
+      "name": "atmos-gitops",
+      "description": "Implements Atmos CI/CD workflows with GitHub Actions, Spacelift, Atlantis, and affected-stack detection.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-gitops/SKILL.md"
+    },
+    {
+      "name": "atmos-helmfile",
+      "description": "Orchestrates Helmfile operations, Kubernetes deployments, varfile generation, EKS integration, and source management through Atmos.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-helmfile/SKILL.md"
+    },
+    {
+      "name": "atmos-introspection",
+      "description": "Queries Atmos configuration, workspace state, dependency graphs, and filtered stack data.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-introspection/SKILL.md"
+    },
+    {
+      "name": "atmos-packer",
+      "description": "Orchestrates Packer initialization, builds, validation, inspection, outputs, and image source management through Atmos.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-packer/SKILL.md"
+    },
+    {
+      "name": "atmos-stacks",
+      "description": "Configures Atmos stacks with imports, inheritance, deep merging, locals, vars, settings, metadata, and overrides.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-stacks/SKILL.md"
+    },
+    {
+      "name": "atmos-stores",
+      "description": "Configures Atmos store backends, secret-manager integrations, hook usage, and cross-component data sharing.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-stores/SKILL.md"
+    },
+    {
+      "name": "atmos-templates",
+      "description": "Writes Atmos Go templates with Sprig, Gomplate, atmos.Component, atmos.GomplateDatasource, and atmos.Store helpers.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-templates/SKILL.md"
+    },
+    {
+      "name": "atmos-terraform",
+      "description": "Orchestrates Terraform planning, apply workflows, workspace management, backend configuration, and varfile generation through Atmos.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-terraform/SKILL.md"
+    },
+    {
+      "name": "atmos-toolchain",
+      "description": "Manages Atmos tool installation, execution, search, and version pinning.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-toolchain/SKILL.md"
+    },
+    {
+      "name": "atmos-validation",
+      "description": "Validates Atmos configs with Rego, JSON Schema, and manifests.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-validation/SKILL.md"
+    },
+    {
+      "name": "atmos-vendoring",
+      "description": "Vendors Atmos components from Git, OCI, registries, and storage.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-vendoring/SKILL.md"
+    },
+    {
+      "name": "atmos-workflows",
+      "description": "Automates Atmos workflows with multi-step execution, Go template support, and cross-component orchestration.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-workflows/SKILL.md"
+    },
+    {
+      "name": "atmos-yaml-functions",
+      "description": "Uses Atmos YAML functions for dynamic configuration values.",
+      "origin": "lamella",
+      "category": "atmos",
+      "path": "skills/atmos/atmos-yaml-functions/SKILL.md"
+    },
+    {
+      "name": "coding-tutor",
+      "description": "Creates codebase-aware coding tutorials for learning and onboarding.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/coding-tutor/SKILL.md"
+    },
+    {
+      "name": "cross-conversation-project-manager",
+      "description": "Maintains project state across multiple conversations over days or weeks.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/cross-conversation-project-manager/SKILL.md"
+    },
+    {
+      "name": "debate-evaluator",
+      "description": "Evaluates solutions through multi-round debate between independent judges until consensus.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/debate-evaluator/SKILL.md"
+    },
+    {
+      "name": "debate-simulator",
+      "description": "Simulates debates between 2-3 expert personas from different angles.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/debate-simulator/SKILL.md"
+    },
+    {
+      "name": "devils-advocate",
+      "description": "Challenges ideas, plans, decisions, or proposals using structured critical reasoning.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/devils-advocate/SKILL.md"
+    },
+    {
+      "name": "expert-panel",
+      "description": "Assembles 2-3 complementary experts to collaboratively analyze a topic.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/expert-panel/SKILL.md"
+    },
+    {
+      "name": "founder-leadership-coaching",
+      "description": "Helps founders improve delegation, leadership focus, and operating cadence.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/founder-leadership-coaching/SKILL.md"
+    },
+    {
+      "name": "stress-test-design",
+      "description": "Stress-tests a plan or design through sequential challenge questions and recommended answers.",
+      "origin": "lamella",
+      "category": "collaboration",
+      "path": "skills/collaboration/stress-test-design/SKILL.md"
+    },
+    {
+      "name": "agent-introspection-debugging",
+      "description": "Activate when an agent is stuck, looping, or hitting context limits — provides self-repair framework and failure-pattern diagnosis.",
+      "origin": "ECC agent-introspection-debugging (adapted)",
+      "category": "core",
+      "path": "skills/core/agent-introspection-debugging/SKILL.md"
+    },
+    {
+      "name": "api-test-suite-builder",
+      "description": "Run this when building API test suites — generates scaffolds for route handlers, auth flows, validation rules, and contract edges.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/api-test-suite-builder/SKILL.md"
+    },
+    {
+      "name": "architecture-decision-records",
+      "description": "Run this when making or documenting architectural decisions — produces ADRs with clear rationale, alternatives, and trade-offs.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/architecture-decision-records/SKILL.md"
+    },
+    {
+      "name": "brainstorming",
+      "description": "Run this when exploring design options before implementation — generates multiple approaches and compares feasibility.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/brainstorming/SKILL.md"
+    },
+    {
+      "name": "clarify-requirements",
+      "description": "Run this when requirements are ambiguous or incomplete before starting implementation — produces clarity on scope and success criteria.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/clarify-requirements/SKILL.md"
+    },
+    {
+      "name": "code-maturity-assessor",
+      "description": "Run this when evaluating code quality or security readiness — produces maturity assessment using Trail of Bits' nine-category framework.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/code-maturity-assessor/SKILL.md"
+    },
+    {
+      "name": "code-review-pro",
+      "description": "Run this when reviewing code for security, performance, or maintainability — identifies vulnerabilities, bottlenecks, and refactoring opportunities.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/code-review-pro/SKILL.md"
+    },
+    {
+      "name": "code-review-process",
+      "description": "Run this when you need structured code review before merging — coordinates subagent feedback and produces technical evaluation report.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/code-review-process/SKILL.md"
+    },
+    {
+      "name": "codebase-onboarding",
+      "description": "Run this when you need to onboard engineers or create handoff docs — analyzes repository structure and produces practical onboarding material.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/codebase-onboarding/SKILL.md"
+    },
+    {
+      "name": "confidence-check",
+      "description": ">",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/confidence-check/SKILL.md"
+    },
+    {
+      "name": "context-engineering",
+      "description": "Activate when designing or optimizing context windows in agent systems — explains components, mechanics, constraints, and assembly patterns.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/context-engineering/SKILL.md"
+    },
+    {
+      "name": "continuous-learning",
+      "description": "Run this at session end or after solving a novel problem — extracts patterns into reusable learned skills for future sessions.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/continuous-learning/SKILL.md"
+    },
+    {
+      "name": "coordinator-delegation-discipline",
+      "description": ">",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/coordinator-delegation-discipline/SKILL.md"
+    },
+    {
+      "name": "council",
+      "description": "Run this for non-trivial design decisions to avoid anchoring bias — coordinates 4-voice technical council (Architect, Skeptic, Pragmatist, Critic).",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/council/SKILL.md"
+    },
+    {
+      "name": "deep-module-review",
+      "description": "Run this when reviewing architecture — identifies shallow modules, brittle seams, and candidates for deep-module refactoring.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/deep-module-review/SKILL.md"
+    },
+    {
+      "name": "dependency-upgrade",
+      "description": "Run this when upgrading major dependencies — manages compatibility analysis, staged rollout, testing, and rollback strategies.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/dependency-upgrade/SKILL.md"
+    },
+    {
+      "name": "design-patterns",
+      "description": "Run this when analyzing code structure — identifies GoF design patterns, refactoring opportunities, and stack-specific adaptations.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/design-patterns/SKILL.md"
+    },
+    {
+      "name": "duplicate-detection",
+      "description": "Run this when looking for code duplication or consolidation opportunities — identifies semantic duplicates across different implementations.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/duplicate-detection/SKILL.md"
+    },
+    {
+      "name": "e2e-testing",
+      "description": "Run this when building or reviewing Playwright tests — guides test structure, page models, and flake reduction strategies.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/e2e-testing/SKILL.md"
+    },
+    {
+      "name": "error-memory",
+      "description": "Run this when debugging to search past error resolutions or after fixing an error to record the solution for future recall.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/error-memory/SKILL.md"
+    },
+    {
+      "name": "fidelity-review",
+      "description": "Run this to verify implementation matches plan — compares code against specification to identify deviations and compliance gaps.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/fidelity-review/SKILL.md"
+    },
+    {
+      "name": "git-cleanup",
+      "description": "Run this when local git branches have accumulated and need review for deletion — safely analyzes, groups, and confirms before cleanup.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/git-cleanup/SKILL.md"
+    },
+    {
+      "name": "interface-design-variants",
+      "description": "Run this before finalizing an interface — designs and compares multiple materially different interface shapes.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/interface-design-variants/SKILL.md"
+    },
+    {
+      "name": "legacy-modernizer",
+      "description": "Run this when modernizing legacy systems — guides incremental migration with strangler fig, branch by abstraction, and zero-downtime strategies.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/legacy-modernizer/SKILL.md"
+    },
+    {
+      "name": "memoir-concept-extraction",
+      "description": "Run this to extract domain knowledge into a memoir — captures named concepts and relationships from documents or hyphae search results.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/memoir-concept-extraction/SKILL.md"
+    },
+    {
+      "name": "monorepo-management",
+      "description": "Run this when setting up or working with monorepos — guides Turborepo, Nx, and pnpm workspace configuration and management.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/monorepo-management/SKILL.md"
+    },
+    {
+      "name": "parallel-debugging",
+      "description": "Run this when debugging a complex issue with multiple plausible causes — uses competing hypotheses methodology to isolate root cause.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/parallel-debugging/SKILL.md"
+    },
+    {
+      "name": "plan-fleet",
+      "description": "Run this when breaking down work for fleet execution — creates implementation plans optimized for GitHub Copilot CLI parallel agents.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/plan-fleet/SKILL.md"
+    },
+    {
+      "name": "property-based-testing",
+      "description": "Run this when implementing property-based tests — guides property-based testing patterns across multiple languages and smart contracts.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/property-based-testing/SKILL.md"
+    },
+    {
+      "name": "strategic-compact",
+      "description": "Activate at task boundaries when context pressure is high — suggests manual compaction points to preserve context through phases.",
+      "origin": "ECC strategic-compact (adapted)",
+      "category": "core",
+      "path": "skills/core/strategic-compact/SKILL.md"
+    },
+    {
+      "name": "structured-review",
+      "description": "Run this to review a plan or spec — evaluates clarity, feasibility, risk, and completeness using systematic framework.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/structured-review/SKILL.md"
+    },
+    {
+      "name": "systematic-debugging",
+      "description": "Run this when debugging to apply structured methodology — uses investigation, hypotheses, testing, and validation framework.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/systematic-debugging/SKILL.md"
+    },
+    {
+      "name": "tech-debt-tracker",
+      "description": "Run this when assessing codebase health — scans for technical debt, prioritizes fixes, and tracks trends for backlog planning.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/tech-debt-tracker/SKILL.md"
+    },
+    {
+      "name": "test-debugging",
+      "description": "Run this when test failures need diagnosis — applies five-phase workflow to isolate root cause and fix.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/test-debugging/SKILL.md"
+    },
+    {
+      "name": "test-driven-development",
+      "description": "Activate when starting feature work — enforces TDD by requiring failing tests before implementation begins.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/test-driven-development/SKILL.md"
+    },
+    {
+      "name": "test-writing",
+      "description": "Run this when writing tests for new code or fixing tests after refactoring — orchestrates test creation with systematic coverage.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/test-writing/SKILL.md"
+    },
+    {
+      "name": "token-efficiency",
+      "description": "Reduces unnecessary token generation through conciseness instructions injected at SessionStart",
+      "origin": "caveman compression persona (adapted)",
+      "category": "core",
+      "path": "skills/core/token-efficiency/SKILL.md"
+    },
+    {
+      "name": "type-driven-design",
+      "description": "Run this when designing types to prevent bugs at compile time — leverages type systems to make invalid states unrepresentable.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/type-driven-design/SKILL.md"
+    },
+    {
+      "name": "verified-implementer",
+      "description": "Run this for complex implementations requiring verification — orchestrates implementation with LLM-as-Judge validation at critical steps.",
+      "origin": "lamella",
+      "category": "core",
+      "path": "skills/core/verified-implementer/SKILL.md"
+    },
+    {
+      "name": "council-architect",
+      "description": "Evaluates decisions for long-term structural soundness and maintainability.",
+      "origin": "lamella",
+      "category": "council-roles",
+      "path": "skills/council-roles/council-architect/SKILL.md"
+    },
+    {
+      "name": "council-critic",
+      "description": "Evaluates whether a proposal actually solves the stated problem and identifies gaps.",
+      "origin": "lamella",
+      "category": "council-roles",
+      "path": "skills/council-roles/council-critic/SKILL.md"
+    },
+    {
+      "name": "council-pragmatist",
+      "description": "Assesses implementation cost, timeline, and what version actually ships.",
+      "origin": "lamella",
+      "category": "council-roles",
+      "path": "skills/council-roles/council-pragmatist/SKILL.md"
+    },
+    {
+      "name": "council-skeptic",
+      "description": "Identifies risk, edge cases, and failure modes in proposals.",
+      "origin": "lamella",
+      "category": "council-roles",
+      "path": "skills/council-roles/council-skeptic/SKILL.md"
+    },
+    {
+      "name": "cpp-pro",
+      "description": "Applies modern C++ development patterns.",
+      "origin": "lamella",
+      "category": "cpp",
+      "path": "skills/cpp/cpp-pro/SKILL.md"
+    },
+    {
+      "name": "cpp-testing",
+      "description": "Implements C++ testing workflows with GoogleTest and CTest.",
+      "origin": "lamella",
+      "category": "cpp",
+      "path": "skills/cpp/cpp-testing/SKILL.md"
+    },
+    {
+      "name": "embedded-systems",
+      "description": "Builds embedded and firmware systems in C and C++.",
+      "origin": "lamella",
+      "category": "cpp",
+      "path": "skills/cpp/embedded-systems/SKILL.md"
+    },
+    {
+      "name": "database-schema-designer",
+      "description": "Designs relational schemas, migrations, indexes, policies, and ERDs.",
+      "origin": "lamella",
+      "category": "database",
+      "path": "skills/database/database-schema-designer/SKILL.md"
+    },
+    {
+      "name": "postgresql",
+      "description": "Designs PostgreSQL schemas and database patterns.",
+      "origin": "lamella",
+      "category": "database",
+      "path": "skills/database/postgresql/SKILL.md"
+    },
+    {
+      "name": "sql-pro",
+      "description": "Optimizes SQL queries and database design across PostgreSQL, MySQL, SQL Server, and Oracle.",
+      "origin": "lamella",
+      "category": "database",
+      "path": "skills/database/sql-pro/SKILL.md"
+    },
+    {
+      "name": "ansible",
+      "description": "Generates, validates, lints, and tests Ansible playbooks, roles, inventories, and tasks.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/ansible/SKILL.md"
+    },
+    {
+      "name": "aws-agentic-ai",
+      "description": "Deploys and manages AWS Bedrock AgentCore services.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/aws-agentic-ai/SKILL.md"
+    },
+    {
+      "name": "aws-cdk-development",
+      "description": "Builds cloud infrastructure with AWS Cloud Development Kit (CDK) in TypeScript or Python.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/aws-cdk-development/SKILL.md"
+    },
+    {
+      "name": "aws-cost-operations",
+      "description": "Analyzes AWS costs, monitoring, and operational health.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/aws-cost-operations/SKILL.md"
+    },
+    {
+      "name": "aws-serverless-eda",
+      "description": "Designs AWS serverless event-driven architectures with core managed services.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/aws-serverless-eda/SKILL.md"
+    },
+    {
+      "name": "chaos-engineering",
+      "description": "Designs chaos experiments, failure injection frameworks, and game day exercises.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/chaos-engineering/SKILL.md"
+    },
+    {
+      "name": "deployment",
+      "description": "Guides production deployments, CI/CD, rollbacks, and readiness checks.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/deployment/SKILL.md"
+    },
+    {
+      "name": "distributed-tracing",
+      "description": "Implements distributed tracing with Jaeger, Tempo, and request analysis.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/distributed-tracing/SKILL.md"
+    },
+    {
+      "name": "docker-patterns",
+      "description": "Guides Dockerfiles, Compose setups, networking, volumes, and container security.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/docker-patterns/SKILL.md"
+    },
+    {
+      "name": "docker-troubleshoot",
+      "description": "Diagnoses container failures, networking issues, permissions, and port conflicts.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/docker-troubleshoot/SKILL.md"
+    },
+    {
+      "name": "github-actions-validator",
+      "description": "Validates, lints, audits, and fixes GitHub Actions workflows in `.github/workflows`.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/github-actions-validator/SKILL.md"
+    },
+    {
+      "name": "gitops-workflow",
+      "description": "Implements GitOps deployments with ArgoCD, Flux, and reconciliation.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/gitops-workflow/SKILL.md"
+    },
+    {
+      "name": "grafana-dashboards",
+      "description": "Creates and manages production Grafana dashboards for real-time visualization of system and application metrics.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/grafana-dashboards/SKILL.md"
+    },
+    {
+      "name": "helm-charts",
+      "description": "Creates, validates, lints, and tests Helm charts for Kubernetes applications.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/helm-charts/SKILL.md"
+    },
+    {
+      "name": "incident-commander",
+      "description": "Coordinates live incident response with severity classification, role separation, communication cadence, and timeline reconstruction.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/incident-commander/SKILL.md"
+    },
+    {
+      "name": "kubernetes-manifest-generator",
+      "description": "Creates production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/kubernetes-manifest-generator/SKILL.md"
+    },
+    {
+      "name": "kubernetes-security-policies",
+      "description": "Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC for production-grade security.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/kubernetes-security-policies/SKILL.md"
+    },
+    {
+      "name": "makefile",
+      "description": "Generates, validates, lints, and audits Makefiles with `.PHONY` targets and build automation.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/makefile/SKILL.md"
+    },
+    {
+      "name": "modal-serverless",
+      "description": "Runs Python code in the cloud with serverless containers, GPUs, and autoscaling.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/modal-serverless/SKILL.md"
+    },
+    {
+      "name": "otel-collector",
+      "description": "Configures OpenTelemetry Collector pipelines for traces, metrics, and logs. Use when setting up receivers, processors, exporters, or service pipelines; choosing between agent and gateway deployment; applying sampling strategies; or transforming telemetry with OTTL.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/otel-collector/SKILL.md"
+    },
+    {
+      "name": "otel-instrumentation",
+      "description": "Instruments services with the OpenTelemetry SDK to emit traces, metrics, and logs. Use when adding OTel to a new service, reviewing telemetry quality, or choosing SDK setup across Node.js, Go, Python, Java, or Rust.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/otel-instrumentation/SKILL.md"
+    },
+    {
+      "name": "postmortem-writing",
+      "description": "Writes effective blameless postmortems with root cause analysis, timelines, and action items.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/postmortem-writing/SKILL.md"
+    },
+    {
+      "name": "pre-publish-review",
+      "description": "Layered pre-publish gate for Rust crates: deep-dive per-change review, holistic API and supply-chain analysis, and synthesis verdict before cargo publish.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/pre-publish-review/SKILL.md"
+    },
+    {
+      "name": "prometheus-configuration",
+      "description": "Sets up Prometheus for metric collection, storage, and monitoring of infrastructure and applications.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/prometheus-configuration/SKILL.md"
+    },
+    {
+      "name": "promql",
+      "description": "Generates, validates, lints, and optimizes PromQL queries, alerting rules, and recording rules.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/promql/SKILL.md"
+    },
+    {
+      "name": "release-manager",
+      "description": "Plans releases, derives changelogs, recommends semantic version bumps, and checks release readiness.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/release-manager/SKILL.md"
+    },
+    {
+      "name": "runbook-generator",
+      "description": "Generates operational runbooks for services, deployments, maintenance, and rollback flows.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/runbook-generator/SKILL.md"
+    },
+    {
+      "name": "slo-implementation",
+      "description": "Defines SLIs, SLOs, error budgets, and alerting.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/slo-implementation/SKILL.md"
+    },
+    {
+      "name": "terraform-patterns",
+      "description": "Implements infrastructure as code with Terraform across AWS, Azure, or GCP.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/terraform-patterns/SKILL.md"
+    },
+    {
+      "name": "turborepo-caching",
+      "description": "Configures Turborepo for efficient monorepo builds with local and remote caching.",
+      "origin": "lamella",
+      "category": "devops",
+      "path": "skills/devops/turborepo-caching/SKILL.md"
+    },
+    {
+      "name": "accessibility",
+      "description": "Implements and audits accessible frontend experiences.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/accessibility/SKILL.md"
+    },
+    {
+      "name": "component-architecture",
+      "description": "Designs reusable frontend component architectures.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/component-architecture/SKILL.md"
+    },
+    {
+      "name": "css-animation-creator",
+      "description": "Creates frontend motion and animation patterns.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/css-animation-creator/SKILL.md"
+    },
+    {
+      "name": "design-systems",
+      "description": "Builds frontend design systems and visual foundations.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/design-systems/SKILL.md"
+    },
+    {
+      "name": "frontend-patterns",
+      "description": "Applies modern frontend architecture patterns.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/frontend-patterns/SKILL.md"
+    },
+    {
+      "name": "frontend-performance",
+      "description": "Profiles and improves frontend performance.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/frontend-performance/SKILL.md"
+    },
+    {
+      "name": "frontend-slides",
+      "description": "Builds browser-based presentation decks from scratch or from PowerPoint content.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/frontend-slides/SKILL.md"
+    },
+    {
+      "name": "responsive-design",
+      "description": "Builds responsive frontend layouts with modern CSS.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/responsive-design/SKILL.md"
+    },
+    {
+      "name": "screenshot-to-code",
+      "description": "Converts UI screenshots into working frontend code.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/screenshot-to-code/SKILL.md"
+    },
+    {
+      "name": "spline-3d-integration",
+      "description": "Integrates Spline scenes into web projects with React, Next.js, or vanilla HTML.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/spline-3d-integration/SKILL.md"
+    },
+    {
+      "name": "threejs-advanced",
+      "description": "Implements advanced Three.js animation, post-processing, and shader workflows.",
+      "origin": "lamella",
+      "category": "frontend",
+      "path": "skills/frontend/threejs-advanced/SKILL.md"
+    },
+    {
+      "name": "golang-patterns",
+      "description": "Applies idiomatic Go development patterns.",
+      "origin": "lamella",
+      "category": "go",
+      "path": "skills/go/golang-patterns/SKILL.md"
+    },
+    {
+      "name": "golang-testing",
+      "description": "Implements idiomatic Go testing patterns.",
+      "origin": "lamella",
+      "category": "go",
+      "path": "skills/go/golang-testing/SKILL.md"
+    },
+    {
+      "name": "agent-development",
+      "description": "Guides agent development for Claude Code plugins.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/agent-development/SKILL.md"
+    },
+    {
+      "name": "command-development",
+      "description": "Guides slash command development for Claude Code.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/command-development/SKILL.md"
+    },
+    {
+      "name": "config-curator",
+      "description": "Curates insights from reflections and critiques into `CLAUDE.md` using Agentic Context Engineering.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/config-curator/SKILL.md"
+    },
+    {
+      "name": "create-handoff",
+      "description": "Create a structured handoff document with verification script",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/create-handoff/SKILL.md"
+    },
+    {
+      "name": "create-hook",
+      "description": "Creates Claude Code hooks and matching repo guardrails.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/create-hook/SKILL.md"
+    },
+    {
+      "name": "create-skill",
+      "description": "Guides effective skill creation.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/create-skill/SKILL.md"
+    },
+    {
+      "name": "create-workflow-command",
+      "description": "Creates workflow commands that orchestrate multi-step execution through sub-agents with file-based task prompts.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/create-workflow-command/SKILL.md"
+    },
+    {
+      "name": "designing-workflow-skills",
+      "description": "Designs workflow skills with phases, routing, gates, and delegation.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/designing-workflow-skills/SKILL.md"
+    },
+    {
+      "name": "evolve-skill",
+      "description": "Captures skill evolution deltas by diffing what the skill guided vs what actually shipped, then stores the lesson in hyphae for skill authors to query.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/evolve-skill/SKILL.md"
+    },
+    {
+      "name": "file-todos",
+      "description": "Manages a file-based todo tracking system in the `todos/` directory.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/file-todos/SKILL.md"
+    },
+    {
+      "name": "plugin-settings",
+      "description": "Documents the `.claude/plugin-name.local.md` pattern for plugin-specific configuration.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/plugin-settings/SKILL.md"
+    },
+    {
+      "name": "plugin-structure",
+      "description": "Guides Claude Code plugin architecture and directory structure.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/plugin-structure/SKILL.md"
+    },
+    {
+      "name": "rust-crate-skill-generator",
+      "description": "Orchestrates on-demand generation of crate-specific skills from docs.rs `llms.txt` data and project dependencies.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/rust-crate-skill-generator/SKILL.md"
+    },
+    {
+      "name": "skill-best-practices",
+      "description": "Applies Anthropic's official best practices for skill development.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/skill-best-practices/SKILL.md"
+    },
+    {
+      "name": "skill-composer-studio",
+      "description": "Composes multiple existing skills into custom multi-step workflows with automatic handoffs.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/skill-composer-studio/SKILL.md"
+    },
+    {
+      "name": "skill-router",
+      "description": "Routes questions to the right skill, plugin, or agent.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/skill-router/SKILL.md"
+    },
+    {
+      "name": "skill-stocktake",
+      "description": "Audits Claude skills and commands for quality.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/skill-stocktake/SKILL.md"
+    },
+    {
+      "name": "task-observer",
+      "description": "Monitors task execution for skill improvement opportunities.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/task-observer/SKILL.md"
+    },
+    {
+      "name": "team-communication-protocols",
+      "description": "Defines agent team messaging, approvals, and shutdown protocols.",
+      "origin": "lamella",
+      "category": "meta",
+      "path": "skills/meta/team-communication-protocols/SKILL.md"
+    },
+    {
+      "name": "cqrs-implementation",
+      "description": "Implements Command Query Responsibility Segregation patterns for distributed systems.",
+      "origin": "lamella",
+      "category": "microservices",
+      "path": "skills/microservices/cqrs-implementation/SKILL.md"
+    },
+    {
+      "name": "event-store-design",
+      "description": "Designs event stores for event-sourced systems.",
+      "origin": "lamella",
+      "category": "microservices",
+      "path": "skills/microservices/event-store-design/SKILL.md"
+    },
+    {
+      "name": "microservices-design",
+      "description": "Designs microservices architectures with service boundaries, event-driven communication, and resilience patterns.",
+      "origin": "lamella",
+      "category": "microservices",
+      "path": "skills/microservices/microservices-design/SKILL.md"
+    },
+    {
+      "name": "saga-orchestration",
+      "description": "Implements saga orchestration patterns for distributed transactions.",
+      "origin": "lamella",
+      "category": "microservices",
+      "path": "skills/microservices/saga-orchestration/SKILL.md"
+    },
+    {
+      "name": "django-patterns",
+      "description": "Guides Django architecture, DRF APIs, ORM patterns, and testing.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/django-patterns/SKILL.md"
+    },
+    {
+      "name": "django-security",
+      "description": "Applies Django security patterns for auth, CSRF, XSS, and deployment.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/django-security/SKILL.md"
+    },
+    {
+      "name": "django-tdd",
+      "description": "Applies Django testing strategies with pytest-django, TDD, factory_boy, mocking, coverage, and DRF test patterns.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/django-tdd/SKILL.md"
+    },
+    {
+      "name": "django-verification",
+      "description": "Verifies Django projects with migrations, linting, coverage-backed tests, security scans, and deployment-readiness checks.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/django-verification/SKILL.md"
+    },
+    {
+      "name": "fastapi",
+      "description": "Applies FastAPI best practices and conventions for APIs and Pydantic models.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/fastapi/SKILL.md"
+    },
+    {
+      "name": "modern-python",
+      "description": "Configures Python projects with modern tooling (uv, ruff, ty).",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/modern-python/SKILL.md"
+    },
+    {
+      "name": "pandas-pro",
+      "description": "Applies pandas patterns for DataFrame manipulation, cleaning, aggregation, merging, and time series analysis.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/pandas-pro/SKILL.md"
+    },
+    {
+      "name": "python-patterns",
+      "description": "Applies Python idioms, typing, async patterns, and standard library.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/python-patterns/SKILL.md"
+    },
+    {
+      "name": "python-testing",
+      "description": "Applies pytest patterns and configuration for Python test suites.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/python-testing/SKILL.md"
+    },
+    {
+      "name": "temporal-python-testing",
+      "description": "Tests Temporal workflows with pytest, time-skipping, and mocking strategies.",
+      "origin": "lamella",
+      "category": "python",
+      "path": "skills/python/temporal-python-testing/SKILL.md"
+    },
+    {
+      "name": "embedding-strategies",
+      "description": "Selects and optimizes embedding models for RAG systems.",
+      "origin": "lamella",
+      "category": "rag",
+      "path": "skills/rag/embedding-strategies/SKILL.md"
+    },
+    {
+      "name": "hybrid-search-implementation",
+      "description": "Combines vector and keyword retrieval strategies.",
+      "origin": "lamella",
+      "category": "rag",
+      "path": "skills/rag/hybrid-search-implementation/SKILL.md"
+    },
+    {
+      "name": "rag-implementation",
+      "description": "Builds Retrieval-Augmented Generation systems for LLM applications.",
+      "origin": "lamella",
+      "category": "rag",
+      "path": "skills/rag/rag-implementation/SKILL.md"
+    },
+    {
+      "name": "vector-search-optimization",
+      "description": "Optimizes vector search infrastructure and retrieval quality.",
+      "origin": "lamella",
+      "category": "rag",
+      "path": "skills/rag/vector-search-optimization/SKILL.md"
+    },
+    {
+      "name": "concurrency",
+      "description": "Analyzes Rust concurrency and async issues.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/concurrency/SKILL.md"
+    },
+    {
+      "name": "lifecycle",
+      "description": "Designs Rust resource lifecycle patterns.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/lifecycle/SKILL.md"
+    },
+    {
+      "name": "meta-cognition-parallel",
+      "description": "Applies an experimental three-layer Rust analysis workflow.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/meta-cognition-parallel/SKILL.md"
+    },
+    {
+      "name": "mutability",
+      "description": "Analyzes Rust mutability and interior mutability issues.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/mutability/SKILL.md"
+    },
+    {
+      "name": "ownership",
+      "description": "Analyzes Rust ownership, borrowing, and lifetime issues.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/ownership/SKILL.md"
+    },
+    {
+      "name": "resource-mgmt",
+      "description": "Explains Rust smart pointers and resource management patterns.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/resource-mgmt/SKILL.md"
+    },
+    {
+      "name": "rust-advanced",
+      "description": "Guides advanced Rust implementation work.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-advanced/SKILL.md"
+    },
+    {
+      "name": "rust-api-design",
+      "description": "Design Rust APIs with the right defaults for boundaries, naming, builders, typed values, and public contract stability. Use when shaping public APIs, reviewing ergonomics, choosing between enums/newtypes/builders, or when naming and type design questions matter.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-api-design/SKILL.md"
+    },
+    {
+      "name": "rust-async-patterns",
+      "description": "Design and review Rust async code beyond the always-on core rules. Use when working on Tokio runtime choices, channels, task orchestration, cancellation, blocking boundaries, or async coordination patterns.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-async-patterns/SKILL.md"
+    },
+    {
+      "name": "rust-docs-quality",
+      "description": "Write and review Rust documentation and lint policy with the right level of strictness. Use when improving rustdoc, documenting public contracts, deciding lint severity, or aligning docs and tooling with crate quality goals.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-docs-quality/SKILL.md"
+    },
+    {
+      "name": "rust-learner",
+      "description": "Retrieves Rust release, crate, and documentation information.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-learner/SKILL.md"
+    },
+    {
+      "name": "rust-performance",
+      "description": "Optimize Rust performance and memory usage with measurement-first guidance. Use when benchmarking, profiling, reducing allocation pressure, tuning release profiles, or evaluating layout and container tradeoffs in hot paths.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-performance/SKILL.md"
+    },
+    {
+      "name": "rust-project-layout",
+      "description": "Organize Rust crates, modules, visibility, workspaces, and internal public surfaces coherently. Use when restructuring crates, deciding on workspace boundaries, reviewing module layout, or tightening visibility and re-export policy.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-project-layout/SKILL.md"
+    },
+    {
+      "name": "rust-router",
+      "description": "Routes Rust questions to the right local skill.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-router/SKILL.md"
+    },
+    {
+      "name": "rust-testing-patterns",
+      "description": "Design Rust tests with the right split between unit, integration, doctest, async, property, mock, and benchmark coverage. Use when adding tests, choosing test style, or reviewing whether evidence matches the behavior claim.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/rust-testing-patterns/SKILL.md"
+    },
+    {
+      "name": "unsafe-checker",
+      "description": "Reviews unsafe Rust and FFI code for soundness risks.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/unsafe-checker/SKILL.md"
+    },
+    {
+      "name": "zero-cost",
+      "description": "Explains Rust generics, traits, and zero-cost abstraction trade-offs.",
+      "origin": "lamella",
+      "category": "rust",
+      "path": "skills/rust/zero-cost/SKILL.md"
+    },
+    {
+      "name": "address-sanitizer",
+      "description": "Detects memory errors with AddressSanitizer during fuzzing.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/address-sanitizer/SKILL.md"
+    },
+    {
+      "name": "agentic-actions-auditor",
+      "description": "Audits agent-integrated GitHub Actions for prompt-injection security risks.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/agentic-actions-auditor/SKILL.md"
+    },
+    {
+      "name": "api-footgun-detector",
+      "description": "Identifies error-prone APIs, dangerous configurations, and footgun designs that enable security mistakes.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/api-footgun-detector/SKILL.md"
+    },
+    {
+      "name": "auth-implementation-patterns",
+      "description": "Provides authentication and authorization patterns for JWT, OAuth2, sessions, RBAC, and permission-based access control.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/auth-implementation-patterns/SKILL.md"
+    },
+    {
+      "name": "cargo-fuzz",
+      "description": "Uses cargo-fuzz for Rust projects that need libFuzzer-based fuzzing.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/cargo-fuzz/SKILL.md"
+    },
+    {
+      "name": "codeql",
+      "description": "Scans codebases for security vulnerabilities using CodeQL's interprocedural data flow and taint tracking analysis.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/codeql/SKILL.md"
+    },
+    {
+      "name": "constant-time-crypto",
+      "description": "Detects and tests timing side-channel vulnerabilities in cryptographic code.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/constant-time-crypto/SKILL.md"
+    },
+    {
+      "name": "dependency-auditor",
+      "description": "Audits dependencies for vulnerabilities, licenses, staleness, and upgrades.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/dependency-auditor/SKILL.md"
+    },
+    {
+      "name": "fuzz-harness-writing",
+      "description": "Designs fuzz harnesses, corpora, dictionaries, and coverage strategies.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/fuzz-harness-writing/SKILL.md"
+    },
+    {
+      "name": "insecure-defaults",
+      "description": "Detects fail-open defaults like weak auth, secrets, and permissive security.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/insecure-defaults/SKILL.md"
+    },
+    {
+      "name": "memory-safety-patterns",
+      "description": "Applies memory-safety patterns across Rust, C++, and C.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/memory-safety-patterns/SKILL.md"
+    },
+    {
+      "name": "ossfuzz",
+      "description": "Sets up OSS-Fuzz for continuous fuzzing of open source projects.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/ossfuzz/SKILL.md"
+    },
+    {
+      "name": "pci-compliance",
+      "description": "Implements PCI DSS controls for payment systems and card data.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/pci-compliance/SKILL.md"
+    },
+    {
+      "name": "pii-redactor",
+      "description": "Detects and redacts PII from text files.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/pii-redactor/SKILL.md"
+    },
+    {
+      "name": "sast-configuration",
+      "description": "Configures SAST tools, scans, and SARIF processing workflows.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/sast-configuration/SKILL.md"
+    },
+    {
+      "name": "seatbelt-sandboxer",
+      "description": "Generates minimal macOS Seatbelt sandbox configurations.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/seatbelt-sandboxer/SKILL.md"
+    },
+    {
+      "name": "secrets-management",
+      "description": "Implements secure secrets management for CI/CD and cloud platforms.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/secrets-management/SKILL.md"
+    },
+    {
+      "name": "security-audit-methodology",
+      "description": "Guides end-to-end security audits, scoping, and deep code review.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/security-audit-methodology/SKILL.md"
+    },
+    {
+      "name": "security-research",
+      "description": "Run this when you need a structured multi-role security audit that produces confirmed, exploitable findings — each with a CWE identifier, CVSS 3.1 base score, and a minimal reproducible PoC.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/security-research/SKILL.md"
+    },
+    {
+      "name": "security-review",
+      "description": "Reviews code against OWASP patterns and secure coding practices.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/security-review/SKILL.md"
+    },
+    {
+      "name": "semgrep",
+      "description": "Runs Semgrep static analysis scans and helps create custom Semgrep rules.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/semgrep/SKILL.md"
+    },
+    {
+      "name": "soc2-compliance",
+      "description": "Plans SOC 2 readiness, control mapping, and audit evidence collection.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/soc2-compliance/SKILL.md"
+    },
+    {
+      "name": "stride-analysis-patterns",
+      "description": "Applies the STRIDE methodology to threat identification, attack tree construction, and security requirement extraction.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/stride-analysis-patterns/SKILL.md"
+    },
+    {
+      "name": "supply-chain-risk-auditor",
+      "description": "Audits dependency supply-chain risk, staleness, and takeover exposure.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/supply-chain-risk-auditor/SKILL.md"
+    },
+    {
+      "name": "threat-mitigation-mapping",
+      "description": "Maps identified threats to appropriate security controls and mitigations.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/threat-mitigation-mapping/SKILL.md"
+    },
+    {
+      "name": "wycheproof",
+      "description": "Applies Google's Wycheproof test vectors and crypto vulnerability patterns to cryptographic implementations.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/wycheproof/SKILL.md"
+    },
+    {
+      "name": "yara-rule-authoring",
+      "description": "Guides authoring of high-quality YARA-X detection rules for malware identification.",
+      "origin": "lamella",
+      "category": "security",
+      "path": "skills/security/yara-rule-authoring/SKILL.md"
+    },
+    {
+      "name": "agent-browser",
+      "description": "Automates browser interactions with Vercel's agent-browser CLI.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/agent-browser/SKILL.md"
+    },
+    {
+      "name": "analytics-tracking",
+      "description": "Plans, audits, and debugs analytics tracking with GA4, GTM, event taxonomies, and conversion instrumentation.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/analytics-tracking/SKILL.md"
+    },
+    {
+      "name": "api-design-principles",
+      "description": "Designs REST and GraphQL APIs with clear contracts and maintainable patterns.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/api-design-principles/SKILL.md"
+    },
+    {
+      "name": "aws-mcp-setup",
+      "description": "Configures AWS MCP servers for documentation search and API access.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/aws-mcp-setup/SKILL.md"
+    },
+    {
+      "name": "bash-script-generator",
+      "description": "Generates bash and shell scripts for automation and CLI workflows.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/bash-script-generator/SKILL.md"
+    },
+    {
+      "name": "bash-script-validator",
+      "description": "Validates bash and shell scripts with ShellCheck.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/bash-script-validator/SKILL.md"
+    },
+    {
+      "name": "cli-developer",
+      "description": "Builds CLI tools with commands, prompts, parsing, and completions.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/cli-developer/SKILL.md"
+    },
+    {
+      "name": "devcontainer-setup",
+      "description": "Creates devcontainers with Claude Code, language-specific tooling (Python/Node/Rust/Go), and persistent volumes.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/devcontainer-setup/SKILL.md"
+    },
+    {
+      "name": "docx-word-documents",
+      "description": "Creates, reads, and edits Word documents (.docx).",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/docx-word-documents/SKILL.md"
+    },
+    {
+      "name": "excalidraw-diagram-generator",
+      "description": "Generates Excalidraw diagrams as .excalidraw JSON files.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/excalidraw-diagram-generator/SKILL.md"
+    },
+    {
+      "name": "gh-cli-patterns",
+      "description": "Guides GitHub CLI usage for repos, PRs, issues, and APIs.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/gh-cli-patterns/SKILL.md"
+    },
+    {
+      "name": "google-workspace-operations",
+      "description": "Operates Google Workspace with Gmail, Drive, Calendar, and Sheets.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/google-workspace-operations/SKILL.md"
+    },
+    {
+      "name": "graphql-patterns",
+      "description": "Designs GraphQL schemas, resolvers, federation layouts, and subscriptions.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/graphql-patterns/SKILL.md"
+    },
+    {
+      "name": "markitdown-converter",
+      "description": "Converts files and office documents to Markdown.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/markitdown-converter/SKILL.md"
+    },
+    {
+      "name": "mcp-ecosystem-context",
+      "description": "Provides MCP tool preferences for subagents that inherit MCP access but lack CLAUDE.md context. Include via the skills frontmatter field in subagent definitions to enable rhizome and hyphae tool awareness.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/mcp-ecosystem-context/SKILL.md"
+    },
+    {
+      "name": "mcp-integration",
+      "description": "Integrates MCP servers into Claude Code plugins and tools.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/mcp-integration/SKILL.md"
+    },
+    {
+      "name": "mcp-server-builder",
+      "description": "Builds MCP server scaffolds from OpenAPI contracts and validates tool manifests before publishing.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/mcp-server-builder/SKILL.md"
+    },
+    {
+      "name": "mermaid-diagrams",
+      "description": "Creates software diagrams using Mermaid syntax.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/mermaid-diagrams/SKILL.md"
+    },
+    {
+      "name": "microsoft-365-tenant-admin",
+      "description": "Administers Microsoft 365 tenants, identities, licensing, and security baselines.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/microsoft-365-tenant-admin/SKILL.md"
+    },
+    {
+      "name": "obsidian",
+      "description": "Manages Obsidian vaults and Obsidian Flavored Markdown.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/obsidian/SKILL.md"
+    },
+    {
+      "name": "openapi-spec-generation",
+      "description": "Generates and maintains OpenAPI 3.1 specifications from code, design-first specs, and validation patterns.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/openapi-spec-generation/SKILL.md"
+    },
+    {
+      "name": "pdf-manipulation",
+      "description": "Extracts, creates, merges, splits, and fills PDF documents.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/pdf-manipulation/SKILL.md"
+    },
+    {
+      "name": "php-pro",
+      "description": "Builds modern PHP applications with strict typing, Symfony patterns, static analysis, and PSR conventions.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/php-pro/SKILL.md"
+    },
+    {
+      "name": "playwright",
+      "description": "Automates browsers and Playwright end-to-end tests.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/playwright/SKILL.md"
+    },
+    {
+      "name": "pptx-presentations",
+      "description": "Creates, edits, and analyzes PowerPoint presentations (.pptx).",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/pptx-presentations/SKILL.md"
+    },
+    {
+      "name": "rclone",
+      "description": "Uploads, syncs, and manages files across cloud storage providers with rclone.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/rclone/SKILL.md"
+    },
+    {
+      "name": "regex-debugger",
+      "description": "Explains and debugs regex patterns with examples and test cases.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/regex-debugger/SKILL.md"
+    },
+    {
+      "name": "tmux-interactive-runner",
+      "description": "Controls interactive CLI tools with tmux sessions and scripted key input.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/tmux-interactive-runner/SKILL.md"
+    },
+    {
+      "name": "token-reduction-optimizer",
+      "description": "Reduces token-heavy command output with Mycelium.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/token-reduction-optimizer/SKILL.md"
+    },
+    {
+      "name": "websocket-patterns",
+      "description": "Designs real-time systems with WebSockets or Socket.IO.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/websocket-patterns/SKILL.md"
+    },
+    {
+      "name": "xlsx-spreadsheets",
+      "description": "Creates, edits, and analyzes Excel spreadsheets and CSV files.",
+      "origin": "lamella",
+      "category": "tools",
+      "path": "skills/tools/xlsx-spreadsheets/SKILL.md"
+    },
+    {
+      "name": "backend-patterns",
+      "description": "Applies backend architecture and production Node.js patterns.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/backend-patterns/SKILL.md"
+    },
+    {
+      "name": "javascript-testing-patterns",
+      "description": "Applies non-obvious testing patterns for Jest and Vitest.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/javascript-testing-patterns/SKILL.md"
+    },
+    {
+      "name": "modern-javascript-patterns",
+      "description": "Applies modern JavaScript patterns, utilities, and module-system guidance.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/modern-javascript-patterns/SKILL.md"
+    },
+    {
+      "name": "nextjs-app-router-patterns",
+      "description": "Applies Next.js App Router architecture, caching strategies, and component patterns.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/nextjs-app-router-patterns/SKILL.md"
+    },
+    {
+      "name": "payload",
+      "description": "Guides Payload CMS collections, hooks, access control, and APIs.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/payload/SKILL.md"
+    },
+    {
+      "name": "react-patterns",
+      "description": "Applies React and Next.js component patterns for performance, accessibility, and animation work.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/react-patterns/SKILL.md"
+    },
+    {
+      "name": "tailwind-design-system",
+      "description": "Builds Tailwind CSS design systems with tokens and components.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/tailwind-design-system/SKILL.md"
+    },
+    {
+      "name": "typescript",
+      "description": "Applies TypeScript code style, type-safety patterns, and project conventions.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/typescript/SKILL.md"
+    },
+    {
+      "name": "zustand-store-ts",
+      "description": "Creates Zustand stores with TypeScript, subscribeWithSelector middleware, and proper state-action separation.",
+      "origin": "lamella",
+      "category": "typescript",
+      "path": "skills/typescript/zustand-store-ts/SKILL.md"
+    },
+    {
+      "name": "capture-observation",
+      "description": "Formats raw ecosystem notes from `.notes/intake/` into numbered observation records and saves them under `.notes/formatted/`. Use when agent behavior, ownership gaps, workflow problems, or ecosystem notes need to become structured OBS entries.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/capture-observation/SKILL.md"
+    },
+    {
+      "name": "compound-scenario-planning",
+      "description": "Models compound scenarios that cascade across revenue, people, product, operations, and cash.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/compound-scenario-planning/SKILL.md"
+    },
+    {
+      "name": "conductor",
+      "description": "Organizes project context, track-based work management, and TDD execution with the Conductor system.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/conductor/SKILL.md"
+    },
+    {
+      "name": "context-handoff",
+      "description": "Creates a structured session handoff document for continuity across sessions.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/context-handoff/SKILL.md"
+    },
+    {
+      "name": "create-plans",
+      "description": "Creates hierarchical project plans optimized for solo agentic development.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/create-plans/SKILL.md"
+    },
+    {
+      "name": "deliver-edge-cases",
+      "description": "Documents edge cases, error states, boundary conditions, and recovery paths for a feature.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/deliver-edge-cases/SKILL.md"
+    },
+    {
+      "name": "develop-adr",
+      "description": "Creates Architecture Decision Records using the Nygard format.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/develop-adr/SKILL.md"
+    },
+    {
+      "name": "develop-spike-summary",
+      "description": "Documents the results of a time-boxed technical or design exploration.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/develop-spike-summary/SKILL.md"
+    },
+    {
+      "name": "executing-plans",
+      "description": "Executes a written implementation plan in a separate session with review checkpoints.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/executing-plans/SKILL.md"
+    },
+    {
+      "name": "finishing-a-development-branch",
+      "description": "Guides merge, PR, or cleanup steps after implementation.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/finishing-a-development-branch/SKILL.md"
+    },
+    {
+      "name": "git-analyze-issue",
+      "description": "Analyzes a GitHub issue and creates a detailed technical specification.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/git-analyze-issue/SKILL.md"
+    },
+    {
+      "name": "git-create-pr",
+      "description": "Creates pull requests with GitHub CLI using proper templates and formatting.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/git-create-pr/SKILL.md"
+    },
+    {
+      "name": "git-worktrees",
+      "description": "Manages Git worktrees for parallel development across multiple branches and working directories.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/git-worktrees/SKILL.md"
+    },
+    {
+      "name": "github-triage",
+      "description": "Batch-triages GitHub issues and PRs with read-only analysis and permalink-backed verdicts.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/github-triage/SKILL.md"
+    },
+    {
+      "name": "handoff-check",
+      "description": "Audits an active handoff for unchecked checklist items, empty PASTE blocks, unresolved clarification markers, missing residual-work dispositions, and missing verification evidence before completion claims. Use when working from `.handoffs/*.md` or before saying a handoff is done.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/handoff-check/SKILL.md"
+    },
+    {
+      "name": "kaizen",
+      "description": "Applies Kaizen continuous-improvement methods such as 5 Whys, Fishbone, PDCA, and A3 problem documentation.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/kaizen/SKILL.md"
+    },
+    {
+      "name": "mental-models",
+      "description": "Applies decision-making frameworks such as first-principles decomposition, inversion, pre-mortems, and second-order thinking.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/mental-models/SKILL.md"
+    },
+    {
+      "name": "resolve-pr-parallel",
+      "description": "Resolves pull request comments using parallel processing.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/resolve-pr-parallel/SKILL.md"
+    },
+    {
+      "name": "spec-driven-workflow",
+      "description": "Creates implementation-ready specs and derives tests from acceptance criteria.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/spec-driven-workflow/SKILL.md"
+    },
+    {
+      "name": "strategy-execution-alignment",
+      "description": "Checks whether company strategy, team goals, and execution are aligned.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/strategy-execution-alignment/SKILL.md"
+    },
+    {
+      "name": "task-linked-council",
+      "description": "Runs a fixed two-role technical council for one task using the existing reviewer and architect lanes.",
+      "origin": "lamella",
+      "category": "workflow",
+      "path": "skills/workflow/task-linked-council/SKILL.md"
+    },
+    {
+      "name": "content-strategy",
+      "description": "Plans content strategy with pillars, topic clusters, buyer-stage coverage, and distribution intent.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/content-strategy/SKILL.md"
+    },
+    {
+      "name": "content-writer",
+      "description": "Creates, researches, and repurposes content across platforms and formats.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/content-writer/SKILL.md"
+    },
+    {
+      "name": "docs-style",
+      "description": "Defines style guidelines for writing and updating documentation.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/docs-style/SKILL.md"
+    },
+    {
+      "name": "email-sequence",
+      "description": "Designs lifecycle email sequences with triggers, timing, message progression, and ready-to-send drafts.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/email-sequence/SKILL.md"
+    },
+    {
+      "name": "humanizer",
+      "description": "Removes signs of AI-generated writing from text.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/humanizer/SKILL.md"
+    },
+    {
+      "name": "latex-posters",
+      "description": "Creates professional research posters in LaTeX using beamerposter, tikzposter, or baposter.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/latex-posters/SKILL.md"
+    },
+    {
+      "name": "release-notes",
+      "description": "Generates changelogs and user-facing release notes from commits and pull requests.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/release-notes/SKILL.md"
+    },
+    {
+      "name": "voice-toolkit",
+      "description": "Extracts voice profiles from sample text and transforms voice dictation into structured prompts.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/voice-toolkit/SKILL.md"
+    },
+    {
+      "name": "writing-voice",
+      "description": "Defines voice and tone rules for written prose.",
+      "origin": "lamella",
+      "category": "writing",
+      "path": "skills/writing/writing-voice/SKILL.md"
+    },
+    {
+      "name": "agent-introspection-debugging",
+      "description": "Detects and recovers from stuck states (loops, context overflow, rate limits, stale diffs, permission errors) using a four-phase self-repair protocol with structured introspection reporting.",
+      "origin": "ECC agent-introspection-debugging (adapted)",
+      "category": "root",
+      "path": "skills/agent-introspection-debugging.md"
+    },
+    {
+      "name": "detect-context-drift",
+      "description": "Detects when an agent's working context (recent tool calls, files touched) drifts from the assigned task, preventing off-scope work.",
+      "origin": "Basidiocarp Canopy Drift Detection Pipeline",
+      "category": "root",
+      "path": "skills/detect-context-drift.md"
+    },
+    {
+      "name": "detect-spec-drift",
+      "description": "Compares recent code changes against the active canopy task specification to identify misalignment between implementation and proposal.",
+      "origin": "Basidiocarp Canopy Drift Detection Pipeline",
+      "category": "root",
+      "path": "skills/detect-spec-drift.md"
+    },
+    {
+      "name": "gateguard",
+      "description": "Three-stage investigation gate (DENY → INVESTIGATE → ALLOW) enforced before any Edit, Write, MultiEdit, or destructive Bash operation. Forces models to gather specific facts before proceeding.",
+      "origin": "Everything-Claude-Code ecosystem audit (ECC, 2026-04-23)",
+      "category": "root",
+      "path": "skills/gateguard.md"
+    },
+    {
+      "name": "strategic-compact",
+      "description": "Provides a decision table for determining when to compact context based on usage percentage, message count, and active file count.",
+      "origin": "ECC strategic-compact (adapted)",
+      "category": "root",
+      "path": "skills/strategic-compact.md"
+    }
+  ],
+  "agents": [
+    {
+      "name": "ai-engineer",
+      "description": "Designs and implements LLM applications, RAG systems, and agentic workflows with reliability, safety, and cost awareness. Use when the task is application-level AI feature work rather than core ML training or MLOps automation.",
+      "category": "ai-ml",
+      "path": "subagents/ai-ml/ai-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "ml-engineer",
+      "description": "Designs and implements production ML systems, model serving, and evaluation pipelines with reproducibility and monitoring built in. Use when the task is model training or serving work rather than LLM application wiring or MLOps orchestration.",
+      "category": "ai-ml",
+      "path": "subagents/ai-ml/ml-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "mlops-engineer",
+      "description": "Designs and automates ML lifecycle infrastructure, experiment tracking, registries, and retraining workflows. Use when the task is platform and automation work around ML systems rather than model code itself.",
+      "category": "ai-ml",
+      "path": "subagents/ai-ml/mlops-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "prompt-engineer",
+      "description": "Designs, tests, and refines prompts and prompt scaffolding for production LLM systems. Use when the task is prompt design or evaluation rather than building the surrounding AI application stack.",
+      "category": "ai-ml",
+      "path": "subagents/ai-ml/prompt-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "comment-analyzer",
+      "description": "Reviews code comments for accuracy, completeness, and long-term maintainability. Use when comment changes need validation or when you suspect comment drift.",
+      "category": "analysis",
+      "path": "subagents/analysis/comment-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "conversation-analyzer",
+      "description": "Analyzes conversation transcripts to identify repeatable tool-use mistakes and derive hookable prevention patterns. Use when turning past user frustration into future guardrails.",
+      "category": "analysis",
+      "path": "subagents/analysis/conversation-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "data-flow-analyzer",
+      "description": "Traces data flow from source to sink, maps trust boundaries, and records validation evidence without jumping to exploitability conclusions. Use when a narrow path through code needs neutral source-to-sink analysis.",
+      "category": "analysis",
+      "path": "subagents/analysis/data-flow-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "function-analyzer",
+      "description": "Performs deep per-function structural analysis to build understanding of dense logic, data flow, or state transitions. Use when one function or a tight call chain needs neutral, detailed comprehension before review or audit.",
+      "category": "analysis",
+      "path": "subagents/analysis/function-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "git-history-analyzer",
+      "description": "Analyzes git history to explain how code evolved, who changed it, and why patterns exist. Use when historical context matters for reviews, debugging, or design decisions.",
+      "category": "analysis",
+      "path": "subagents/analysis/git-history-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "pattern-analyzer",
+      "description": "Analyzes design patterns, anti-patterns, naming conventions, duplication, and boundary violations across a codebase. Use when checking whether code follows the repo’s established structural habits.",
+      "category": "analysis",
+      "path": "subagents/analysis/pattern-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "performance-analyzer",
+      "description": "Analyzes code for algorithmic, database, memory, caching, and scalability bottlenecks. Use when performance concerns arise after design or implementation and you need a static performance review.",
+      "category": "analysis",
+      "path": "subagents/analysis/performance-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "repo-analyzer",
+      "description": "Researches repository structure, conventions, documentation, and implementation patterns to support onboarding and contribution. Use when you need a map of how a codebase works before changing it.",
+      "category": "analysis",
+      "path": "subagents/analysis/repo-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "spec-flow-analyzer",
+      "description": "Maps user journeys, permutations, and edge cases inside a spec or feature description. Use when a plan or requirements doc needs flow analysis before implementation starts.",
+      "category": "analysis",
+      "path": "subagents/analysis/spec-flow-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "type-design-analyzer",
+      "description": "Reviews type design for invariant strength, encapsulation, and practical safety. Use when introducing or refactoring domain types and you need a focused analysis of whether the model prevents real bugs.",
+      "category": "analysis",
+      "path": "subagents/analysis/type-design-analyzer/SUBAGENT.md"
+    },
+    {
+      "name": "architect",
+      "description": "Designs cross-cutting software architecture, proposes alternatives, and produces implementation blueprints or ADR-ready decisions. Use when no narrower specialist architect is the better fit.",
+      "category": "architecture",
+      "path": "subagents/architecture/architect/SUBAGENT.md"
+    },
+    {
+      "name": "architecture-reviewer",
+      "description": "Reviews structural decisions for coupling, reversibility, scalability, and design risk without editing code. Use before or after planning major technical changes.",
+      "category": "architecture",
+      "path": "subagents/architecture/architecture-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "backend-architect",
+      "description": "Designs backend service boundaries, API contracts, communication patterns, and resilience strategy. Use when planning backend services or APIs rather than implementing them.",
+      "category": "architecture",
+      "path": "subagents/architecture/backend-architect/SUBAGENT.md"
+    },
+    {
+      "name": "c4-architect",
+      "description": "Produces C4 architecture documentation at context, container, component, and code levels. Use when the task is to document the current system shape clearly for a specific audience.",
+      "category": "architecture",
+      "path": "subagents/architecture/c4-architect/SUBAGENT.md"
+    },
+    {
+      "name": "cloud-architect",
+      "description": "Designs cloud infrastructure, IaC, resilience, security controls, and cost posture across AWS, Azure, or GCP. Use when planning cloud platform architecture rather than application service boundaries.",
+      "category": "architecture",
+      "path": "subagents/architecture/cloud-architect/SUBAGENT.md"
+    },
+    {
+      "name": "event-sourcing-architect",
+      "description": "Designs event-sourced systems, CQRS boundaries, projections, and saga flows. Use when the task is specifically about immutable event streams and temporal domain modeling rather than simpler CRUD or messaging patterns.",
+      "category": "architecture",
+      "path": "subagents/architecture/event-sourcing-architect/SUBAGENT.md"
+    },
+    {
+      "name": "frontend-architect",
+      "description": "Designs frontend component architecture, design-system boundaries, accessibility constraints, and performance budgets. Use when planning a UI system or feature structure rather than implementing the components directly.",
+      "category": "architecture",
+      "path": "subagents/architecture/frontend-architect/SUBAGENT.md"
+    },
+    {
+      "name": "graphql-architect",
+      "description": "Designs GraphQL schemas, federation topology, resolver strategy, caching, subscriptions, and production hardening. Use when the task is specifically GraphQL architecture rather than general backend service design.",
+      "category": "architecture",
+      "path": "subagents/architecture/graphql-architect/SUBAGENT.md"
+    },
+    {
+      "name": "kubernetes-architect",
+      "description": "Designs Kubernetes platform topology, GitOps flow, workload isolation, and cluster operations. Use when the task is specifically cluster or platform architecture rather than underlying cloud account design.",
+      "category": "architecture",
+      "path": "subagents/architecture/kubernetes-architect/SUBAGENT.md"
+    },
+    {
+      "name": "monorepo-architect",
+      "description": "Designs monorepo workspace structure, task graph boundaries, and cache-aware CI workflows. Use when the task is to shape or scale a multi-project repository rather than implement one package inside it.",
+      "category": "architecture",
+      "path": "subagents/architecture/monorepo-architect/SUBAGENT.md"
+    },
+    {
+      "name": "business-analyst",
+      "description": "Builds KPI frameworks, business intelligence analysis, and decision-oriented recommendations for established businesses. Use when the task is business performance analysis rather than startup fundraising or quantitative trading.",
+      "category": "business",
+      "path": "subagents/business/business-analyst/SUBAGENT.md"
+    },
+    {
+      "name": "business-council",
+      "description": "Synthesizes several business perspectives into a single advisory verdict on revenue, market position, risk, and viability. Use when a business decision needs a multi-angle board-style assessment rather than one analytical model.",
+      "category": "business",
+      "path": "subagents/business/business-council/SUBAGENT.md"
+    },
+    {
+      "name": "quant-analyst",
+      "description": "Builds and evaluates quantitative finance models, backtests, and risk analyses with realistic assumptions. Use when the task is trading, portfolio, or market-risk modeling rather than general business analytics.",
+      "category": "business",
+      "path": "subagents/business/quant-analyst/SUBAGENT.md"
+    },
+    {
+      "name": "startup-analyst",
+      "description": "Analyzes early-stage startup strategy, market sizing, unit economics, and fundraising readiness. Use when the task is pre-seed through Series A planning rather than established-business BI or quant finance.",
+      "category": "business",
+      "path": "subagents/business/startup-analyst/SUBAGENT.md"
+    },
+    {
+      "name": "code-auditor",
+      "description": "Audits codebases for maintainability, consistency, and structural quality issues. Use when you need a broad static review of complexity, duplication, or code hygiene across a repo or PR.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/code-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "code-explorer",
+      "description": "Traces execution paths and architecture layers to explain how an existing feature works. Use before modifying or extending unfamiliar code.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/code-explorer/SUBAGENT.md"
+    },
+    {
+      "name": "code-fixer",
+      "description": "Implements pre-specified fixes from an existing fix list or review artifact. Use when the issues are already identified and the task is to land them cleanly without expanding scope.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/code-fixer/SUBAGENT.md"
+    },
+    {
+      "name": "code-reviewer",
+      "description": "Reviews changed code for correctness, security, performance, and missing tests. Use after implementation or before merge.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/code-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "perf-auditor",
+      "description": "Audits applications for measurable performance bottlenecks in bundle size, rendering, query patterns, and runtime behavior. Use when you need a focused review of latency or resource waste.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/perf-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "refactor-cleaner",
+      "description": "Removes dead code, unused exports, and duplicate logic in low-risk cleanup passes. Use when the task is safe cleanup rather than broader structural redesign.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/refactor-cleaner/SUBAGENT.md"
+    },
+    {
+      "name": "refactorer",
+      "description": "Improves code structure without changing behavior. Use after implementation when code needs simplification, cleanup, or standardization.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/refactorer/SUBAGENT.md"
+    },
+    {
+      "name": "self-review",
+      "description": "Performs post-implementation validation against requirements, test evidence, and residual risk before handoff. Use immediately after an implementation wave when you need a concise production-readiness check.",
+      "category": "code-quality",
+      "path": "subagents/code-quality/self-review/SUBAGENT.md"
+    },
+    {
+      "name": "socratic-mentor",
+      "description": "Guides programming learners through discovery-oriented questioning instead of direct answers. Use when the goal is teaching understanding, not just unblocking implementation.",
+      "category": "collaboration",
+      "path": "subagents/collaboration/socratic-mentor/SUBAGENT.md"
+    },
+    {
+      "name": "team-debugger",
+      "description": "Investigates one assigned debugging hypothesis and reports evidence, contradictions, and confidence back to a coordinator. Use during parallel debugging when each worker owns one theory.",
+      "category": "collaboration",
+      "path": "subagents/collaboration/team-debugger/SUBAGENT.md"
+    },
+    {
+      "name": "team-implementer",
+      "description": "Implements one assigned workstream within explicit file-ownership boundaries and reports integration status back to the coordinator. Use during parallel delivery when ownership is partitioned up front.",
+      "category": "collaboration",
+      "path": "subagents/collaboration/team-implementer/SUBAGENT.md"
+    },
+    {
+      "name": "team-lead",
+      "description": "Decomposes work into parallel streams with file ownership boundaries, coordinates workers, and synthesizes the result. Use when a task is large enough to benefit from explicit multi-worker orchestration.",
+      "category": "collaboration",
+      "path": "subagents/collaboration/team-lead/SUBAGENT.md"
+    },
+    {
+      "name": "team-reviewer",
+      "description": "Reviews one assigned dimension such as security, performance, architecture, testing, or accessibility and reports structured findings to a coordinator. Use during parallel review where each worker owns one lens.",
+      "category": "collaboration",
+      "path": "subagents/collaboration/team-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "clarity-editor",
+      "description": "Edits prose for clarity, concision, jargon reduction, and stronger sentence-level flow. Use when the task is a clarity pass on existing writing rather than deeper restructuring or voice redesign.",
+      "category": "content",
+      "path": "subagents/content/clarity-editor/SUBAGENT.md"
+    },
+    {
+      "name": "content-architect",
+      "description": "Creates outlines, hooks, and section flow for written content before drafting begins. Use when raw material exists but the content still needs a strong structure.",
+      "category": "content",
+      "path": "subagents/content/content-architect/SUBAGENT.md"
+    },
+    {
+      "name": "content-writer",
+      "description": "Writes marketing and editorial content from a product brief, audience context, and supporting assets. Use when producing publishable content rather than purely technical documentation.",
+      "category": "content",
+      "path": "subagents/content/content-writer/SUBAGENT.md"
+    },
+    {
+      "name": "seo-optimizer",
+      "description": "Audits and improves SEO across content, metadata, structure, and technical signals. Use when reviewing or implementing search-oriented improvements for a site or page set.",
+      "category": "content",
+      "path": "subagents/content/seo-optimizer/SUBAGENT.md"
+    },
+    {
+      "name": "voice-guardian",
+      "description": "Reviews content for tone, register, and style drift against a defined voice profile. Use when checking whether content matches an established brand or author voice.",
+      "category": "content",
+      "path": "subagents/content/voice-guardian/SUBAGENT.md"
+    },
+    {
+      "name": "implementer",
+      "description": "Executes bounded, well-specified tasks with minimal judgment and explicit scope. Use after the plan and approach are already decided and the work is mostly mechanical.",
+      "category": "core",
+      "path": "subagents/core/implementer/SUBAGENT.md"
+    },
+    {
+      "name": "data-engineer",
+      "description": "Designs and implements data pipelines, warehouse flows, and data-platform automation with quality and governance built in. Use when the task is pipeline or analytics infrastructure work rather than schema-only tuning.",
+      "category": "data",
+      "path": "subagents/data/data-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "data-integrity-guardian",
+      "description": "Reviews migrations, data transformations, and persistent-data code for safety, reversibility, and privacy risk. Use when the task is to assess integrity and compliance risk rather than implement the broader data flow.",
+      "category": "data",
+      "path": "subagents/data/data-integrity-guardian/SUBAGENT.md"
+    },
+    {
+      "name": "data-scientist",
+      "description": "Performs statistical analysis, modeling, and experiment design with reproducibility and business interpretation built in. Use when the task is analytical or predictive modeling work rather than pipeline or schema implementation.",
+      "category": "data",
+      "path": "subagents/data/data-scientist/SUBAGENT.md"
+    },
+    {
+      "name": "database-architect",
+      "description": "Designs database systems, audits query patterns, and reviews schema or migration changes. Use when choosing storage models, tuning queries, or checking database-facing code for production risk.",
+      "category": "data",
+      "path": "subagents/data/database-architect/SUBAGENT.md"
+    },
+    {
+      "name": "seed-generator",
+      "description": "Generates realistic, idempotent seed data from the project schema for development, testing, or demos. Use when the task is to create or update seed scripts rather than redesign the data model itself.",
+      "category": "data",
+      "path": "subagents/data/seed-generator/SUBAGENT.md"
+    },
+    {
+      "name": "vector-db-architect",
+      "description": "Designs vector search systems, embedding strategies, chunking pipelines, and retrieval architecture for semantic search or RAG use cases. Use when planning vector retrieval systems rather than general data modeling.",
+      "category": "data",
+      "path": "subagents/data/vector-db-architect/SUBAGENT.md"
+    },
+    {
+      "name": "bug-auditor",
+      "description": "Audits changed code for likely runtime defects such as async misuse, cleanup gaps, and unsafe state transitions. Use when you want a static defect sweep instead of debugging one known failing case.",
+      "category": "debugging",
+      "path": "subagents/debugging/bug-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "bug-hunter",
+      "description": "Finds likely bugs in local changes or review diffs through systematic root-cause analysis. Use after a logical implementation chunk or before merge when you want proactive bug discovery.",
+      "category": "debugging",
+      "path": "subagents/debugging/bug-hunter/SUBAGENT.md"
+    },
+    {
+      "name": "bug-reproduction-validator",
+      "description": "Reproduces and classifies reported issues to confirm whether they are real bugs, environment problems, or misunderstandings. Use when a bug report needs verification before anyone starts fixing it.",
+      "category": "debugging",
+      "path": "subagents/debugging/bug-reproduction-validator/SUBAGENT.md"
+    },
+    {
+      "name": "build-error-resolver",
+      "description": "Resolves build, type, import, and configuration errors with minimal diffs. Use when the build is red and the goal is to restore a clean compile quickly.",
+      "category": "debugging",
+      "path": "subagents/debugging/build-error-resolver/SUBAGENT.md"
+    },
+    {
+      "name": "debugger",
+      "description": "Performs root-cause analysis for errors, test failures, and unexpected behavior. Use when a real failure needs systematic investigation and a minimal fix.",
+      "category": "debugging",
+      "path": "subagents/debugging/debugger/SUBAGENT.md"
+    },
+    {
+      "name": "deploy-checker",
+      "description": "Validates deployment readiness across builds, configuration, migrations, and health checks. Use before shipping when you need a release-blocker list instead of general infra review.",
+      "category": "devops",
+      "path": "subagents/devops/deploy-checker/SUBAGENT.md"
+    },
+    {
+      "name": "deployment-engineer",
+      "description": "Designs and implements CI/CD pipelines, GitOps workflows, and deployment automation for safe releases. Use when the task is to build or revise delivery infrastructure rather than just audit readiness.",
+      "category": "devops",
+      "path": "subagents/devops/deployment-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "devops-sre",
+      "description": "Diagnoses infrastructure incidents, reliability issues, and operational regressions using structured incident-response reasoning. Use when the task is active troubleshooting or remediation planning rather than building new delivery infrastructure.",
+      "category": "devops",
+      "path": "subagents/devops/devops-sre/SUBAGENT.md"
+    },
+    {
+      "name": "docker-engineer",
+      "description": "Designs and troubleshoots Dockerfiles, Compose stacks, and container runtime configuration. Use when the task is container-focused build or runtime work rather than broader Kubernetes or deployment architecture.",
+      "category": "devops",
+      "path": "subagents/devops/docker-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "infra-auditor",
+      "description": "Audits deployment configuration for environment drift, headers, health checks, and production-readiness gaps. Use when reviewing infrastructure config before release or after reliability issues.",
+      "category": "devops",
+      "path": "subagents/devops/infra-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "network-engineer",
+      "description": "Designs and troubleshoots cloud networking, traffic routing, DNS, TLS, and connectivity boundaries. Use when the task is specifically network architecture or diagnosis rather than broader cloud platform planning.",
+      "category": "devops",
+      "path": "subagents/devops/network-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "observability-engineer",
+      "description": "Designs and implements monitoring, logging, tracing, and alerting systems with actionable SLO-driven coverage. Use when the task is to build or improve observability rather than only respond to an incident.",
+      "category": "devops",
+      "path": "subagents/devops/observability-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "service-mesh-architect",
+      "description": "Designs service mesh topology, mTLS, traffic management, and observability for Istio, Linkerd, or similar platforms. Use when the task is specifically mesh architecture rather than general cloud or backend design.",
+      "category": "devops",
+      "path": "subagents/devops/service-mesh-architect/SUBAGENT.md"
+    },
+    {
+      "name": "terraform-specialist",
+      "description": "Designs and implements Terraform or OpenTofu infrastructure with modular composition, secure state handling, and automation-aware workflows. Use when the task is IaC-focused rather than broader cloud platform planning.",
+      "category": "devops",
+      "path": "subagents/devops/terraform-specialist/SUBAGENT.md"
+    },
+    {
+      "name": "api-documenter",
+      "description": "Writes API documentation, OpenAPI specs, examples, and migration guidance. Use when documenting endpoints, authentication flows, request and response schemas, or SDK-facing API behavior.",
+      "category": "documentation",
+      "path": "subagents/documentation/api-documenter/SUBAGENT.md"
+    },
+    {
+      "name": "doc-auditor",
+      "description": "Audits documentation coverage, drift, and missing explanations across code, guides, and API surfaces. Use when checking whether a repo is documented well enough to maintain or ship safely.",
+      "category": "documentation",
+      "path": "subagents/documentation/doc-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "docs-writer",
+      "description": "Creates or updates technical documentation from code and architecture context. Use when implementation changes require docs, codemaps, or drift fixes.",
+      "category": "documentation",
+      "path": "subagents/documentation/docs-writer/SUBAGENT.md"
+    },
+    {
+      "name": "tech-writer",
+      "description": "Writes clear technical documentation for users, developers, and operators. Use when the task is to create or revise guides, references, onboarding docs, or architecture explanations for a specific audience.",
+      "category": "documentation",
+      "path": "subagents/documentation/tech-writer/SUBAGENT.md"
+    },
+    {
+      "name": "tutorial-engineer",
+      "description": "Creates step-by-step tutorials and onboarding content from code. Use when the goal is to teach a workflow or concept through progressive examples rather than reference documentation.",
+      "category": "documentation",
+      "path": "subagents/documentation/tutorial-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "accessibility-reviewer",
+      "description": "Audits and remediates accessibility barriers against WCAG expectations. Use when reviewing UI flows, components, or content for keyboard access, semantics, contrast, or assistive-technology compatibility.",
+      "category": "frontend",
+      "path": "subagents/frontend/accessibility-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "design-iterator",
+      "description": "Iteratively refines an existing UI through repeated screenshot, analysis, and targeted improvement cycles. Use when a design needs multiple visual passes to reach a polished state.",
+      "category": "frontend",
+      "path": "subagents/frontend/design-iterator/SUBAGENT.md"
+    },
+    {
+      "name": "dx-optimizer",
+      "description": "Improves developer workflows, feedback loops, and onboarding ergonomics. Use when reducing setup friction, slow iteration, or avoidable tooling pain in a codebase.",
+      "category": "frontend",
+      "path": "subagents/frontend/dx-optimizer/SUBAGENT.md"
+    },
+    {
+      "name": "figma-design-sync",
+      "description": "Compares a web implementation with a Figma design and fixes visual mismatches with precise code changes. Use when a built UI needs to match a Figma source closely.",
+      "category": "frontend",
+      "path": "subagents/frontend/figma-design-sync/SUBAGENT.md"
+    },
+    {
+      "name": "frontend-developer",
+      "description": "Implements React and Next.js UI with responsive behavior, accessibility, and state management. Use when the task is to build or fix frontend code rather than only plan the architecture.",
+      "category": "frontend",
+      "path": "subagents/frontend/frontend-developer/SUBAGENT.md"
+    },
+    {
+      "name": "ui-auditor",
+      "description": "Audits interfaces for visual consistency, accessibility gaps, and missing UX states. Use when reviewing a UI implementation for design-system drift or usability regressions.",
+      "category": "frontend",
+      "path": "subagents/frontend/ui-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "ui-designer",
+      "description": "Designs accessible interfaces, token systems, and component specifications. Use when defining or refining UI architecture before implementation.",
+      "category": "frontend",
+      "path": "subagents/frontend/ui-designer/SUBAGENT.md"
+    },
+    {
+      "name": "ui-visual-validator",
+      "description": "Verifies whether UI changes actually achieved their intended visual result using screenshots and rendered evidence. Use when a visual change needs proof across states or breakpoints.",
+      "category": "frontend",
+      "path": "subagents/frontend/ui-visual-validator/SUBAGENT.md"
+    },
+    {
+      "name": "django-developer",
+      "description": "Implements and reviews Django applications with idiomatic ORM, async-aware views, DRF patterns, and production-safe defaults. Use when a task is specifically Django-shaped.",
+      "category": "languages",
+      "path": "subagents/languages/django-developer/SUBAGENT.md"
+    },
+    {
+      "name": "fastapi-developer",
+      "description": "Implements FastAPI services with async-safe patterns, Pydantic models, and production-ready API structure. Use when the task is specifically FastAPI or async API focused.",
+      "category": "languages",
+      "path": "subagents/languages/fastapi-developer/SUBAGENT.md"
+    },
+    {
+      "name": "language-developer",
+      "description": "Implements idiomatic code in whichever programming language the task requires when no narrower language specialist is the right fit. Use for polyglot or language-specific work that still needs production-quality implementation.",
+      "category": "languages",
+      "path": "subagents/languages/language-developer/SUBAGENT.md"
+    },
+    {
+      "name": "python-developer",
+      "description": "Implements modern Python code with strong typing, tests, and production-safe defaults. Use when the task is Python-specific but not narrowly tied to Django or FastAPI.",
+      "category": "languages",
+      "path": "subagents/languages/python-developer/SUBAGENT.md"
+    },
+    {
+      "name": "rust-developer",
+      "description": "Implements and reviews Rust systems with idiomatic ownership, async, and type-driven design patterns. Use when a task is specifically Rust-shaped rather than general polyglot work.",
+      "category": "languages",
+      "path": "subagents/languages/rust-developer/SUBAGENT.md"
+    },
+    {
+      "name": "agent-creator",
+      "description": "Designs and writes new agent or subagent definitions from a clear role request. Use when the task is to create a new agent artifact rather than review or validate an existing one.",
+      "category": "meta",
+      "path": "subagents/meta/agent-creator/SUBAGENT.md"
+    },
+    {
+      "name": "agent-native-reviewer",
+      "description": "Reviews whether a product or codebase supports agent-native parity between user actions and agent capabilities. Use after adding UI features, tools, or system-prompt context that should remain accessible to agents.",
+      "category": "meta",
+      "path": "subagents/meta/agent-native-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "agent-sdk-verifier-py",
+      "description": "Verifies Python agent-SDK applications for correct SDK usage, security posture, and deployment readiness. Use after creating or modifying a Python Agent SDK app.",
+      "category": "meta",
+      "path": "subagents/meta/agent-sdk-verifier-py/SUBAGENT.md"
+    },
+    {
+      "name": "agent-sdk-verifier-ts",
+      "description": "Verifies TypeScript agent-SDK applications for correct SDK usage, type safety, and deployment readiness. Use after creating or modifying a TypeScript Agent SDK app.",
+      "category": "meta",
+      "path": "subagents/meta/agent-sdk-verifier-ts/SUBAGENT.md"
+    },
+    {
+      "name": "output-evaluator",
+      "description": "Evaluates proposed code or content changes for correctness, completeness, and safety before commit or application. Use as a lightweight first-pass quality gate, not as a substitute for human review.",
+      "category": "meta",
+      "path": "subagents/meta/output-evaluator/SUBAGENT.md"
+    },
+    {
+      "name": "plugin-validator",
+      "description": "Validates a plugin's structure, manifest, and component inventory for packaging readiness. Use when a plugin has been created or modified and needs a structured validation pass rather than piecemeal review.",
+      "category": "meta",
+      "path": "subagents/meta/plugin-validator/SUBAGENT.md"
+    },
+    {
+      "name": "post-dev-orchestrator",
+      "description": "Coordinates multi-step post-development launch work across several specialized outputs. Use when the task is to run or manage a full post-development workflow rather than execute one isolated content or launch task.",
+      "category": "meta",
+      "path": "subagents/meta/post-dev-orchestrator/SUBAGENT.md"
+    },
+    {
+      "name": "skill-reviewer",
+      "description": "Reviews a skill for trigger quality, structure, and progressive disclosure. Use when a skill has been created or modified and needs a focused quality review rather than a plugin-wide validation pass.",
+      "category": "meta",
+      "path": "subagents/meta/skill-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "slash-command-auditor",
+      "description": "Audits slash-command markdown files for frontmatter quality, argument handling, tool restrictions, and prompt structure. Use when a command needs a read-only audit rather than immediate implementation changes.",
+      "category": "meta",
+      "path": "subagents/meta/slash-command-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "subagent-auditor",
+      "description": "Audits subagent definitions for trigger quality, structure, tool access, and instruction clarity. Use when a subagent file needs a read-only quality audit rather than direct rewriting.",
+      "category": "meta",
+      "path": "subagents/meta/subagent-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "workflow-skill-reviewer",
+      "description": "Reviews workflow-oriented skills for structural quality, workflow pattern fit, tool assignment, and anti-patterns. Use when auditing a workflow-based skill rather than a simpler single-file skill.",
+      "category": "meta",
+      "path": "subagents/meta/workflow-skill-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "context-manager",
+      "description": "Designs context assembly, retrieval, and handoff strategies for multi-agent or long-running workflows. Use when the main problem is getting the right information to the right worker at the right time.",
+      "category": "planning",
+      "path": "subagents/planning/context-manager/SUBAGENT.md"
+    },
+    {
+      "name": "fix-planner",
+      "description": "Consolidates audit findings into a deduplicated, prioritized implementation plan. Use after auditors have produced reports and the next step is deciding what to fix first.",
+      "category": "planning",
+      "path": "subagents/planning/fix-planner/SUBAGENT.md"
+    },
+    {
+      "name": "planner",
+      "description": "Plans implementation work through read-only exploration, dependency mapping, and risk analysis. Use before coding when a task needs sequencing or decomposition.",
+      "category": "planning",
+      "path": "subagents/planning/planner/SUBAGENT.md"
+    },
+    {
+      "name": "prd-interviewer",
+      "description": "Runs structured discovery to turn rough ideas into a product requirements document. Use when a feature, product, or bugfix needs a real requirements interview before implementation.",
+      "category": "planning",
+      "path": "subagents/planning/prd-interviewer/SUBAGENT.md"
+    },
+    {
+      "name": "repo-index",
+      "description": "Produces a compact repository map and index for faster onboarding and lower-context follow-up work. Use when a codebase needs a fresh structural briefing rather than deep architectural analysis.",
+      "category": "planning",
+      "path": "subagents/planning/repo-index/SUBAGENT.md"
+    },
+    {
+      "name": "requirements-analyst",
+      "description": "Turns ambiguous ideas into concrete, prioritized requirements with measurable acceptance criteria. Use when the main problem is clarifying what needs to be built before design or implementation begins.",
+      "category": "planning",
+      "path": "subagents/planning/requirements-analyst/SUBAGENT.md"
+    },
+    {
+      "name": "fact-checker",
+      "description": "Verifies claims, dates, statistics, and quotes against authoritative sources. Use when written content or documentation needs factual review before publication.",
+      "category": "research",
+      "path": "subagents/research/fact-checker/SUBAGENT.md"
+    },
+    {
+      "name": "framework-researcher",
+      "description": "Researches framework, library, and platform guidance from authoritative sources. Use when implementation decisions depend on official docs, version-specific constraints, or established best practices.",
+      "category": "research",
+      "path": "subagents/research/framework-researcher/SUBAGENT.md"
+    },
+    {
+      "name": "researcher",
+      "description": "Researches technologies, libraries, frameworks, and dependencies to support implementation decisions. Use when the team needs multi-source investigation, tradeoff analysis, and a concrete recommendation.",
+      "category": "research",
+      "path": "subagents/research/researcher/SUBAGENT.md"
+    },
+    {
+      "name": "source-researcher",
+      "description": "Researches sources, audience needs, and competitive coverage for writing projects. Use when content work needs credible references, audience framing, and a differentiated angle before drafting.",
+      "category": "research",
+      "path": "subagents/research/source-researcher/SUBAGENT.md"
+    },
+    {
+      "name": "contracts-reviewer",
+      "description": "Reviews APIs, data models, and type definitions for contract design flaws and breaking changes. Use when changes affect public interfaces, schemas, validation rules, or domain models.",
+      "category": "security",
+      "path": "subagents/security/contracts-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "dependency-auditor",
+      "description": "Audits dependencies for security exposure, maintenance risk, license issues, and unused packages. Use when reviewing lockfiles, package upgrades, or supply-chain hygiene before release.",
+      "category": "security",
+      "path": "subagents/security/dependency-auditor/SUBAGENT.md"
+    },
+    {
+      "name": "exploitability-verifier",
+      "description": "Verifies whether a suspected vulnerability is actually exploitable by proving attacker control, mathematical bounds, and race feasibility. Use when a security finding needs a read-only exploitability decision.",
+      "category": "security",
+      "path": "subagents/security/exploitability-verifier/SUBAGENT.md"
+    },
+    {
+      "name": "incident-responder",
+      "description": "Leads active incident response, stakeholder communication, and post-incident follow-up. Use during production incidents when the task is to coordinate response, severity, and communication rather than only debug infrastructure.",
+      "category": "security",
+      "path": "subagents/security/incident-responder/SUBAGENT.md"
+    },
+    {
+      "name": "malware-analyst",
+      "description": "Analyzes suspected malware samples and related artifacts for defensive triage, behavior, and IOC extraction. Use for authorized malware research, incident triage, or detection-rule authoring.",
+      "category": "security",
+      "path": "subagents/security/malware-analyst/SUBAGENT.md"
+    },
+    {
+      "name": "reverse-engineer",
+      "description": "Analyzes binaries, executables, and protocols for authorized security research and defensive understanding. Use when the task is to inspect compiled software, extract behavior, or understand undocumented binary logic.",
+      "category": "security",
+      "path": "subagents/security/reverse-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "security-reviewer",
+      "description": "Reviews code and system design for security vulnerabilities, remediation strategy, and audit findings. Use when checking auth, trust boundaries, sensitive data handling, or exploitability in a code change.",
+      "category": "security",
+      "path": "subagents/security/security-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "semgrep-scanner",
+      "description": "Executes assigned Semgrep rulesets for a specific language slice and produces JSON or SARIF output. Use as a scan worker when Semgrep runs need parallel per-language execution.",
+      "category": "security",
+      "path": "subagents/security/semgrep-scanner/SUBAGENT.md"
+    },
+    {
+      "name": "threat-modeler",
+      "description": "Identifies and prioritizes threats in system designs using structured threat-modeling methods. Use when reviewing architecture, trust boundaries, data flows, or security controls before implementation or release.",
+      "category": "security",
+      "path": "subagents/security/threat-modeler/SUBAGENT.md"
+    },
+    {
+      "name": "legacy-modernizer",
+      "description": "Modernizes legacy code incrementally with compatibility, tests, and rollback planning preserved. Use when the task is migration or modernization work rather than greenfield implementation.",
+      "category": "specialized",
+      "path": "subagents/specialized/legacy-modernizer/SUBAGENT.md"
+    },
+    {
+      "name": "poc-builder",
+      "description": "Builds proof-of-concept artifacts for a verified issue, including concrete exploit steps, executable demonstrations when feasible, and negative cases. Use only after the vulnerability or failure mode has already been substantiated.",
+      "category": "specialized",
+      "path": "subagents/specialized/poc-builder/SUBAGENT.md"
+    },
+    {
+      "name": "pr-comment-resolver",
+      "description": "Resolves a specific PR review comment with focused code changes and a clear resolution summary. Use when the feedback is already known and the task is to land the requested change without scope creep.",
+      "category": "specialized",
+      "path": "subagents/specialized/pr-comment-resolver/SUBAGENT.md"
+    },
+    {
+      "name": "pr-writer",
+      "description": "Produces a pull request description from the actual diff, commit history, and supporting context. Use when a branch is ready for review and the next step is generating a high-signal PR summary.",
+      "category": "specialized",
+      "path": "subagents/specialized/pr-writer/SUBAGENT.md"
+    },
+    {
+      "name": "terminal-engineer",
+      "description": "Solves terminal, shell, PTY, and CLI behavior issues across platforms. Use when the task involves terminal I/O, job control, escape sequences, shell startup behavior, or other terminal-specific implementation details.",
+      "category": "specialized",
+      "path": "subagents/specialized/terminal-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "api-tester",
+      "description": "Tests API endpoints through live requests when possible and falls back to static endpoint analysis when not. Use when you need API-specific validation rather than browser or end-to-end testing.",
+      "category": "testing",
+      "path": "subagents/testing/api-tester/SUBAGENT.md"
+    },
+    {
+      "name": "browser-tester",
+      "description": "Verifies running web applications through live browser interaction to catch UI bugs, console errors, and broken flows. Use when you need manual-style browser validation against a running app.",
+      "category": "testing",
+      "path": "subagents/testing/browser-tester/SUBAGENT.md"
+    },
+    {
+      "name": "e2e-runner",
+      "description": "Creates, maintains, and runs end-to-end tests for critical user journeys. Use when the task is to implement or execute durable E2E coverage rather than do one-off browser checking.",
+      "category": "testing",
+      "path": "subagents/testing/e2e-runner/SUBAGENT.md"
+    },
+    {
+      "name": "fullstack-qa-orchestrator",
+      "description": "Coordinates a find-fix-verify loop across browser QA and code changes until critical user-facing issues are resolved. Use when you want an end-to-end QA pass with active remediation, not just a report.",
+      "category": "testing",
+      "path": "subagents/testing/fullstack-qa-orchestrator/SUBAGENT.md"
+    },
+    {
+      "name": "qa-engineer",
+      "description": "Adds structured verification sections to implementation task files using risk-based quality gates. Use when a task spec needs explicit review or judge criteria before execution.",
+      "category": "testing",
+      "path": "subagents/testing/qa-engineer/SUBAGENT.md"
+    },
+    {
+      "name": "tdd-guide",
+      "description": "Drives a write-tests-first RED-GREEN-IMPROVE workflow for new features, bug fixes, and refactors. Use when the task should be executed through explicit TDD rather than implementation-first coding.",
+      "category": "testing",
+      "path": "subagents/testing/tdd-guide/SUBAGENT.md"
+    },
+    {
+      "name": "test-coverage-reviewer",
+      "description": "Reviews changed code for behavioral test coverage gaps and weak assertions. Use after implementation or test updates when you need to know whether the tests would actually catch regressions.",
+      "category": "testing",
+      "path": "subagents/testing/test-coverage-reviewer/SUBAGENT.md"
+    },
+    {
+      "name": "test-runner",
+      "description": "Runs checks and classifies failures by likely cause. Use after changes when you need verification across types, lint, and tests.",
+      "category": "testing",
+      "path": "subagents/testing/test-runner/SUBAGENT.md"
+    }
+  ],
+  "commands": [
+    {
+      "name": "cancel-skill-improver",
+      "description": "Stops, cancels, or aborts the active skill improvement loop while preserving all changes made to skill files. Use to manually stop, cancel, abort, or kill the iteration process early.",
+      "path": "commands/ai/cancel-skill-improver.md"
+    },
+    {
+      "name": "trailofbits:ct-check",
+      "description": "Detects timing side-channels in cryptographic code",
+      "path": "commands/ai/ct-check.md"
+    },
+    {
+      "name": "explain",
+      "description": "Explain code, concepts, or system behavior with adjustable depth levels",
+      "path": "commands/ai/explain.md"
+    },
+    {
+      "name": "langchain-agent",
+      "description": "Create LangGraph-based agent with modern patterns",
+      "path": "commands/ai/langchain-agent.md"
+    },
+    {
+      "name": "multi-agent-optimize",
+      "description": "",
+      "path": "commands/ai/multi-agent-optimize.md"
+    },
+    {
+      "name": "prompt-optimize",
+      "description": "Optimize prompts for production with CoT, few-shot, and constitutional AI patterns",
+      "path": "commands/ai/prompt-optimize.md"
+    },
+    {
+      "name": "run-prompt",
+      "description": "Delegate one or more prompts to fresh sub-task contexts with parallel or sequential execution",
+      "path": "commands/ai/run-prompt.md"
+    },
+    {
+      "name": "analyze",
+      "description": "Read-only analysis of codebase - discover features, check test coverage, identify issues, and generate report",
+      "path": "commands/analysis/analyze.md"
+    },
+    {
+      "name": "trailofbits:entry-points",
+      "description": "Identifies state-changing entry points in smart contracts",
+      "path": "commands/analysis/entry-points.md"
+    },
+    {
+      "name": "error-analysis",
+      "description": "",
+      "path": "commands/analysis/error-analysis.md"
+    },
+    {
+      "name": "reflect",
+      "description": "Task reflection and validation using Serena MCP analysis capabilities",
+      "path": "commands/analysis/reflect.md"
+    },
+    {
+      "name": "report-bug",
+      "description": "Report a bug in the compound-engineering plugin",
+      "path": "commands/analysis/report-bug.md"
+    },
+    {
+      "name": "reproduce-bug",
+      "description": "Reproduce and investigate a bug using logs, console inspection, and browser screenshots",
+      "path": "commands/analysis/reproduce-bug.md"
+    },
+    {
+      "name": "select-tool",
+      "description": "Intelligent MCP tool selection based on complexity scoring and operation analysis",
+      "path": "commands/analysis/select-tool.md"
+    },
+    {
+      "name": "triage",
+      "description": "Triage and categorize findings for the CLI todo system",
+      "path": "commands/analysis/triage.md"
+    },
+    {
+      "name": "c4-architecture",
+      "description": "",
+      "path": "commands/architecture/c4-architecture.md"
+    },
+    {
+      "name": "correction-record",
+      "description": "Record a correction as a generalizable pattern to prevent repeating the same mistake. Triggers on 'correction record', 'record this correction', 'log this mistake'.",
+      "path": "commands/architecture/correction-record.md"
+    },
+    {
+      "name": "cross-platform",
+      "description": "Cross-platform terminal patterns for Windows, macOS, and Linux with portable code examples",
+      "path": "commands/architecture/cross-platform.md"
+    },
+    {
+      "name": "design-review",
+      "description": "Review existing UI for issues and improvements",
+      "path": "commands/architecture/design-review.md"
+    },
+    {
+      "name": "design-system-setup",
+      "description": "Initialize a design system with tokens",
+      "path": "commands/architecture/design-system-setup.md"
+    },
+    {
+      "name": "design",
+      "description": "Design system architecture, APIs, and component interfaces with comprehensive specifications",
+      "path": "commands/architecture/design.md"
+    },
+    {
+      "name": "evolve",
+      "description": "Analyze instincts and suggest or generate evolved structures",
+      "path": "commands/architecture/evolve.md"
+    },
+    {
+      "name": "pattern-name",
+      "description": "Extract reusable patterns from the session, self-evaluate quality before saving, and determine the right save location (Global vs Project).",
+      "path": "commands/architecture/learn-eval.md"
+    },
+    {
+      "name": "learn",
+      "description": "",
+      "path": "commands/architecture/learn.md"
+    },
+    {
+      "name": "legacy-modernize",
+      "description": "Orchestrate legacy system modernization using the strangler fig pattern with gradual component replacement",
+      "path": "commands/architecture/legacy-modernize.md"
+    },
+    {
+      "name": "agent-native-audit",
+      "description": "Run comprehensive agent-native architecture review with scored principles",
+      "path": "commands/audit/agent-native-audit.md"
+    },
+    {
+      "name": "audit-agents-skills",
+      "description": "Audit quality of agents, skills, and commands in a Claude Code project",
+      "path": "commands/audit/audit-agents-skills.md"
+    },
+    {
+      "name": "audit-component",
+      "description": "Audit a skill, slash command, or subagent for compliance and best practices",
+      "path": "commands/audit/audit-component.md"
+    },
+    {
+      "name": "trailofbits:audit-context",
+      "description": "Builds deep architectural context before vulnerability hunting",
+      "path": "commands/audit/audit-context.md"
+    },
+    {
+      "name": "audit",
+      "description": "",
+      "path": "commands/audit/audit.md"
+    },
+    {
+      "name": "compliance-check",
+      "description": "",
+      "path": "commands/audit/compliance-check.md"
+    },
+    {
+      "name": "Dependency Audit",
+      "description": "",
+      "path": "commands/audit/deps-audit.md"
+    },
+    {
+      "name": "deps-upgrade",
+      "description": "",
+      "path": "commands/audit/deps-upgrade.md"
+    },
+    {
+      "name": "ce:review",
+      "description": "Perform exhaustive code reviews using multi-agent analysis, ultra-thinking, and worktrees",
+      "path": "commands/audit/review.md"
+    },
+    {
+      "name": "trailofbits:spec-compliance",
+      "description": "Verifies code implements specification requirements",
+      "path": "commands/audit/spec-compliance.md"
+    },
+    {
+      "name": "spec-panel",
+      "description": "Multi-expert specification review and improvement using renowned specification and software engineering experts",
+      "path": "commands/audit/spec-panel.md"
+    },
+    {
+      "name": "business-case",
+      "description": "Generate comprehensive investor-ready business case document with market, solution, financials, and strategy",
+      "path": "commands/business/business-case.md"
+    },
+    {
+      "name": "business-panel",
+      "description": "",
+      "path": "commands/business/business-panel.md"
+    },
+    {
+      "name": "cost-optimize",
+      "description": "",
+      "path": "commands/business/cost-optimize.md"
+    },
+    {
+      "name": "financial-projections",
+      "description": "Create detailed 3-5 year financial model with revenue, costs, cash flow, and scenarios",
+      "path": "commands/business/financial-projections.md"
+    },
+    {
+      "name": "market-opportunity",
+      "description": "Generate comprehensive market opportunity analysis with TAM/SAM/SOM calculations",
+      "path": "commands/business/market-opportunity.md"
+    },
+    {
+      "name": "10-10-10",
+      "description": "Evaluate decisions across three time horizons",
+      "path": "commands/consider/10-10-10.md"
+    },
+    {
+      "name": "5-whys",
+      "description": "Drill to root cause by asking why repeatedly",
+      "path": "commands/consider/5-whys.md"
+    },
+    {
+      "name": "eisenhower-matrix",
+      "description": "Apply Eisenhower matrix (urgent/important) to prioritize tasks or decisions",
+      "path": "commands/consider/eisenhower-matrix.md"
+    },
+    {
+      "name": "first-principles",
+      "description": "Break down to fundamentals and rebuild from base truths",
+      "path": "commands/consider/first-principles.md"
+    },
+    {
+      "name": "inversion",
+      "description": "Solve problems backwards - what would guarantee failure?",
+      "path": "commands/consider/inversion.md"
+    },
+    {
+      "name": "occams-razor",
+      "description": "Find simplest explanation that fits all the facts",
+      "path": "commands/consider/occams-razor.md"
+    },
+    {
+      "name": "one-thing",
+      "description": "Identify the single highest-leverage action",
+      "path": "commands/consider/one-thing.md"
+    },
+    {
+      "name": "opportunity-cost",
+      "description": "Analyze what you give up by choosing this option",
+      "path": "commands/consider/opportunity-cost.md"
+    },
+    {
+      "name": "pareto",
+      "description": "Apply Pareto's principle (80/20 rule) to analyze arguments or current discussion",
+      "path": "commands/consider/pareto.md"
+    },
+    {
+      "name": "second-order",
+      "description": "Think through consequences of consequences",
+      "path": "commands/consider/second-order.md"
+    },
+    {
+      "name": "swot",
+      "description": "Map strengths, weaknesses, opportunities, and threats",
+      "path": "commands/consider/swot.md"
+    },
+    {
+      "name": "via-negativa",
+      "description": "Improve by removing rather than adding",
+      "path": "commands/consider/via-negativa.md"
+    },
+    {
+      "name": "ads",
+      "description": "Generate social media ads for Instagram, Facebook, LinkedIn, and Twitter/X with persona targeting",
+      "path": "commands/content/ads.md"
+    },
+    {
+      "name": "articles",
+      "description": "Generate showcase articles about your app in technical, casual, or story style for content marketing",
+      "path": "commands/content/articles.md"
+    },
+    {
+      "name": "compose",
+      "description": "Generate Docker Compose config with services, networking, volumes, and health checks",
+      "path": "commands/content/compose.md"
+    },
+    {
+      "name": "feature-video",
+      "description": "Record a video walkthrough of a feature and add it to the PR description",
+      "path": "commands/content/feature-video.md"
+    },
+    {
+      "name": "landing",
+      "description": "Design landing page proposals with hero, features, testimonials, and CTAs tailored to personas",
+      "path": "commands/content/landing.md"
+    },
+    {
+      "name": "persona",
+      "description": "Generate a product or marketing persona using the v2.5 canonical template contract",
+      "path": "commands/content/persona.md"
+    },
+    {
+      "name": "personas",
+      "description": "Create a multi-persona pack with audience segments, messaging strategy, and CTA guidance",
+      "path": "commands/content/personas.md"
+    },
+    {
+      "name": "seo",
+      "description": "Analyze and generate SEO assets - meta tags, keywords, structured data, OG images, and favicons",
+      "path": "commands/content/seo.md"
+    },
+    {
+      "name": "ce:brainstorm",
+      "description": "Explore requirements and approaches through collaborative dialogue before planning implementation",
+      "path": "commands/database/brainstorm.md"
+    },
+    {
+      "name": "data-driven-feature",
+      "description": "Build features guided by data insights, A/B testing, and continuous measurement",
+      "path": "commands/database/data-driven-feature.md"
+    },
+    {
+      "name": "data-pipeline",
+      "description": "",
+      "path": "commands/database/data-pipeline.md"
+    },
+    {
+      "name": "database",
+      "description": "Configure database containers (PostgreSQL, MySQL, MongoDB, Redis) with security, persistence, and health checks",
+      "path": "commands/database/database.md"
+    },
+    {
+      "name": "guideline",
+      "description": "",
+      "path": "commands/database/guideline.md"
+    },
+    {
+      "name": "sql-migrations",
+      "description": "SQL database migrations with zero-downtime strategies for PostgreSQL, MySQL, SQL Server",
+      "path": "commands/database/sql-migrations.md"
+    },
+    {
+      "name": "cleanup",
+      "description": "Remove debug logs, resolved TODOs, fix comments, and development artifacts to prepare code for clean commits",
+      "path": "commands/debugging/cleanup.md"
+    },
+    {
+      "name": "ce:compound",
+      "description": "Document a recently solved problem to compound your team's knowledge",
+      "path": "commands/debugging/compound.md"
+    },
+    {
+      "name": "log",
+      "description": "Log a new error and its solution to the error memory database",
+      "path": "commands/debugging/log.md"
+    },
+    {
+      "name": "stats",
+      "description": "Show statistics about the error memory database",
+      "path": "commands/debugging/stats.md"
+    },
+    {
+      "name": "bugfix",
+      "description": "Document a bug fix with problem analysis, root cause investigation, and regression testing strategy",
+      "path": "commands/development/bugfix.md"
+    },
+    {
+      "name": "build-fix",
+      "description": "Fix build, compile, and typecheck failures one issue at a time",
+      "path": "commands/development/build-fix.md"
+    },
+    {
+      "name": "build",
+      "description": "Build, compile, and package projects with intelligent error handling and optimization",
+      "path": "commands/development/build.md"
+    },
+    {
+      "name": "code-explain",
+      "description": "",
+      "path": "commands/development/code-explain.md"
+    },
+    {
+      "name": "code-migrate",
+      "description": "",
+      "path": "commands/development/code-migrate.md"
+    },
+    {
+      "name": "commit-push-pr",
+      "description": "Commit, push, and open a PR",
+      "path": "commands/development/commit-push-pr.md"
+    },
+    {
+      "name": "commit",
+      "description": "Create a git commit",
+      "path": "commands/development/commit.md"
+    },
+    {
+      "name": "create-handoff",
+      "description": "Create a structured handoff document with verification",
+      "path": "commands/development/create-handoff.md"
+    },
+    {
+      "name": "feature-dev",
+      "description": "Guided feature development with codebase understanding and architecture focus",
+      "path": "commands/development/feature-dev.md"
+    },
+    {
+      "name": "feature-prd",
+      "description": "Create a feature-focused PRD with lighter interview process optimized for new features within existing products",
+      "path": "commands/development/feature-prd.md"
+    },
+    {
+      "name": "implement",
+      "description": "Execute a Conductor track plan phase by phase with TDD and verification gates",
+      "path": "commands/development/implement.md"
+    },
+    {
+      "name": "multi-model-dev",
+      "description": "Multi-model focused development workflow (backend or frontend)",
+      "path": "commands/development/multi-model-dev.md"
+    },
+    {
+      "name": "new-sdk-app",
+      "description": "Create and setup a new Claude Agent SDK application",
+      "path": "commands/development/new-sdk-app.md"
+    },
+    {
+      "name": "new-track",
+      "description": "Create a new track with specification and phased implementation plan",
+      "path": "commands/development/new-track.md"
+    },
+    {
+      "name": "optimize",
+      "description": "Analyze and suggest performance improvements for code, queries, or systems",
+      "path": "commands/development/optimize.md"
+    },
+    {
+      "name": "performance-optimization",
+      "description": "Orchestrate end-to-end application performance optimization from profiling to monitoring",
+      "path": "commands/development/performance-optimization.md"
+    },
+    {
+      "name": "refactor-clean",
+      "description": "",
+      "path": "commands/development/refactor-clean.md"
+    },
+    {
+      "name": "refine",
+      "description": "Analyze and enhance an existing PRD by identifying gaps and asking targeted questions to fill weak areas",
+      "path": "commands/development/refine.md"
+    },
+    {
+      "name": "smart-debug",
+      "description": "",
+      "path": "commands/development/smart-debug.md"
+    },
+    {
+      "name": "smart-fix",
+      "description": "Resolve complex issues with staged investigation, approval gates, and verified fixes",
+      "path": "commands/development/smart-fix.md"
+    },
+    {
+      "name": "tdd",
+      "description": "Enforce test-driven development workflow. Scaffold interfaces, generate tests FIRST, then implement minimal code to pass. Ensure 80%+ coverage.",
+      "path": "commands/development/tdd.md"
+    },
+    {
+      "name": "tech-debt",
+      "description": "",
+      "path": "commands/development/tech-debt.md"
+    },
+    {
+      "name": "ce:work",
+      "description": "Execute work plans efficiently while maintaining quality and finishing features",
+      "path": "commands/development/work.md"
+    },
+    {
+      "name": "dockerfile",
+      "description": "Generate optimized multi-stage Dockerfile with caching, non-root user, and health checks",
+      "path": "commands/devops/dockerfile.md"
+    },
+    {
+      "name": "Migration Monitoring",
+      "description": "Migration monitoring, CDC, and observability infrastructure",
+      "path": "commands/devops/migration-observability.md"
+    },
+    {
+      "name": "monitor-setup",
+      "description": "",
+      "path": "commands/devops/monitor-setup.md"
+    },
+    {
+      "name": "serve",
+      "description": "Serve the Workbench development environment for interactive package development",
+      "path": "commands/devops/serve.md"
+    },
+    {
+      "name": "shell",
+      "description": "Shell configuration guide - startup files, environment variables, and shell options for bash/zsh",
+      "path": "commands/devops/shell.md"
+    },
+    {
+      "name": "slo-implement",
+      "description": "",
+      "path": "commands/devops/slo-implement.md"
+    },
+    {
+      "name": "changelog",
+      "description": "Generate a short daily, weekly, or custom-window changelog from recent merged work",
+      "path": "commands/documentation/changelog.md"
+    },
+    {
+      "name": "commands",
+      "description": "Quick reference for essential Docker and Docker Compose CLI commands",
+      "path": "commands/documentation/commands.md"
+    },
+    {
+      "name": "deploy-docs",
+      "description": "Validate and prepare documentation for GitHub Pages deployment",
+      "path": "commands/documentation/deploy-docs.md"
+    },
+    {
+      "name": "docs",
+      "description": "Core documentation management - validate, generate, update, and check status",
+      "path": "commands/documentation/docs.md"
+    },
+    {
+      "name": "release-notes",
+      "description": "Generate release notes in multiple formats from git commits",
+      "path": "commands/documentation/release-notes.md"
+    },
+    {
+      "name": "whats-next",
+      "description": "Analyze the current conversation and create a handoff document for continuing this work in a fresh context",
+      "path": "commands/documentation/whats-next.md"
+    },
+    {
+      "name": "writing",
+      "description": "Writing workflow with plan-draft-review-compound phases",
+      "path": "commands/documentation/writing.md"
+    },
+    {
+      "name": "Accessibility Tests",
+      "description": "",
+      "path": "commands/frontend/accessibility-audit.md"
+    },
+    {
+      "name": "create-component",
+      "description": "Guided component creation with proper patterns",
+      "path": "commands/frontend/create-component.md"
+    },
+    {
+      "name": "generate_command",
+      "description": "Create a new custom slash command following conventions and best practices",
+      "path": "commands/frontend/generate_command.md"
+    },
+    {
+      "name": "screenshots",
+      "description": "Capture app screenshots across viewports (desktop, tablet, mobile) and color modes for marketing materials",
+      "path": "commands/frontend/screenshots.md"
+    },
+    {
+      "name": "signals",
+      "description": "Unix signal handling - SIGINT, SIGTERM, SIGHUP with handler patterns and best practices",
+      "path": "commands/frontend/signals.md"
+    },
+    {
+      "name": "streams",
+      "description": "Standard I/O streams guide - stdin, stdout, stderr with buffering, piping, and redirection",
+      "path": "commands/frontend/streams.md"
+    },
+    {
+      "name": "clean_gone",
+      "description": "Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees.",
+      "path": "commands/git/clean_gone.md"
+    },
+    {
+      "name": "trailofbits:diff-review",
+      "description": "Performs security-focused differential review of code changes",
+      "path": "commands/git/diff-review.md"
+    },
+    {
+      "name": "git-workflow",
+      "description": "Orchestrate git workflow from code review through PR creation with quality gates",
+      "path": "commands/git/git-workflow.md"
+    },
+    {
+      "name": "git",
+      "description": "Git operations with intelligent commit messages and workflow optimization",
+      "path": "commands/git/git.md"
+    },
+    {
+      "name": "pr-enhance",
+      "description": "",
+      "path": "commands/git/pr-enhance.md"
+    },
+    {
+      "name": "prs-awaiting-author",
+      "description": "List PRs awaiting changes from the author (changes requested)",
+      "path": "commands/git/prs-awaiting-author.md"
+    },
+    {
+      "name": "prs-awaiting-maintainer",
+      "description": "List PRs awaiting maintainer/reviewer action (no review yet or review requested)",
+      "path": "commands/git/prs-awaiting-maintainer.md"
+    },
+    {
+      "name": "revert",
+      "description": "Git-aware undo by logical work unit (track, phase, or task)",
+      "path": "commands/git/revert.md"
+    },
+    {
+      "name": "review-pr",
+      "description": "Comprehensive PR review using specialized agents",
+      "path": "commands/git/review-pr.md"
+    },
+    {
+      "name": "go",
+      "description": "Go development commands — build, test, review",
+      "path": "commands/languages/go.md"
+    },
+    {
+      "name": "ml-pipeline",
+      "description": "",
+      "path": "commands/languages/ml-pipeline.md"
+    },
+    {
+      "name": "python-review",
+      "description": "Comprehensive Python code review for PEP 8 compliance, type hints, security, and Pythonic idioms. Invokes the python-reviewer agent.",
+      "path": "commands/languages/python-review.md"
+    },
+    {
+      "name": "python-scaffold",
+      "description": "",
+      "path": "commands/languages/python-scaffold.md"
+    },
+    {
+      "name": "rust",
+      "description": "Rust development commands — check, review, project, news, features",
+      "path": "commands/languages/rust.md"
+    },
+    {
+      "name": "typescript-scaffold",
+      "description": "",
+      "path": "commands/languages/typescript-scaffold.md"
+    },
+    {
+      "name": "sc:agent",
+      "description": "SC Agent — session controller that orchestrates investigation, implementation, and review",
+      "path": "commands/meta/agent.md"
+    },
+    {
+      "name": "clean-crate-skills",
+      "description": "Remove local dynamic crate skills",
+      "path": "commands/meta/clean-crate-skills.md"
+    },
+    {
+      "name": "create-llms-for-skills",
+      "description": "Generate comprehensive llms.txt from URLs using agent-browser",
+      "path": "commands/meta/create-llms-for-skills.md"
+    },
+    {
+      "name": "create-llms-from-source",
+      "description": "Generate llms.txt from local Rust source code",
+      "path": "commands/meta/create-llms-from-source.md"
+    },
+    {
+      "name": "create-plugin",
+      "description": "Guided end-to-end plugin creation workflow with component design, implementation, and validation",
+      "path": "commands/meta/create-plugin.md"
+    },
+    {
+      "name": "create-prompt",
+      "description": "Create a new prompt that another Claude can execute",
+      "path": "commands/meta/create-prompt.md"
+    },
+    {
+      "name": "create-skill",
+      "description": "Scaffold a complete SKILL.md file from a name and brief description. Triggers on 'create a skill', 'new skill', 'scaffold a skill'.",
+      "path": "commands/meta/create-skill.md"
+    },
+    {
+      "name": "{crate_name}-{feature}",
+      "description": "Create high-quality Rust crate skills from llms.txt",
+      "path": "commands/meta/create-skills-via-llms.md"
+    },
+    {
+      "name": "evolve-skill",
+      "description": "Capture a skill evolution delta after completing a skill-guided task. Diffs what the skill suggested vs what actually shipped. Triggers on 'evolve skill', 'skill delta', '/evolve-skill'.",
+      "path": "commands/meta/evolve-skill.md"
+    },
+    {
+      "name": "fix-skill-docs",
+      "description": "Check and fix missing reference files in dynamic skills",
+      "path": "commands/meta/fix-skill-docs.md"
+    },
+    {
+      "name": "heal-skill",
+      "description": "Fix incorrect SKILL.md files when a skill has wrong instructions or outdated API references",
+      "path": "commands/meta/heal-skill.md"
+    },
+    {
+      "name": "{rule-name}",
+      "description": "Create hooks to prevent unwanted behaviors from conversation analysis or explicit instructions",
+      "path": "commands/meta/hookify.md"
+    },
+    {
+      "name": "improve-agent",
+      "description": "",
+      "path": "commands/meta/improve-agent.md"
+    },
+    {
+      "name": "instinct",
+      "description": "Manage instincts (status, export, import)",
+      "path": "commands/meta/instinct.md"
+    },
+    {
+      "name": "skill-create",
+      "description": "Analyze local git history to extract coding patterns and generate SKILL.md files. Local version of the Skill Creator GitHub App.",
+      "path": "commands/meta/skill-from-git.md"
+    },
+    {
+      "name": "skill-improver",
+      "description": "Iteratively reviews and fixes a Claude Code skill until it meets quality standards. Triggers on 'fix my skill', 'improve skill quality', 'skill improvement loop'.",
+      "path": "commands/meta/skill-improver.md"
+    },
+    {
+      "name": "skill-index",
+      "description": "",
+      "path": "commands/meta/skill-index.md"
+    },
+    {
+      "name": "sync-crate-skills",
+      "description": "Sync dynamic skills for Cargo.toml dependencies or local source",
+      "path": "commands/meta/sync-crate-skills.md"
+    },
+    {
+      "name": "deepen-plan",
+      "description": "Enhance a plan with parallel research agents for each section to add depth, best practices, and implementation details",
+      "path": "commands/planning/deepen-plan.md"
+    },
+    {
+      "name": "estimate",
+      "description": "Provide development estimates for tasks, features, or projects with intelligent analysis",
+      "path": "commands/planning/estimate.md"
+    },
+    {
+      "name": "kickoff",
+      "description": "Run the Feature Kickoff workflow (problem → hypothesis → PRD → stories)",
+      "path": "commands/planning/kickoff.md"
+    },
+    {
+      "name": "ce:plan",
+      "description": "Transform feature descriptions into well-structured project plans following conventions",
+      "path": "commands/planning/plan.md"
+    },
+    {
+      "name": "pm",
+      "description": "Project Manager Agent - Default orchestration agent that coordinates all sub-agents and manages workflows seamlessly",
+      "path": "commands/planning/pm.md"
+    },
+    {
+      "name": "pm2-init",
+      "description": "",
+      "path": "commands/planning/pm2-init.md"
+    },
+    {
+      "name": "prd",
+      "description": "Start a comprehensive PRD interview to transform an idea into a complete Product Requirements Document",
+      "path": "commands/planning/prd.md"
+    },
+    {
+      "name": "projects",
+      "description": "List known projects and their instinct statistics",
+      "path": "commands/planning/projects.md"
+    },
+    {
+      "name": "run-plan",
+      "description": "Execute a PLAN.md file directly without loading planning skill context",
+      "path": "commands/planning/run-plan.md"
+    },
+    {
+      "name": "task",
+      "description": "Execute complex tasks with intelligent workflow management and delegation",
+      "path": "commands/planning/task.md"
+    },
+    {
+      "name": "team",
+      "description": "Multi-agent team orchestration - spawn, delegate, debug, feature development, review, and more",
+      "path": "commands/planning/team.md"
+    },
+    {
+      "name": "trailofbits:burp-search",
+      "description": "Searches Burp Suite project files for security analysis",
+      "path": "commands/research/burp-search.md"
+    },
+    {
+      "name": "competitive",
+      "description": "Research competitors - who else does this, how, strengths/weaknesses",
+      "path": "commands/research/competitive.md"
+    },
+    {
+      "name": "deep-dive",
+      "description": "Comprehensive investigation of a topic - thorough analysis with sources",
+      "path": "commands/research/deep-dive.md"
+    },
+    {
+      "name": "feasibility",
+      "description": "Reality check - can we actually do this with our constraints?",
+      "path": "commands/research/feasibility.md"
+    },
+    {
+      "name": "history",
+      "description": "Research what's been tried before - past attempts, lessons learned",
+      "path": "commands/research/history.md"
+    },
+    {
+      "name": "landscape",
+      "description": "Map the space - tools, players, trends, gaps in a domain",
+      "path": "commands/research/landscape.md"
+    },
+    {
+      "name": "open-source",
+      "description": "Find open-source solutions - libraries, tools, projects that solve this",
+      "path": "commands/research/open-source.md"
+    },
+    {
+      "name": "options",
+      "description": "Compare multiple options side-by-side with recommendation",
+      "path": "commands/research/options.md"
+    },
+    {
+      "name": "search",
+      "description": "Find notes by title, tags, or content",
+      "path": "commands/research/search.md"
+    },
+    {
+      "name": "technical",
+      "description": "Research how to implement something - approaches, libraries, tradeoffs",
+      "path": "commands/research/technical.md"
+    },
+    {
+      "name": "incident-response",
+      "description": "Orchestrate multi-agent incident response with modern SRE practices for rapid resolution and learning",
+      "path": "commands/security/incident-response.md"
+    },
+    {
+      "name": "trailofbits:scan-apk",
+      "description": "Scans Android APKs for Firebase security misconfigurations",
+      "path": "commands/security/scan-apk.md"
+    },
+    {
+      "name": "Dependency Security Scan",
+      "description": "",
+      "path": "commands/security/security-dependencies.md"
+    },
+    {
+      "name": "security-hardening",
+      "description": "Orchestrate comprehensive security hardening with defense-in-depth strategy across all application layers",
+      "path": "commands/security/security-hardening.md"
+    },
+    {
+      "name": "SAST Scan",
+      "description": "Static Application Security Testing (SAST) for code vulnerability analysis across multiple languages and frameworks",
+      "path": "commands/security/security-sast.md"
+    },
+    {
+      "name": "trailofbits:semgrep-rule",
+      "description": "Creates Semgrep rules with test-first methodology",
+      "path": "commands/security/semgrep-rule.md"
+    },
+    {
+      "name": "ssl",
+      "description": "Set up SSL/TLS with automatic certificates using Traefik or Nginx reverse proxy",
+      "path": "commands/security/ssl.md"
+    },
+    {
+      "name": "unsafe-review",
+      "description": "Review unsafe Rust and FFI code for soundness risks, with optional quick-check mode",
+      "path": "commands/security/unsafe-review.md"
+    },
+    {
+      "name": "xss-scan",
+      "description": "",
+      "path": "commands/security/xss-scan.md"
+    },
+    {
+      "name": "add-to-todos",
+      "description": "Add todo item to TO-DOS.md with context from conversation",
+      "path": "commands/session/add-to-todos.md"
+    },
+    {
+      "name": "check-todos",
+      "description": "List outstanding todos and select one to work on",
+      "path": "commands/session/check-todos.md"
+    },
+    {
+      "name": "checkpoint",
+      "description": "",
+      "path": "commands/session/checkpoint.md"
+    },
+    {
+      "name": "load",
+      "description": "Session lifecycle management with Serena MCP integration for project context loading",
+      "path": "commands/session/load.md"
+    },
+    {
+      "name": "save",
+      "description": "Session lifecycle management with Serena MCP integration for session context persistence",
+      "path": "commands/session/save.md"
+    },
+    {
+      "name": "session-handoff",
+      "description": "Produce a handoff document capturing session state for continuity across sessions. Triggers on 'session handoff', 'end of session', 'write handoff'.",
+      "path": "commands/session/session-handoff.md"
+    },
+    {
+      "name": "sessions",
+      "description": "",
+      "path": "commands/session/sessions.md"
+    },
+    {
+      "name": "config-validate",
+      "description": "",
+      "path": "commands/setup/config-validate.md"
+    },
+    {
+      "name": "configure",
+      "description": "Enable or disable hookify rules interactively",
+      "path": "commands/setup/configure.md"
+    },
+    {
+      "name": "doctor",
+      "description": "Diagnose and fix common documentation issues",
+      "path": "commands/setup/doctor.md"
+    },
+    {
+      "name": "modes",
+      "description": "Guide to terminal modes - canonical, raw, and cbreak with termios configuration",
+      "path": "commands/setup/modes.md"
+    },
+    {
+      "name": "onboard",
+      "description": "",
+      "path": "commands/setup/onboard.md"
+    },
+    {
+      "name": "settings",
+      "description": "View and manage global settings including companion project defaults for each companion project type",
+      "path": "commands/setup/settings.md"
+    },
+    {
+      "name": "setup-pm",
+      "description": "Configure your preferred package manager (npm/pnpm/yarn/bun)",
+      "path": "commands/setup/setup-pm.md"
+    },
+    {
+      "name": "setup",
+      "description": "Initialize project with Conductor artifacts (product definition, tech stack, workflow, style guides)",
+      "path": "commands/setup/setup.md"
+    },
+    {
+      "name": "template",
+      "description": "List, view, and apply documentation templates",
+      "path": "commands/setup/template.md"
+    },
+    {
+      "name": "api-mock",
+      "description": "",
+      "path": "commands/testing/api-mock.md"
+    },
+    {
+      "name": "e2e",
+      "description": "Generate and run end-to-end tests with Playwright. Creates test journeys, runs tests, captures screenshots/videos/traces, and uploads artifacts.",
+      "path": "commands/testing/e2e.md"
+    },
+    {
+      "name": "index",
+      "description": "Generate comprehensive project documentation and knowledge base with intelligent organization",
+      "path": "commands/testing/index.md"
+    },
+    {
+      "name": "Pull Request",
+      "description": "",
+      "path": "commands/testing/issue.md"
+    },
+    {
+      "name": "test-browser",
+      "description": "Run browser tests on pages affected by current PR or branch",
+      "path": "commands/testing/test-browser.md"
+    },
+    {
+      "name": "test-coverage",
+      "description": "",
+      "path": "commands/testing/test-coverage.md"
+    },
+    {
+      "name": "test-generate",
+      "description": "",
+      "path": "commands/testing/test-generate.md"
+    },
+    {
+      "name": "test-xcode",
+      "description": "Build and test iOS apps on simulator using XcodeBuildMCP",
+      "path": "commands/testing/test-xcode.md"
+    },
+    {
+      "name": "ask-me-questions",
+      "description": "Gather requirements through adaptive questioning before executing any task",
+      "path": "commands/workflow/ask-me-questions.md"
+    },
+    {
+      "name": "escape",
+      "description": "ANSI escape sequence reference - colors, cursor control, screen manipulation with examples",
+      "path": "commands/workflow/escape.md"
+    },
+    {
+      "name": "eval",
+      "description": "",
+      "path": "commands/workflow/eval.md"
+    },
+    {
+      "name": "improve",
+      "description": "Apply systematic improvements to code quality, performance, and maintainability",
+      "path": "commands/workflow/improve.md"
+    },
+    {
+      "name": "sc:index-repo",
+      "description": "Repository Indexing - 94% token reduction (58K → 3K)",
+      "path": "commands/workflow/index-repo.md"
+    },
+    {
+      "name": "list",
+      "description": "List all configured hookify rules",
+      "path": "commands/workflow/list.md"
+    },
+    {
+      "name": "migrate",
+      "description": "Migrate errors from the old solved-errors.md format to the new database",
+      "path": "commands/workflow/migrate.md"
+    },
+    {
+      "name": "multi-execute",
+      "description": "",
+      "path": "commands/workflow/multi-execute.md"
+    },
+    {
+      "name": "multi-workflow",
+      "description": "",
+      "path": "commands/workflow/multi-workflow.md"
+    },
+    {
+      "name": "orchestrate",
+      "description": "",
+      "path": "commands/workflow/orchestrate.md"
+    },
+    {
+      "name": "promote",
+      "description": "Promote project-scoped instincts to global scope",
+      "path": "commands/workflow/promote.md"
+    },
+    {
+      "name": "spawn",
+      "description": "Meta-system task orchestration with intelligent breakdown and delegation",
+      "path": "commands/workflow/spawn.md"
+    },
+    {
+      "name": "sync",
+      "description": "Detect and fix drift between documentation and source code",
+      "path": "commands/workflow/sync.md"
+    },
+    {
+      "name": "update-codemaps",
+      "description": "",
+      "path": "commands/workflow/update-codemaps.md"
+    },
+    {
+      "name": "trailofbits:variants",
+      "description": "Finds similar vulnerabilities using pattern-based analysis",
+      "path": "commands/workflow/variants.md"
+    },
+    {
+      "name": "workflow",
+      "description": "Generate structured implementation workflows from PRDs and feature requirements",
+      "path": "commands/workflow/workflow.md"
+    }
+  ]
+}

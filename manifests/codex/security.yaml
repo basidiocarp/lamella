@@ -30,6 +30,7 @@
       "security/seatbelt-sandboxer",
       "security/secrets-management",
       "security/security-audit-methodology",
+      "security/security-research",
       "security/security-review",
       "security/semgrep",
       "security/soc2-compliance",

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   generate:
@@ -29,31 +29,30 @@ jobs:
       - name: Verify manifest is valid JSON
         run: python3 -c "import json,sys; d=json.load(open('generated/skills-manifest.json')); print('skills/agents/commands:', len(d.get('skills',[])), len(d.get('agents',[])), len(d.get('commands',[])))"
 
-      - name: Commit manifest if changed
+      - name: Verify committed manifest is up to date (drift check)
         run: |
-          # Guard: fail loudly if the manifest path is gitignored — that would
-          # make git add a no-op and silently disable drift detection every run.
+          # Guard: fail loudly if the manifest path is gitignored — a gitignored
+          # artifact can never drift-check because it is not tracked, which would
+          # silently disable this gate on every run.
           if git check-ignore -q "generated/skills-manifest.json"; then
             echo "::error::generated/skills-manifest.json is gitignored — drift detection would be disabled. Fix .gitignore before proceeding."
             exit 1
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add generated/skills-manifest.json
-
-          # Guard: fail if the file was not staged AND is not already tracked
-          # (i.e. git add left the index untouched for a reason other than no-change).
-          if ! git diff --cached --name-only | grep -q "^generated/skills-manifest.json$"; then
-            if ! git ls-files --error-unmatch generated/skills-manifest.json 2>/dev/null; then
-              echo "::error::generated/skills-manifest.json was not staged by git add — the path may be gitignored or the file was not written."
-              exit 1
-            fi
+          # Guard: the file must be tracked, otherwise there is nothing to drift
+          # against and the generator's output is going unreviewed.
+          if ! git ls-files --error-unmatch generated/skills-manifest.json >/dev/null 2>&1; then
+            echo "::error::generated/skills-manifest.json is not tracked by git — commit it so CI can verify it stays current."
+            exit 1
           fi
 
-          if git diff --cached --quiet; then
-            echo "No changes to skills-manifest.json — skipping commit."
-          else
-            git commit -m "chore: regenerate skills-manifest.json"
-            git push
+          # The "Generate skills manifest" step already regenerated the file in
+          # place. If it now differs from the committed copy, the author forgot to
+          # regenerate before pushing. We cannot push to a protected main from CI,
+          # so fail and tell them to regenerate and include it in their PR.
+          if ! git diff --exit-code -- generated/skills-manifest.json; then
+            echo "::error::generated/skills-manifest.json is stale. Run 'bash scripts/generate-skill-manifest.sh generated/skills-manifest.json' and commit the result."
+            exit 1
           fi
+
+          echo "skills-manifest.json is up to date."

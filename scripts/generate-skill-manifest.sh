@@ -249,9 +249,17 @@ SKILL_COUNT=$(grep -c '^{' "$TMP_SKILLS" 2>/dev/null || true)
 AGENT_COUNT=$(grep -c '^{' "$TMP_AGENTS" 2>/dev/null || true)
 CMD_COUNT=$(grep -c '^{' "$TMP_COMMANDS" 2>/dev/null || true)
 
+# Emit only the content-root BASENAME, never the absolute path. The manifest is
+# committed and drift-checked in CI; an absolute path embeds the machine that ran
+# the generator (developer's $HOME vs the CI runner's /home/runner/work/...), which
+# would make the committed file drift on every CI run even when no content changed.
+# The basename ("lamella-skills") is stable across the developer's sibling checkout
+# and the CI checkout, and nothing consumes this field beyond annotation.
+CONTENT_ROOT_LABEL="$(basename "$CONTENT_ROOT")"
+
 # jq --slurpfile reads NDJSON files (one JSON object per line) as arrays
 jq -n \
-    --arg content_root "$CONTENT_ROOT" \
+    --arg content_root "$CONTENT_ROOT_LABEL" \
     --slurpfile skills "$TMP_SKILLS" \
     --slurpfile agents "$TMP_AGENTS" \
     --slurpfile commands "$TMP_COMMANDS" \

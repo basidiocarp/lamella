@@ -1,0 +1,16 @@
+{
+  "name": "core-architecture",
+  "version": "0.10.0-dev.65",
+  "description": "Architecture and design guidance for refactors, interfaces, patterns, and modernization",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "architecture",
+    "design",
+    "refactor",
+    "patterns"
+  ]
+}

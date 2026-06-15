@@ -1,0 +1,89 @@
+# Ansible Role: [ROLE_NAME]
+
+[Brief description of what this role does]
+
+## Requirements
+
+- Ansible 2.10 or higher
+- Supported platforms:
+  - Ubuntu 20.04, 22.04, 24.04
+  - Debian 11, 12
+  - RHEL/CentOS/Rocky 8, 9
+
+## Role Variables
+
+### Required Variables
+
+```yaml
+# [var_name]: [description]
+```
+
+### Optional Variables
+
+```yaml
+# Package and service
+[role_name]_package_name: [package_name]  # Package to install
+[role_name]_service_name: [service_name]  # Service name
+[role_name]_version: latest                # Version to install
+
+# Network and paths
+[role_name]_listen_port: 8080
+[role_name]_config_dir: /etc/[role_name]
+[role_name]_data_dir: /var/lib/[role_name]
+
+# Users and permissions
+[role_name]_user: [role_name]
+[role_name]_group: [role_name]
+
+# Features
+[role_name]_enable_ssl: false
+[role_name]_enable_monitoring: true
+```
+
+## Dependencies
+
+None.
+
+## Example Playbook
+
+```yaml
+- hosts: servers
+  become: true
+  roles:
+    - role: [role_name]
+      vars:
+        [role_name]_port: [custom_port]
+        [role_name]_enable_ssl: true
+```
+
+## Example with Variables
+
+```yaml
+- hosts: production
+  become: true
+  vars:
+    [role_name]_port: [custom_port]
+    [role_name]_max_connections: 200
+    [role_name]_enable_ssl: true
+    [role_name]_ssl_cert: /etc/ssl/certs/app.crt
+    [role_name]_ssl_key: /etc/ssl/private/app.key
+  roles:
+    - [role_name]
+```
+
+## Tags
+
+- `install` - Installation tasks
+- `configure` - Configuration tasks
+- `service` - Service management tasks
+- `packages` - Package installation
+- `directories` - Directory creation
+
+## License
+
+MIT
+
+## Author Information
+
+[Author Name]
+[Contact Information]

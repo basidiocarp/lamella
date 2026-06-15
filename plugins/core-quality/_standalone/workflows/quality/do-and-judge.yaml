@@ -1,0 +1,92 @@
+schema_version: "1.0"
+workflow_id: do-and-judge
+name: Implement and Review
+description: >
+  Runs an implementer agent on a handoff, then runs the full parallel PR review,
+  then synthesizes. Encodes the implementer/auditor pattern as a reusable workflow.
+
+nodes:
+  - kind: prompt
+    id: implement
+    prompt: |
+      Implement the handoff at $HANDOFF_PATH.
+      Stay inside the owning repo. Run repo-local verification before reporting done.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: review-code
+    prompt: |
+      Run a comprehensive code review on the implementation output.
+      Check for:
+      - Security vulnerabilities
+      - Performance issues
+      - Maintainability and readability
+      - Best practices and design patterns
+      - Potential bugs or edge cases
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: review-errors
+    prompt: |
+      Review the implementation for error handling and silent failure risks.
+      Check for:
+      - Unhandled exceptions or edge cases
+      - Silent failures that could mask bugs
+      - Missing error messages or debugging information
+      - Error propagation and recovery strategies
+      - Logging and observability gaps
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: review-tests
+    prompt: |
+      Review the test coverage and quality in the implementation.
+      Check for:
+      - Test gaps (untested code paths)
+      - Weak assertions or incomplete test scenarios
+      - Flaky or brittle tests
+      - Missing edge case coverage
+      - Integration vs unit test balance
+
+      Be concrete. Reference specific file paths and line numbers.
+    trigger_rule: all_success
+
+  - kind: prompt
+    id: synthesize
+    prompt: |
+      Synthesize the review findings from:
+      $review-code.output
+      $review-errors.output
+      $review-tests.output
+    context: fresh
+    trigger_rule: one_success
+
+  - kind: approval
+    id: human-gate
+    prompt: "Review synthesis above. Approve to apply fixes, reject to stop."
+
+  - kind: prompt
+    id: fix
+    prompt: |
+      Apply the prioritized fixes from the synthesis:
+      $synthesize.output
+
+      Fix blockers and concerns. Skip nits unless trivial. Run verification after each fix.
+    trigger_rule: all_success
+
+edges:
+  - { from: implement,     to: review-code }
+  - { from: implement,     to: review-errors }
+  - { from: implement,     to: review-tests }
+  - { from: review-code,   to: synthesize }
+  - { from: review-errors, to: synthesize }
+  - { from: review-tests,  to: synthesize }
+  - { from: synthesize,    to: human-gate }
+  - { from: human-gate,    to: fix }
+
+env:
+  HANDOFF_PATH: ""

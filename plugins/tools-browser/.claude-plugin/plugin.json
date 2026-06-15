@@ -1,0 +1,16 @@
+{
+  "name": "tools-browser",
+  "version": "0.10.0-dev.65",
+  "description": "Browser automation and realtime web tooling for interactive surfaces",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "browser",
+    "playwright",
+    "websocket",
+    "automation"
+  ]
+}

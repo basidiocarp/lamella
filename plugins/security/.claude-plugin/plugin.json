@@ -1,0 +1,16 @@
+{
+  "name": "security",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered security plugins and shared security commands",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "bundle",
+    "audit",
+    "fuzzing",
+    "compliance"
+  ]
+}

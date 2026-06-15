@@ -1,0 +1,16 @@
+{
+  "name": "collaboration",
+  "version": "0.10.0-dev.65",
+  "description": "Team collaboration and facilitation: teaching, debate, project continuity, structured challenge, expert synthesis, and cross-functional coordination",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "collaboration",
+    "meetings",
+    "teams",
+    "decision-making",
+    "communication"
+  ]
+}

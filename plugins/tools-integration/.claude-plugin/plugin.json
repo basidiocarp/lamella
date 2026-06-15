@@ -1,0 +1,16 @@
+{
+  "name": "tools-integration",
+  "version": "0.10.0-dev.65",
+  "description": "Integration tooling for MCP, APIs, analytics, devcontainers, sync, and knowledge stores",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "integration",
+    "mcp",
+    "api",
+    "analytics"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "workflow-planning",
+  "version": "0.10.0-dev.65",
+  "description": "Planning workflows for specs, decisions, edge cases, and continuous improvement",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "planning",
+    "adr",
+    "kaizen",
+    "specs"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "security-compliance",
+  "version": "0.10.0-dev.65",
+  "description": "Security compliance and threat modeling: PCI, SOC 2, STRIDE, and mitigations",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "compliance",
+    "pci",
+    "soc2",
+    "threat-modeling"
+  ]
+}

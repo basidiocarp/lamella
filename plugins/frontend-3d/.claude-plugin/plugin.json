@@ -1,0 +1,16 @@
+{
+  "name": "frontend-3d",
+  "version": "0.10.0-dev.65",
+  "description": "3D frontend experiences for Spline and advanced Three.js workflows",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "3d",
+    "spline",
+    "threejs",
+    "webgl"
+  ]
+}

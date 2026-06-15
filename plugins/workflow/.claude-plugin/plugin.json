@@ -1,0 +1,16 @@
+{
+  "name": "workflow",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered workflow plugins and shared workflow commands",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "bundle",
+    "planning",
+    "git",
+    "execution"
+  ]
+}

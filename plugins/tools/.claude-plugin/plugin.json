@@ -1,0 +1,16 @@
+{
+  "name": "tools",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered tool plugins and shared research/setup commands",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "bundle",
+    "cli",
+    "automation",
+    "integration"
+  ]
+}

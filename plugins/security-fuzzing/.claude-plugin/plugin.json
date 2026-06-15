@@ -1,0 +1,16 @@
+{
+  "name": "security-fuzzing",
+  "version": "0.10.0-dev.65",
+  "description": "Security fuzzing: harness design, sanitizer setup, crash reproduction, and OSS-Fuzz",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "fuzzing",
+    "asan",
+    "libfuzzer",
+    "oss-fuzz"
+  ]
+}

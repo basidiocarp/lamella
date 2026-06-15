@@ -1,0 +1,16 @@
+{
+  "name": "frontend",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered frontend plugins and shared frontend commands",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "bundle",
+    "ui",
+    "visual",
+    "3d"
+  ]
+}

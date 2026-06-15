@@ -1,0 +1,16 @@
+{
+  "name": "writing",
+  "version": "0.10.0-dev.65",
+  "description": "Technical and editorial writing: documentation, changelogs, voice, style, posters, and presentation-ready content",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "documentation",
+    "content",
+    "technical-writing",
+    "changelog"
+  ]
+}

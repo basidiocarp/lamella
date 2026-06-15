@@ -1,0 +1,16 @@
+{
+  "name": "devops",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered DevOps plugins and shared infrastructure commands",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "bundle",
+    "cloud",
+    "kubernetes",
+    "platform"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "python",
+  "version": "0.10.0-dev.65",
+  "description": "Python development: Django, FastAPI, async patterns, testing, and modern Python practices",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "python",
+    "django",
+    "fastapi",
+    "pytest",
+    "async"
+  ],
+  "lspServers": "./.lsp.json"
+}

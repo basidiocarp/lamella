@@ -1,0 +1,16 @@
+{
+  "name": "tools-documents",
+  "version": "0.10.0-dev.65",
+  "description": "Document processing for PDF, Word, PowerPoint, spreadsheets, and Markdown conversion",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "documents",
+    "pdf",
+    "docx",
+    "xlsx"
+  ]
+}

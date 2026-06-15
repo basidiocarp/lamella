@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>lamella Marketplace</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --fg: #e2e8f0;
+      --muted: #94a3b8;
+      --card: rgba(15, 23, 42, 0.78);
+      --accent: #38bdf8;
+      --accent-2: #f59e0b;
+      --border: rgba(148, 163, 184, 0.18);
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.24), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.18), transparent 30%),
+        var(--bg);
+      color: var(--fg);
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.05;
+    }
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .card {
+      margin-top: 28px;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Consolas, monospace;
+      font-size: 0.95em;
+      color: var(--fg);
+    }
+    a {
+      color: var(--accent);
+    }
+    .meta {
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="meta">Claude Code Marketplace</div>
+    <h1>lamella</h1>
+    <p>Lamella — curated skills, agents, and commands for Claude Code</p>
+    <div class="card">
+      <p>Marketplace catalog URL:</p>
+      <p><code>./.claude-plugin/marketplace.json</code></p>
+      <p>This build is intended for Claude Code marketplace installation and automated updates.</p>
+    </div>
+  </main>
+</body>
+</html>

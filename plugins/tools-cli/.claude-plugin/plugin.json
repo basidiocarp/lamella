@@ -1,0 +1,16 @@
+{
+  "name": "tools-cli",
+  "version": "0.10.0-dev.65",
+  "description": "CLI and shell tooling: generators, validators, terminals, and command ergonomics",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "cli",
+    "shell",
+    "bash",
+    "tmux"
+  ]
+}

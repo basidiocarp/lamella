@@ -1,0 +1,17 @@
+{
+  "rust-analyzer": {
+    "command": "rust-analyzer",
+    "args": [],
+    "extensionToLanguage": {
+      ".rs": "rust"
+    },
+    "initializationOptions": {
+      "check": {
+        "command": "clippy"
+      },
+      "cargo": {
+        "allFeatures": true
+      }
+    }
+  }
+}

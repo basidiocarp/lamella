@@ -1,0 +1,16 @@
+{
+  "name": "meta-authoring",
+  "version": "0.10.0-dev.65",
+  "description": "Lamella authoring tools for skills, hooks, commands, plugins, and workflow design",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "meta",
+    "authoring",
+    "skills",
+    "plugins",
+    "hooks"
+  ]
+}

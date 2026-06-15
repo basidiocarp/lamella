@@ -1,0 +1,16 @@
+{
+  "name": "devops-observability",
+  "version": "0.10.0-dev.65",
+  "description": "Observability and resilience: tracing, metrics, SLOs, chaos, and postmortems",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "observability",
+    "tracing",
+    "metrics",
+    "slo"
+  ]
+}

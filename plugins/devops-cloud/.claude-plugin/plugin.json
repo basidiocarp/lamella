@@ -1,0 +1,16 @@
+{
+  "name": "devops-cloud",
+  "version": "0.10.0-dev.65",
+  "description": "Cloud infrastructure patterns for AWS CDK, serverless, costs, and Bedrock AgentCore",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "cloud",
+    "aws",
+    "serverless",
+    "cdk"
+  ]
+}

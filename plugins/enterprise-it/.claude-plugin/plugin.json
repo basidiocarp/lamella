@@ -1,0 +1,16 @@
+{
+  "name": "enterprise-it",
+  "version": "0.10.0-dev.65",
+  "description": "Internal workspace administration: Atlassian, Confluence, Jira, Google Workspace, and Microsoft 365 operations",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "enterprise-it",
+    "workspace-admin",
+    "atlassian",
+    "google-workspace",
+    "microsoft-365"
+  ]
+}

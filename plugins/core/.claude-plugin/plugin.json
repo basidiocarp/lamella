@@ -1,0 +1,16 @@
+{
+  "name": "core",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered core development plugins and shared base resources. Includes general skills (reusable without ecosystem dependencies) and basidiocarp skills (require hyphae, mycelium, annulus, or .handoffs/).",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "bundle",
+    "workflow",
+    "quality",
+    "architecture"
+  ]
+}

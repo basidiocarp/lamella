@@ -1,0 +1,16 @@
+{
+  "name": "security-scanning",
+  "version": "0.10.0-dev.65",
+  "description": "Security scanning: SAST, dependency checks, prompt-injection audits, and PII detection",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "scanning",
+    "sast",
+    "codeql",
+    "semgrep"
+  ]
+}

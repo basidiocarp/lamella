@@ -1,0 +1,16 @@
+{
+  "name": "executive",
+  "version": "0.10.0-dev.65",
+  "description": "Leadership and operating-system skills: board updates, operating rhythms, change rollout, executive coaching, health diagnostics, and scenario planning",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "executive",
+    "leadership",
+    "operating-rhythm",
+    "board",
+    "strategy"
+  ]
+}

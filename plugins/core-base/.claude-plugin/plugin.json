@@ -1,0 +1,16 @@
+{
+  "name": "core-base",
+  "version": "0.10.0-dev.65",
+  "description": "Foundational development workflow: planning, debugging, and test discipline",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "base",
+    "debugging",
+    "testing",
+    "planning"
+  ]
+}

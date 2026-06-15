@@ -1,0 +1,16 @@
+{
+  "name": "frontend-base",
+  "version": "0.10.0-dev.65",
+  "description": "Core frontend guidance for accessibility, components, responsiveness, and performance",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "base",
+    "accessibility",
+    "components",
+    "performance"
+  ]
+}

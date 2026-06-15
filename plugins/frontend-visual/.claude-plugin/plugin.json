@@ -1,0 +1,16 @@
+{
+  "name": "frontend-visual",
+  "version": "0.10.0-dev.65",
+  "description": "Visual frontend work for motion, design systems, screenshots, and slides",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "visual",
+    "animation",
+    "design-systems",
+    "slides"
+  ]
+}

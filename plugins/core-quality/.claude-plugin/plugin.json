@@ -1,0 +1,16 @@
+{
+  "name": "core-quality",
+  "version": "0.10.0-dev.65",
+  "description": "Code quality and verification: reviews, tests, fidelity checks, and implementation gates",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "quality",
+    "reviews",
+    "verification",
+    "testing"
+  ]
+}

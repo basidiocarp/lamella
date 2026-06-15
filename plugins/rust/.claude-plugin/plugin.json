@@ -1,0 +1,17 @@
+{
+  "name": "rust",
+  "version": "0.10.0-dev.65",
+  "description": "Rust development: 15 core rules plus routed skills for async, APIs, testing, performance, docs, and project layout",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rust",
+    "systems",
+    "async",
+    "cargo",
+    "memory-safety"
+  ],
+  "lspServers": "./.lsp.json"
+}

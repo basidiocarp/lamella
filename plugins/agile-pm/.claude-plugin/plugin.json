@@ -1,0 +1,16 @@
+{
+  "name": "agile-pm",
+  "version": "0.10.0-dev.65",
+  "description": "Product planning and delivery: problem framing, opportunity trees, PRDs, user stories, prioritization, refinement, retrospectives, and delivery artifacts",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "agile",
+    "product-management",
+    "discovery",
+    "delivery",
+    "iteration"
+  ]
+}

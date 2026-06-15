@@ -1,0 +1,16 @@
+{
+  "name": "security-crypto",
+  "version": "0.10.0-dev.65",
+  "description": "Applied crypto security: constant-time analysis, vectors, and malware signatures",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "crypto",
+    "constant-time",
+    "wycheproof",
+    "yara"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "meta-routing",
+  "version": "0.10.0-dev.65",
+  "description": "Meta routing and orchestration for skill discovery, composition, and team coordination",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "meta",
+    "routing",
+    "composition",
+    "coordination",
+    "discovery"
+  ]
+}

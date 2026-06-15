@@ -1,0 +1,16 @@
+{
+  "name": "microservices",
+  "version": "0.10.0-dev.65",
+  "description": "Microservices architecture, event sourcing, and distributed systems",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "microservices",
+    "cqrs",
+    "event-sourcing",
+    "distributed",
+    "saga"
+  ]
+}

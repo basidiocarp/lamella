@@ -1,0 +1,15 @@
+{
+  "name": "go",
+  "version": "0.10.0-dev.65",
+  "description": "Go development: concurrency patterns, testing, and idiomatic Go practices",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "go",
+    "golang",
+    "concurrency",
+    "backend"
+  ]
+}

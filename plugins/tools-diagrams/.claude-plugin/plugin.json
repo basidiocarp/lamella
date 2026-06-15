@@ -1,0 +1,16 @@
+{
+  "name": "tools-diagrams",
+  "version": "0.10.0-dev.65",
+  "description": "Diagramming workflows for Mermaid and Excalidraw artifacts",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "tools",
+    "diagrams",
+    "mermaid",
+    "excalidraw",
+    "visualization"
+  ]
+}

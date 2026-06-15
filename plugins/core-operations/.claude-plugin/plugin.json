@@ -1,0 +1,16 @@
+{
+  "name": "core-operations",
+  "version": "0.10.0-dev.65",
+  "description": "Operational development support: onboarding, memory, git cleanup, planning, and continuity",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "core",
+    "operations",
+    "onboarding",
+    "memory",
+    "git"
+  ]
+}

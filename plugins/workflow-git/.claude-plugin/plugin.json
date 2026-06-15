@@ -1,0 +1,16 @@
+{
+  "name": "workflow-git",
+  "version": "0.10.0-dev.65",
+  "description": "Git-centric workflows for issue analysis, pull requests, worktrees, and review resolution",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "git",
+    "pull-requests",
+    "worktrees",
+    "review"
+  ]
+}

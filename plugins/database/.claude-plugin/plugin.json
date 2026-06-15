@@ -1,0 +1,16 @@
+{
+  "name": "database",
+  "version": "0.10.0-dev.65",
+  "description": "Database development: schema design, SQL optimization, PostgreSQL, migrations, and data modeling",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "database",
+    "sql",
+    "postgresql",
+    "migrations",
+    "data-modeling"
+  ]
+}

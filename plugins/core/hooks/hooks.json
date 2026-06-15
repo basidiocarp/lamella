@@ -1,0 +1,271 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(process.platform!=='win32'&&!process.env.TMUX&&!process.env.TMUX_PANE&&/(npm run dev\\b|pnpm( run)? dev\\b|yarn dev\\b|bun run dev\\b)/.test(cmd)){console.error('[Hook] BLOCKED: Dev server must run in tmux for log access');console.error('[Hook] Use: tmux new-session -d -s dev \\\"npm run dev\\\"');console.error('[Hook] Then: tmux attach -t dev');process.exit(2)}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Block dev servers outside tmux - ensures you can access logs"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(process.platform!=='win32'&&!process.env.TMUX&&/(npm (install|test)|pnpm (install|test)|yarn (install|test)?|bun (install|test)|cargo build|make\\b|docker\\b|pytest|vitest|playwright)/.test(cmd)){console.error('[Hook] Consider running in tmux for session persistence');console.error('[Hook] tmux new -s dev  |  tmux attach -t dev')}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Reminder to use tmux for long-running commands"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/git push/.test(cmd)){console.error('[Hook] Review changes before push...');console.error('[Hook] Continuing with push (remove this hook to add interactive review)')}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Reminder before git push to review changes"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(!/\\bgit\\b[^|;&]*\\bcommit\\b/.test(cmd)){console.log(d);return}let diff='';try{diff=require('child_process').execSync('git diff --cached --no-color -U0',{encoding:'utf8'})}catch(e){console.log(d);return}if(!diff){console.log(d);return}const rules=[{re:/gh[pousr]_[A-Za-z0-9]{36}/g,name:'GitHub token'},{re:/-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/g,name:'private key'},{re:/AKIA[0-9A-Z]{16}/g,name:'AWS access key',excl:['AKIAIOSFODNN7EXAMPLE']}];for(const r of rules){for(const m of diff.matchAll(r.re)){if(r.excl&&r.excl.includes(m[0])){continue}process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',permissionDecision:'deny',permissionDecisionReason:r.name+' detected in staged changes (value redacted) \\u2014 unstage or remove the secret before committing.'}}));return}}console.log(d);return}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Block git commit when staged changes contain a high-confidence secret"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/rhizome-advisory.js\""
+          }
+        ],
+        "description": "Rhizome advisory: warn when Bash is used for code navigation instead of Rhizome MCP tools (exit 0, advisory only)"
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-write-doc-warn.js\""
+          }
+        ],
+        "description": "Doc file warning: warn about non-standard documentation files (exit code 0; warns only)"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/suggest-compact.js\""
+          }
+        ],
+        "description": "Suggest manual compaction at logical intervals"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/pre-compact.js\""
+          },
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code pre-compact",
+            "timeout": 10
+          }
+        ],
+        "description": "Save state before context compaction"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code user-prompt-submit",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Cortina runtime: capture submitted prompts into scoped lifecycle state"
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/session-start.js\""
+          }
+        ],
+        "description": "Load previous context and detect package manager on new session"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/gh pr create/.test(cmd)){const out=i.tool_output?.output||'';const m=out.match(/https:\\/\\/github.com\\/[^/]+\\/[^/]+\\/pull\\/\\d+/);if(m){console.error('[Hook] PR created: '+m[0]);const repo=m[0].replace(/https:\\/\\/github.com\\/([^/]+\\/[^/]+)\\/pull\\/\\d+/,'$1');const pr=m[0].replace(/.+\\/pull\\/(\\d+)/,'$1');console.error('[Hook] To review: gh pr review '+pr+' --repo '+repo)}}}catch{}})\""
+          }
+        ],
+        "description": "Log PR URL and provide review command after PR creation"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/(npm run build|pnpm build|yarn build)/.test(cmd)){console.error('[Hook] Build completed (placeholder: no analysis logic implemented yet)')}}catch{}})\"",
+            "async": true,
+            "timeout": 30
+          }
+        ],
+        "description": "TODO(placeholder): async hook for build analysis — replace command with real analysis logic before use"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/post-edit-format.js\""
+          }
+        ],
+        "description": "Auto-format JS/TS files after edits (auto-detects Biome or Prettier)"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/post-edit-typecheck.js\""
+          }
+        ],
+        "description": "TypeScript check after editing .ts/.tsx files"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/post-edit-console-warn.js\""
+          }
+        ],
+        "description": "Warn about console.log statements after edits"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/comment-style-check.js\""
+          }
+        ],
+        "description": "Warn about inline-dash comment style, suggest boxed style"
+      },
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code post-tool-use",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Cortina runtime: capture errors, validations, corrections, and export or ingest signals"
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "requires": [
+              "hyphae"
+            ],
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/capture-pr-reviews.js\"",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Capture PR review feedback in hyphae"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/check-console-log.js\""
+          }
+        ],
+        "description": "Check for console.log in modified files after each response"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code stop"
+          }
+        ],
+        "description": "Cortina runtime: capture session-end summaries into scoped lifecycle state"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/evaluate-session.js\""
+          }
+        ],
+        "description": "Evaluate session for extractable patterns"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "requires": [
+              "cortina"
+            ],
+            "command": "cortina adapter claude-code session-end"
+          }
+        ],
+        "description": "Cortina runtime: capture session-end event into scoped lifecycle state (synchronous — must complete before exit)"
+      }
+    ]
+  }
+}

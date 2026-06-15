@@ -1,0 +1,16 @@
+{
+  "name": "developer-ops",
+  "version": "0.10.0-dev.65",
+  "description": "Operational engineering workflows: incident command, release management, runbooks, tech debt tracking, and spec-driven execution",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "developer-ops",
+    "operations",
+    "incident-response",
+    "release",
+    "runbooks"
+  ]
+}

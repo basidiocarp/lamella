@@ -1,0 +1,16 @@
+{
+  "name": "devops-platform",
+  "version": "0.10.0-dev.65",
+  "description": "Platform automation: Docker, Terraform, Ansible, CI validation, and deployments",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "platform",
+    "docker",
+    "terraform",
+    "ansible"
+  ]
+}

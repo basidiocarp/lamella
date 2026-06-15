@@ -1,0 +1,16 @@
+{
+  "name": "devops-kubernetes",
+  "version": "0.10.0-dev.65",
+  "description": "Kubernetes delivery: Helm, manifests, security policies, and GitOps workflows",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "devops",
+    "kubernetes",
+    "helm",
+    "gitops",
+    "manifests"
+  ]
+}

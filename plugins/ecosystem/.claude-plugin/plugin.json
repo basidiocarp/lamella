@@ -1,0 +1,15 @@
+{
+  "name": "ecosystem",
+  "version": "0.10.0-dev.65",
+  "description": "Curated plugin set for the basidiocarp ecosystem. Installs the tools, skills, and rules needed to work with mycelium, hyphae, canopy, cortina, stipe, and related tools. Language-specific and domain-specific plugins are optional extras.",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ecosystem",
+    "basidiocarp",
+    "bundle",
+    "default"
+  ]
+}

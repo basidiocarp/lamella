@@ -1,0 +1,16 @@
+{
+  "name": "meta",
+  "version": "0.10.0-dev.65",
+  "description": "Umbrella bundle for layered Lamella authoring, routing, and governance plugins",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "meta",
+    "bundle",
+    "authoring",
+    "routing",
+    "governance"
+  ]
+}

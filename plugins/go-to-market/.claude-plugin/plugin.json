@@ -1,0 +1,16 @@
+{
+  "name": "go-to-market",
+  "version": "0.10.0-dev.65",
+  "description": "Product marketing and launch content: pricing strategy, working-backwards press releases, launch checklists, content strategy, and email programs",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "go-to-market",
+    "launch",
+    "pricing",
+    "content",
+    "product-marketing"
+  ]
+}

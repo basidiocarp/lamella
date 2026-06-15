@@ -1,0 +1,16 @@
+{
+  "name": "meta-governance",
+  "version": "0.10.0-dev.65",
+  "description": "Meta governance for curation, audits, stocktakes, and task capture",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "meta",
+    "governance",
+    "audit",
+    "curation",
+    "todos"
+  ]
+}

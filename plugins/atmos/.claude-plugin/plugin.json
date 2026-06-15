@@ -1,0 +1,16 @@
+{
+  "name": "atmos",
+  "version": "0.10.0-dev.65",
+  "description": "Cloud Posse Atmos: stack orchestration, Terraform/Helmfile/Ansible integration, configuration management, and CI/CD patterns",
+  "author": {
+    "name": "lamella"
+  },
+  "license": "MIT",
+  "keywords": [
+    "atmos",
+    "cloud-posse",
+    "terraform",
+    "infrastructure",
+    "stacks"
+  ]
+}

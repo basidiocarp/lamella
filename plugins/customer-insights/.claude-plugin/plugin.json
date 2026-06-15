@@ -1,0 +1,16 @@
+{
+  "name": "customer-insights",
+  "version": "0.10.0-dev.65",
+  "description": "Discovery and research artifacts: JTBD, interview planning, market analysis, journey mapping, competitive analysis, and shared language",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "discovery",
+    "research",
+    "customer-insights",
+    "jobs-to-be-done",
+    "market-analysis"
+  ]
+}

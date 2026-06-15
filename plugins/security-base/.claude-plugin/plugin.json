@@ -1,0 +1,16 @@
+{
+  "name": "security-base",
+  "version": "0.10.0-dev.65",
+  "description": "Core security practices: auth, secrets, defaults, reviews, and safe APIs",
+  "author": {
+    "name": "William Newton"
+  },
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "base",
+    "auth",
+    "secrets",
+    "secure-coding"
+  ]
+}

@@ -4,6 +4,20 @@ All notable changes to Lamella are documented in this file.
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-06-15
+
+### Added
+
+- **skills-manifest CI workflow and generator**: Added a workflow and generator
+  that produces the skills manifest as a CI artifact.
+- **security-research skill**: Registered the `security-research` skill in the
+  security plugin manifests so it ships in the packaged plugin.
+
+### Fixed
+
+- **skills-manifest drift check**: The skills-manifest workflow now drift-checks
+  the generated manifest instead of pushing to the protected `main` branch.
+
 ## [0.5.10] - 2026-04-10
 
 ### Added

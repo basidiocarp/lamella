@@ -55,7 +55,7 @@ jobs:
           cd ..
 
       - name: Upload Claude artifact
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: lamella-claude
           path: |
@@ -63,7 +63,7 @@ jobs:
             lamella-claude-${{ github.ref_name }}.zip
 
       - name: Upload Codex artifact
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: lamella-codex
           path: |

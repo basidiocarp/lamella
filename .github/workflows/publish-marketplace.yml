@@ -15,10 +15,10 @@ jobs:
     env:
       LAMELLA_CONTENT_ROOT: ${{ github.workspace }}/lamella-skills
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6.0.3
 
       - name: Checkout lamella-skills content root
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
         with:
           repository: basidiocarp/lamella-skills
           path: lamella-skills
